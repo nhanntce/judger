@@ -47,7 +47,7 @@ exports.login = function (req, res) {
             req.connection.socket.remoteAddress).split(",")[0];
         var sql = "";
         if (role == "student_account") {
-            var sql = "SELECT * FROM `" + role + "` WHERE (`username`='" + user + "' and password = '" + hash + "' and ip='" + ipaddress + "') or (`username`='" + user + "' and password = '" + hash + "' and '" + new Date() + "' >= timeout and islogin=0)";
+            var sql = "SELECT * FROM `" + role + "` WHERE (`username`='" + user + "' and password = '" + hash + "' and ip='" + ipaddress + "') or (`username`='" + user + "' and password = '" + hash + "' and " + new Date().getTime() + " >= timeout and islogin=0)";
             db.query(sql, function (err, results) {
                 if (results.length) {
                     req.session.userId = results[0].id;
