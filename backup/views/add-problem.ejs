@@ -1,0 +1,78 @@
+<%- include ("partials/header") %>
+<div class="container">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Contest <%=contest_name%></h6>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-6">
+                    <p><b>Problems</b></p>
+                    <% for (let i = 0; i < problem_files.length; ++i) { %>
+                    <form action="/contest/add-problem/delete-problem" method="post">
+                        <a href="/debai/<%=contest_name%>/<%=problem_files[i]%>"
+                            target="_blank"><%=problem_files[i]%></a>
+
+
+                        <input type="hidden" name="problem_path"
+                            value="./public/debai/<%=contest_name%>/<%=problem_files[i]%>">
+                        <input type="hidden" name="contest_id" value="<%=contest_id%>">
+                        <button type="submit" class="btn btn-danger btn-circle btn-sm">
+                            <i class="fa fa-trash-alt "></i>
+                        </button>
+                    </form>
+                    <% } %>
+                </div>
+                <div class="col-lg-6">
+                    <p><b>Testcases</b></p>
+                    <% for (let i = 0; i < testcase.length; ++i) { %>
+                    <form action="/contest/add-problem/delete-testcase" method="post">
+                        <%=testcase[i]%> (<%=testcase_size[i]%> tests)
+                        <input type="hidden" name="testcase_path" value="<%=testcase_path[i]%>">
+                        <input type="hidden" name="contest_id" value="<%=contest_id%>">
+                        <button type="submit" class="btn btn-danger btn-circle btn-sm">
+                            <i class="fa fa-trash-alt "></i>
+                        </button>
+                    </form>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Upload problems</h6>
+                </div>
+                <div class="card-body">
+                    <label>Choose file (.pdf, .doc, .docx):</label>
+                    <form action="/contest/add-problem/upload-problem?contest_id=<%=contest_id%>" method="post"
+                        enctype="multipart/form-data">
+                        <input type="file" name="filetoupload" accept=".pdf, .docx, .doc">
+                        <button type="submit" class="btn btn-info"><i class="fa fa-upload "> Upload</i></button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-lg-6">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Upload testcases</h6>
+                </div>
+                <div class="card-body">
+                    <label>Choose file (.zip):</label>
+                    <form action="/contest/add-problem/upload-testcase?contest_id=<%=contest_id%>" method="post"
+                        enctype="multipart/form-data">
+                        <input type="file" name="filetoupload" accept=".zip">
+                        <button type="submit" class="btn btn-info"><i class="fa fa-upload "> Upload</i></button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+<%- include ("partials/footer") %>

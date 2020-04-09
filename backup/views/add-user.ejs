@@ -1,0 +1,63 @@
+<%- include ("partials/header") %>
+<div class="container">
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">Add users</h6>
+    </div>
+    <div class="card-body">
+        <form action="/contest/load-user" method="GET">
+            <div class="form-group">
+                <label>Enter name of class</label>
+                <input type="text" class="form-control" id="class_name" name="class_name">
+                <input type="hidden" name="contest_id" value="<%=contest_id%>">
+              </div>
+            <button class="btn btn-primary" type="submit"><i class="fa fa-spinner"></i> Load</button>
+        </form>
+        <% if (message.length > 0) { %>
+            <div class="alert alert-success col-sm-12"><%= message %></div>
+            <% } %>
+        <% if (data.length > 0) { %>
+            
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>
+                            <center>
+                                <button type="button" style="border: none; background: transparent; font-size: 14px;"
+                                    id="MyTableCheckAllButton">
+                                    <i class="far fa-square"></i>
+                                </button>
+                            </center>
+                        </th>
+                        <th></th>
+                        <th>Roll number</th>
+                        <th>Name</th>
+                        <th>Class</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for (let i = 0; i < data.length; ++i) {%>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td><%= data[i].rollnumber %></td>
+                        <td><%= data[i].name %></td>
+                        <td><%= data[i].class %></td>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+            <form action="/contest/add-user" method="post">
+                <input type="hidden" id="list_rollnumber" name="list_rollnumber" value="">
+                <input type="hidden" name="contest_id" value="<%=contest_id%>">
+                <button type="submit" class="btn btn-info">
+                    <i class="fa fa-plus "> Add selected</i>
+                </button>
+            </form>
+        </div>
+        <% } %>
+    </div>
+  </div>
+</div>
+<%- include ("partials/footer") %>

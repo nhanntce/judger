@@ -1,0 +1,8 @@
+<%- include ("partials/header") %>
+<div class="container">
+<% for (let i = 0, l = data.length; i < l; ++i) {%>
+<button type="submit" onclick="window.location='/contest/data-rank?contest_id=<%=data[i].contest_id%>';">
+    <%= data[i].contest_name %></button>
+<% } %>
+</div>
+<%- include ("partials/footer") %>

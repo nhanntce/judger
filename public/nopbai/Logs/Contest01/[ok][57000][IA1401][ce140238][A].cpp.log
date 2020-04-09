@@ -1,0 +1,4 @@
+Compile error
+A.cpp:5:19: error: size of array 'arr' is too large
+ int arr[1000000000];
+                   ^

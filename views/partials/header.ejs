@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Judger</title>
+    <link rel="stylesheet" href="../vendor/fontawesome-free/css/all.min.css" />
+
+    <!-- Custom styles for this template -->
+    <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+
+    <link href="../css/mdb.min.css" rel="stylesheet">
+    <link href="../css/styles.css" rel="stylesheet">
+    <!-- Custom styles for this page -->
+    <link href="../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link href="../vendor/datatables/select.dataTables.min.css" rel="stylesheet">
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="../vendor/jquery/jquery.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="../js/mdb.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="../vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="../vendor/datatables/dataTables.select.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="../js/demo/datatables-demo.js"></script>
+
+    <script src="../js//ace.js"></script>
+    
+    <script>
+        $(window).on("unload", function (e) {
+            $.get('/session/destroy');
+        });
+        $(document).ready(function () {
+            // get current URL path and assign 'active' class
+            var pathname = window.location.pathname;
+            $('.navbar-nav > li > a[href="' + pathname + '"]').parent().addClass('active');
+        });
+    </script>
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark indigo mb-4">
+        <div class="container">
+            <a class="navbar-brand"><img src="/img/scales.svg" height="30" alt="Judger"> Judger</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
+                aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="basicExampleNav">
+                <ul class="navbar-nav mr-auto text-uppercase">
+                    <li class="nav-item">
+                        <a class="nav-link waves-light active" href="/home/dashboard">Home</a>
+                    </li>
+                    <% if (role == "Teacher") { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contest">Contest</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contest/rank">Rank</a>
+                    </li>
+                    <% } %>
+                </ul>
+                <ul class="nav navbar-nav nav-flex-icons ml-auto">
+                    <button class="btn aqua-gradient btn-md my-2 my-sm-0 ml-3" type="button"
+                        onclick="window.location='/submission';">
+                        <li class="fa fa-upload"></li> Submit
+                    </button>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-4" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-user"></i> <%=user%> </a>
+                        <div class="dropdown-menu dropdown-menu-right dropdown-info"
+                            aria-labelledby="navbarDropdownMenuLink-4">
+                            <a class="dropdown-item" href="/home/profile">My account</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/home/logout">Logout</a>
+                        </div>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>

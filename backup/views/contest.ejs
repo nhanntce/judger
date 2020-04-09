@@ -1,0 +1,49 @@
+<%- include ("partials/header") %>
+<!-- Main component for a primary marketing message or call to action -->
+<div class="container">
+<h2>Total <%= data.length %> contests
+    <button type="submit"class="btn btn-success" data-toggle="modal" data-target="#myModal">
+    <i class="fa fa-plus fa-lg"></i> Add a new contest
+</button>
+</h2>
+
+
+<% for (let i = 0; i < data.length; ++i) {%>
+    <form action="/contest/detail" method="GET">
+        <input type="hidden" name="contest_id" value="<%= data[i].contest_id %>">
+        <button type="submit">
+            <%= data[i].contest_name %>
+        </button>
+    </form>
+
+<% } %>
+</div>
+<!-- The Modal -->
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Add a new contest</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form action="/contest/add-contest" method="POST">
+                    <div class="form-group">
+                        <label>Enter name of contest</label>
+                        <input type="text" class="form-control" id="contest_name" name="contest_name">
+                        <label>Enter time of contest</label>
+                        <input type="datetime-local" class="form-control"  id = "datetime" name="datetime">
+                      </div>
+                    <button class="btn btn-primary" type="submit"><i class="fa fa-plus"></i> Add</button>
+                </form>
+                <div class="container">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include ("partials/footer") %>

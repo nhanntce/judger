@@ -1,0 +1,74 @@
+<%- include ("partials/header") %>
+<% 
+    var logs = [];
+    var bais = [];
+    for (let i = 0; i < bailam.length; ++i) {
+        for (let j = 0; j < log_files.length; ++j) {
+            console.log(log_files[j])
+            if (bailam[i].includes(log_files[j].split('.')[0])) {
+                
+                bais.push(bailam[i]);
+                logs.push(log_files[j]);
+            }
+            
+        }
+    }
+%>
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb cyan lighten-4">
+            <li class="breadcrumb-item"><a class="black-text" href="/contest/rank">Rank</a></li>
+            <li class="breadcrumb-item"><a class="black-text"
+                    href="/contest/data-rank?contest_id=<%= contest_id %>"><%= contest_name %></li></a>
+            <li class="breadcrumb-item active"><%= rollnumber %></li>
+        </ol>
+    </nav>
+    <% 
+        
+        for (let i = 0, l = log_files.length; i < l; ++i) {
+        var mtime = fs.statSync(bais[i]).mtime; 
+            var tenbai = bailam[i].split('][')[4].replace('].', '.');
+            var filedate = new Date(new Date(mtime).getTime() - (new Date(mtime).getTimezoneOffset() * 60000)).toISOString().substring(0, 19).replace('T',' ');
+            var logcontent = fs.readFileSync('./public/nopbai/Logs/' + contest_name + '/' + logs[i], 'utf8');
+            var baicontent = fs.readFileSync(bais[i], 'utf8');
+            var status = 'success';
+            if (logcontent.split('\n')[0].includes('error') || logcontent.split('\n')[0] == "0") {
+                status = 'danger';
+            }
+    %>
+    <div class="card shadow mb-1 border-left-<%=status%>">
+        <!-- Card Header - Accordion -->
+        <a href="#collapseCardExample<%=i%>" class="d-block card-header py-3" data-toggle="collapse" role="button"
+            aria-expanded="true" aria-controls="collapseCardExample">
+            <h6 class="m-0 font-weight-bold text-<%=status%>">
+                <%= filedate %> - <%= tenbai %>
+            </h6>
+        </a>
+        <!-- Card Content - Collapse -->
+        <div class="collapse" id="collapseCardExample<%=i%>">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        Result
+                        <div id="editor<%=i%>" style="height: 300px;"><%= logcontent %></div>
+                    </div>
+                    <div class="col">
+                        Submission
+                        <div id="editor1<%=i%>" style="height: 300px;"><%= baicontent %></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var editor = ace.edit('editor<%=i%>');
+        editor.getSession().setMode("ace/mode/c_cpp");
+        document.getElementById('editor<%=i%>').style.fontSize = '15px';
+        var editor1 = ace.edit('editor1<%=i%>');
+        editor1.getSession().setMode("ace/mode/c_cpp");
+        document.getElementById('editor1<%=i%>').style.fontSize = '15px';
+    </script>
+    <% } %>
+</div>
+<%- include ("partials/footer") %>

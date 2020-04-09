@@ -1,0 +1,96 @@
+<%- include ("partials/header") %>
+<!-- Main component for a primary marketing message or call to action -->
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb cyan lighten-4">
+            <li class="breadcrumb-item active"><a class="black-text" href="/contest">Contest</a></li>
+        </ol>
+    </nav>
+    <h2>Total
+        <%= data.length %> contests
+        <button type="submit" class="btn btn-success" data-toggle="modal" data-target="#myModal"><i
+                class="fa fa-plus fa-lg"></i> Add a new contest</button>
+    </h2>
+    <% for (let i = 0, l = data.length; i < l; ++i) {%>
+    <div class="card shadow mb-2 border-left-primary">
+        <!-- Card Header - Accordion -->
+        <a href="#collapseCardExample<%=i%>" class="d-block card-header py-3" data-toggle="collapse" role="button"
+            aria-expanded="true" aria-controls="collapseCardExample">
+            <h6 class="m-0 font-weight-bold text-primary">
+                <%= data[i].contest_name %>
+            </h6>
+        </a>
+        <!-- Card Content - Collapse -->
+        <div class="collapse" id="collapseCardExample<%=i%>">
+            <div class="card-header">
+                <form action="/contest/delete-contest" method="post">
+                    <button type="button" class="btn btn-info btn-sm"
+                        onclick="window.location='/contest/detail?contest_id=<%=data[i].contest_id%>';"><i
+                            class="fa fa-eye"></i> View Detail</button>
+                    <input type="hidden" name="contest_id" value="<%=data[i].contest_id%>">
+                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                        data-target="#modalConfirmDelete<%=i%>"><i class="fa fa-trash-alt"></i> Delete</button>
+                </form>
+            </div>
+            <div class="card-body">
+                <p><strong>Start:</strong> <%=data[i].time_begin%></p>
+                <p><strong>End:</strong> <%=data[i].time_end%></p>
+            </div>
+        </div>
+    </div>
+    <!--Modal: modalConfirmDelete-->
+    <div class="modal fade" id="modalConfirmDelete<%=i%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
+            <div class="modal-content text-center">
+                <div class="modal-header d-flex justify-content-center">
+                    <p class="heading">Are you sure?</p>
+                </div>
+                <div class="modal-body">
+                    <i class="fas fa-times fa-4x animated rotateIn"></i><br>
+                    <font color=red><b><%= data[i].contest_name %></b></font>
+                </div>
+                <div class="modal-footer flex-center">
+                    <form action="/contest/delete-contest" method="post">
+                        <input type="hidden" name="contest_id" value="<%=data[i].contest_id%>">
+                        <button type="submit" class="btn btn-outline-danger">Yes</button>
+                    </form>
+                    <a type="button" class="btn  btn-danger waves-effect" data-dismiss="modal">No</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Modal: modalConfirmDelete-->
+    <% } %>
+</div>
+<!-- The Modal add contest-->
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Add a new contest</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form action="/contest/add-contest" method="POST">
+                    <div class="form-group">
+                        <label>Enter name of contest</label>
+                        <input type="text" class="form-control" id="contest_name" name="contest_name">
+                        <label>Enter start time</label>
+                        <input type="datetime-local" class="form-control" id="starttime" name="starttime">
+                        <label>Enter end time</label>
+                        <input type="datetime-local" class="form-control" id="endtime" name="endtime">
+                    </div>
+                    <button class="btn btn-primary" type="submit"><i class="fa fa-plus"></i> Add</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- The Modal add contest-->
+
+<%- include ("partials/footer") %>

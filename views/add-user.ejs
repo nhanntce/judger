@@ -1,0 +1,132 @@
+<%- include ("partials/header") %>
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb cyan lighten-4">
+            <li class="breadcrumb-item"><a class="black-text" href="/contest">Contest</a></li>
+            <li class="breadcrumb-item"><a class="black-text" href="/contest/detail?contest_id=<%=contest_id%>">Detail</a></li>
+            <li class="breadcrumb-item active">Add student</li>
+        </ol>
+    </nav>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Add users</h6>
+        </div>
+        <div class="card-body">
+            <form action="/contest/load-user" method="GET">
+                <div class="form-group">
+                    <label>Enter name of class</label>
+                    <input type="text" class="form-control" id="class_name" name="class_name">
+                    <input type="hidden" name="contest_id" value="<%=contest_id%>">
+                </div>
+                <button class="btn btn-primary" type="submit"><i class="fa fa-spinner"></i> Load</button>
+            </form>
+            <% if (message.length > 0) { %>
+            <div class="alert alert-success col-sm-12"><%= message %></div>
+            <% } %>
+            <% if (data.length > 0) { %>
+
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable1" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>
+                                <center>
+                                    <button type="button"
+                                        style="border: none; background: transparent; font-size: 14px;"
+                                        id="MyTableCheckAllButton">
+                                        <i class="far fa-square"></i>
+                                    </button>
+                                </center>
+                            </th>
+                            <th></th>
+                            <th>Roll number</th>
+                            <th>Name</th>
+                            <th>Class</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for (let i = 0, l = data.length; i < l; ++i) {%>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td><%= data[i].rollnumber %></td>
+                            <td><%= data[i].name %></td>
+                            <td><%= data[i].class %></td>
+                        </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+                <form action="/contest/add-user" method="post">
+                    <input type="hidden" id="list_rollnumber" name="list_rollnumber" value="">
+                    <input type="hidden" name="contest_id" value="<%=contest_id%>">
+                    <input type="hidden" name="class_name" value="<%=class_name%>">
+                    <button type="submit" class="btn btn-info">
+                        <i class="fa fa-plus "> Add selected</i>
+                    </button>
+                </form>
+            </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+<script>
+        let myTable = $('#dataTable1').DataTable({
+        columnDefs: [{
+            searchable: false,
+            orderable: false,
+            className: 'select-checkbox',
+            targets: 0,
+        }],
+        select: {
+            style: 'multi', // 'single', 'multi', 'os', 'multi+shift'
+            selector: 'td:first-child',
+        },
+        order: [
+            [1, 'asc'],
+        ],
+        columns: [
+            { width: '5%' },
+            { width: '5%' },
+            null,
+            null,
+            null
+        ]
+    });
+
+    myTable.on('select deselect draw', function () {
+        var all = myTable.rows({ search: 'applied' }).count(); // get total count of rows
+        var selectedRows = myTable.rows({ selected: true, search: 'applied' }).count(); // get total count of selected rows
+
+        if (selectedRows < all) {
+            $('#MyTableCheckAllButton i').attr('class', 'far fa-square');
+        } else {
+            $('#MyTableCheckAllButton i').attr('class', 'far fa-check-square');
+        }
+        var dataTableRows = myTable.rows({ selected: true }).data().toArray();
+        var list = []
+        for (let i = 0; i < dataTableRows.length; ++i) {
+            list.push(dataTableRows[i][2])
+        }
+        document.getElementById('list_rollnumber').value = list;
+    });
+
+    $('#MyTableCheckAllButton').click(function () {
+        var all = myTable.rows({ search: 'applied' }).count(); // get total count of rows
+        var selectedRows = myTable.rows({ selected: true, search: 'applied' }).count(); // get total count of selected rows
+
+
+        if (selectedRows < all) {
+            //Added search applied in case user wants the search items will be selected
+            myTable.rows({ search: 'applied' }).deselect();
+            myTable.rows({ search: 'applied' }).select();
+        } else {
+            myTable.rows({ search: 'applied' }).deselect();
+        }
+    });
+    myTable.on('order.dt search.dt', function () {
+        myTable.column(1, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+            cell.innerHTML = i + 1;
+        });
+    }).draw();
+</script>
+<%- include ("partials/footer") %>

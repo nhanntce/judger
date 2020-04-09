@@ -1,0 +1,27 @@
+{
+  "name": "judger",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": {
+    "name": "Hy Nguyen",
+    "email": "khanghy3004@gmail.com",
+    "url": "https://github.com/khanghy3004"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "ejs": "^3.0.2",
+    "express": "^4.17.1",
+    "express-session": "^1.17.0",
+    "extract-zip": "^2.0.0",
+    "formidable": "^1.2.2",
+    "lignator": "^1.0.2",
+    "mysql": "^2.18.0",
+    "req-flash": "0.0.3",
+    "yauzl": "^2.10.0"
+  }
+}
