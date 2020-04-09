@@ -14,7 +14,6 @@ global.path = require('path')
 global.public_dir = __dirname + '/public';
 
 var app = express();
-var PORT = process.env.PORT || 8080;
 var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
@@ -102,6 +101,6 @@ app.get('/session/destroy', user.session_destroy);
 
 
 // Listen at port 8080
-app.listen(PORT, () => {
-  console.log(`Server running on port: ${PORT}`);
+app.listen(process.env.PORT || 8080, function(){
+  console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
 });
