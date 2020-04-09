@@ -16,9 +16,9 @@ global.public_dir = __dirname + '/public';
 var app = express();
 var connection = mysql.createConnection({
   host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'judger'
+  user: 'b4b9a8353ef2b1',
+  password: '8be0fc31',
+  database: 'heroku_14b425247890a22'
 });
 
 connection.connect();
