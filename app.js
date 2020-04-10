@@ -14,14 +14,13 @@ global.path = require('path')
 global.public_dir = __dirname + '/public';
 
 var app = express();
-var connection = mysql.createConnection({
-  host: 'us-cdbr-iron-east-01.cleardb.net',
-  user: 'b4b9a8353ef2b1',
-  password: '8be0fc31',
-  database: 'heroku_14b425247890a22'
+const dbConfig = require("./routes/db.config.js");
+var connection = mysql.createPool({
+  host: dbConfig.HOST,
+  user: dbConfig.USER,
+  password: dbConfig.PASSWORD,
+  database: dbConfig.DB
 });
-
-connection.connect();
 
 global.db = connection;
 
@@ -39,7 +38,6 @@ app.use(session({
 }))
 
 // development only
-
 app.get('/', routes.index);//call for main index page
 app.get('/signup', user.signup);//call for signup page
 app.post('/signup', user.signup);//call for signup post 

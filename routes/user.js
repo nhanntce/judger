@@ -294,7 +294,7 @@ exports.load_user = function (req, res) {
     var contest_id = req.query.contest_id;
     var sql = "SELECT rollnumber, name, class FROM student_account WHERE class='" + class_name + "' and in_contest=0";
     db.query(sql, function (err, results) {
-        res.render('add-user.ejs', { data: results, contest_id: contest_id, message: message, class_name: class_name, role: req.session.role, user: "req.session.user" });
+        res.render('add-user.ejs', { data: results, contest_id: contest_id, message: message, class_name: class_name, role: req.session.role, user: req.session.user });
     });
 
 };
