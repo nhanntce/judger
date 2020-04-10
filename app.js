@@ -7,7 +7,8 @@ var express = require('express')
   , http = require('http')
   , session = require('express-session')
   , mysql = require('mysql')
-  , bodyParser = require("body-parser");
+  , bodyParser = require("body-parser")
+  , compression = require('compression');
 
 global.fs = require('fs');
 global.path = require('path')
@@ -27,6 +28,7 @@ global.db = connection;
 // all environments
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
+app.use(compression());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));

@@ -29,15 +29,18 @@
             <div class="tab-pane fade active show" id="submit-classic-shadow" role="tabpanel"
                 aria-labelledby="submit-tab-classic-shadow">
                 <div id="timer" class=""></div><br>
-                <% if (message.length > 0) { %>
-                <div class="alert alert-success col-sm-12"><%= message %></div>
+                <% if (message.length > 0) { 
+                    if (message == "Submit error!") { %>
+                        <div class="alert alert-danger col-sm-12"><%= message %></div>
+                    <% } else { %>
+                        <div class="alert alert-success col-sm-12"><%= message %></div>
+                    <% } %>
                 <% } %>
                 <% if (new Date() - data[0].time_begin > 0) { %>
                 <form action="/submission/submit" method="post" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="exampleFormControlSelect1">Problem ID</label>
                         <select class="form-control" name="tenbai">
-                            <option selected="" selected disabled hidden>Select a problem</option>
                             <% for (let i = 0, l = problem_files.length; i < l; ++i) { %>
                             <option><%= problem_files[i].split('-')[0] %></option>
                             <% } %>

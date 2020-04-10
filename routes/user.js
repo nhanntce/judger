@@ -571,6 +571,9 @@ exports.submission = function (req, res) {
     if (req.query.success) {
         message = "Submit successfully!"
     }
+    if (req.query.error) {
+        message = "Submit error!"
+    }
     var sql = "SELECT * FROM `contest_student` " +
         "INNER JOIN contest ON contest_student.contest_id=contest.contest_id " +
         "INNER JOIN student_account ON contest_student.student_rollnumber=student_account.rollnumber " +
@@ -594,6 +597,10 @@ exports.submit = function (req, res) {
     if (req.method == "POST") {
         var form = new formidable.IncomingForm();
         form.parse(req, function (err, fields, files) {
+            if (files.filetoupload.name == "") {
+                res.redirect("/submission?error=1");
+                return;
+            }
             var type = files.filetoupload.name.split('.');
             var ip = "";
             if (req.session.ipaddress.includes(':')) {
