@@ -48,7 +48,6 @@ exports.login = function (req, res) {
         var sql = "";
         if (role == "student_account") {
             var sql = "SELECT * FROM `" + role + "` WHERE (`username`='" + user + "' and password = '" + hash + "' and ip='" + ipaddress + "') or (`username`='" + user + "' and password = '" + hash + "' and " + new Date().getTime() + " >= ROUND(UNIX_TIMESTAMP(timeout) * 1000) and islogin=0)";
-            console.log(sql)
             db.query(sql, function (err, results) {
                 if (results.length) {
                     req.session.userId = results[0].id;
@@ -63,7 +62,6 @@ exports.login = function (req, res) {
                     message = 'Wrong Credentials.';
                     res.render('index.ejs', { message: message });
                 }
-
             });
 
         } else {
@@ -420,7 +418,6 @@ exports.upload_testcase = function (req, res) {
             });
 
             form.on('file', function (name, file) {
-                console.log(fs.existsSync(file.path))
                 try {
                     extract(file.path, { dir: public_dir + '/thumuctest/' + contest_name })
                     console.log('Extraction complete')
@@ -483,7 +480,6 @@ exports.data_rank = function (req, res) {
     var contest_id = req.query.contest_id;
     var sql = "SELECT * FROM `contest_student` WHERE `contest_id`=" + contest_id;
     db.query(sql, function (err, results) {
-        console.log(results)
         if (results.length == 0) {
             message = "No student in contest";
             res.render('data-rank.ejs', { data: [], problem_files: [], message: message, role: req.session.role, user: req.session.user });
@@ -572,8 +568,7 @@ exports.submission = function (req, res) {
         return;
     }
     var message = "";
-    if (req.session.submitted) {
-        req.session.submitted = false;
+    if (req.query.success) {
         message = "Submit successfully!"
     }
     var sql = "SELECT * FROM `contest_student` " +
@@ -581,43 +576,46 @@ exports.submission = function (req, res) {
         "INNER JOIN student_account ON contest_student.student_rollnumber=student_account.rollnumber " +
         "WHERE student_account.id=" + userId;
     db.query(sql, function (err, results) {
-        var contest_name = results[0].contest_name;
-        fs.readdir('./public/debai/' + contest_name, function (err, files) {
-            var problem_files = files;
-            var bailam = traverseDir('./public/thumucbailam/' + contest_name + '/' + results[0].rollnumber);
-            res.render('submit.ejs', { data: results, problem_files: problem_files, bailam: bailam, message: message, role: req.session.role, user: req.session.user });
-
-        });
+        if (results.length == 0) {
+            error = "You have no contests";
+            res.render('submit.ejs', { error: error, role: req.session.role, user: req.session.user });
+        } else {
+            var contest_name = results[0].contest_name;
+            fs.readdir('./public/debai/' + contest_name, function (err, files) {
+                var problem_files = files;
+                var bailam = traverseDir('./public/thumucbailam/' + contest_name + '/' + results[0].rollnumber);
+                res.render('submit.ejs', { error: "", data: results, problem_files: problem_files, bailam: bailam, message: message, role: req.session.role, user: req.session.user });
+            });
+        }      
     });
 };
 //---------------------------------Submit submissions file----------------------------------
 exports.submit = function (req, res) {
     if (req.method == "POST") {
         var form = new formidable.IncomingForm();
-
-
         form.parse(req, function (err, fields, files) {
-            var type = files.filetoupload.name.split('.')
-            var newfile = '[ok][' + fields.time + '][' + fields.contest_name + '][' + fields.rollnumber + '][' + fields.tenbai + '].' + type[type.length - 1];
+            var type = files.filetoupload.name.split('.');
+            var ip = "";
+            if (req.session.ipaddress.includes(':')) {
+                ip = req.session.ipaddress.replace(/:/g, '');
+            } else if (req.session.ipaddress.includes('.')) {
+                ip = req.session.ipaddress.replace(/./g, '_');
+            }
+            var newfile = '['+ip+'][' + fields.time + '][' + fields.contest_name + '][' + fields.rollnumber + '][' + fields.tenbai + '].' + type[type.length - 1];
             var oldpath = files.filetoupload.path;
             var newpath = './public/nopbai/' + newfile;
             fs.readFile(oldpath, function (err, data) {
                 if (err) throw err;
-
                 // Write the file
                 fs.writeFile(newpath, data, function (err) {
                     if (err) throw err;
                 });
-
                 // Delete the file
                 fs.unlink(oldpath, function (err) {
                     if (err) throw err;
                 });
-                req.session.submitted = true;
-                res.redirect("/submission");
-
+                res.redirect("/submission?success=1");
             });
-
 
         });
 
