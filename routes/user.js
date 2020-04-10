@@ -1,6 +1,7 @@
 const lignator = require('lignator');
 const formidable = require('formidable');
 const extract = require("extract-zip");
+const zipper = require('zip-local');
 //TIME OUT
 const minutes = 15;
 
@@ -217,6 +218,24 @@ exports.edit_contest = function (req, res) {
             res.redirect("/contest/detail?contest_id=" + contest_id);
         });
     }
+};
+//---------------------------------Download a contest----------------------------------
+exports.download = function (req, res) {
+    var userId = req.session.userId;
+
+    if (userId == null) {
+        res.redirect("/login");
+        return;
+    }
+    var contest_id = req.query.contest_id;
+    var sql = "SELECT contest_name from contest WHERE `contest_id`=" + contest_id;
+    db.query(sql, function (err, results) {
+        var contest_name = results[0].contest_name;
+        zipper.sync.zip("./public/thumucbailam/" + contest_name).compress().save(contest_name + ".zip");
+        var file = contest_name + ".zip";
+        res.download(file) 
+    });
+
 };
 //---------------------------------contest-detail-get----------------------------------
 exports.contest_detail = function (req, res) {
@@ -476,7 +495,7 @@ exports.data_rank = function (req, res) {
         return;
     }
     var message = "";
-    
+
     var contest_id = req.query.contest_id;
     var sql = "SELECT * FROM `contest_student` WHERE `contest_id`=" + contest_id;
     db.query(sql, function (err, results) {
@@ -486,7 +505,7 @@ exports.data_rank = function (req, res) {
         } else {
             sql = "SELECT * FROM `contest` WHERE `contest_id`=" + contest_id;
             db.query(sql, function (err, results) {
-                
+
                 var contest_name = results[0].contest_name;
                 var problem_files = [];
                 fs.readdir('./public/debai/' + contest_name, function (err, files) {
@@ -494,7 +513,7 @@ exports.data_rank = function (req, res) {
                     res.render('data-rank.ejs', { data: results, problem_files: problem_files, message: message, role: req.session.role, user: req.session.user });
                 });
             });
-        }   
+        }
     });
 };
 //---------------------------------load rank -> json----------------------------------
@@ -589,7 +608,7 @@ exports.submission = function (req, res) {
                 var bailam = traverseDir('./public/thumucbailam/' + contest_name + '/' + results[0].rollnumber);
                 res.render('submit.ejs', { error: "", data: results, problem_files: problem_files, bailam: bailam, message: message, role: req.session.role, user: req.session.user });
             });
-        }      
+        }
     });
 };
 //---------------------------------Submit submissions file----------------------------------
@@ -608,7 +627,7 @@ exports.submit = function (req, res) {
             } else if (req.session.ipaddress.includes('.')) {
                 ip = req.session.ipaddress.replace(/./g, '_');
             }
-            var newfile = '['+ip+'][' + fields.time + '][' + fields.contest_name + '][' + fields.rollnumber + '][' + fields.tenbai + '].' + type[type.length - 1];
+            var newfile = '[' + ip + '][' + fields.time + '][' + fields.contest_name + '][' + fields.rollnumber + '][' + fields.tenbai + '].' + type[type.length - 1];
             var oldpath = files.filetoupload.path;
             var newpath = './public/nopbai/' + newfile;
             fs.readFile(oldpath, function (err, data) {

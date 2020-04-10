@@ -23,14 +23,10 @@
         <!-- Card Content - Collapse -->
         <div class="collapse" id="collapseCardExample<%=i%>">
             <div class="card-header">
-                <form action="/contest/delete-contest" method="post">
-                    <button type="button" class="btn btn-info btn-sm"
-                        onclick="window.location='/contest/detail?contest_id=<%=data[i].contest_id%>';"><i
-                            class="fa fa-eye"></i> View Detail</button>
-                    <input type="hidden" name="contest_id" value="<%=data[i].contest_id%>">
-                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                        data-target="#modalConfirmDelete<%=i%>"><i class="fa fa-trash-alt"></i> Delete</button>
-                </form>
+                <button type="button" class="btn btn-info btn-sm"
+                        onclick="window.location='/contest/detail?contest_id=<%=data[i].contest_id%>';"><i class="fa fa-eye"></i> View Detail</button>
+                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                    data-target="#modalConfirmDelete<%=i%>"><i class="fa fa-trash-alt"></i> Delete</button>
             </div>
             <div class="card-body">
                 <p><strong>Start:</strong> <%=data[i].time_begin%></p>

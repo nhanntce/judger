@@ -8,8 +8,11 @@ var express = require('express')
   , session = require('express-session')
   , mysql = require('mysql')
   , bodyParser = require("body-parser")
-  , compression = require('compression');
-
+  , compression = require('compression')
+  , https = require('https');
+  
+http.globalAgent.maxSockets = Infinity;
+https.globalAgent.maxSockets = Infinity;
 global.fs = require('fs');
 global.path = require('path')
 global.public_dir = __dirname + '/public';
@@ -58,6 +61,8 @@ app.post('/contest/delete-contest', user.delete_contest);
 app.post('/contest/edit-contest', user.edit_contest);
 // Contest detail
 app.get('/contest/detail', user.contest_detail);
+// Contest download
+app.get('/contest/download', user.download);
 // Delete student in contest
 app.post('/contest/delete-user', user.delete_user);
 // Load student from class
@@ -98,7 +103,16 @@ app.get('/submission', user.submission);
 app.post('/submission/submit', user.submit);
 // Destroy session when closing tab or browse
 app.get('/session/destroy', user.session_destroy);
-
+// Admin page
+app.get('/admin', (req, res) => {
+  var userId = req.session.userId;
+  if (userId == null) {
+    res.redirect("/login");
+    return;
+  }
+  var contest_id = req.query.contest_id;
+  res.render('admin.ejs', { data: [], contest_id: contest_id, message: "", role: req.session.role, user: req.session.user });
+});
 
 // Listen at port 8080
 app.listen(process.env.PORT || 8080, function(){
