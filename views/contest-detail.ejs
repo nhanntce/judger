@@ -13,11 +13,11 @@
     <h2>Total
         <%= data.length %> student in contest
         <%= contest_name %>
-        <button type="button" class="btn btn-success"
+        <button type="button" class="btn btn-outline-success waves-effect"
             onclick="window.location='/contest/add-user?contest_id=<%=contest_id%>';">
             <i class="fa fa-plus fa-lg"></i> Add student
         </button>
-        <button type="button" class="btn btn-success"
+        <button type="button" class="btn btn-outline-success waves-effect"
             onclick="window.location='/contest/add-problem?contest_id=<%=contest_id%>';">
             <i class="fa fa-plus fa-lg"></i> Add problem and testcase
         </button>
@@ -30,12 +30,12 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <i class="m-0 font-weight-bold text-primary">From: </i><%= time_begin.toLocaleString() %> <i
-                class="m-0 font-weight-bold text-primary"> to: </i><%= time_end.toLocaleString() %>
-            <button type="button" class="btn btn-primary waves-effect waves-light btn-rounded btn-sm" data-toggle="modal" data-target="#myModal"><i
+            <i class="m-0 font-weight-bold text-primary">From: </i><%= time_begin.toLocaleString("vi-VN") %> <i
+                class="m-0 font-weight-bold text-primary"> to: </i><%= time_end.toLocaleString("vi-VN") %>
+            <button type="button" class="btn btn-primary waves-effect waves-light btn-sm" data-toggle="modal" data-target="#myModal"><i
                     class="far fa-edit"></i> Edit</button>
             <div class="float-right">
-                <button type="button" class="btn btn-dark-green waves-effect waves-light btn-rounded btn-sm"
+                <button type="button" class="btn btn-default btn-rounded btn-sm"
                     onclick="window.location='/contest/download?contest_id=<%=contest_id%>';"><i
                         class="fa fa-download"></i> Download</button>
             </div>
@@ -123,7 +123,7 @@
                 <p class="heading">Are you sure?</p>
             </div>
             <div class="modal-body">
-                <i class="fas fa-times fa-4x animated rotateIn"></i><br>
+                <i class="fa fa-times fa-4x animated rotateIn"></i><br>
                 <font color=red><b id="totalrollnumber"></b></font>
             </div>
             <div class="modal-footer flex-center">

@@ -126,7 +126,6 @@ exports.profile = function (req, res) {
         res.redirect("/login");
         return;
     }
-
     var sql = "SELECT * FROM `" + role + "` WHERE `id`='" + userId + "'";
     db.query(sql, function (err, result) {
         res.render('profile.ejs', { data: result, role: req.session.role, user: req.session.user });

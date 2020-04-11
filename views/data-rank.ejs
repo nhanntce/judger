@@ -17,6 +17,7 @@
                     $('#progress').text((pro | 0).toString() + '%');
                 } else {
                     $('#progress').attr('style', 'width:100%');
+                    $('#progress').attr('class', 'progress-bar progress-bar-striped bg-danger');
                     $('#progress').text('The Contest is Over');
                     clearInterval(x);
                     return;
@@ -27,9 +28,21 @@
             var example_table = $('#dataTableRank').DataTable({
                 "ajax": "/contest/load-rank?contest_id=<%=data[0].contest_id%>",
                 "columnDefs": [{
-                    "targets": -1,
+                    "targets": [0, 1],
                     "render": function (data, type, row, meta) {
-                        return '<a href="/contest/detail-rank?rollnumber=' + row[0] + '"><li class="fa fa-star-half-alt"></li> View</a>';
+                        return '<a href="/contest/detail-rank?rollnumber=' + row[0] + '">'+data+'</a>';
+                    }
+                }],
+                "dom": 'lBfrtip',
+                buttons: [{
+                    extend: 'excelHtml5',
+                    text: '<li class="fa fa-file-excel"></li> Export to Excel',
+                    title: '<%=data[0].contest_name%>',
+
+                    download: 'open',
+                    orientation: 'landscape',
+                    exportOptions: {
+                        columns: ':visible'
                     }
                 }]
             });

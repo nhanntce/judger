@@ -1,11 +1,11 @@
 <%- include ("partials/header" ) %>
 <div class="container">
     <% if (error.length > 0) { %>
-        <div class="alert alert-danger col-sm-12"><%= error %></div>
+    <div class="alert alert-danger col-sm-12"><%= error %></div>
     <% } else { %>
     <h2>Contest <%= data[0].contest_name %></h2>
-    <h6><i class="m-0 font-weight-bold text-primary">From: </i><%= data[0].time_begin.toLocaleString() %> <i
-            class="m-0 font-weight-bold text-primary"> to: </i><%= data[0].time_end.toLocaleString() %> </h6>
+    <h6><i class="m-0 font-weight-bold text-primary">From: </i><%= data[0].time_begin.toLocaleString("vi-VN") %> <i
+            class="m-0 font-weight-bold text-primary"> to: </i><%= data[0].time_end.toLocaleString("vi-VN") %> </h6>
     <div class="classic-tabs mx-2">
 
         <ul class="nav tabs-cyan" role="tablist">
@@ -31,12 +31,12 @@
                 <div id="timer" class=""></div><br>
                 <% if (message.length > 0) { 
                     if (message == "Submit error!") { %>
-                        <div class="alert alert-danger col-sm-12"><%= message %></div>
-                    <% } else { %>
-                        <div class="alert alert-success col-sm-12"><%= message %></div>
-                    <% } %>
+                <div class="alert alert-danger col-sm-12"><%= message %></div>
+                <% } else { %>
+                <div class="alert alert-success col-sm-12"><%= message %></div>
                 <% } %>
-                <% if (new Date() - data[0].time_begin > 0) { %>
+                <% } %>
+                <% if (new Date() - data[0].time_begin > 0 && data[0].time_end - new Date() > 0) { %>
                 <form action="/submission/submit" method="post" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="exampleFormControlSelect1">Problem ID</label>
@@ -69,9 +69,7 @@
                         <%=problem_files[i]%>
                     </a></p>
                 <% } } else { %>
-                <p>
-                    <font color=red><b>The contest has not started</b></font>
-                </p>
+                <p><font color=red><b>The contest has not started</b></font></p>
                 <% } %>
             </div>
             <div class="tab-pane fade" id="history-classic-shadow" role="tabpanel"
@@ -93,7 +91,8 @@
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                             </div>
                             <div class="modal-body">
-                                <div id="editor<%=i%>" style="height: 300px;"><%= fs.readFileSync(bailam[i], 'utf8'); %></div>
+                                <div id="editor<%=i%>" style="height: 300px;"><%= fs.readFileSync(bailam[i], 'utf8'); %>
+                                </div>
                                 <script type="text/javascript">
                                     var editor = ace.edit('editor<%=i%>');
                                     editor.getSession().setMode("ace/mode/c_cpp");
@@ -116,8 +115,8 @@
         </div>
     </div>
     <script>
-        var countUpDate="<%=data[0].time_begin.getTime() %>",countDownDate="<%=data[0].time_end.getTime() %>",now=(new Date).getTime();if(countUpDate-now>=0){var distance=countUpDate-now,days=Math.floor(distance/864e5),hours=Math.floor(distance%864e5/36e5),minutes=Math.floor(distance%36e5/6e4),seconds=Math.floor(distance%6e4/1e3);document.getElementById("timer").innerHTML="<b><p>Contest start after</p></b><div class='count-down-time'><div class='count-down-part count-down-days' data-label='Days'>"+days+"</div>:<div class='count-down-part count-down-hours' data-label='Hours'>"+hours+"</div>:<div class='count-down-part count-down-minutes' data-label='Minutes'>"+minutes+"</div>:<div class='count-down-part count-down-seconds' data-label='Seconds'>"+seconds+"</div></div>";var x=setInterval(function(){if(distance=countUpDate-(now+=1e3),days=Math.floor(distance/864e5),hours=Math.floor(distance%864e5/36e5),minutes=Math.floor(distance%36e5/6e4),seconds=Math.floor(distance%6e4/1e3),document.getElementById("timer").innerHTML="<b><p>Contest start after</p></b><div class='count-down-time'><div class='count-down-part count-down-days' data-label='Days'>"+days+"</div>:<div class='count-down-part count-down-hours' data-label='Hours'>"+hours+"</div>:<div class='count-down-part count-down-minutes' data-label='Minutes'>"+minutes+"</div>:<div class='count-down-part count-down-seconds' data-label='Seconds'>"+seconds+"</div></div>",distance<=0)return document.getElementById("timer").innerHTML="Please refresh the page to start the contest!",void clearInterval(x)},1e3)}else{distance=countDownDate-now,days=Math.floor(distance/864e5),hours=Math.floor(distance%864e5/36e5),minutes=Math.floor(distance%36e5/6e4),seconds=Math.floor(distance%6e4/1e3);document.getElementById("timer").innerHTML="<b><p>Time remaining</p></b><div class='count-down-time'><div class='count-down-part count-down-days' data-label='Days'>"+days+"</div>:<div class='count-down-part count-down-hours' data-label='Hours'>"+hours+"</div>:<div class='count-down-part count-down-minutes' data-label='Minutes'>"+minutes+"</div>:<div class='count-down-part count-down-seconds' data-label='Seconds'>"+seconds+"</div></div>";var y=setInterval(function(){if(distance=countDownDate-(now+=1e3),days=Math.floor(distance/864e5),hours=Math.floor(distance%864e5/36e5),minutes=Math.floor(distance%36e5/6e4),seconds=Math.floor(distance%6e4/1e3),document.getElementById("timer").innerHTML="<b><p>Time remaining</p></b><div class='count-down-time'><div class='count-down-part count-down-days' data-label='Days'>"+days+"</div>:<div class='count-down-part count-down-hours' data-label='Hours'>"+hours+"</div>:<div class='count-down-part count-down-minutes' data-label='Minutes'>"+minutes+"</div>:<div class='count-down-part count-down-seconds' data-label='Seconds'>"+seconds+"</div></div>",distance<=0)return clearInterval(y),void(document.getElementById("timer").innerHTML="<font color=red><b><p>Contest is over</p></b></font>")},1e3)}
-        </script>
+        var countUpDate="<%=data[0].time_begin.getTime() %>",countDownDate="<%=data[0].time_end.getTime() %>",now=(new Date).getTime();if(countDownDate-now<=0)document.getElementById("timer").innerHTML="<font color=red><b><p>Contest is over</p></b></font>";else if(countUpDate-now>=0){var distance=countUpDate-now,days=Math.floor(distance/864e5),hours=Math.floor(distance%864e5/36e5),minutes=Math.floor(distance%36e5/6e4),seconds=Math.floor(distance%6e4/1e3);document.getElementById("timer").innerHTML="<b><p>Contest start after</p></b><div class='count-down-time'><div class='count-down-part count-down-days' data-label='Days'>"+days+"</div>:<div class='count-down-part count-down-hours' data-label='Hours'>"+hours+"</div>:<div class='count-down-part count-down-minutes' data-label='Minutes'>"+minutes+"</div>:<div class='count-down-part count-down-seconds' data-label='Seconds'>"+seconds+"</div></div>";var x=setInterval(function(){if(distance=countUpDate-(now+=1e3),days=Math.floor(distance/864e5),hours=Math.floor(distance%864e5/36e5),minutes=Math.floor(distance%36e5/6e4),seconds=Math.floor(distance%6e4/1e3),document.getElementById("timer").innerHTML="<b><p>Contest start after</p></b><div class='count-down-time'><div class='count-down-part count-down-days' data-label='Days'>"+days+"</div>:<div class='count-down-part count-down-hours' data-label='Hours'>"+hours+"</div>:<div class='count-down-part count-down-minutes' data-label='Minutes'>"+minutes+"</div>:<div class='count-down-part count-down-seconds' data-label='Seconds'>"+seconds+"</div></div>",distance<=0)return document.getElementById("timer").innerHTML="Please refresh the page to start the contest!",void clearInterval(x)},1e3)}else{distance=countDownDate-now,days=Math.floor(distance/864e5),hours=Math.floor(distance%864e5/36e5),minutes=Math.floor(distance%36e5/6e4),seconds=Math.floor(distance%6e4/1e3),document.getElementById("timer").innerHTML="<b><p>Time remaining</p></b><div class='count-down-time'><div class='count-down-part count-down-days' data-label='Days'>"+days+"</div>:<div class='count-down-part count-down-hours' data-label='Hours'>"+hours+"</div>:<div class='count-down-part count-down-minutes' data-label='Minutes'>"+minutes+"</div>:<div class='count-down-part count-down-seconds' data-label='Seconds'>"+seconds+"</div></div>";var y=setInterval(function(){if(distance=countDownDate-(now+=1e3),days=Math.floor(distance/864e5),hours=Math.floor(distance%864e5/36e5),minutes=Math.floor(distance%36e5/6e4),seconds=Math.floor(distance%6e4/1e3),document.getElementById("timer").innerHTML="<b><p>Time remaining</p></b><div class='count-down-time'><div class='count-down-part count-down-days' data-label='Days'>"+days+"</div>:<div class='count-down-part count-down-hours' data-label='Hours'>"+hours+"</div>:<div class='count-down-part count-down-minutes' data-label='Minutes'>"+minutes+"</div>:<div class='count-down-part count-down-seconds' data-label='Seconds'>"+seconds+"</div></div>",distance<=0)return clearInterval(y)},1e3)}     
+    </script>
     <% } %>
 </div>
 <%- include ("partials/footer" ) %>
