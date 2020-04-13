@@ -4,9 +4,7 @@
     var bais = [];
     for (let i = 0; i < bailam.length; ++i) {
         for (let j = 0; j < log_files.length; ++j) {
-            console.log(log_files[j])
-            if (bailam[i].includes(log_files[j].split('.')[0])) {
-                
+            if (bailam[i].includes(log_files[j].split('.')[0])) {  
                 bais.push(bailam[i]);
                 logs.push(log_files[j]);
             }
@@ -24,9 +22,8 @@
         </ol>
     </nav>
     <% 
-        
-        for (let i = 0, l = log_files.length; i < l; ++i) {
-        var mtime = fs.statSync(bais[i]).mtime; 
+        for (let i = log_files.length - 1; i >= 0; --i) {
+            var mtime = fs.statSync(bailam[i]).mtime; 
             var tenbai = bailam[i].split('][')[4].replace('].', '.');
             var filedate = new Date(new Date(mtime).getTime() - (new Date(mtime).getTimezoneOffset() * 60000)).toISOString().substring(0, 19).replace('T',' ');
             var logcontent = fs.readFileSync('./public/nopbai/Logs/' + contest_name + '/' + logs[i], 'utf8');
@@ -50,24 +47,23 @@
                 <div class="row">
                     <div class="col">
                         Result
-                        <div id="editor<%=i%>" style="height: 300px;"><%= logcontent %></div>
+                        <div id="editorlog<%=i%>" style="height: 300px;"><%= logcontent %></div>
                     </div>
                     <div class="col">
                         Submission
-                        <div id="editor1<%=i%>" style="height: 300px;"><%= baicontent %></div>
+                        <div id="editorbai<%=i%>" style="height: 300px;"><%= baicontent %></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
     <script type="text/javascript">
-        var editor = ace.edit('editor<%=i%>');
-        editor.getSession().setMode("ace/mode/c_cpp");
-        document.getElementById('editor<%=i%>').style.fontSize = '15px';
-        var editor1 = ace.edit('editor1<%=i%>');
-        editor1.getSession().setMode("ace/mode/c_cpp");
-        document.getElementById('editor1<%=i%>').style.fontSize = '15px';
+        var editorlog = ace.edit('editorlog<%=i%>');
+        editorlog.getSession().setMode("ace/mode/c_cpp");
+        document.getElementById('editorlog<%=i%>').style.fontSize = '15px';
+        var editorbai = ace.edit('editorbai<%=i%>');
+        editorbai.getSession().setMode("ace/mode/c_cpp");
+        document.getElementById('editorbai<%=i%>').style.fontSize = '15px';
     </script>
     <% } %>
 </div>

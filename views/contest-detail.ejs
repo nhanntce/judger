@@ -12,13 +12,13 @@
     <!-- Page Heading -->
     <h2>Total
         <%= data.length %> student in contest
-        <%= contest_name %>
+        <%= data[0].contest_name %>
         <button type="button" class="btn btn-outline-success waves-effect"
-            onclick="window.location='/contest/add-user?contest_id=<%=contest_id%>';">
+            onclick="window.location='/contest/add-user?contest_id=<%=data[0].contest_id%>';">
             <i class="fa fa-plus fa-lg"></i> Add student
         </button>
         <button type="button" class="btn btn-outline-success waves-effect"
-            onclick="window.location='/contest/add-problem?contest_id=<%=contest_id%>';">
+            onclick="window.location='/contest/add-problem?contest_id=<%=data[0].contest_id%>';">
             <i class="fa fa-plus fa-lg"></i> Add problem and testcase
         </button>
     </h2>
@@ -30,13 +30,13 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <i class="m-0 font-weight-bold text-primary">From: </i><%= time_begin.toLocaleString("vi-VN") %> <i
-                class="m-0 font-weight-bold text-primary"> to: </i><%= time_end.toLocaleString("vi-VN") %>
+            <i class="m-0 font-weight-bold text-primary">From: </i><%= data[0].time_begin1 %> <i
+                class="m-0 font-weight-bold text-primary"> to: </i><%= data[0].time_end1 %>
             <button type="button" class="btn btn-primary waves-effect waves-light btn-sm" data-toggle="modal" data-target="#myModal"><i
                     class="far fa-edit"></i> Edit</button>
             <div class="float-right">
                 <button type="button" class="btn btn-default btn-rounded btn-sm"
-                    onclick="window.location='/contest/download?contest_id=<%=contest_id%>';"><i
+                    onclick="window.location='/contest/download?contest_id=<%=data[0].contest_id%>';"><i
                         class="fa fa-download"></i> Download</button>
             </div>
         </div>
@@ -74,7 +74,7 @@
                     <% } %>
                 </tbody>
             </table>
-            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modalConfirmDelete"><i
+            <button type="button" id="btnconfirm" class="btn btn-danger" data-toggle="modal" data-target="#modalConfirmDelete"><i
                     class="fa fa-trash-alt"></i> Delete selected</button>
         </div>
     </div>
@@ -95,16 +95,16 @@
             <div class="modal-body">
                 <form action="/contest/edit-contest" method="POST">
                     <div class="form-group">
-                        <input type="hidden" name="contest_id" value="<%=contest_id%>">
+                        <input type="hidden" name="contest_id" value="<%=data[0].contest_id%>">
                         <label>Enter name</label>
                         <input type="text" class="form-control" id="contest_name" name="contest_name"
-                            value="<%=contest_name%>">
+                            value="<%=data[0].contest_name%>">
                         <label>Enter start time</label>
                         <input type="datetime-local" class="form-control" id="time_begin" name="time_begin"
-                            value="<%=new Date(time_begin.getTime() - (time_begin.getTimezoneOffset() * 60000)).toISOString().substring(0, 19)%>">
+                            value="<%=new Date(data[0].time_begin.getTime() - (data[0].time_begin.getTimezoneOffset() * 60000)).toISOString().substring(0, 19)%>">
                         <label>Enter end time</label>
                         <input type="datetime-local" class="form-control" id="time_end" name="time_end"
-                            value="<%=new Date(time_end.getTime() - (time_end.getTimezoneOffset() * 60000)).toISOString().substring(0, 19)%>">
+                            value="<%=new Date(data[0].time_end.getTime() - (data[0].time_end.getTimezoneOffset() * 60000)).toISOString().substring(0, 19)%>">
                     </div>
                     <button class="btn btn-primary" type="submit"><i class="fa fa-check"></i> Submit</button>
                 </form>
@@ -123,13 +123,13 @@
                 <p class="heading">Are you sure?</p>
             </div>
             <div class="modal-body">
-                <i class="fa fa-times fa-4x animated rotateIn"></i><br>
+                <i class="fas fa-times fa-4x animated rotateIn"></i><br>
                 <font color=red><b id="totalrollnumber"></b></font>
             </div>
             <div class="modal-footer flex-center">
                 <form action="/contest/delete-user" method="post">
                     <input type="hidden" id="list_rollnumber" name="list_rollnumber">
-                    <input type="hidden" name="contest_id" value="<%=contest_id%>">
+                    <input type="hidden" name="contest_id" value="<%=data[0].contest_id%>">
                     <button type="submit" class="btn btn-outline-danger">Yes</button>
                 </form>
                 <a type="button" class="btn  btn-danger waves-effect" data-dismiss="modal">No</a>

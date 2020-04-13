@@ -48,7 +48,7 @@
             });
             setInterval(function () {
                 example_table.ajax.reload();
-            }, 3000);
+            }, 5000);
         });
     </script>
     <nav aria-label="breadcrumb">
@@ -57,9 +57,19 @@
             <li class="breadcrumb-item active"><%= data[0].contest_name %></li>
         </ol>
     </nav>
-    <h2>Contest
-        <%= data[0].contest_name %>
-    </h2>
+    <div class="row">
+        <div class="col-md-3 text-left no-pad">
+            <h4><b>Start</b></h4>
+            <%= data[0].time_begin1 %>
+        </div>
+        <div class="col-md-6 text-center">
+            <h2 class="title">Contest <%= data[0].contest_name %></h2>
+        </div>
+        <div class="col-md-3 text-right no-pad">
+            <h4><b>End</b></h4>
+            <%= data[0].time_end1 %>
+        </div>
+        </div>
     <div class="progress">
         <div id="progress" class="progress-bar progress-bar-striped progress-bar-animated bg-success"></div>
     </div>
@@ -80,7 +90,6 @@
                         </th>
                         <% } %>
                         <th>Total</th>
-                        <th></th>
                     </tr>
                 </thead>
             </table>

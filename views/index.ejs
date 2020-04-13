@@ -1,78 +1,55 @@
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <title>Sample Site</title>
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
+    <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="../css/mdb.min.css" rel="stylesheet">
 
 </head>
-
-<body id="clrblk">
+<body class="winter-neva-gradient">
     <div class="container">
-        <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <div class="panel-title">Sign In</div>
+        <div class="row">
+          <div class="col-sm-9 col-md-7 col-lg-4 mx-auto">
+            <div class="card o-hidden border-0 shadow-lg my-5">
+              <div class="card-body">
+                <div class="text-center">
+                    <h1 class="h4 text-gray-900 mb-4">Sign In</h1>
                 </div>
-
-                <div style="padding-top:30px" class="panel-body">
-                    <% if (message.length > 0) { %>
-                    <div class="alert alert-danger col-sm-12"><%= message %></div>
-                    <% } %>
-
-                    <form id="loginform" class="form-horizontal" role="form" method="post" action="/login">
-
-                        <div style="margin-bottom: 25px" class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                            <input id="login-username" type="text" class="form-control" name="user_name" value=""
-                                placeholder="username">
+                <% if (message.length > 0) { %>
+                <div class="alert alert-danger col-sm-12 animated shake fast" align=center><%= message %></div>
+                <% } %>
+                <form class="user" method="post" action="/login">
+                    <div class="form-group">
+                        <input type="text" class="form-control form-control-user" name="user_name"
+                            placeholder="Enter Username...">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control form-control-user" name="password"
+                            placeholder="Password">
+                    </div>
+                    <div class="form-group">
+                        <!-- Material inline 1 -->
+                        <div class="form-check form-check-inline">
+                            <input type="radio" class="form-check-input" id="materialInline1" name="role" checked
+                                value="Student">
+                            <label class="form-check-label" for="materialInline1">Student</label>
                         </div>
 
-                        <div style="margin-bottom: 25px" class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                            <input id="login-password" type="password" class="form-control" name="password"
-                                placeholder="password">
+                        <!-- Material inline 2 -->
+                        <div class="form-check form-check-inline">
+                            <input type="radio" class="form-check-input" id="materialInline2" name="role"
+                                value="Teacher">
+                            <label class="form-check-label" for="materialInline2">Teacher</label>
                         </div>
-
-
-
-                        <div style="margin-top:25px" class="form-group">
-                            <!-- Button -->
-                            <div class="col-sm-8">
-                                <select class="form-control" name="role">
-                                    <option  >Student</option>
-                                    <option selected>Teacher</option>
-                                </select>
-                            </div>
-                            <div class="col-sm-2"></div>
-                            <div class="col-sm-2">
-                                <button id="btn-login" type="submit" class="btn btn-success">Login </button>
-
-                            </div>
-                            
-                        </div>
-
-
-                        <!-- <div class="form-group">
-                            <div class="col-md-12 control">
-                                <div style="border-top: 1px solid#888; padding-top:15px; font-size:85%">
-                                    Don't have an account!
-                                    <a href="/signup">
-                                        Sign Up Here
-                                    </a>
-                                </div>
-                            </div>
-                        </div> -->
-                    </form>
-
-
-
-                </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-user btn-block">Login </button>
+                </form>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
 
-    </div>
-    
 </body>
 
 </html>

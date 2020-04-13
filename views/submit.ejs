@@ -3,119 +3,115 @@
     <% if (error.length > 0) { %>
     <div class="alert alert-danger col-sm-12"><%= error %></div>
     <% } else { %>
-    <h2>Contest <%= data[0].contest_name %></h2>
-    <h6><i class="m-0 font-weight-bold text-primary">From: </i><%= data[0].time_begin.toLocaleString("vi-VN") %> <i
-            class="m-0 font-weight-bold text-primary"> to: </i><%= data[0].time_end.toLocaleString("vi-VN") %> </h6>
-    <div class="classic-tabs mx-2">
-
-        <ul class="nav tabs-cyan" role="tablist">
-            <li class="nav-item">
-                <a class="nav-link waves-light active show" id="submit-tab-classic-shadow" data-toggle="tab"
-                    href="#submit-classic-shadow" role="tab" aria-controls="profile-classic-shadow"
-                    aria-selected="true">Submit</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link waves-light" id="problem-tab-classic-shadow" data-toggle="tab"
-                    href="#problem-classic-shadow" role="tab" aria-controls="follow-classic-shadow"
-                    aria-selected="false">Problem</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link waves-light" id="history-tab-classic-shadow" data-toggle="tab"
-                    href="#history-classic-shadow" role="tab" aria-controls="contact-classic-shadow"
-                    aria-selected="false">History</a>
-            </li>
-        </ul>
-        <div class="tab-content card">
-            <div class="tab-pane fade active show" id="submit-classic-shadow" role="tabpanel"
-                aria-labelledby="submit-tab-classic-shadow">
-                <div id="timer" class=""></div><br>
-                <% if (message.length > 0) { 
-                    if (message == "Submit error!") { %>
-                <div class="alert alert-danger col-sm-12"><%= message %></div>
-                <% } else { %>
-                <div class="alert alert-success col-sm-12"><%= message %></div>
-                <% } %>
-                <% } %>
-                <% if (new Date() - data[0].time_begin > 0 && data[0].time_end - new Date() > 0) { %>
-                <form action="/submission/submit" method="post" enctype="multipart/form-data">
-                    <div class="form-group">
-                        <label for="exampleFormControlSelect1">Problem ID</label>
-                        <select class="form-control" name="tenbai">
-                            <% for (let i = 0, l = problem_files.length; i < l; ++i) { %>
-                            <option><%= problem_files[i].split('-')[0] %></option>
-                            <% } %>
-                        </select>
+    <div class="text-center">
+        <h2>Contest <%= data[0].contest_name %></h2>
+        <h6><i class="m-0 font-weight-bold text-primary">From: </i><%= data[0].time_begin1 %> <i
+                class="m-0 font-weight-bold text-primary"> to: </i><%= data[0].time_end1 %> </h6>
+    </div>
+    <ul class="nav nav-tabs nav-justified md-tabs blue-gradient" id="myTabJust" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="submit-tab-just" data-toggle="tab" href="#submit-just" role="tab"
+                aria-controls="submit-just" aria-selected="true">Submit</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="problem-tab-just" data-toggle="tab" href="#problem-just" role="tab"
+                aria-controls="problem-just" aria-selected="false">Problem</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="history-tab-just" data-toggle="tab" href="#history-just" role="tab"
+                aria-controls="history-just" aria-selected="false">History</a>
+        </li>
+    </ul>
+    <div class="tab-content card pt-5" id="myTabContentJust">
+        <div class="tab-pane fade show active" id="submit-just" role="tabpanel" aria-labelledby="submit-tab-just">
+            <div id="timer" class=""></div><br>
+            <% if (message.length > 0) { 
+                if (message == "Submit error!") { %>
+            <div class="alert alert-danger col-sm-12"><%= message %></div>
+            <% } else { %>
+            <div class="alert alert-success col-sm-12"><%= message %></div>
+            <% } %>
+            <% } %>
+            <% if (new Date() - data[0].time_begin > 0 && data[0].time_end - new Date() > 0) { %>
+            <form action="/submission/submit" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="exampleFormControlSelect1">Problem ID</label>
+                    <select class="form-control" name="tenbai">
+                        <% for (let i = 0, l = debai.length; i < l; ++i) { %>
+                        <option><%= debai[i].split('-')[0] %></option>
+                        <% } %>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Choose file (.c, .cpp):</label>
+                    <div class="custom-file">
+                        <input type="hidden" name="time" value="<%=new Date() - data[0].time_begin%>">
+                        <input type="hidden" name="contest_name" value="<%=data[0].contest_name%>">
+                        <input type="hidden" name="rollnumber" value="<%=data[0].rollnumber%>">
+                        <input type="file" class="custom-file-input" name="filetoupload" accept=".c, .cpp">
+                        <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+                        <button type="submit" class="btn btn-dark-green"><i class="fa fa-upload"></i>
+                            Submit</button>
                     </div>
-                    <div class="form-group">
-                        <label>Choose file (.c, .cpp):</label>
-                        <div class="custom-file">
-                            <input type="hidden" name="time" value="<%=new Date() - data[0].time_begin%>">
-                            <input type="hidden" name="contest_name" value="<%=data[0].contest_name%>">
-                            <input type="hidden" name="rollnumber" value="<%=data[0].rollnumber%>">
-                            <input type="file" class="custom-file-input" name="filetoupload" accept=".c, .cpp">
-                            <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
-                            <button type="submit" class="btn btn-dark-green"><i class="fa fa-upload"></i>
-                                Submit</button>
-                        </div>
-                    </div>
-                </form>
-                <% } %>
-            </div>
-            <div class="tab-pane fade" id="problem-classic-shadow" role="tabpanel"
-                aria-labelledby="problem-tab-classic-shadow">
-                <% if (new Date() - data[0].time_begin > 0) { %>
-                <% for (let i = 0, l = problem_files.length; i < l; ++i) { %>
-                <p><a href="/debai/<%=data[0].contest_name%>/<%=problem_files[i]%>" target="_blank">
-                        <%=problem_files[i]%>
-                    </a></p>
-                <% } } else { %>
-                <p><font color=red><b>The contest has not started</b></font></p>
-                <% } %>
-            </div>
-            <div class="tab-pane fade" id="history-classic-shadow" role="tabpanel"
-                aria-labelledby="history-tab-classic-shadow">
-                <% if (new Date() - data[0].time_begin > 0) { %>
-                <% for (let i = 0, l = bailam.length; i < l; ++i) { %>
-                <p><a href="#" data-toggle="modal" data-target="#myModal<%=i%>">
-                        <% var mtime = fs.statSync(bailam[i]).mtime; 
+                </div>
+            </form>
+            <% } %>
+        </div>
+        <div class="tab-pane fade" id="problem-just" role="tabpanel" aria-labelledby="problem-tab-just">
+            <% if (new Date() - data[0].time_begin > 0) { %>
+            <% for (let i = 0, l = debai.length; i < l; ++i) { %>
+            <p><a href="/debai/<%=data[0].contest_name%>/<%=debai[i]%>" target="_blank">
+                    <%=debai[i]%>
+                </a></p>
+            <% } } else { %>
+            <p>
+                <font color=red><b>The contest has not started</b></font>
+            </p>
+            <% } %>
+        </div>
+        <div class="tab-pane fade" id="history-just" role="tabpanel" aria-labelledby="history-tab-just">
+            <% if (new Date() - data[0].time_begin > 0) { %>
+            <% for (let i = bailam.length - 1; i >= 0; --i) { %>
+            <p><a href="#" data-toggle="modal" data-target="#myModal<%=i%>">
+                    <% var mtime = fs.statSync(bailam[i]).mtime; 
                             var tenbai = bailam[i].split('][')[4].replace('].', '.');
                             var filedate = new Date(new Date(mtime).getTime() - (new Date(mtime).getTimezoneOffset() * 60000)).toISOString().substring(0, 19).replace('T',' ');
                         %>
-                        <%= filedate %> - <%= tenbai %>
-                    </a></p>
-                <div class="modal fade" id="myModal<%=i%>">
-                    <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title"><%= filedate %> - <%= tenbai %></h4>
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            </div>
-                            <div class="modal-body">
-                                <div id="editor<%=i%>" style="height: 300px;"><%= fs.readFileSync(bailam[i], 'utf8'); %>
-                                </div>
-                                <script type="text/javascript">
-                                    var editor = ace.edit('editor<%=i%>');
-                                    editor.getSession().setMode("ace/mode/c_cpp");
-                                    document.getElementById('editor<%=i%>').style.fontSize = '15px';
-                                </script>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                            </div>
-
+                    <%= filedate %> - <%= tenbai %>
+                </a></p>
+            <div class="modal fade" id="myModal<%=i%>">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title"><%= filedate %> - <%= tenbai %></h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
                         </div>
+                        <div class="modal-body">
+                            <div id="editor<%=i%>" style="height: 300px;"><%= fs.readFileSync(bailam[i], 'utf8'); %>
+                            </div>
+                            <script type="text/javascript">
+                                var editor = ace.edit('editor<%=i%>');
+                                editor.getSession().setMode("ace/mode/c_cpp");
+                                document.getElementById('editor<%=i%>').style.fontSize = '15px';
+                            </script>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+
                     </div>
                 </div>
-                <% } } else { %>
-                <p>
-                    <font color=red><b>The contest has not started</b></font>
-                </p>
-                <% } %>
             </div>
+            <% } } else { %>
+            <p>
+                <font color=red><b>The contest has not started</b></font>
+            </p>
+            <% } %>
         </div>
     </div>
+
     <script>
-        var countUpDate="<%=data[0].time_begin.getTime() %>",countDownDate="<%=data[0].time_end.getTime() %>",now=(new Date).getTime();if(countDownDate-now<=0)document.getElementById("timer").innerHTML="<font color=red><b><p>Contest is over</p></b></font>";else if(countUpDate-now>=0){var distance=countUpDate-now,days=Math.floor(distance/864e5),hours=Math.floor(distance%864e5/36e5),minutes=Math.floor(distance%36e5/6e4),seconds=Math.floor(distance%6e4/1e3);document.getElementById("timer").innerHTML="<b><p>Contest start after</p></b><div class='count-down-time'><div class='count-down-part count-down-days' data-label='Days'>"+days+"</div>:<div class='count-down-part count-down-hours' data-label='Hours'>"+hours+"</div>:<div class='count-down-part count-down-minutes' data-label='Minutes'>"+minutes+"</div>:<div class='count-down-part count-down-seconds' data-label='Seconds'>"+seconds+"</div></div>";var x=setInterval(function(){if(distance=countUpDate-(now+=1e3),days=Math.floor(distance/864e5),hours=Math.floor(distance%864e5/36e5),minutes=Math.floor(distance%36e5/6e4),seconds=Math.floor(distance%6e4/1e3),document.getElementById("timer").innerHTML="<b><p>Contest start after</p></b><div class='count-down-time'><div class='count-down-part count-down-days' data-label='Days'>"+days+"</div>:<div class='count-down-part count-down-hours' data-label='Hours'>"+hours+"</div>:<div class='count-down-part count-down-minutes' data-label='Minutes'>"+minutes+"</div>:<div class='count-down-part count-down-seconds' data-label='Seconds'>"+seconds+"</div></div>",distance<=0)return document.getElementById("timer").innerHTML="Please refresh the page to start the contest!",void clearInterval(x)},1e3)}else{distance=countDownDate-now,days=Math.floor(distance/864e5),hours=Math.floor(distance%864e5/36e5),minutes=Math.floor(distance%36e5/6e4),seconds=Math.floor(distance%6e4/1e3),document.getElementById("timer").innerHTML="<b><p>Time remaining</p></b><div class='count-down-time'><div class='count-down-part count-down-days' data-label='Days'>"+days+"</div>:<div class='count-down-part count-down-hours' data-label='Hours'>"+hours+"</div>:<div class='count-down-part count-down-minutes' data-label='Minutes'>"+minutes+"</div>:<div class='count-down-part count-down-seconds' data-label='Seconds'>"+seconds+"</div></div>";var y=setInterval(function(){if(distance=countDownDate-(now+=1e3),days=Math.floor(distance/864e5),hours=Math.floor(distance%864e5/36e5),minutes=Math.floor(distance%36e5/6e4),seconds=Math.floor(distance%6e4/1e3),document.getElementById("timer").innerHTML="<b><p>Time remaining</p></b><div class='count-down-time'><div class='count-down-part count-down-days' data-label='Days'>"+days+"</div>:<div class='count-down-part count-down-hours' data-label='Hours'>"+hours+"</div>:<div class='count-down-part count-down-minutes' data-label='Minutes'>"+minutes+"</div>:<div class='count-down-part count-down-seconds' data-label='Seconds'>"+seconds+"</div></div>",distance<=0)return clearInterval(y)},1e3)}     
+        var countUpDate = "<%=data[0].time_begin.getTime() %>", countDownDate = "<%=data[0].time_end.getTime() %>", now = (new Date).getTime(); if (countDownDate - now <= 0) document.getElementById("timer").innerHTML = "<font color=red><b><p>Contest is over</p></b></font>"; else if (countUpDate - now >= 0) { var distance = countUpDate - now, days = Math.floor(distance / 864e5), hours = Math.floor(distance % 864e5 / 36e5), minutes = Math.floor(distance % 36e5 / 6e4), seconds = Math.floor(distance % 6e4 / 1e3); document.getElementById("timer").innerHTML = "<b><p>Contest start after</p></b><div class='count-down-time'><div class='count-down-part count-down-days' data-label='Days'>" + days + "</div>:<div class='count-down-part count-down-hours' data-label='Hours'>" + hours + "</div>:<div class='count-down-part count-down-minutes' data-label='Minutes'>" + minutes + "</div>:<div class='count-down-part count-down-seconds' data-label='Seconds'>" + seconds + "</div></div>"; var x = setInterval(function () { if (distance = countUpDate - (now += 1e3), days = Math.floor(distance / 864e5), hours = Math.floor(distance % 864e5 / 36e5), minutes = Math.floor(distance % 36e5 / 6e4), seconds = Math.floor(distance % 6e4 / 1e3), document.getElementById("timer").innerHTML = "<b><p>Contest start after</p></b><div class='count-down-time'><div class='count-down-part count-down-days' data-label='Days'>" + days + "</div>:<div class='count-down-part count-down-hours' data-label='Hours'>" + hours + "</div>:<div class='count-down-part count-down-minutes' data-label='Minutes'>" + minutes + "</div>:<div class='count-down-part count-down-seconds' data-label='Seconds'>" + seconds + "</div></div>", distance <= 0) return document.getElementById("timer").innerHTML = "Please refresh the page to start the contest!", void clearInterval(x) }, 1e3) } else { distance = countDownDate - now, days = Math.floor(distance / 864e5), hours = Math.floor(distance % 864e5 / 36e5), minutes = Math.floor(distance % 36e5 / 6e4), seconds = Math.floor(distance % 6e4 / 1e3), document.getElementById("timer").innerHTML = "<b><p>Time remaining</p></b><div class='count-down-time'><div class='count-down-part count-down-days' data-label='Days'>" + days + "</div>:<div class='count-down-part count-down-hours' data-label='Hours'>" + hours + "</div>:<div class='count-down-part count-down-minutes' data-label='Minutes'>" + minutes + "</div>:<div class='count-down-part count-down-seconds' data-label='Seconds'>" + seconds + "</div></div>"; var y = setInterval(function () { if (distance = countDownDate - (now += 1e3), days = Math.floor(distance / 864e5), hours = Math.floor(distance % 864e5 / 36e5), minutes = Math.floor(distance % 36e5 / 6e4), seconds = Math.floor(distance % 6e4 / 1e3), document.getElementById("timer").innerHTML = "<b><p>Time remaining</p></b><div class='count-down-time'><div class='count-down-part count-down-days' data-label='Days'>" + days + "</div>:<div class='count-down-part count-down-hours' data-label='Hours'>" + hours + "</div>:<div class='count-down-part count-down-minutes' data-label='Minutes'>" + minutes + "</div>:<div class='count-down-part count-down-seconds' data-label='Seconds'>" + seconds + "</div></div>", distance <= 0) return clearInterval(y) }, 1e3) }     
     </script>
     <% } %>
 </div>

@@ -10,7 +10,7 @@
     </nav>
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Add users</h6>
+            <h6 class="m-0 font-weight-bold">Add students <a href="/contest/add-class">or Add new class</a></h6>
         </div>
         <div class="card-body">
             <form action="/contest/load-user" method="GET">
@@ -24,6 +24,9 @@
             <% if (message.length > 0) { %>
             <div class="alert alert-success col-sm-12"><%= message %></div>
             <% } %>
+            <% if (error.length > 0) { %>
+                <div class="alert alert-danger col-sm-12"><%= error %> <a href="/contest/add-class">Click here to add new class</a></div>
+                <% } %>
             <% if (data.length > 0) { %>
 
             <div class="table-responsive">
@@ -57,7 +60,7 @@
                         <% } %>
                     </tbody>
                 </table>
-                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modalConfirmAdd"><i
+                <button type="button" id="btnconfirm" class="btn btn-info" data-toggle="modal" data-target="#modalConfirmAdd"><i
                         class="fa fa-plus "> Add selected</i></button>
             </div>
             <!--Modal: modalConfirmDelete-->

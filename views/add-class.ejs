@@ -1,0 +1,73 @@
+<%- include ("partials/header") %>
+<script>
+    $(document).ready(function () {
+        $('#dataTableClass').DataTable();
+    });
+</script>
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb cyan lighten-4">
+            <li class="breadcrumb-item"><a class="black-text" href="/contest">Contest</a></li>
+            <li class="breadcrumb-item active">Add Class</li>
+        </ol>
+    </nav>
+    <% if (xlData.length == 0) { %>
+    <div class="form-group">
+        <% if (error.length > 0) { %>
+        <div class="alert alert-danger col-sm-12"><%= error %></div>
+        <% } %>
+        <form action="/contest/add-class" method="post" enctype="multipart/form-data">
+            <label>Enter name of class</label>
+            <input type="text" class="form-control" id="class_name" name="class_name">
+            <label>Choose file (.xls, .xlsx):</label>
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" name="filetoupload" accept=".xls, .xlsx">
+                <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+                <button type="submit" class="btn btn-dark-green btn-sm"><i class="fa fa-upload"></i> Submit</button>
+            </div>
+        </form>
+    </div>
+    <% } else { %>
+    <%
+        var RollNumber = []
+        var MemberCode = []
+        var FullName = []
+        for (let i = 0, l = xlData.length; i < l; ++i) {
+            RollNumber.push(JSON.stringify(xlData[i].RollNumber).replace(/"/g,'').toUpperCase())
+            MemberCode.push(JSON.stringify(xlData[i].MemberCode).replace(/"/g,'').toLowerCase())
+            FullName.push(JSON.stringify(xlData[i].FullName).replace(/"/g,''))
+        }
+    %>
+    <form action="/contest/add-class/create" method="post">
+        <input type="hidden" name="RollNumber" value="<%=RollNumber%>">
+        <input type="hidden" name="MemberCode" value="<%=MemberCode%>">
+        <input type="hidden" name="FullName" value="<%=FullName%>">
+        <input type="hidden" name="class_name" value="<%=class_name%>">
+        <button type="submit" class="btn btn-green btn-sm"><i class="fa fa-check-circle fa-lg"></i> Create</button>
+    </form>
+    <div class="card-body">
+        <table class="table table-bordered table-hover" id="dataTableClass" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Roll number</th>
+                    <th>MemberCode</th>
+                    <th>Name</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <% for (let i = 0, l = xlData.length; i < l; ++i) { %>
+                <tr>
+                    <td><%= JSON.stringify(xlData[i].RollNumber).replace(/"/g,'') %></td>
+                    <td><%= JSON.stringify(xlData[i].MemberCode).replace(/"/g,'') %></td>
+                    <td><%= JSON.stringify(xlData[i].FullName).replace(/"/g,'') %></td>
+                </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+    <% } %>
+    
+
+</div>
+<%- include ("partials/footer") %>

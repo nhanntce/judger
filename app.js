@@ -10,7 +10,7 @@ var express = require('express')
   , bodyParser = require("body-parser")
   , compression = require('compression')
   , https = require('https');
-  
+
 http.globalAgent.maxSockets = Infinity;
 https.globalAgent.maxSockets = Infinity;
 global.fs = require('fs');
@@ -39,13 +39,22 @@ app.use(session({
   secret: 'keyboard cat',
   resave: false,
   saveUninitialized: true,
-  // cookie: { maxAge: 60000 }
+  cookie: { maxAge: 60000*5 }
 }))
 
 // development only
+app.get('*', (req, res, next) => {
+  if (['/', '/login', '/home/dashboard', '/home/logout', '/home/profile', '/submission', '/submission?success=1', '/submission?error=1', '/session/destroy', '/error'].indexOf(req.url) !== -1) {
+    return next();
+  }
+  if (req.session.role === "Student") {
+    res.redirect("/error");
+    return;
+  } else {
+    return next();
+  }
+});
 app.get('/', routes.index);//call for main index page
-app.get('/signup', user.signup);//call for signup page
-app.post('/signup', user.signup);//call for signup post 
 app.get('/login', routes.index);//call for login page
 app.post('/login', user.login);//call for login post
 app.get('/home/dashboard', user.dashboard);//call for dashboard page after login
@@ -77,8 +86,23 @@ app.get('/contest/add-user', (req, res) => {
     return;
   }
   var contest_id = req.query.contest_id;
-  res.render('add-user.ejs', { data: [], contest_id: contest_id, message: "", role: req.session.role, user: req.session.user });
+  res.render('add-user.ejs', { data: [], contest_id: contest_id, message: "", error: "", role: req.session.role, user: req.session.user });
 });
+// Load class
+app.get('/contest/load-class', user.load_class);
+// Add class
+app.post('/contest/add-class', user.add_class);
+// Add class
+app.get('/contest/add-class', (req, res) => {
+  var userId = req.session.userId;
+  if (userId == null) {
+    res.redirect("/login");
+    return;
+  }
+  res.render('add-class.ejs', { data: [], xlData: "", message: "", error: "", class_name: "", role: req.session.role, user: req.session.user });
+});
+// Add class
+app.post('/contest/add-class/create', user.create_class);
 // add problem
 app.get('/contest/add-problem', user.add_problem);
 // upload the problem
@@ -105,16 +129,20 @@ app.post('/submission/submit', user.submit);
 app.get('/session/destroy', user.session_destroy);
 // Admin page
 app.get('/admin', (req, res) => {
-  var userId = req.session.userId;
-  if (userId == null) {
-    res.redirect("/login");
-    return;
-  }
+  // var userId = req.session.userId;
+  // if (userId == null) {
+  //   res.redirect("/login");
+  //   return;
+  // }
   var contest_id = req.query.contest_id;
-  res.render('admin.ejs', { data: [], contest_id: contest_id, message: "", role: req.session.role, user: req.session.user });
+  res.render('admin.ejs', { data: [], contest_id: contest_id, message: "", error: "", role: req.session.role, user: req.session.user });
+});
+app.get('/error', (req, res) => {
+  res.render('404.ejs');
 });
 
+
 // Listen at port 8080
-app.listen(process.env.PORT || 8080, function(){
+app.listen(process.env.PORT || 8080, function () {
   console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
 });
