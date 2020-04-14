@@ -27,9 +27,9 @@
             <div id="timer" class=""></div><br>
             <% if (message.length > 0) { 
                 if (message == "Submit error!") { %>
-            <div class="alert alert-danger col-sm-12"><%= message %></div>
+            <script>toastr.error('<%=message%>')</script>
             <% } else { %>
-            <div class="alert alert-success col-sm-12"><%= message %></div>
+            <script>toastr.success('<%=message%>')</script>
             <% } %>
             <% } %>
             <% if (new Date() - data[0].time_begin > 0 && data[0].time_end - new Date() > 0) { %>

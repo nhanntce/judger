@@ -86,7 +86,7 @@ app.get('/contest/add-user', (req, res) => {
     return;
   }
   var contest_id = req.query.contest_id;
-  res.render('add-user.ejs', { data: [], contest_id: contest_id, message: "", error: "", role: req.session.role, user: req.session.user });
+  res.render('add-user.ejs', { data: [], contest_id: contest_id, message: "", error: "", warning: "", role: req.session.role, user: req.session.user });
 });
 // Load class
 app.get('/contest/load-class', user.load_class);

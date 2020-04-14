@@ -3,6 +3,7 @@ const formidable = require('formidable')
 const extract = require("extract-zip")
 const zipper = require('zip-local')
 const XLSX = require('xlsx')
+const storage = require("./storage.js");
 //TIME OUT
 const minutes = 15
 const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs))
@@ -59,7 +60,7 @@ exports.login = function (req, res) {
         if (role == "student_account") { // if student
             var sql = "SELECT id, username FROM `" + role + "` WHERE (`username`='" + user + "' and password = '" + hash + "' and ip='" + ipaddress + "') or (`username`='" + user + "' and password = '" + hash + "' and " + new Date().getTime() + " >= ROUND(UNIX_TIMESTAMP(timeout) * 1000) and islogin=0)"
             db.query(sql, function (err, results) {
-                if (err) {res.redirect("/error");return}
+                if (err) { res.redirect("/error"); return }
                 if (results.length) {
                     req.session.userId = results[0].id
                     req.session.role = post.role
@@ -78,7 +79,7 @@ exports.login = function (req, res) {
         } else { // teacher
             sql = "SELECT id, username, rollnumber FROM `" + role + "` WHERE `username`='" + user + "' and password = '" + hash + "'"
             db.query(sql, function (err, results) {
-                if (err) {res.redirect("/error");return}
+                if (err) { res.redirect("/error"); return }
                 if (results.length) {
                     req.session.userId = results[0].id
                     req.session.role = post.role
@@ -133,7 +134,7 @@ exports.profile = function (req, res) {
     }
     var sql = "SELECT name FROM `" + role + "` WHERE `id`='" + userId + "'"
     db.query(sql, function (err, result) {
-        if (err) {res.redirect("/error");return}
+        if (err) { res.redirect("/error"); return }
         res.render('profile.ejs', { data: result, role: req.session.role, user: req.session.user })
     })
 }
@@ -148,7 +149,7 @@ exports.contest = function (req, res) {
     var teacher_rollnumber = req.session.teacher_rollnumber
     var sql = "SELECT contest_id, contest_name, time_begin, time_end FROM `contest` WHERE `teacher_rollnumber`='" + teacher_rollnumber + "' AND `deleted`=0"
     db.query(sql, function (err, results) {
-        if (err) {res.redirect("/error");return}
+        if (err) { res.redirect("/error"); return }
         res.render('contest.ejs', { data: results, role: req.session.role, user: req.session.user })
     })
 }
@@ -166,17 +167,17 @@ exports.add_contest = function (req, res) {
         var starttime = post.starttime
         var endtime = post.endtime
         // create 4 folder when add new contest
-        if (!fs.existsSync('./public/thumucbailam/' + contest_name)) {
-            fs.mkdirSync('./public/thumucbailam/' + contest_name)
+        if (!fs.existsSync(storage.BAILAM + contest_name)) {
+            fs.mkdirSync(storage.BAILAM + contest_name)
         }
-        if (!fs.existsSync('./public/debai/' + contest_name)) {
-            fs.mkdirSync('./public/debai/' + contest_name)
+        if (!fs.existsSync(storage.DEBAI + contest_name)) {
+            fs.mkdirSync(storage.DEBAI + contest_name)
         }
-        if (!fs.existsSync('./public/thumuctest/' + contest_name)) {
-            fs.mkdirSync('./public/thumuctest/' + contest_name)
+        if (!fs.existsSync(storage.TESTCASE + contest_name)) {
+            fs.mkdirSync(storage.TESTCASE + contest_name)
         }
-        if (!fs.existsSync('./public/nopbai/Logs/' + contest_name)) {
-            fs.mkdirSync('./public/nopbai/Logs/' + contest_name)
+        if (!fs.existsSync(storage.NOPBAI + 'Logs/' + contest_name)) {
+            fs.mkdirSync(storage.NOPBAI + 'Logs/' + contest_name)
         }
         // add contest to db
         var sql = "INSERT INTO `contest`(`contest_name`, `teacher_rollnumber`, `time_begin`, `time_end`) VALUES ('" + contest_name + "', '" + teacher_rollnumber + "', '" + starttime + "', '" + endtime + "')"
@@ -198,21 +199,26 @@ exports.delete_contest = function (req, res) {
     if (req.method == "POST") {
         var post = req.body
         var contest_id = post.contest_id
-        // update status contest.deleted=1, student_account.in_contest=0
-        var sql = "UPDATE contest " +
-            "INNER JOIN contest_student ON contest.contest_id=contest_student.contest_id " +
-            "INNER JOIN student_account ON contest_student.student_rollnumber=student_account.rollnumber " +
-            "SET contest.deleted=1, student_account.in_contest=0 " +
-            "WHERE contest.contest_id=" + contest_id + " AND contest_student.student_rollnumber=student_account.rollnumber"
-        db.query(sql, function (err) {
-            if (err) {res.redirect("/error");return}
-            // delete student in contest_student
-            sql = "DELETE FROM `contest_student` WHERE contest_id=" + contest_id
+        var sql = ""
+        try {
+            // update status contest.deleted=1, student_account.in_contest=0
+            sql = "UPDATE contest SET deleted=1 WHERE contest_id=" + contest_id
+            db.query(sql);
+            sql = "UPDATE student_account " +
+                "INNER JOIN contest_student ON contest_student.student_rollnumber=student_account.rollnumber " +
+                "SET student_account.in_contest=0 " +
+                "WHERE contest_student.contest_id=" + contest_id + " AND contest_student.student_rollnumber=student_account.rollnumber"
             db.query(sql, function (err) {
-                if (err) {res.redirect("/error");return}
+                if (err) { res.redirect("/error"); return }
+                // delete student in contest_student
+                sql = "DELETE FROM `contest_student` WHERE contest_id=" + contest_id
+                db.query(sql)
                 res.redirect("/contest")
             })
-        })
+        } catch (error) {
+            res.redirect("/error")
+            return
+        }
     } else {
         res.redirect("/error")
         return
@@ -234,7 +240,7 @@ exports.edit_contest = function (req, res) {
         // update contest_name, time_begin, time_end
         var sql = "UPDATE `contest` SET `contest_name`='" + contest_name + "',`time_begin`='" + time_begin + "',`time_end`='" + time_end + "' WHERE `contest_id`=" + contest_id
         db.query(sql, function (err, results) {
-            if (err) {res.redirect("/error");return}
+            if (err) { res.redirect("/error"); return }
             res.redirect("/contest/detail?contest_id=" + contest_id)
         })
     } else {
@@ -252,10 +258,10 @@ exports.download = function (req, res) {
     var contest_id = req.query.contest_id
     var sql = "SELECT contest_name from contest WHERE `contest_id`=" + contest_id
     db.query(sql, function (err, results) {
-        if (err) {res.redirect("/error");return}
+        if (err) { res.redirect("/error"); return }
         var contest_name = results[0].contest_name
-        // zip folder "./public/thumucbailam/" + contest_name
-        zipper.sync.zip("./public/thumucbailam/" + contest_name).compress().save(contest_name + ".zip")
+        // zip folder "./public/thumucbailam/ contest_name
+        zipper.sync.zip(storage.BAILAM + contest_name).compress().save(contest_name + ".zip")
         var file = contest_name + ".zip"
         res.download(file) // download file .zip
     })
@@ -284,7 +290,7 @@ exports.contest_detail = function (req, res) {
         "INNER JOIN contest ON contest_student.contest_id=contest.contest_id " +
         "WHERE contest.contest_id=" + contest_id
     db.query(sql, function (err, results) {
-        if (err || results.length==0) {res.redirect("/error");return}
+        if (err) { res.redirect("/error"); return }
         if (results.length == 0) { // if no student in contest
             sql = "SELECT contest_name, contest_id, time_begin, time_end, DATE_FORMAT(time_begin, '%d-%m-%Y %H:%i:%s') as time_begin1, DATE_FORMAT(time_end, '%d-%m-%Y %H:%i:%s') as time_end1  FROM contest WHERE contest_id=" + contest_id
             db.query(sql, function (err, results) {
@@ -337,6 +343,7 @@ exports.load_user = function (req, res) {
     }
     var message = ""
     var error = ""
+    var warning = ""
     if (req.session.added) {
         req.session.added = false
         message = "Succesfully! Student has been added."
@@ -346,11 +353,24 @@ exports.load_user = function (req, res) {
     var contest_id = req.query.contest_id
     var sql = "SELECT rollnumber, name, class FROM student_account WHERE class='" + class_name + "' and in_contest=0"
     db.query(sql, function (err, results) {
-        if (err) {res.redirect("/error");return}
+        if (err) { res.redirect("/error"); return }
         if (results.length == 0) { // if query empty
-            error = "Sorry, the system cannot find class " + class_name
+            sql = "SELECT rollnumber FROM student_account WHERE class='" + class_name + "' LIMIT 1"
+            db.query(sql, function (err, results) {
+                if (err) { res.redirect("/error"); return }
+                if (results.length == 0) {
+                    error = "Sorry, the system cannot find class " + class_name
+                    res.render('add-user.ejs', { data: results, contest_id: contest_id, message: message, error: error, warning: warning, class_name: class_name, role: req.session.role, user: req.session.user })
+                    return
+                } else {
+                    warning = "All student are in contest"
+                    res.render('add-user.ejs', { data: [], contest_id: contest_id, message: message, error: error, warning: warning, class_name: class_name, role: req.session.role, user: req.session.user })
+                    return
+                }
+            })
+        } else {
+            res.render('add-user.ejs', { data: results, contest_id: contest_id, message: message, error: error, warning: warning, class_name: class_name, role: req.session.role, user: req.session.user })
         }
-        res.render('add-user.ejs', { data: results, contest_id: contest_id, message: message, error: error, class_name: class_name, role: req.session.role, user: req.session.user })
     })
 
 }
@@ -370,14 +390,14 @@ exports.add_user = function (req, res) {
         if (list_rollnumber != "") { // if has student in added list
             var sql = "SELECT contest_name FROM contest WHERE contest_id=" + contest_id
             db.query(sql, function (err, results) {
-                if (err || results.length==0) {res.redirect("/error");return}
+                if (err || results.length == 0) { res.redirect("/error"); return }
                 var contest_name = results[0].contest_name
                 var list = list_rollnumber.split(",")
                 var sql = ""
                 for (let i = 0, l = list.length; i < l; ++i) {
                     // create a new folder contains submission files of student
-                    if (!fs.existsSync('./public/thumucbailam/' + contest_name + '/' + list[i])) {
-                        fs.mkdirSync('./public/thumucbailam/' + contest_name + '/' + list[i])
+                    if (!fs.existsSync(storage.BAILAM + contest_name + '/' + list[i])) {
+                        fs.mkdirSync(storage.BAILAM + contest_name + '/' + list[i])
                     }
                     // update `in_contest`=1 in student_account and insert student into contest_student
                     sql = "UPDATE `student_account` SET `in_contest`=1 WHERE rollnumber='" + list[i] + "'"
@@ -410,7 +430,7 @@ exports.load_class = function (req, res) {
     try {
         //read file excel
         var class_name = req.query.class_name
-        var workbook = XLSX.readFile('./public/excel/' + class_name + '.xls')
+        var workbook = XLSX.readFile(storage.EXCEL + class_name + '.xls')
         var sheet_name_list = workbook.SheetNames
         var xlData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]])
         res.render('add-class.ejs', { data: [], xlData: xlData, message: "", error: "", class_name: class_name, role: req.session.role, user: req.session.user })
@@ -424,7 +444,7 @@ exports.add_class = function (req, res) {
     if (req.method == "POST") {
         var form = new formidable.IncomingForm()
         form.parse(req, function (err, fields, files) {
-            if (err) {res.redirect("/error");return}
+            if (err) { res.redirect("/error"); return }
             if (files.filetoupload.name == "") { // check file name is empty
                 res.redirect("/contest/add-class?error=1")
                 return
@@ -437,7 +457,7 @@ exports.add_class = function (req, res) {
             // check class is exist
             var sql = "SELECT rollnumber FROM student_account WHERE class='" + class_name + "' LIMIT 1"
             db.query(sql, function (err, results) {
-                if (err) {res.redirect("/error");return}
+                if (err) { res.redirect("/error"); return }
                 if (results.length > 0) { // if class is exist, return error
                     res.render('add-class.ejs', { data: [], xlData: "", message: "", error: "Sorry, class " + class_name + " is exist", class_name: class_name, role: req.session.role, user: req.session.user })
                     return
@@ -445,16 +465,16 @@ exports.add_class = function (req, res) {
                 // get file upload and rewrite it 
                 var newfile = class_name + '.' + files.filetoupload.name.split('.')[1]
                 var oldpath = files.filetoupload.path
-                var newpath = './public/excel/' + newfile
+                var newpath = storage.EXCEl + newfile
                 fs.readFile(oldpath, function (err, data) {
-                    if (err) {res.redirect("/error");return}
+                    if (err) { res.redirect("/error"); return }
                     // Write the file
                     fs.writeFile(newpath, data, function (err) {
-                        if (err) {res.redirect("/error");return}
+                        if (err) { res.redirect("/error"); return }
                     })
                     // Delete the file
                     fs.unlink(oldpath, function (err) {
-                        if (err) {res.redirect("/error");return}
+                        if (err) { res.redirect("/error"); return }
                     })
                     sleep(500).then(() => {
                         res.redirect("/contest/load-class?class_name=" + class_name)
@@ -488,18 +508,18 @@ exports.add_problem = function (req, res) {
     var contest_id = req.query.contest_id
     var sql = "SELECT contest_name FROM contest WHERE contest_id=" + contest_id
     db.query(sql, function (err, results) {
-        if (err || results.length==0) {res.redirect("/error");return}
+        if (err || results.length == 0) { res.redirect("/error"); return }
         var contest_name = results[0].contest_name
         var problem_files = []
         // get problem
-        fs.readdir('./public/debai/' + contest_name, function (err, files) {
-            if (err) {res.redirect("/error");return}
+        fs.readdir(storage.DEBAI + contest_name, function (err, files) {
+            if (err) { res.redirect("/error"); return }
             problem_files = files
             var testcase = []
             var testcase_size = []
             var testcase_path = []
             //get testcase
-            var folders = getFolders('./public/thumuctest/' + contest_name)
+            var folders = getFolders(storage.TESTCASE + contest_name)
             for (let i = 0, l = folders.length; i < l; i++) {
                 var tmp = folders[i].split('\\')
                 testcase.push(tmp[tmp.length - 1]) // testcase name
@@ -522,16 +542,16 @@ exports.upload_problem = function (req, res) {
 
         var sql = "SELECT contest_name FROM contest WHERE contest_id=" + contest_id
         db.query(sql, function (err, results) {
-            if (err || results.length==0) {res.redirect("/error");return}
+            if (err || results.length == 0) { res.redirect("/error"); return }
             var contest_name = results[0].contest_name
-            // upload problem to folder './public/debai/' + contest_name
+            // upload problem to folder './public/debai/contest_name
             var form = new formidable.IncomingForm()
             form.parse(req)
             form.on('fileBegin', function (name, file) {
                 if (file.name == "") {
                     return
                 }
-                file.path = './public/debai/' + contest_name + '/' + file.name
+                file.path = storage.DEBAI + contest_name + '/' + file.name
             })
             form.on('file', function (name, file) {
                 res.redirect("/contest/add-problem?contest_id=" + contest_id)
@@ -554,7 +574,7 @@ exports.upload_testcase = function (req, res) {
 
         var sql = "SELECT contest_name FROM contest WHERE contest_id=" + contest_id
         db.query(sql, function (err, results) {
-            if (err || results.length==0) {res.redirect("/error");return}
+            if (err || results.length == 0) { res.redirect("/error"); return }
             var contest_name = results[0].contest_name
             // upload testcase to folder './public/thumuctest/' + contest_name
             var form = new formidable.IncomingForm()
@@ -563,12 +583,12 @@ exports.upload_testcase = function (req, res) {
                 if (file.name == "") {
                     return
                 }
-                file.path = './public/thumuctest/' + contest_name + '/' + file.name
+                file.path = storage.TESTCASE + contest_name + '/' + file.name
             })
             // extract testcase.zip
             form.on('file', function (name, file) {
                 try {
-                    extract(file.path, { dir: public_dir + '/thumuctest/' + contest_name })
+                    extract(file.path, { dir: public_dir + storage.TESTCASE.substring(8) + contest_name })
                     console.log('Extraction complete')
                 } catch (err) {
                     console.log(err)
@@ -593,7 +613,7 @@ exports.delete_problem = function (req, res) {
         var contest_id = post.contest_id
         // delete problem
         fs.unlink(problem_path, (err) => {
-            if (err) {res.redirect("/error");return}
+            if (err) { res.redirect("/error"); return }
             res.redirect("/contest/add-problem?contest_id=" + contest_id)
         })
     } else {
@@ -632,7 +652,7 @@ exports.rank = function (req, res) {
     var teacher_rollnumber = req.session.teacher_rollnumber
     var sql = "SELECT contest_id, contest_name FROM `contest` WHERE `teacher_rollnumber`='" + teacher_rollnumber + "'"
     db.query(sql, function (err, results) {
-        if (err || results.length==0) {res.redirect("/error");return}
+        if (err || results.length == 0) { res.redirect("/error"); return }
         res.render('rank.ejs', { data: results, role: req.session.role, user: req.session.user })
     })
 }
@@ -647,19 +667,19 @@ exports.data_rank = function (req, res) {
     var contest_id = req.query.contest_id
     var sql = "SELECT student_rollnumber FROM `contest_student` WHERE `contest_id`=" + contest_id + " LIMIT 1"
     db.query(sql, function (err, results) {
-        if (err) {res.redirect("/error");return}
+        if (err) { res.redirect("/error"); return }
         if (results.length == 0) { // if No student in contest
             message = "No student in contest"
             res.render('data-rank.ejs', { data: [], problem_files: [], message: message, role: req.session.role, user: req.session.user })
         } else {
             sql = "SELECT contest_name, contest_id, time_begin, time_end, DATE_FORMAT(time_begin, '%d-%m-%Y %H:%i:%s') as time_begin1, DATE_FORMAT(time_end, '%d-%m-%Y %H:%i:%s') as time_end1 FROM `contest` WHERE `contest_id`=" + contest_id
             db.query(sql, function (err, results) {
-                if (err || results.length==0) {res.redirect("/error");return}
+                if (err || results.length == 0) { res.redirect("/error"); return }
                 var contest_name = results[0].contest_name //contest name
                 var problem_files = []
                 // get all problem in folder './public/debai/' + contest_name
-                fs.readdir('./public/debai/' + contest_name, function (err, files) {
-                    if (err) {res.redirect("/error");return}
+                fs.readdir(storage.DEBAI + contest_name, function (err, files) {
+                    if (err) { res.redirect("/error"); return }
                     problem_files = files
                     res.render('data-rank.ejs', { data: results, problem_files: problem_files, message: message, role: req.session.role, user: req.session.user })
                 })
@@ -675,17 +695,17 @@ exports.load_rank = function (req, res) {
         "INNER JOIN contest ON contest_student.contest_id=contest.contest_id " +
         "WHERE contest.contest_id=" + contest_id
     db.query(sql, function (err, results) {
-        if (err || results.length==0) {res.redirect("/error");return}
+        if (err || results.length == 0) { res.redirect("/error"); return }
         var contest_name = results[0].contest_name
         var problem_files = []
         // get all problem in folder './public/debai/' + contest_name
-        fs.readdir('./public/debai/' + contest_name, function (err, files) {
-            if (err) {res.redirect("/error");return}
+        fs.readdir(storage.DEBAI + contest_name, function (err, files) {
+            if (err) { res.redirect("/error"); return }
             problem_files = files
             var log_files = []
             // get all judged Logs in folder './public/nopbai/Logs/' + contest_name
-            fs.readdir('./public/nopbai/Logs/' + contest_name, function (err, files) {
-                if (err) {res.redirect("/error");return}
+            fs.readdir(storage.NOPBAI + 'Logs/' + contest_name, function (err, files) {
+                if (err) { res.redirect("/error"); return }
                 log_files = files
                 res.render('load-rank.ejs', { data: results, problem_files: problem_files, log_files: log_files, message: "", role: req.session.role, user: req.session.user })
             })
@@ -702,20 +722,20 @@ exports.detail_rank = function (req, res) {
     var rollnumber = req.query.rollnumber
     var sql = "SELECT contest.contest_name, contest.contest_id FROM `contest_student` INNER JOIN contest ON contest_student.contest_id=contest.contest_id WHERE student_rollnumber='" + rollnumber + "'"
     db.query(sql, function (err, results) {
-        if (err || results.length==0) {res.redirect("/error");return}
+        if (err || results.length == 0) { res.redirect("/error"); return }
         var contest_name = results[0].contest_name
         var contest_id = results[0].contest_id
-        // get all judged Logs in folder './public/nopbai/Logs/' + contest_name
-        fs.readdir('./public/nopbai/Logs/' + contest_name, function (err, files) {
-            if (err) {res.redirect("/error");return}
+        // get all judged Logs in folder './public/nopbai/Logs/contest_name
+        fs.readdir(storage.NOPBAI + 'Logs/' + contest_name, function (err, files) {
+            if (err) { res.redirect("/error"); return }
             var log_files = []
             for (let i = 0, l = files.length; i < l; i++) {
                 if (files[i].includes(rollnumber)) {
                     log_files.push(files[i])
                 }
             }
-            // get all submissions of students in folder './public/nopbai/Logs/' + contest_name
-            var bailam = traverseDir('./public/thumucbailam/' + contest_name + '/' + rollnumber)
+            // get all submissions of students in folder './public/thumucbailam/contest_name/rollnumber
+            var bailam = traverseDir(storage.BAILAM + contest_name + '/' + rollnumber)
             res.render('rank-detail.ejs', { bailam: bailam, contest_name: contest_name, contest_id: contest_id, rollnumber: rollnumber, log_files: log_files, message: "", role: req.session.role, user: req.session.user })
         })
     })
@@ -758,21 +778,21 @@ exports.submission = function (req, res) {
         "INNER JOIN student_account ON contest_student.student_rollnumber=student_account.rollnumber " +
         "WHERE student_account.id=" + userId
     db.query(sql, function (err, results) {
-        if (err) {res.redirect("/error");return}
+        if (err) { res.redirect("/error"); return }
         if (results.length == 0) { // if student have no contests
             error = "You have no contests"
             res.render('submit.ejs', { error: error, role: req.session.role, user: req.session.user })
         } else {
             var contest_name = results[0].contest_name
-            // get all problem in folder './public/debai/' + contest_name
-            fs.readdir('./public/debai/' + contest_name, function (err, files) {
+            // get all problem in folder './public/debai/contest_name
+            fs.readdir(storage.DEBAI + contest_name, function (err, files) {
                 var debai = files
                 req.session.debai = [];
                 for (let i = 0, l = debai.length; i < l; ++i) {
                     req.session.debai.push(debai[i].split('-')[0])
                 }
-                // get all submissions of student in folder './public/thumucbailam/' + contest_name + '/' + results[0].rollnumber
-                var bailam = traverseDir('./public/thumucbailam/' + contest_name + '/' + results[0].rollnumber)
+                // get all submissions of student in folder './public/thumucbailam/contest_name/results[0].rollnumber
+                var bailam = traverseDir(storage.BAILAM + contest_name + '/' + results[0].rollnumber)
                 res.render('submit.ejs', { error: "", data: results, debai: debai, bailam: bailam, message: message, role: req.session.role, user: req.session.user })
             })
         }
@@ -783,7 +803,7 @@ exports.submit = function (req, res) {
     if (req.method == "POST") {
         var form = new formidable.IncomingForm()
         form.parse(req, function (err, fields, files) {
-            if (err) {res.redirect("/error");return}
+            if (err) { res.redirect("/error"); return }
             // check file is valid
             if (files.filetoupload.name == "" || !req.session.debai.includes(fields.tenbai) || !/^\w+\.(c|cpp)$/.test(files.filetoupload.name)) {
                 res.redirect("/submission?error=1")
@@ -799,16 +819,16 @@ exports.submit = function (req, res) {
             }
             var newfile = '[' + ip + '][' + fields.time + '][' + fields.contest_name + '][' + fields.rollnumber + '][' + fields.tenbai + '].' + type[type.length - 1]
             var oldpath = files.filetoupload.path
-            var newpath = './public/nopbai/' + newfile
+            var newpath = storage.NOPBAI + newfile
             fs.readFile(oldpath, function (err, data) {
-                if (err) {res.redirect("/error");return}
+                if (err) { res.redirect("/error"); return }
                 // Write the file
                 fs.writeFile(newpath, data, function (err) {
-                    if (err) {res.redirect("/error");return}
+                    if (err) { res.redirect("/error"); return }
                 })
                 // Delete the file
                 fs.unlink(oldpath, function (err) {
-                    if (err) {res.redirect("/error");return}
+                    if (err) { res.redirect("/error"); return }
                 })
                 sleep(500).then(() => {
                     res.redirect("/submission?success=1")

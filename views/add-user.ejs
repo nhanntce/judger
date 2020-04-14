@@ -22,11 +22,14 @@
                 <button class="btn btn-primary" type="submit"><i class="fa fa-spinner"></i> Load</button>
             </form>
             <% if (message.length > 0) { %>
-            <div class="alert alert-success col-sm-12"><%= message %></div>
+                <script>toastr.success('<%=message%>')</script>
             <% } %>
             <% if (error.length > 0) { %>
-                <div class="alert alert-danger col-sm-12"><%= error %> <a href="/contest/add-class">Click here to add new class</a></div>
-                <% } %>
+                <script>toastr.error('<%=error%>')</script>
+            <% } %>
+            <% if (warning.length > 0) { %>
+                <script>toastr.warning('<%=warning%>')</script>
+            <% } %>
             <% if (data.length > 0) { %>
 
             <div class="table-responsive">

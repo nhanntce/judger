@@ -23,9 +23,7 @@
         </button>
     </h2>
     <% if (message.length > 0) { %>
-    <div class="alert alert-success col-sm-12">
-        <%= message %>
-    </div>
+        <script>toastr.success('<%=message%>')</script>
     <% } %>
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
