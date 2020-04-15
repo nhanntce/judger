@@ -204,15 +204,9 @@ exports.delete_contest = function (req, res) {
             // update status contest.deleted=1, student_account.in_contest=0
             sql = "UPDATE contest SET deleted=1 WHERE contest_id=" + contest_id
             db.query(sql);
-            sql = "UPDATE student_account " +
-                "INNER JOIN contest_student ON contest_student.student_rollnumber=student_account.rollnumber " +
-                "SET student_account.in_contest=0 " +
-                "WHERE contest_student.contest_id=" + contest_id + " AND contest_student.student_rollnumber=student_account.rollnumber"
-            db.query(sql, function (err) {
-                if (err) { res.redirect("/error"); return }
-                // delete student in contest_student
-                sql = "DELETE FROM `contest_student` WHERE contest_id=" + contest_id
-                db.query(sql)
+            sql = "UPDATE student_account SET contest_id=0 WHERE contest_id=" + contest_id
+            db.query(sql)
+            sleep(500).then(() => {
                 res.redirect("/contest")
             })
         } catch (error) {
@@ -285,9 +279,8 @@ exports.contest_detail = function (req, res) {
         message = "Succesfully! Student has been deleted."
     }
 
-    var sql = "SELECT student_account.id, contest_student.student_rollnumber, student_account.name, student_account.class, contest.contest_id, contest.contest_name,contest.time_begin,contest.time_end, DATE_FORMAT(contest.time_begin, '%d-%m-%Y %H:%i:%s') as time_begin1, DATE_FORMAT(contest.time_end, '%d-%m-%Y %H:%i:%s') as time_end1 FROM contest_student " +
-        "INNER JOIN student_account ON contest_student.student_rollnumber=student_account.rollnumber " +
-        "INNER JOIN contest ON contest_student.contest_id=contest.contest_id " +
+    var sql = "SELECT student_account.id, student_account.rollnumber, student_account.name, student_account.class, contest.contest_id, contest.contest_name,contest.time_begin,contest.time_end, DATE_FORMAT(contest.time_begin, '%d-%m-%Y %H:%i:%s') as time_begin1, DATE_FORMAT(contest.time_end, '%d-%m-%Y %H:%i:%s') as time_end1 FROM contest " +
+        "INNER JOIN student_account ON student_account.contest_id=contest.contest_id " +
         "WHERE contest.contest_id=" + contest_id
     db.query(sql, function (err, results) {
         if (err) { res.redirect("/error"); return }
@@ -317,11 +310,9 @@ exports.delete_user = function (req, res) {
         if (list_rollnumber != "") { // // if has student in deleted list
             var list = list_rollnumber.split(",")
             var sql = ""
-            // update `in_contest`=0 in student_account and delete student in contest_student
+            // update contest_id=0 in student_account
             for (let i = 0, l = list.length; i < l; ++i) {
-                sql = "UPDATE `student_account` SET `in_contest`=0 WHERE rollnumber='" + list[i] + "'"
-                db.query(sql)
-                sql = "DELETE FROM `contest_student` WHERE student_rollnumber='" + list[i] + "'"
+                sql = "UPDATE student_account SET contest_id=0 WHERE rollnumber='" + list[i] + "'"
                 db.query(sql)
             }
             req.session.deleted = true
@@ -351,7 +342,7 @@ exports.load_user = function (req, res) {
     }
     var class_name = req.query.class_name
     var contest_id = req.query.contest_id
-    var sql = "SELECT rollnumber, name, class FROM student_account WHERE class='" + class_name + "' and in_contest=0"
+    var sql = "SELECT rollnumber, name, class FROM student_account WHERE class='" + class_name + "' and contest_id=0"
     db.query(sql, function (err, results) {
         if (err) { res.redirect("/error"); return }
         if (results.length == 0) { // if query empty
@@ -399,10 +390,8 @@ exports.add_user = function (req, res) {
                     if (!fs.existsSync(storage.BAILAM + contest_name + '/' + list[i])) {
                         fs.mkdirSync(storage.BAILAM + contest_name + '/' + list[i])
                     }
-                    // update `in_contest`=1 in student_account and insert student into contest_student
-                    sql = "UPDATE `student_account` SET `in_contest`=1 WHERE rollnumber='" + list[i] + "'"
-                    db.query(sql)
-                    sql = "INSERT INTO `contest_student`(`student_rollnumber`, `contest_id`) VALUES ('" + list[i] + "'," + contest_id + ")"
+                    // update contest_id in student_account
+                    sql = "UPDATE student_account SET contest_id=" + contest_id + " WHERE rollnumber='" + list[i] + "'"
                     db.query(sql)
                 }
             })
@@ -650,7 +639,7 @@ exports.rank = function (req, res) {
         return
     }
     var teacher_rollnumber = req.session.teacher_rollnumber
-    var sql = "SELECT contest_id, contest_name FROM `contest` WHERE `teacher_rollnumber`='" + teacher_rollnumber + "'"
+    var sql = "SELECT contest_id, contest_name FROM `contest` WHERE `teacher_rollnumber`='" + teacher_rollnumber + "' AND deleted=0"
     db.query(sql, function (err, results) {
         if (err || results.length == 0) { res.redirect("/error"); return }
         res.render('rank.ejs', { data: results, role: req.session.role, user: req.session.user })
@@ -665,7 +654,7 @@ exports.data_rank = function (req, res) {
     }
     var message = ""
     var contest_id = req.query.contest_id
-    var sql = "SELECT student_rollnumber FROM `contest_student` WHERE `contest_id`=" + contest_id + " LIMIT 1"
+    var sql = "SELECT rollnumber FROM student_account WHERE contest_id=" + contest_id + " LIMIT 1"
     db.query(sql, function (err, results) {
         if (err) { res.redirect("/error"); return }
         if (results.length == 0) { // if No student in contest
@@ -690,10 +679,10 @@ exports.data_rank = function (req, res) {
 //---------------------------------load rank -> json----------------------------------
 exports.load_rank = function (req, res) {
     var contest_id = req.query.contest_id
-    var sql = "SELECT student_account.id, contest_student.student_rollnumber, student_account.name, student_account.class, contest.contest_id, contest.contest_name, contest.time_begin, contest.time_end FROM contest_student " +
-        "INNER JOIN student_account ON contest_student.student_rollnumber=student_account.rollnumber " +
-        "INNER JOIN contest ON contest_student.contest_id=contest.contest_id " +
+    var sql = "SELECT student_account.id, student_account.rollnumber, student_account.name, student_account.class, contest.contest_id, contest.contest_name, contest.time_begin, contest.time_end FROM contest " +
+        "INNER JOIN student_account ON student_account.contest_id=contest.contest_id " +
         "WHERE contest.contest_id=" + contest_id
+    console.log(sql)
     db.query(sql, function (err, results) {
         if (err || results.length == 0) { res.redirect("/error"); return }
         var contest_name = results[0].contest_name
@@ -720,7 +709,7 @@ exports.detail_rank = function (req, res) {
         return
     }
     var rollnumber = req.query.rollnumber
-    var sql = "SELECT contest.contest_name, contest.contest_id FROM `contest_student` INNER JOIN contest ON contest_student.contest_id=contest.contest_id WHERE student_rollnumber='" + rollnumber + "'"
+    var sql = "SELECT contest.contest_name, contest.contest_id FROM contest INNER JOIN student_account ON student_account.contest_id=contest.contest_id WHERE student_account.rollnumber='" + rollnumber + "'"
     db.query(sql, function (err, results) {
         if (err || results.length == 0) { res.redirect("/error"); return }
         var contest_name = results[0].contest_name
@@ -767,15 +756,16 @@ exports.submission = function (req, res) {
         return
     }
     var message = ""
-    if (req.query.success) {
+    if (req.session.submit_success) {
+        req.session.submit_success = false;
         message = "Submit successfully!"
     }
-    if (req.query.error) {
+    if (req.session.submit_error) {
+        req.session.submit_error = false;
         message = "Submit error!"
     }
-    var sql = "SELECT contest.contest_name, contest.time_begin, contest.time_end, student_account.rollnumber, DATE_FORMAT(time_begin, '%d-%m-%Y %H:%i:%s') as time_begin1, DATE_FORMAT(time_end, '%d-%m-%Y %H:%i:%s') as time_end1 FROM `contest_student` " +
-        "INNER JOIN contest ON contest_student.contest_id=contest.contest_id " +
-        "INNER JOIN student_account ON contest_student.student_rollnumber=student_account.rollnumber " +
+    var sql = "SELECT contest.contest_name, contest.time_begin, contest.time_end, student_account.rollnumber, DATE_FORMAT(time_begin, '%d-%m-%Y %H:%i:%s') as time_begin1, DATE_FORMAT(time_end, '%d-%m-%Y %H:%i:%s') as time_end1 FROM student_account " +
+        "INNER JOIN contest ON student_account.contest_id=contest.contest_id " +
         "WHERE student_account.id=" + userId
     db.query(sql, function (err, results) {
         if (err) { res.redirect("/error"); return }
@@ -786,6 +776,7 @@ exports.submission = function (req, res) {
             var contest_name = results[0].contest_name
             // get all problem in folder './public/debai/contest_name
             fs.readdir(storage.DEBAI + contest_name, function (err, files) {
+                if (err) { res.redirect("/error"); return }
                 var debai = files
                 req.session.debai = [];
                 for (let i = 0, l = debai.length; i < l; ++i) {
@@ -806,7 +797,8 @@ exports.submit = function (req, res) {
             if (err) { res.redirect("/error"); return }
             // check file is valid
             if (files.filetoupload.name == "" || !req.session.debai.includes(fields.tenbai) || !/^\w+\.(c|cpp)$/.test(files.filetoupload.name)) {
-                res.redirect("/submission?error=1")
+                req.session.submit_error = true;
+                res.redirect("/submission")
                 return
             }
             // create new formatted name of uploaded file
@@ -831,7 +823,8 @@ exports.submit = function (req, res) {
                     if (err) { res.redirect("/error"); return }
                 })
                 sleep(500).then(() => {
-                    res.redirect("/submission?success=1")
+                    req.session.submit_success = true;
+                    res.redirect("/submission")
                 })
             })
 

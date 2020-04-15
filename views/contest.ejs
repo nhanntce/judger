@@ -48,7 +48,7 @@
                     <font color=red><b><%= data[i].contest_name %></b></font>
                 </div>
                 <div class="modal-footer flex-center">
-                    <form action="/contest/delete-contest" method="post">
+                    <form action="/contest/delete-contest" method="POST">
                         <input type="hidden" name="contest_id" value="<%=data[i].contest_id%>">
                         <button type="submit" class="btn btn-outline-danger">Yes</button>
                     </form>

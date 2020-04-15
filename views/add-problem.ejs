@@ -39,7 +39,7 @@
                                     <font color=red><b><%=problem_files[i]%></b></font>
                                 </div>
                                 <div class="modal-footer flex-center">
-                                    <form action="/contest/add-problem/delete-problem" method="post">
+                                    <form action="/contest/add-problem/delete-problem" method="POST">
                                         <input type="hidden" name="problem_path"
                                             value="./public/debai/<%=contest_name%>/<%=problem_files[i]%>">
                                         <input type="hidden" name="contest_id" value="<%=contest_id%>">
@@ -74,7 +74,7 @@
                                     <font color=red><b><%=testcase[i]%> (<%=testcase_size[i]%> tests)</b></font>
                                 </div>
                                 <div class="modal-footer flex-center">
-                                    <form action="/contest/add-problem/delete-testcase" method="post">
+                                    <form action="/contest/add-problem/delete-testcase" method="POST">
                                         <input type="hidden" name="testcase_path" value="<%=testcase_path[i]%>">
                                         <input type="hidden" name="contest_id" value="<%=contest_id%>">
                                         <button type="submit" class="btn btn-outline-danger">Yes</button>
@@ -100,7 +100,7 @@
                     <div class="form-group">
                         <label>Choose file (.pdf, .doc, .docx):</label>
                         <div class="custom-file">
-                            <form action="/contest/add-problem/upload-problem?contest_id=<%=contest_id%>" method="post"
+                            <form action="/contest/add-problem/upload-problem?contest_id=<%=contest_id%>" method="POST"
                                 enctype="multipart/form-data">
                                 <input type="file" class="custom-file-input" name="filetoupload"
                                     accept=".pdf, .doc, .docx">
@@ -122,7 +122,7 @@
                     <div class="form-group">
                         <label>Choose file (.zip):</label>
                         <div class="custom-file">
-                            <form action="/contest/add-problem/upload-testcase?contest_id=<%=contest_id%>" method="post"
+                            <form action="/contest/add-problem/upload-testcase?contest_id=<%=contest_id%>" method="POST"
                                 enctype="multipart/form-data">
                                 <input type="file" class="custom-file-input" name="filetoupload" accept=".zip">
                                 <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>

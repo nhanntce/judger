@@ -1,9 +1,9 @@
 <% var progress = (new Date() - data[0].time_begin) / (data[0].time_end - data[0].time_begin) * 100;
 var point = []
 for (let i = 0, l = data.length; i < l; ++i) {
-    point[data[i].student_rollnumber] = new Array();
+    point[data[i].rollnumber] = new Array();
     for (let j = 0; j < problem_files.length; ++j) {
-       point[data[i].student_rollnumber][problem_files[j].split('-')[0]] = "Not submit";
+       point[data[i].rollnumber][problem_files[j].split('-')[0]] = "Not submit";
     }
     
 }
@@ -20,12 +20,12 @@ for (let i = 0, l = log_files.length; i < l; ++i) {
 }
 var totalpoint = []
 for (let i = 0, l = data.length; i < l; ++i) {
-    totalpoint[data[i].student_rollnumber] = 0;
+    totalpoint[data[i].rollnumber] = 0;
     for (let j = 0, l = problem_files.length; j < l; ++j) {
-        if (isNaN(point[data[i].student_rollnumber][problem_files[j].split('-')[0]]) == false) {
-            totalpoint[data[i].student_rollnumber] += point[data[i].student_rollnumber][problem_files[j].split('-')[0]];
+        if (isNaN(point[data[i].rollnumber][problem_files[j].split('-')[0]]) == false) {
+            totalpoint[data[i].rollnumber] += point[data[i].rollnumber][problem_files[j].split('-')[0]];
         } else {
-            totalpoint[data[i].student_rollnumber] += 0;
+            totalpoint[data[i].rollnumber] += 0;
         }
     }
 }
@@ -35,12 +35,12 @@ var obj = {
 for (let i = 0, l = data.length; i < l; ++i) {
     tb = new Array();
     
-    tb.push(data[i].student_rollnumber, data[i].name, data[i].class);
+    tb.push(data[i].rollnumber, data[i].name, data[i].class);
     
     for (let j = 0, l = problem_files.length; j < l; ++j) {
-        tb.push(point[data[i].student_rollnumber][problem_files[j].split('-')[0]]); 
+        tb.push(point[data[i].rollnumber][problem_files[j].split('-')[0]]); 
     }
-    tb.push(totalpoint[data[i].student_rollnumber]);
+    tb.push(totalpoint[data[i].rollnumber]);
     tb.push(-1);
     obj.data.push(tb);
 }

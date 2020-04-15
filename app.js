@@ -10,14 +10,10 @@ var express = require('express')
   , bodyParser = require("body-parser")
   , compression = require('compression')
   , https = require('https');
-
+// set maximum sockets
 http.globalAgent.maxSockets = Infinity;
 https.globalAgent.maxSockets = Infinity;
-global.fs = require('fs');
-global.path = require('path')
-global.public_dir = __dirname + '/public';
-
-var app = express();
+// Config database mysql
 const dbConfig = require("./routes/db.config.js");
 var connection = mysql.createPool({
   host: dbConfig.HOST,
@@ -25,9 +21,12 @@ var connection = mysql.createPool({
   password: dbConfig.PASSWORD,
   database: dbConfig.DB
 });
-
+// set global variable
 global.db = connection;
-
+global.fs = require('fs');
+global.path = require('path')
+global.public_dir = __dirname + '/public';
+var app = express();
 // all environments
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
@@ -41,7 +40,6 @@ app.use(session({
   saveUninitialized: true,
   cookie: { maxAge: 60000*5 }
 }))
-
 // development only
 app.get('*', (req, res, next) => {
   if (['/', '/login', '/home/dashboard', '/home/logout', '/home/profile', '/submission', '/submission?success=1', '/submission?error=1', '/session/destroy', '/error'].indexOf(req.url) !== -1) {

@@ -60,7 +60,7 @@
                         <td></td>
                         <td></td>
                         <td>
-                            <%= data[i].student_rollnumber %>
+                            <%= data[i].rollnumber %>
                         </td>
                         <td>
                             <%= data[i].name %>
@@ -125,7 +125,7 @@
                 <font color=red><b id="totalrollnumber"></b></font>
             </div>
             <div class="modal-footer flex-center">
-                <form action="/contest/delete-user" method="post">
+                <form action="/contest/delete-user" method="POST">
                     <input type="hidden" id="list_rollnumber" name="list_rollnumber">
                     <input type="hidden" name="contest_id" value="<%=data[0].contest_id%>">
                     <button type="submit" class="btn btn-outline-danger">Yes</button>
