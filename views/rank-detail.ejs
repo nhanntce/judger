@@ -13,14 +13,17 @@
     }
 %>
 <div class="container">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb cyan lighten-4">
-            <li class="breadcrumb-item"><a class="black-text" href="/contest/rank">Rank</a></li>
-            <li class="breadcrumb-item"><a class="black-text"
-                    href="/contest/data-rank?contest_id=<%= contest_id %>"><%= contest_name %></li></a>
-            <li class="breadcrumb-item active"><%= rollnumber %></li>
-        </ol>
-    </nav>
+    <div class="bc-icons">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"> <a class="text-gray-700" href="/contest/rank">Rank</a></li>
+                <li><i class="fas fa-angle-double-right mx-2 text-gray-700" aria-hidden="true"></i></li>
+                <li class="breadcrumb-item"> <a class="text-gray-700"  href="/contest/data-rank?contest_id=<%= contest_id %>"><%= contest_name %></a></li>
+                <li><i class="fas fa-angle-double-right mx-2 text-gray-700" aria-hidden="true"></i></li>
+                <li class="breadcrumb-item text-gray-700 active"><%= rollnumber %></li>
+            </ol>
+        </nav>
+    </div>
     <% 
         for (let i = log_files.length - 1; i >= 0; --i) {
             var mtime = fs.statSync(bailam[i]).mtime; 

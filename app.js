@@ -4,6 +4,7 @@
 var express = require('express')
   , routes = require('./routes')
   , user = require('./routes/user')
+  , admin = require('./routes/admin')
   , http = require('http')
   , session = require('express-session')
   , mysql = require('mysql')
@@ -38,7 +39,7 @@ app.use(session({
   secret: 'keyboard cat',
   resave: false,
   saveUninitialized: true,
-  cookie: { maxAge: 60000*5 }
+  // cookie: { maxAge: 60000*15 }
 }))
 // development only
 app.get('*', (req, res, next) => {
@@ -97,7 +98,12 @@ app.get('/contest/add-class', (req, res) => {
     res.redirect("/login");
     return;
   }
-  res.render('add-class.ejs', { data: [], xlData: "", message: "", error: "", class_name: "", role: req.session.role, user: req.session.user });
+  var message = ""
+  if (req.session.added) {
+      req.session.added = false
+      message = "Add successfully!"
+  }
+  res.render('add-class.ejs', { data: [], xlData: "", message: message, error: "", class_name: "", role: req.session.role, user: req.session.user });
 });
 // Add class
 app.post('/contest/add-class/create', user.create_class);
@@ -126,15 +132,9 @@ app.post('/submission/submit', user.submit);
 // Destroy session when closing tab or browse
 app.get('/session/destroy', user.session_destroy);
 // Admin page
-app.get('/admin', (req, res) => {
-  // var userId = req.session.userId;
-  // if (userId == null) {
-  //   res.redirect("/login");
-  //   return;
-  // }
-  var contest_id = req.query.contest_id;
-  res.render('admin.ejs', { data: [], contest_id: contest_id, message: "", error: "", role: req.session.role, user: req.session.user });
-});
+app.get('/admin', admin.dashboard);
+app.get('/admin/student', admin.admin_student);
+app.get('/admin/teacher', admin.admin_teacher);
 app.get('/error', (req, res) => {
   res.render('404.ejs');
 });

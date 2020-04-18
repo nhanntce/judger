@@ -12,13 +12,19 @@
             var x = setInterval(function () {
                 var pro = (new Date().getTime() - parseInt('<%=data[0].time_begin.getTime()%>')) / (parseInt('<%=data[0].time_end.getTime()%>') - parseInt('<%=data[0].time_begin.getTime()%>')) * 100;
 
-                if (pro < 100 && pro > 0) {
+                if (pro <= 100 && pro >= 0) {
                     $('#progress').attr('style', 'width:' + pro + '%');
                     $('#progress').text((pro | 0).toString() + '%');
-                } else {
+                } else if (pro > 100) {
                     $('#progress').attr('style', 'width:100%');
                     $('#progress').attr('class', 'progress-bar progress-bar-striped bg-danger');
                     $('#progress').text('The Contest is Over');
+                    clearInterval(x);
+                    return;
+                } else {
+                    $('#progress').attr('style', 'width:100%');
+                    $('#progress').attr('class', 'progress-bar progress-bar-striped bg-primary');
+                    $('#progress').text('The Contest is not open');
                     clearInterval(x);
                     return;
                 }
@@ -30,7 +36,7 @@
                 "columnDefs": [{
                     "targets": [0, 1],
                     "render": function (data, type, row, meta) {
-                        return '<a href="/contest/detail-rank?rollnumber=' + row[0] + '">'+data+'</a>';
+                        return '<a href="/contest/detail-rank?rollnumber=' + row[0] + '">' + data + '</a>';
                     }
                 }],
                 "dom": 'lBfrtip',
@@ -51,12 +57,15 @@
             }, 5000);
         });
     </script>
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb cyan lighten-4">
-            <li class="breadcrumb-item"><a class="black-text" href="/contest/rank">Contest</a></li>
-            <li class="breadcrumb-item active"><%= data[0].contest_name %></li>
-        </ol>
-    </nav>
+    <div class="bc-icons">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"> <a class="text-gray-700" href="/contest/rank">Rank</a></li>
+                <li><i class="fas fa-angle-double-right mx-2 text-gray-700" aria-hidden="true"></i></li>
+                <li class="breadcrumb-item text-gray-700 active"><%= data[0].contest_name %></li>
+            </ol>
+        </nav>
+    </div>
     <div class="row">
         <div class="col-md-3 text-left no-pad">
             <h4><b>Start</b></h4>
@@ -69,30 +78,35 @@
             <h4><b>End</b></h4>
             <%= data[0].time_end1 %>
         </div>
-        </div>
+    </div>
     <div class="progress">
         <div id="progress" class="progress-bar progress-bar-striped progress-bar-animated bg-success"></div>
     </div>
     <br />
     <div class="card shadow mb-4">
         <div class="card-body">
-            <table id="dataTableRank" class="table" style="width: 100%;">
-                <thead>
-                    <tr>
-                        <th>Roll number</th>
-                        <th>Name</th>
-                        <th>Class</th>
-                        <% for (let i = 0, l = problem_files.length; i < l; ++i) { %>
-                        <th>
-                            <a href="/debai/<%data[0].contest_name%>/<%=problem_files[i]%>" target="_blank"
-                                data-toggle="tooltip" data-placement="bottom"
-                                title="<%=problem_files[i].split('.')[0]%>"><%= problem_files[i].split('-')[0] %></a>
-                        </th>
-                        <% } %>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-            </table>
+            <div class="table-responsive">
+                <table id="dataTableRank" class="table table-hover table-bordered" style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th width="12%">Roll number</th>
+                            <th>Name</th>
+                            <th width="5%">Class</th>
+                            <% for (let i = 0, l = problem_files.length; i < l; ++i) { %>
+                            <th width="10%">
+                                <center><a href="/debai/<%data[0].contest_name%>/<%=problem_files[i]%>" target="_blank"
+                                        data-toggle="tooltip" data-placement="bottom"
+                                        title="<%=problem_files[i].split('.')[0]%>"><%= problem_files[i].split('-')[0] %></a>
+                                </center>
+                            </th>
+                            <% } %>
+                            <th>
+                                <center>Total</center>
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
         </div>
     </div>
     <% } %>

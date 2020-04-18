@@ -1,28 +1,46 @@
 <%- include ("partials/header") %>
 <!-- Main component for a primary marketing message or call to action -->
 <div class="container">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb cyan lighten-4">
-            <li class="breadcrumb-item active"><a class="black-text" href="/contest">Contest</a></li>
-        </ol>
-    </nav>
+    <div class="bc-icons">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a class="text-gray-700" href="/contest">Contest</a></li>
+            </ol>
+          </nav>
+    </div>
     <h2>Total
         <%= data.length %> contests
-        <button type="submit" class="btn btn-outline-success waves-effect" data-toggle="modal" data-target="#myModal"><i
+        <button type="submit" class="btn btn-outline-blue waves-effect btn-sm" data-toggle="modal" data-target="#myModal"><i
                 class="fa fa-plus fa-lg"></i> Add a new contest</button>
-        <button type="submit" class="btn btn-outline-success waves-effect" onclick="window.location='/contest/add-class';"><i class="fa fa-plus fa-lg"></i> Add a new class</button>
+        <button type="submit" class="btn btn-outline-blue waves-effect btn-sm" onclick="window.location='/contest/add-class';"><i class="fa fa-plus fa-lg"></i> Add a new class</button>
     </h2>
+    <div class="accordion md-accordion accordion-1" id="accordionEx1" role="tablist" aria-multiselectable="true">
     <% for (let i = 0, l = data.length; i < l; ++i) {%>
-    <div class="card shadow mb-2 border-left-primary">
+    <%
+        var curDate = new Date()
+        var status = ""
+        var bagde = ""
+        if (curDate < data[i].time_begin) {
+            status = "primary"
+            bagde = "upcoming"
+        } else if (curDate >= data[i].time_begin && curDate <= data[i].time_end) {
+            status = "success"
+            bagde = "opening"
+        } else {
+            status = "gray"
+            bagde = "closed"
+        }
+    %>
+    <div class="card shadow mb-2">
         <!-- Card Header - Accordion -->
-        <a href="#collapseCardExample<%=i%>" class="d-block card-header py-3" data-toggle="collapse" role="button"
-            aria-expanded="true" aria-controls="collapseCardExample">
-            <h6 class="m-0 font-weight-bold text-primary">
-                <%= data[i].contest_name %>
+        <a href="#collapseCardExample<%=i%>"class="card-header grey lighten-5" data-toggle="collapse" role="tab"
+            aria-expanded="true" aria-controls="collapseCardExample" data-parent="#accordionEx1">
+            <h6 class="m-0 text-gray-700">
+                <%= data[i].contest_name %> <span class="badge badge-pill badge-<%=status%>"><%=bagde%></span>
             </h6>
         </a>
         <!-- Card Content - Collapse -->
-        <div class="collapse" id="collapseCardExample<%=i%>">
+        <div class="collapse" id="collapseCardExample<%=i%>" data-parent="#accordionEx1">
             <div class="card-header">
                 <button type="button" class="btn btn-info btn-sm"
                         onclick="window.location='/contest/detail?contest_id=<%=data[i].contest_id%>';"><i class="fa fa-eye"></i> View Detail</button>
@@ -30,8 +48,8 @@
                     data-target="#modalConfirmDelete<%=i%>"><i class="fa fa-trash-alt"></i> Delete</button>
             </div>
             <div class="card-body">
-                <p><strong>Start:</strong> <%=data[i].time_begin%></p>
-                <p><strong>End:</strong> <%=data[i].time_end%></p>
+                <p><strong>Start:</strong> <%=data[i].time_begin1%></p>
+                <p><strong>End:</strong> <%=data[i].time_end1%></p>
             </div>
         </div>
     </div>
@@ -60,6 +78,7 @@
     <!--Modal: modalConfirmDelete-->
     <% } %>
 </div>
+</div>
 <!-- The Modal add contest-->
 <div class="modal fade" id="myModal">
     <div class="modal-dialog modal-lg">
@@ -82,7 +101,7 @@
                         <label>Enter end time</label>
                         <input type="datetime-local" class="form-control" id="endtime" name="endtime">
                     </div>
-                    <button class="btn btn-primary" type="submit"><i class="fa fa-plus"></i> Add</button>
+                    <button class="btn btn-primary btn-sm" type="submit"><i class="fa fa-plus"></i> Add</button>
                 </form>
             </div>
         </div>

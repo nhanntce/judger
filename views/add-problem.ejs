@@ -1,13 +1,16 @@
 <%- include ("partials/header") %>
 <div class="container">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb cyan lighten-4">
-            <li class="breadcrumb-item"><a class="black-text" href="/contest">Contest</a></li>
-            <li class="breadcrumb-item"><a class="black-text"
-                    href="/contest/detail?contest_id=<%=contest_id%>">Detail</a></li>
-            <li class="breadcrumb-item active">Add problem</li>
-        </ol>
-    </nav>
+    <div class="bc-icons">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"> <a class="text-gray-700" href="/contest">Contest</a></li>
+                <li><i class="fas fa-angle-double-right mx-2 text-gray-700" aria-hidden="true"></i></li>
+                <li class="breadcrumb-item"> <a class="text-gray-700" href="/contest/detail?contest_id=<%=contest_id%>">Detail</a></li>
+                <li><i class="fas fa-angle-double-right mx-2 text-gray-700" aria-hidden="true"></i></li>
+                <li class="breadcrumb-item text-gray-700 active">Add problem</li>
+            </ol>
+        </nav>
+    </div>
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Contest

@@ -5,16 +5,22 @@
     });
 </script>
 <div class="container">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb cyan lighten-4">
-            <li class="breadcrumb-item"><a class="black-text" href="/contest">Contest</a></li>
-            <li class="breadcrumb-item active">Add Class</li>
-        </ol>
-    </nav>
+    <div class="bc-icons">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"> <a class="text-gray-700" href="/contest">Contest</a></li>
+                <li><i class="fas fa-angle-double-right mx-2 text-gray-700" aria-hidden="true"></i></li>
+                <li class="breadcrumb-item text-gray-700 active">Add Class</li>
+            </ol>
+        </nav>
+    </div>
     <% if (xlData.length == 0) { %>
     <div class="form-group">
+        <% if (message.length > 0) { %>
+            <script>toastr.success('<%=message%>')</script>
+        <% } %>
         <% if (error.length > 0) { %>
-        <div class="alert alert-danger col-sm-12"><%= error %></div>
+            <script>toastr.error('<%=error%>')</script>
         <% } %>
         <form action="/contest/add-class" method="POST" enctype="multipart/form-data">
             <label>Enter name of class</label>
@@ -38,6 +44,12 @@
             FullName.push(JSON.stringify(xlData[i].FullName).replace(/"/g,''))
         }
     %>
+    <% if (message.length > 0) { %>
+        <script>toastr.success('<%=message%>')</script>
+    <% } %>
+    <% if (error.length > 0) { %>
+        <script>toastr.error('<%=error%>')</script>
+    <% } %>
     <form action="/contest/add-class/create" method="POST">
         <input type="hidden" name="RollNumber" value="<%=RollNumber%>">
         <input type="hidden" name="MemberCode" value="<%=MemberCode%>">

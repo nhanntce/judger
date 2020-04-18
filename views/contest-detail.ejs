@@ -2,36 +2,38 @@
 <!-- Main component for a primary marketing message or call to action -->
 
 <div class="container">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb cyan lighten-4">
-            <li class="breadcrumb-item"><a class="black-text" href="/contest">Contest</a></li>
-            <li class="breadcrumb-item active">Detail</li>
-        </ol>
-    </nav>
-
+    <div class="bc-icons">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"> <a class="text-gray-700" href="/contest">Contest</a></li>
+                <li><i class="fas fa-angle-double-right mx-2 text-gray-700" aria-hidden="true"></i></li>
+                <li class="breadcrumb-item text-gray-700 active">Detail</li>
+            </ol>
+        </nav>
+    </div>
     <!-- Page Heading -->
     <h2>Total
         <%= data.length %> student in contest
         <%= data[0].contest_name %>
-        <button type="button" class="btn btn-outline-success waves-effect"
+        <button type="button" class="btn btn-outline-blue waves-effect btn-sm"
             onclick="window.location='/contest/add-user?contest_id=<%=data[0].contest_id%>';">
             <i class="fa fa-plus fa-lg"></i> Add student
         </button>
-        <button type="button" class="btn btn-outline-success waves-effect"
+        <button type="button" class="btn btn-outline-blue waves-effect btn-sm"
             onclick="window.location='/contest/add-problem?contest_id=<%=data[0].contest_id%>';">
             <i class="fa fa-plus fa-lg"></i> Add problem and testcase
         </button>
     </h2>
     <% if (message.length > 0) { %>
-        <script>toastr.success('<%=message%>')</script>
+    <script>toastr.success('<%=message%>')</script>
     <% } %>
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <i class="m-0 font-weight-bold text-primary">From: </i><%= data[0].time_begin1 %> <i
                 class="m-0 font-weight-bold text-primary"> to: </i><%= data[0].time_end1 %>
-            <button type="button" class="btn btn-primary waves-effect waves-light btn-sm" data-toggle="modal" data-target="#myModal"><i
-                    class="far fa-edit"></i> Edit</button>
+            <button type="button" class="btn btn-primary waves-effect waves-light btn-sm" data-toggle="modal"
+                data-target="#myModal"><i class="far fa-edit"></i> Edit</button>
             <div class="float-right">
                 <button type="button" class="btn btn-default btn-rounded btn-sm"
                     onclick="window.location='/contest/download?contest_id=<%=data[0].contest_id%>';"><i
@@ -72,8 +74,8 @@
                     <% } %>
                 </tbody>
             </table>
-            <button type="button" id="btnconfirm" class="btn btn-danger" data-toggle="modal" data-target="#modalConfirmDelete"><i
-                    class="fa fa-trash-alt"></i> Delete selected</button>
+            <button type="button" id="btnconfirm" class="btn btn-danger btn-md" data-toggle="modal"
+                data-target="#modalConfirmDelete"><i class="fa fa-trash-alt"></i> Delete selected</button>
         </div>
     </div>
 

@@ -1,13 +1,15 @@
 <% var progress = (new Date() - data[0].time_begin) / (data[0].time_end - data[0].time_begin) * 100;
 var point = []
+var times = []
 for (let i = 0, l = data.length; i < l; ++i) {
     point[data[i].rollnumber] = new Array();
+    times[data[i].rollnumber] = new Array();
     for (let j = 0; j < problem_files.length; ++j) {
        point[data[i].rollnumber][problem_files[j].split('-')[0]] = "Not submit";
+       times[data[i].rollnumber][problem_files[j].split('-')[0]] = 0;
     }
     
 }
-
 for (let i = 0, l = log_files.length; i < l; ++i) {
     rollnum = log_files[i].split('][')[3];
     prob = log_files[i].split('][')[4].split('].')[0];
@@ -17,16 +19,20 @@ for (let i = 0, l = log_files.length; i < l; ++i) {
     } else {
         point[rollnum][prob] = 0;
     }  
+    times[rollnum][prob]++;
 }
 var totalpoint = []
+var totaltimes = []
 for (let i = 0, l = data.length; i < l; ++i) {
     totalpoint[data[i].rollnumber] = 0;
+    totaltimes[data[i].rollnumber] = 0;
     for (let j = 0, l = problem_files.length; j < l; ++j) {
         if (isNaN(point[data[i].rollnumber][problem_files[j].split('-')[0]]) == false) {
             totalpoint[data[i].rollnumber] += point[data[i].rollnumber][problem_files[j].split('-')[0]];
         } else {
             totalpoint[data[i].rollnumber] += 0;
         }
+        totaltimes[data[i].rollnumber] += times[data[i].rollnumber][problem_files[j].split('-')[0]];
     }
 }
 var obj = {
@@ -38,9 +44,15 @@ for (let i = 0, l = data.length; i < l; ++i) {
     tb.push(data[i].rollnumber, data[i].name, data[i].class);
     
     for (let j = 0, l = problem_files.length; j < l; ++j) {
-        tb.push(point[data[i].rollnumber][problem_files[j].split('-')[0]]); 
+        if (point[data[i].rollnumber][problem_files[j].split('-')[0]] > 0) {
+            tb.push("<center class='solved'>" + point[data[i].rollnumber][problem_files[j].split('-')[0]] + '<br>(' + times[data[i].rollnumber][problem_files[j].split('-')[0]] + ')</center>'); 
+        } else if (point[data[i].rollnumber][problem_files[j].split('-')[0]] == 0) {
+            tb.push("<center class='attempted'>" + point[data[i].rollnumber][problem_files[j].split('-')[0]] + '<br>(' + times[data[i].rollnumber][problem_files[j].split('-')[0]] + ')</center>'); 
+        } else {
+            tb.push("<center>" + point[data[i].rollnumber][problem_files[j].split('-')[0]] + '<br>(' + times[data[i].rollnumber][problem_files[j].split('-')[0]] + ')</center>'); 
+        } 
     }
-    tb.push(totalpoint[data[i].rollnumber]);
+    tb.push('<center>' + totalpoint[data[i].rollnumber] + '<br>(' + totaltimes[data[i].rollnumber] + ')</center>');
     tb.push(-1);
     obj.data.push(tb);
 }

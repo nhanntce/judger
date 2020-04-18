@@ -1,13 +1,16 @@
 <%- include ("partials/header") %>
 <div class="container">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb cyan lighten-4">
-            <li class="breadcrumb-item"><a class="black-text" href="/contest">Contest</a></li>
-            <li class="breadcrumb-item"><a class="black-text"
-                    href="/contest/detail?contest_id=<%=contest_id%>">Detail</a></li>
-            <li class="breadcrumb-item active">Add student</li>
-        </ol>
-    </nav>
+    <div class="bc-icons">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"> <a class="text-gray-700" href="/contest">Contest</a></li>
+                <li><i class="fas fa-angle-double-right mx-2 text-gray-700" aria-hidden="true"></i></li>
+                <li class="breadcrumb-item"> <a class="text-gray-700" href="/contest/detail?contest_id=<%=contest_id%>">Detail</a></li>
+                <li><i class="fas fa-angle-double-right mx-2 text-gray-700" aria-hidden="true"></i></li>
+                <li class="breadcrumb-item text-gray-700 active">Add student</li>
+            </ol>
+        </nav>
+    </div>
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold">Add students <a href="/contest/add-class">or Add new class</a></h6>
@@ -19,7 +22,7 @@
                     <input type="text" class="form-control" id="class_name" name="class_name">
                     <input type="hidden" name="contest_id" value="<%=contest_id%>">
                 </div>
-                <button class="btn btn-primary" type="submit"><i class="fa fa-spinner"></i> Load</button>
+                <button class="btn btn-primary btn-sm" type="submit"><i class="fa fa-spinner"></i> Load</button>
             </form>
             <% if (message.length > 0) { %>
                 <script>toastr.success('<%=message%>')</script>
@@ -63,7 +66,7 @@
                         <% } %>
                     </tbody>
                 </table>
-                <button type="button" id="btnconfirm" class="btn btn-info" data-toggle="modal" data-target="#modalConfirmAdd"><i
+                <button type="button" id="btnconfirm" class="btn btn-info btn-md" data-toggle="modal" data-target="#modalConfirmAdd"><i
                         class="fa fa-plus "> Add selected</i></button>
             </div>
             <!--Modal: modalConfirmDelete-->

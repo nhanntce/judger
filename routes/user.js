@@ -8,34 +8,6 @@ const storage = require("./storage.js");
 const minutes = 15
 const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs))
 
-function insertStudent(rollnumber, username, password, name, class_name) {
-    try {
-        var sql = "INSERT INTO `student_account`(`rollnumber`, `username`, `password`, `name`, `class`) VALUES ('" + rollnumber + "', '" + username + "', md5('" + password + "'), '" + name + "', '" + class_name + "')"
-        db.query(sql)
-    } catch (error) {
-        res.redirect("/error")
-        return
-    }
-}
-//-----------------------------------------------Create Class------------------------------------------------------
-exports.create_class = function (req, res) {
-    if (req.method == "POST") {
-        var post = req.body
-        var RollNumber = post.RollNumber.split(',')
-        var MemberCode = post.MemberCode.split(',')
-        var FullName = post.FullName.split(',')
-        var class_name = post.class_name
-        for (let i = 0; i < RollNumber.length; i++) {
-            sleep(50).then(() => {
-                insertStudent(RollNumber[i], MemberCode[i], MemberCode[i], FullName[i], class_name)
-            })
-        }
-        res.redirect('/contest/add-class')
-    } else {
-        res.redirect("/error")
-        return
-    }
-}
 //-----------------------------------------------login page call------------------------------------------------------
 exports.login = function (req, res) {
     var message = ''
@@ -59,6 +31,7 @@ exports.login = function (req, res) {
         var sql = ""
         if (role == "student_account") { // if student
             var sql = "SELECT id, username FROM `" + role + "` WHERE (`username`='" + user + "' and password = '" + hash + "' and ip='" + ipaddress + "') or (`username`='" + user + "' and password = '" + hash + "' and " + new Date().getTime() + " >= ROUND(UNIX_TIMESTAMP(timeout) * 1000) and islogin=0)"
+            console.log(sql)
             db.query(sql, function (err, results) {
                 if (err) { res.redirect("/error"); return }
                 if (results.length) {
@@ -147,7 +120,7 @@ exports.contest = function (req, res) {
         return
     }
     var teacher_rollnumber = req.session.teacher_rollnumber
-    var sql = "SELECT contest_id, contest_name, time_begin, time_end FROM `contest` WHERE `teacher_rollnumber`='" + teacher_rollnumber + "' AND `deleted`=0"
+    var sql = "SELECT contest_id, contest_name, time_begin, time_end, DATE_FORMAT(time_begin, '%d-%m-%Y %H:%i:%s') as time_begin1, DATE_FORMAT(time_end, '%d-%m-%Y %H:%i:%s') as time_end1 FROM `contest` WHERE `teacher_rollnumber`='" + teacher_rollnumber + "' AND `deleted`=0"
     db.query(sql, function (err, results) {
         if (err) { res.redirect("/error"); return }
         res.render('contest.ejs', { data: results, role: req.session.role, user: req.session.user })
@@ -276,7 +249,7 @@ exports.contest_detail = function (req, res) {
     var message = ""
     if (req.session.deleted) { // check student is deleted in contest
         req.session.deleted = false
-        message = "Succesfully! Student has been deleted."
+        message = "Succesfully! Students have been deleted."
     }
 
     var sql = "SELECT student_account.id, student_account.rollnumber, student_account.name, student_account.class, contest.contest_id, contest.contest_name,contest.time_begin,contest.time_end, DATE_FORMAT(contest.time_begin, '%d-%m-%Y %H:%i:%s') as time_begin1, DATE_FORMAT(contest.time_end, '%d-%m-%Y %H:%i:%s') as time_end1 FROM contest " +
@@ -337,7 +310,7 @@ exports.load_user = function (req, res) {
     var warning = ""
     if (req.session.added) {
         req.session.added = false
-        message = "Succesfully! Student has been added."
+        message = "Succesfully! Students have been added."
 
     }
     var class_name = req.query.class_name
@@ -412,18 +385,24 @@ exports.load_class = function (req, res) {
         res.redirect("/login")
         return
     }
-    if (req.session.added) {
-        req.session.added = false
-        message = "Succesfully! Student has been added."
-    }
     try {
         //read file excel
         var class_name = req.query.class_name
         var workbook = XLSX.readFile(storage.EXCEL + class_name + '.xls')
         var sheet_name_list = workbook.SheetNames
         var xlData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]])
-        res.render('add-class.ejs', { data: [], xlData: xlData, message: "", error: "", class_name: class_name, role: req.session.role, user: req.session.user })
+        if (typeof xlData[0].RollNumber === "undefined" || typeof xlData[0].MemberCode === "undefined" || typeof xlData[0].FullName === "undefined") {
+            res.render('add-class.ejs', { data: [], xlData: "", message: "", error: "Invalid file excel", class_name: class_name, role: req.session.role, user: req.session.user })
+        } else {
+            if (req.session.sql_err) {
+                req.session.sql_err = false
+                res.render('add-class.ejs', { data: [], xlData: xlData, message: "", error: "Duplicate student roll number", class_name: class_name, role: req.session.role, user: req.session.user })
+            }  else {
+                res.render('add-class.ejs', { data: [], xlData: xlData, message: "Load students successfully!", error: "", class_name: class_name, role: req.session.role, user: req.session.user })
+            } 
+        }
     } catch (error) {
+        console.log(error)
         res.redirect("/error")
         return
     }
@@ -434,13 +413,9 @@ exports.add_class = function (req, res) {
         var form = new formidable.IncomingForm()
         form.parse(req, function (err, fields, files) {
             if (err) { res.redirect("/error"); return }
-            if (files.filetoupload.name == "") { // check file name is empty
-                res.redirect("/contest/add-class?error=1")
-                return
-            }
             var class_name = fields.class_name
-            if (class_name == "") { // check class name is empty
-                res.redirect("/contest/add-class?error=1")
+            if (files.filetoupload.name == "" || class_name == "") { // check file name is empty
+                res.render('add-class.ejs', { data: [], xlData: "", message: "", error: "The input must be not empty!", class_name: class_name, role: req.session.role, user: req.session.user })
                 return
             }
             // check class is exist
@@ -448,13 +423,13 @@ exports.add_class = function (req, res) {
             db.query(sql, function (err, results) {
                 if (err) { res.redirect("/error"); return }
                 if (results.length > 0) { // if class is exist, return error
-                    res.render('add-class.ejs', { data: [], xlData: "", message: "", error: "Sorry, class " + class_name + " is exist", class_name: class_name, role: req.session.role, user: req.session.user })
+                    res.render('add-class.ejs', { data: [], xlData: "", message: "", error: "Sorry, class " + class_name + " is exist!", class_name: class_name, role: req.session.role, user: req.session.user })
                     return
                 }
                 // get file upload and rewrite it 
                 var newfile = class_name + '.' + files.filetoupload.name.split('.')[1]
                 var oldpath = files.filetoupload.path
-                var newpath = storage.EXCEl + newfile
+                var newpath = storage.EXCEL + newfile
                 fs.readFile(oldpath, function (err, data) {
                     if (err) { res.redirect("/error"); return }
                     // Write the file
@@ -471,6 +446,34 @@ exports.add_class = function (req, res) {
                 })
             })
         })
+    } else {
+        res.redirect("/error")
+        return
+    }
+}
+//-----------------------------------------------Create Class------------------------------------------------------
+exports.create_class = function (req, res) {
+    if (req.method == "POST") {
+        var post = req.body
+        var RollNumber = post.RollNumber.split(',')
+        var MemberCode = post.MemberCode.split(',')
+        var FullName = post.FullName.split(',')
+        var class_name = post.class_name
+        var sql = "INSERT INTO `student_account`(`rollnumber`, `username`, `password`, `name`, `class`) VALUES ";
+        for (let i = 0; i < RollNumber.length; i++) {
+            sql += "('" + RollNumber[i] + "','" + MemberCode[i] + "','" + MemberCode[i] + "','" + FullName[i] + "','" +  class_name + "'),"
+        }
+        sql = sql.slice(0, -1)
+        db.query(sql, function (err) {
+            if(err) {
+                req.session.sql_err = true
+                res.redirect("/contest/load-class?class_name=" + class_name)
+            } else {
+                req.session.added = true
+                res.redirect('/contest/add-class')
+            }
+        })
+        
     } else {
         res.redirect("/error")
         return
@@ -639,7 +642,7 @@ exports.rank = function (req, res) {
         return
     }
     var teacher_rollnumber = req.session.teacher_rollnumber
-    var sql = "SELECT contest_id, contest_name FROM `contest` WHERE `teacher_rollnumber`='" + teacher_rollnumber + "' AND deleted=0"
+    var sql = "SELECT contest_id, contest_name, time_begin, time_end FROM `contest` WHERE `teacher_rollnumber`='" + teacher_rollnumber + "' AND deleted=0"
     db.query(sql, function (err, results) {
         if (err || results.length == 0) { res.redirect("/error"); return }
         res.render('rank.ejs', { data: results, role: req.session.role, user: req.session.user })
@@ -682,7 +685,6 @@ exports.load_rank = function (req, res) {
     var sql = "SELECT student_account.id, student_account.rollnumber, student_account.name, student_account.class, contest.contest_id, contest.contest_name, contest.time_begin, contest.time_end FROM contest " +
         "INNER JOIN student_account ON student_account.contest_id=contest.contest_id " +
         "WHERE contest.contest_id=" + contest_id
-    console.log(sql)
     db.query(sql, function (err, results) {
         if (err || results.length == 0) { res.redirect("/error"); return }
         var contest_name = results[0].contest_name
