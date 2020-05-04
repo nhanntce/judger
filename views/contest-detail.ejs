@@ -7,7 +7,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"> <a class="text-gray-700" href="/contest">Contest</a></li>
                 <li><i class="fas fa-angle-double-right mx-2 text-gray-700" aria-hidden="true"></i></li>
-                <li class="breadcrumb-item text-gray-700 active">Detail</li>
+                <li class="breadcrumb-item text-gray-700 font-italic">Detail</li>
             </ol>
         </nav>
     </div>
@@ -50,7 +50,6 @@
                                     id="MyTableCheckAllButton"><i class="far fa-square"></i></button>
                             </center>
                         </th>
-                        <th></th>
                         <th>Roll number</th>
                         <th>Name</th>
                         <th>Class</th>
@@ -59,7 +58,6 @@
                 <tbody>
                     <% for (let i = 0, l = data.length; i < l; ++i) {%>
                     <tr>
-                        <td></td>
                         <td></td>
                         <td>
                             <%= data[i].rollnumber %>

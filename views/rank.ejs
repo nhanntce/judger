@@ -3,63 +3,45 @@
     <div class="bc-icons">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"> <a class="text-gray-700" href="/contest/rank">Rank</a></li>
+                <li class="breadcrumb-item"> <a class="text-gray-700" href="/rank">Rank</a></li>
             </ol>
         </nav>
     </div>
-    <div class="row">
-        <% for (let i = 0, l = data.length; i < l; ++i) {%>
-        <% 
-            var curDate = new Date()
-            var status = ""
-            if (curDate >= data[i].time_begin && curDate <= data[i].time_end) {
-                status = "fa fa-hourglass-half"
-            } else if (curDate > data[i].time_end) {
-                status = "fa fa-hourglass-end"
-            } else {
-                status = "fa fa-hourglass-start"
-            }  
-        %> 
-        <div class="col-lg-6">
-            <div class="card mb-4">
-                <div class="card-header py-3">
-                    <a class="text text-primary" href="/contest/data-rank?contest_id=<%=data[i].contest_id%>"><%= data[i].contest_name %></a>
-                </div>
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div id="timer<%=i%>" class=""></div><br>
-                        </div>
-                        <div class="col-auto">
-                            <i class="<%=status%> fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <script>
-                var countUpDate = "<%=data[i].time_begin.getTime() %>",
-                    countDownDate = "<%=data[i].time_end.getTime() %>",
-                    now = (new Date).getTime();
-                if (countDownDate - now <= 0) document.getElementById("timer<%=i%>").innerHTML = "<font color=red><b><p>Contest is over</p></b></font><div class='count-down-time'><div class='count-down-part count-down-days' data-label='Days'>" + 0 + "</div>:<div class='count-down-part count-down-hours' data-label='Hours'>" + 0 + "</div>:<div class='count-down-part count-down-minutes' data-label='Minutes'>" + 0 + "</div>:<div class='count-down-part count-down-seconds' data-label='Seconds'>" + 0 + "</div></div>";
-                else if (countUpDate - now >= 0) {
-                    var distance = countUpDate - now,
-                        days = Math.floor(distance / 864e5),
-                        hours = Math.floor(distance % 864e5 / 36e5),
-                        minutes = Math.floor(distance % 36e5 / 6e4),
-                        seconds = Math.floor(distance % 6e4 / 1e3);
-                    document.getElementById("timer<%=i%>").innerHTML = "<b><p>Contest start after</p></b><div class='count-down-time'><div class='count-down-part count-down-days' data-label='Days'>" + days + "</div>:<div class='count-down-part count-down-hours' data-label='Hours'>" + hours + "</div>:<div class='count-down-part count-down-minutes' data-label='Minutes'>" + minutes + "</div>:<div class='count-down-part count-down-seconds' data-label='Seconds'>" + seconds + "</div></div>";
-                    var x = setInterval(function () {
-                        if (distance = countUpDate - (now += 1e3), days = Math.floor(distance / 864e5), hours = Math.floor(distance % 864e5 / 36e5), minutes = Math.floor(distance % 36e5 / 6e4), seconds = Math.floor(distance % 6e4 / 1e3), document.getElementById("timer<%=i%>").innerHTML = "<b><p>Contest start after</p></b><div class='count-down-time'><div class='count-down-part count-down-days' data-label='Days'>" + days + "</div>:<div class='count-down-part count-down-hours' data-label='Hours'>" + hours + "</div>:<div class='count-down-part count-down-minutes' data-label='Minutes'>" + minutes + "</div>:<div class='count-down-part count-down-seconds' data-label='Seconds'>" + seconds + "</div></div>", distance <= 0) return document.getElementById("timer<%=i%>").innerHTML = "Please refresh the page to start the contest!", void clearInterval(x)
-                    }, 1e3)
-                } else {
-                    distance = countDownDate - now, days = Math.floor(distance / 864e5), hours = Math.floor(distance % 864e5 / 36e5), minutes = Math.floor(distance % 36e5 / 6e4), seconds = Math.floor(distance % 6e4 / 1e3), document.getElementById("timer<%=i%>").innerHTML = "<b><p>Time remaining</p></b><div class='count-down-time'><div class='count-down-part count-down-days' data-label='Days'>" + days + "</div>:<div class='count-down-part count-down-hours' data-label='Hours'>" + hours + "</div>:<div class='count-down-part count-down-minutes' data-label='Minutes'>" + minutes + "</div>:<div class='count-down-part count-down-seconds' data-label='Seconds'>" + seconds + "</div></div>";
-                    var y = setInterval(function () {
-                        if (distance = countDownDate - (now += 1e3), days = Math.floor(distance / 864e5), hours = Math.floor(distance % 864e5 / 36e5), minutes = Math.floor(distance % 36e5 / 6e4), seconds = Math.floor(distance % 6e4 / 1e3), document.getElementById("timer<%=i%>").innerHTML = "<b><p>Time remaining</p></b><div class='count-down-time'><div class='count-down-part count-down-days' data-label='Days'>" + days + "</div>:<div class='count-down-part count-down-hours' data-label='Hours'>" + hours + "</div>:<div class='count-down-part count-down-minutes' data-label='Minutes'>" + minutes + "</div>:<div class='count-down-part count-down-seconds' data-label='Seconds'>" + seconds + "</div></div>", distance <= 0) return clearInterval(y)
-                    }, 1e3)
-                } 
-            </script>
-        </div>
-        <% } %>
-    </div>
+    <script>
+		function Ajax(){
+		var xmlHttp;
+			try{
+				xmlHttp=new XMLHttpRequest();// Firefox, Opera 8.0+, Safari
+			}
+			catch (e){
+				try{
+					xmlHttp=new ActiveXObject("Msxml2.XMLHTTP"); // Internet Explorer
+				}
+				catch (e){
+				    try{
+						xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");
+					}
+					catch (e){
+						alert("No AJAX!?");
+						return false;
+					}
+				}
+			}
+
+		xmlHttp.onreadystatechange=function(){
+			if(xmlHttp.readyState==4){
+				document.getElementById('ReloadThis').innerHTML=xmlHttp.responseText;
+				setTimeout('Ajax()',1000);
+			}
+		}
+		xmlHttp.open("GET","/rank-time",true);
+		xmlHttp.send(null);
+		}
+
+		window.onload=function(){
+			setTimeout('Ajax()',0);
+		}
+		</script>
+		<div id="ReloadThis"> </div>
 </div>
 <%- include ("partials/footer") %>

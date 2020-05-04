@@ -118,13 +118,22 @@ app.post('/contest/add-problem/delete-problem', user.delete_problem);
 // delete testcase
 app.post('/contest/add-problem/delete-testcase', user.delete_testcase);
 // rank
-app.get('/contest/rank', user.rank);
+app.get('/rank', (req, res) => {
+  var userId = req.session.userId;
+  if (userId == null) {
+    res.redirect("/login");
+    return;
+  }
+  res.render('rank.ejs', { role: req.session.role, user: req.session.user });
+});
+// rank
+app.get('/rank-time', user.rank);
 // data rank
-app.get('/contest/data-rank', user.data_rank);
+app.get('/data-rank', user.data_rank);
 // load rank -> json
-app.get('/contest/load-rank', user.load_rank);
+app.get('/load-rank', user.load_rank);
 // rank detail by rollnumber
-app.get('/contest/detail-rank', user.detail_rank);
+app.get('/detail-rank', user.detail_rank);
 // submission page
 app.get('/submission', user.submission);
 // Submit submissions file

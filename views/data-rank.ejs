@@ -32,11 +32,11 @@
             }, 100);
 
             var example_table = $('#dataTableRank').DataTable({
-                "ajax": "/contest/load-rank?contest_id=<%=data[0].contest_id%>",
+                "ajax": "/load-rank?contest_id=<%=data[0].contest_id%>",
                 "columnDefs": [{
                     "targets": [0, 1],
                     "render": function (data, type, row, meta) {
-                        return '<a href="/contest/detail-rank?rollnumber=' + row[0] + '">' + data + '</a>';
+                        return '<a href="/detail-rank?rollnumber=' + row[0] + '">' + data + '</a>';
                     }
                 }],
                 "dom": 'lBfrtip',
@@ -60,9 +60,9 @@
     <div class="bc-icons">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"> <a class="text-gray-700" href="/contest/rank">Rank</a></li>
+                <li class="breadcrumb-item"> <a class="text-gray-700" href="/rank">Rank</a></li>
                 <li><i class="fas fa-angle-double-right mx-2 text-gray-700" aria-hidden="true"></i></li>
-                <li class="breadcrumb-item text-gray-700 active"><%= data[0].contest_name %></li>
+                <li class="breadcrumb-item text-gray-700 font-italic"><%= data[0].contest_name %></li>
             </ol>
         </nav>
     </div>

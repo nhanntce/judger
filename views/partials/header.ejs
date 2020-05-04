@@ -31,18 +31,30 @@
     <script src="../js//ace.js"></script>
     
     <script>
+        $(window).on("beforeunload", function (e) {
+            if (navigator.userAgent.indexOf("Firefox") !== -1 ) {
+                $.get('/session/destroy');
+            }
+        });
         $(window).on("unload", function (e) {
-            $.get('/session/destroy');
+            if (navigator.userAgent.indexOf("Chrome") !== -1 || navigator.userAgent.indexOf("coc_coc_browser") !== -1 ) {
+                $.get('/session/destroy');
+            }
         });
         $(document).ready(function () {
             // get current URL path and assign 'active' class
             var pathname = window.location.pathname;
-            $('.navbar-nav > li > a[href="' + pathname + '"]').parent().addClass('select');
+            if (pathname.includes("home")) {
+                $('.navbar-nav > li > a[href="/home/dashboard"]').parent().addClass('select');
+            } else if (pathname.includes("contest")) {
+                $('.navbar-nav > li > a[href="/contest"]').parent().addClass('select');
+            } else {
+                $('.navbar-nav > li > a[href="/rank"]').parent().addClass('select');
+            }
+            
         });
     </script>
-
 </head>
-
 <body>
     <nav class="navbar navbar-expand-lg navbar-light navbar-custom mb-4">
         <div class="container">
@@ -61,7 +73,7 @@
                         <a class="nav-link" href="/contest">Contest</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/contest/rank">Rank</a>
+                        <a class="nav-link" href="/rank">Rank</a>
                     </li>
                     <% } %>
                 </ul>

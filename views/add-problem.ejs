@@ -5,12 +5,19 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"> <a class="text-gray-700" href="/contest">Contest</a></li>
                 <li><i class="fas fa-angle-double-right mx-2 text-gray-700" aria-hidden="true"></i></li>
-                <li class="breadcrumb-item"> <a class="text-gray-700" href="/contest/detail?contest_id=<%=contest_id%>">Detail</a></li>
+                <li class="breadcrumb-item"> <a class="text-gray-700"
+                        href="/contest/detail?contest_id=<%=contest_id%>">Detail</a></li>
                 <li><i class="fas fa-angle-double-right mx-2 text-gray-700" aria-hidden="true"></i></li>
-                <li class="breadcrumb-item text-gray-700 active">Add problem</li>
+                <li class="breadcrumb-item text-gray-700 font-italic">Add problem</li>
             </ol>
         </nav>
     </div>
+    <% if (error.length > 0) { %>
+    <script>toastr.error('<%=error%>')</script>
+    <% } %>
+    <% if (message.length > 0) { %>
+    <script>toastr.success('<%=message%>')</script>
+    <% } %>
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Contest
@@ -44,11 +51,11 @@
                                 <div class="modal-footer flex-center">
                                     <form action="/contest/add-problem/delete-problem" method="POST">
                                         <input type="hidden" name="problem_path"
-                                            value="./public/debai/<%=contest_name%>/<%=problem_files[i]%>">
+                                            value="<%=storage.DEBAI%><%=contest_name%>/<%=problem_files[i]%>">
                                         <input type="hidden" name="contest_id" value="<%=contest_id%>">
                                         <button type="submit" class="btn btn-outline-danger">Yes</button>
                                     </form>
-                                    <a type="button" class="btn  btn-danger waves-effect" data-dismiss="modal">No</a>
+                                    <a type="button" class="btn btn-danger waves-effect" data-dismiss="modal">No</a>
                                 </div>
                             </div>
                         </div>
@@ -59,7 +66,8 @@
                 <div class="col-lg-6">
                     <p><b>Testcases</b></p>
                     <% for (let i = 0, l = testcase.length; i < l; ++i) { %>
-                    <%=testcase[i]%> (<%=testcase_size[i]%> tests)
+                    <a href="" data-toggle="modal" data-target="#myModal<%=i%>"><%=testcase[i]%> (<%=testcase_size[i]%>
+                        tests)</a>
                     <button type="button" class="btn btn-danger btn-circle btn-sm" data-toggle="modal"
                         data-target="#modalConfirmDeleteTestcase<%=i%>">
                         <i class="fa fa-trash-alt fa-lg"></i>
@@ -88,6 +96,61 @@
                         </div>
                     </div>
                     <!--Modal: modalConfirmDelete-->
+                    <!--Modal: editTestcase-->
+                    <div class="modal fade" id="myModal<%=i%>">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title"><%=testcase[i]%> (<%=testcase_size[i]%> tests)</h4>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div data-spy="scroll" data-target="#navbar-example2" class="scrollspy-example scrollbar-light-blue">
+                                            <div class="col-3">
+                                                <div class="nav md-pills flex-column nav-pills" id="v-pills-tab" role="tablist"
+                                                    aria-orientation="vertical">
+                                                    <% for (let j = 0; j < testcase_size[i]; ++j) { %>
+                                                    <a class="nav-link <%= j === 0 ? 'active' : ''%>" id="v-pills-home-tab" data-toggle="pill"
+                                                        href="#v-pills-testcase<%=i%><%=j%>" role="tab"
+                                                        aria-controls="v-pills-home"
+                                                        aria-selected="true">Test<%=j+1%></a>
+                                                    <% } %>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-9">
+                                            <div class="tab-content" id="v-pills-tabContent">
+                                                <% for (let j = 0; j < testcase_size[i]; ++j) { %>
+                                                <div class="tab-pane <%= j === 0 ? 'active' : 'fade'%>" id="v-pills-testcase<%=i%><%=j%>" role="tabpanel"
+                                                    aria-labelledby="v-pills-home-tab">
+                                                    <ul class="nav nav-tabs">
+                                                        <li class="nav-item">
+                                                            <a class="nav-link active" data-toggle="tab" href="#input<%=i%><%=j%>">Input</a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a class="nav-link" data-toggle="tab" href="#output<%=i%><%=j%>">Output</a>
+                                                        </li>
+                                                    </ul>
+                                                    <div class="tab-content">
+                                                        <div class="tab-pane active" id="input<%=i%><%=j%>">
+                                                            <%= fs.readFileSync(storage.TESTCASE + contest_name + '/' + testcase[i] +'/test' + (j+1) + '/' + testcase[i] +'.inp', 'utf8') %>
+                                                        </div>
+                                                        <div class="tab-pane fade" id="output<%=i%><%=j%>">
+                                                            <%= fs.readFileSync(storage.TESTCASE + contest_name + '/' + testcase[i] +'/test' + (j+1) + '/' + testcase[i] +'.out', 'utf8') %>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <% } %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!--Modal: editTestcase-->
                     <% } %>
                 </div>
             </div>
@@ -101,14 +164,17 @@
                 </div>
                 <div class="card-body">
                     <div class="form-group">
-                        <label>Choose file (.pdf, .doc, .docx):</label>
+                        <label>Choose file (.pdf, .doc, .docx) - maximum 5MB:</label>
                         <div class="custom-file">
                             <form action="/contest/add-problem/upload-problem?contest_id=<%=contest_id%>" method="POST"
                                 enctype="multipart/form-data">
+                                <input type="hidden" name="contest_name" value="<%=contest_name%>">
+                                <input type="hidden" name="contest_id" value="<%=contest_id%>">
                                 <input type="file" class="custom-file-input" name="filetoupload"
                                     accept=".pdf, .doc, .docx">
                                 <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
-                                <button type="submit" class="btn btn-info"><i class="fa fa-upload"></i> Submit</button>
+                                <button type="submit" class="btn btn-info btn-md"><i class="fa fa-upload"></i>
+                                    Submit</button>
                             </form>
                         </div>
                     </div>
@@ -123,13 +189,16 @@
                 </div>
                 <div class="card-body">
                     <div class="form-group">
-                        <label>Choose file (.zip):</label>
+                        <label>Choose file (.zip) - maximum 5MB:</label>
                         <div class="custom-file">
                             <form action="/contest/add-problem/upload-testcase?contest_id=<%=contest_id%>" method="POST"
                                 enctype="multipart/form-data">
+                                <input type="hidden" name="contest_name" value="<%=contest_name%>">
+                                <input type="hidden" name="contest_id" value="<%=contest_id%>">
                                 <input type="file" class="custom-file-input" name="filetoupload" accept=".zip">
                                 <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
-                                <button type="submit" class="btn btn-info"><i class="fa fa-upload"></i> Submit</button>
+                                <button type="submit" class="btn btn-info btn-md"><i class="fa fa-upload"></i>
+                                    Submit</button>
                             </form>
                         </div>
                     </div>

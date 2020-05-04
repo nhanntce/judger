@@ -12,12 +12,7 @@ $(document).ready(function() {
         },
         order: [
             [1, "asc"]
-        ],
-        columns: [{
-            width: "5%"
-        }, {
-            width: "5%"
-        }, null, null, null]
+        ]
     });
     e.on("select deselect draw", function() {
         var t = e.rows({
@@ -31,7 +26,7 @@ $(document).ready(function() {
                 selected: !0
             }).data().toArray(),
             a = [];
-        for (let e = 0; e < l.length; ++e) a.push(l[e][2]);
+        for (let e = 0; e < l.length; ++e) a.push(l[e][1]);
         if(a.length==0){
             $("#btnconfirm").prop('disabled', true);
         }else {
@@ -53,12 +48,5 @@ $(document).ready(function() {
         }).select()) : e.rows({
             search: "applied"
         }).deselect()
-    }), e.on("order.dt search.dt", function() {
-        e.column(1, {
-            search: "applied",
-            order: "applied"
-        }).nodes().each(function(e, t) {
-            e.innerHTML = t + 1
-        })
-    }).draw()
+    })
 });
