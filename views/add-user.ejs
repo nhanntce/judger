@@ -17,12 +17,14 @@
         </div>
         <div class="card-body">
             <form action="/contest/load-user" method="GET">
-                <div class="form-group">
-                    <label>Enter name of class</label>
-                    <input type="text" class="form-control" id="class_name" name="class_name">
-                    <input type="hidden" name="contest_id" value="<%=contest_id%>">
+                <div class="form-inline">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="class_name" name="class_name" placeholder="Enter name of class">
+                        <input type="hidden" name="contest_id" value="<%=contest_id%>">
+                    </div>
+
+                    <button class="btn btn-primary btn-md" type="submit"><i class="fa fa-spinner"></i> Load</button>
                 </div>
-                <button class="btn btn-primary btn-sm" type="submit"><i class="fa fa-spinner"></i> Load</button>
             </form>
             <% if (message.length > 0) { %>
                 <script>toastr.success('<%=message%>')</script>
