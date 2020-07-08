@@ -1,0 +1,8 @@
+0.0
+Max time: 66
+Max memory: 132
+test01: Traceback (most recent call last):
+  File "[ffff10-65-171-108][4075077][FCoder][CE150394][B].py", line 14, in <module>
+    for j in range(1, int(x ** 0.5) + 1):
+OverflowError: int too large to convert to float
+

@@ -1,5 +1,0 @@
-Compile error
-[1][1929834942][Contest01][ce140237][A].c: In function ‘main’:
-[1][1929834942][Contest01][ce140237][A].c:8:2: error: expected ‘;’ before ‘while’
-  while (test--) {
-  ^~~~~

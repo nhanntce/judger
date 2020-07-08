@@ -1,17 +1,4 @@
 <%- include ("partials/header") %>
-<% 
-    var logs = [];
-    var bais = [];
-    for (let i = 0; i < bailam.length; ++i) {
-        for (let j = 0; j < log_files.length; ++j) {
-            if (bailam[i].includes(log_files[j].split('.')[0])) {  
-                bais.push(bailam[i]);
-                logs.push(log_files[j]);
-            }
-            
-        }
-    }
-%>
 <div class="container">
     <div class="bc-icons">
         <nav aria-label="breadcrumb">
@@ -24,52 +11,126 @@
             </ol>
         </nav>
     </div>
-    <div class="accordion md-accordion accordion-1" id="accordionEx1" role="tablist" aria-multiselectable="true">
-    <% 
-        for (let i = log_files.length - 1; i >= 0; --i) {
-            var mtime = fs.statSync(bailam[i]).mtime; 
-            var tenbai = bailam[i].split('][')[4].replace('].', '.');
-            var filedate = new Date(new Date(mtime).getTime() - (new Date(mtime).getTimezoneOffset() * 60000)).toISOString().substring(0, 19).replace('T',' ');
-            var logcontent = fs.readFileSync('./public/nopbai/Logs/' + contest_name + '/' + logs[i], 'utf8');
-            var baicontent = fs.readFileSync(bais[i], 'utf8');
-            var status = 'success';
-            if (logcontent.split('\n')[0].includes('error') || logcontent.split('\n')[0] == "0") {
-                status = 'danger';
-            }
-    %>
-    <div class="card shadow mb-1 border-left-<%=status%>">
-        <!-- Card Header - Accordion -->
-        <a href="#collapseCardExample<%=i%>" class="d-block card-header py-3" data-toggle="collapse" role="tab"
-            aria-expanded="true" aria-controls="collapseCardExample" data-parent="#accordionEx1">
-            <h6 class="m-0 font-weight-bold text-<%=status%>">
-                <%= filedate %> - <%= tenbai %>
-            </h6>
-        </a>
-        <!-- Card Content - Collapse -->
-        <div class="collapse" id="collapseCardExample<%=i%>" data-parent="#accordionEx1">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col">
-                        Result
-                        <div id="editorlog<%=i%>" style="height: 200px;"><%= logcontent %></div>
-                    </div>
-                    <div class="col">
-                        Submission
-                        <div id="editorbai<%=i%>" style="height: 200px;"><%= baicontent %></div>
+    <table class="table table-hover" id="dataTableRankDetail">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Submit Time</th>
+                <th>Problem</th>
+                <th>Language</th>
+                <th>Time</th>
+                <th>Memory</th>
+                <th>TestCase</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% 
+                var logcontent = ''
+                var baicontent = ''
+                for (let i = 0; i < log_files.length; ++i) {
+                    var mtime = fs.existsSync(bailam[i]) ? fs.statSync(bailam[i]).mtime : 0
+                    var tenbai = bailam[i].split('][')[4].replace('].', '.')
+                    var filedate = moment(mtime).format('DD-MM-YYYY, HH:mm:ss')
+                    var logcontent = fs.existsSync(storage.NOPBAI + 'Logs/' + contest_name + '/' + log_files[i]) ? fs.readFileSync(storage.NOPBAI + 'Logs/' + contest_name + '/' + log_files[i], 'utf8') : ""
+                    var baicontent = fs.existsSync(bailam[i]) ? fs.readFileSync(bailam[i], 'utf8') : ""
+                    var testcase = ''
+                    var score = 0
+                    var timeLimit = '0s'
+                    var memoryLimit = '0MB'
+                    if (logcontent.split('\n')[0].includes('Error') || logcontent.split('\n')[0] == "0.0") {
+                        testcase = '0/' + testcase_size[i]
+                        score = 0
+                    } else {
+                        testcase = parseInt(logcontent.split('\n')[0] * testcase_size[i] / 10) + '/' + testcase_size[i]
+                        score = logcontent.split('\n')[0]
+                        if (logcontent.split('\n')[1].split(': ')[1] > 1000) {
+                            timeLimit = '> 1s'
+                        } else {
+                            timeLimit = (logcontent.split('\n')[1].split(': ')[1] / 1000).toFixed(2) + 's'
+                        }
+                        if (logcontent.split('\n')[2].split(': ')[1] > 1000) {
+                            memoryLimit = '> 1000MB'
+                        } else {
+                            memoryLimit = logcontent.split('\n')[2].split(': ')[1] + 'MB'
+                        }
+                    }
+            %>
+            <tr href="#" data-toggle="modal" data-target="#myModal<%=i%>">
+                <td>
+                    <%=i+1%>
+                </td>
+                <td>
+                    <%=filedate%>
+                </td>
+                <td>
+                    <%=tenbai.split('.')[0]%>
+                </td>
+                <td>
+                    <%=tenbai.split('.')[1].toUpperCase()%>
+                </td>
+                <td>
+                    <%=timeLimit%>
+                </td>
+                <td>
+                    <%=memoryLimit%>
+                </td>
+                <td>
+                    <%=testcase%>
+                </td>
+                <td>
+                    <%=score%>
+                </td>
+            </tr>
+            <div class="modal fade" id="myModal<%=i%>">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title"><%= filedate %> - <%= tenbai %></h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col">
+                                    Result
+                                    <div id="editorlog<%=i%>" style="height: 360px;"><%= logcontent %></div>
+                                </div>
+                                <div class="col">
+                                    Submission
+                                    <div id="editorbai<%=i%>" style="height: 360px;"><%= baicontent %></div>
+                                </div>
+                                <script>
+                                    var editorlog = ace.edit('editorlog<%=i%>');
+                                    editorlog.getSession().setMode("ace/mode/c_cpp");
+                                    editorlog.setOptions({
+                                        readOnly: true
+                                    })
+                                    editorlog.renderer.$cursorLayer.element.style.opacity = 0
+                                    document.getElementById('editorlog<%=i%>').style.fontSize = '15px';
+                                    var editorbai = ace.edit('editorbai<%=i%>');
+                                    editorbai.getSession().setMode("ace/mode/c_cpp");
+                                    editorbai.setOptions({
+                                        readOnly: true
+                                    })
+                                    editorbai.renderer.$cursorLayer.element.style.opacity = 0
+                                    document.getElementById('editorbai<%=i%>').style.fontSize = '15px';
+                                    
+                                </script>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <script>
-        var editorlog = ace.edit('editorlog<%=i%>');
-        editorlog.getSession().setMode("ace/mode/c_cpp");
-        document.getElementById('editorlog<%=i%>').style.fontSize = '15px';
-        var editorbai = ace.edit('editorbai<%=i%>');
-        editorbai.getSession().setMode("ace/mode/c_cpp");
-        document.getElementById('editorbai<%=i%>').style.fontSize = '15px';
-    </script>
-    <% } %>
+            <% } %>
+        </tbody>
+    </table>
 </div>
 </div>
+<script>
+    $("#dataTableRankDetail").DataTable({
+        searching: false,
+        ordering: false,
+        lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
+    })
+</script>
 <%- include ("partials/footer") %>

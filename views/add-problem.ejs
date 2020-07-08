@@ -22,191 +22,257 @@
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Contest
                 <%=contest_name%>
+                <button type="submit" class="btn btn-primary waves-effect btn-sm" data-toggle="modal"
+                    data-target="#myModal"><i class="fa fa-plus"></i> Add</button>
+                <button type="button" id="btnedit" class="btn btn-primary waves-effect btn-sm" data-toggle="modal"
+                    data-target="#myModalEdit"><i class="fa fa-edit"></i> Edit</button>
+                <button type="button" id="btndel" class="btn btn-danger waves-effect btn-sm" data-toggle="modal"
+                    data-target="#modalConfirmDelete"><i class="fa fa-trash"></i> Delete</button>
             </h6>
         </div>
+
         <div class="card-body">
-            <div class="row">
-                <div class="col-lg-6">
-                    <p><b>Problems</b></p>
-                    <% for (let i = 0, l = problem_files.length; i < l; ++i) { %>
-                    <a href="/debai/<%=contest_name%>/<%=problem_files[i]%>" target="_blank">
-                        <%=problem_files[i]%>
-                    </a>
-                    <button type="button" class="btn btn-danger btn-circle btn-sm" data-toggle="modal"
-                        data-target="#modalConfirmDeleteProblem<%=i%>">
-                        <i class="fa fa-trash-alt fa-lg"></i>
-                    </button><br>
-                    <!--Modal: modalConfirmDelete-->
-                    <div class="modal fade" id="modalConfirmDeleteProblem<%=i%>" tabindex="-1" role="dialog"
-                        aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
-                            <div class="modal-content text-center">
-                                <div class="modal-header d-flex justify-content-center">
-                                    <p class="heading">Are you sure?</p>
-                                </div>
-                                <div class="modal-body">
-                                    <i class="fas fa-times fa-4x animated rotateIn"></i><br>
-                                    <font color=red><b><%=problem_files[i]%></b></font>
-                                </div>
-                                <div class="modal-footer flex-center">
-                                    <form action="/contest/add-problem/delete-problem" method="POST">
-                                        <input type="hidden" name="problem_path"
-                                            value="<%=storage.DEBAI%><%=contest_name%>/<%=problem_files[i]%>">
-                                        <input type="hidden" name="contest_id" value="<%=contest_id%>">
-                                        <button type="submit" class="btn btn-outline-danger">Yes</button>
-                                    </form>
-                                    <a type="button" class="btn btn-danger waves-effect" data-dismiss="modal">No</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--Modal: modalConfirmDelete-->
-                    <% } %>
-                </div>
-                <div class="col-lg-6">
-                    <p><b>Testcases</b></p>
-                    <% for (let i = 0, l = testcase.length; i < l; ++i) { %>
-                    <a href="" data-toggle="modal" data-target="#myModal<%=i%>"><%=testcase[i]%> (<%=testcase_size[i]%>
-                        tests)</a>
-                    <button type="button" class="btn btn-danger btn-circle btn-sm" data-toggle="modal"
-                        data-target="#modalConfirmDeleteTestcase<%=i%>">
-                        <i class="fa fa-trash-alt fa-lg"></i>
-                    </button><br>
-                    <!--Modal: modalConfirmDelete-->
-                    <div class="modal fade" id="modalConfirmDeleteTestcase<%=i%>" tabindex="-1" role="dialog"
-                        aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
-                            <div class="modal-content text-center">
-                                <div class="modal-header d-flex justify-content-center">
-                                    <p class="heading">Are you sure?</p>
-                                </div>
-                                <div class="modal-body">
-                                    <i class="fas fa-times fa-4x animated rotateIn"></i><br>
-                                    <font color=red><b><%=testcase[i]%> (<%=testcase_size[i]%> tests)</b></font>
-                                </div>
-                                <div class="modal-footer flex-center">
-                                    <form action="/contest/add-problem/delete-testcase" method="POST">
-                                        <input type="hidden" name="testcase_path" value="<%=testcase_path[i]%>">
-                                        <input type="hidden" name="contest_id" value="<%=contest_id%>">
-                                        <button type="submit" class="btn btn-outline-danger">Yes</button>
-                                    </form>
-                                    <a type="button" class="btn  btn-danger waves-effect" data-dismiss="modal">No</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--Modal: modalConfirmDelete-->
-                    <!--Modal: editTestcase-->
-                    <div class="modal fade" id="myModal<%=i%>">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h4 class="modal-title"><%=testcase[i]%> (<%=testcase_size[i]%> tests)</h4>
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="row">
-                                        <div data-spy="scroll" data-target="#navbar-example2" class="scrollspy-example scrollbar-light-blue">
-                                            <div class="col-3">
-                                                <div class="nav md-pills flex-column nav-pills" id="v-pills-tab" role="tablist"
-                                                    aria-orientation="vertical">
+            <div class="table-responsive">
+                <table class="table" id="datatableProblem" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th width="5%"></th>
+                            <th width="20%">Name</th>
+                            <th width="25%">Problem</th>
+                            <th width="25%">Test Case</th>
+                            <th width="25%">Limit Submission</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for (let i = 0; i < problem_id.length; ++i) { %>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <%=problem_id[i]%>
+                            </td>
+                            <td>
+                                <a href="<%=path_problem[i].replace('/public', '.')%>"
+                                    target="_blank"><%=path.basename(path_problem[i])%></a>
+                            </td>
+                            <td>
+                                <a href="#" data-toggle="modal" data-target="#myModal<%=i%>"><%=testcase_size[i]%></a>
+                            </td>
+                            <td>
+                                <%=limitSub[i]%>
+                            </td>
+                        </tr>
+                        <!--Modal: editTestcase-->
+                        <div class="modal fade" id="myModal<%=i%>">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title"><%=problem_id[i]%> (<%=testcase_size[i]%> tests)</h4>
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div data-spy="scroll" data-target="#navbar-example2"
+                                                class="scrollspy-example scrollbar-light-blue">
+                                                <div class="col-3">
+                                                    <div class="nav md-pills flex-column nav-pills" id="v-pills-tab"
+                                                        role="tablist" aria-orientation="vertical">
+                                                        <% for (let j = 0; j < testcase_size[i]; ++j) { %>
+                                                        <a class="nav-link <%= j === 0 ? 'active' : ''%>"
+                                                            id="v-pills-home-tab" data-toggle="pill"
+                                                            href="#v-pills-testcase<%=i%><%=j%>" role="tab"
+                                                            aria-controls="v-pills-home"
+                                                            aria-selected="true">Test<%=(j+1 < 10) ? '0' + (j + 1) : j+1%></a>
+                                                        <% } %>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-9">
+                                                <div class="tab-content" id="v-pills-tabContent">
                                                     <% for (let j = 0; j < testcase_size[i]; ++j) { %>
-                                                    <a class="nav-link <%= j === 0 ? 'active' : ''%>" id="v-pills-home-tab" data-toggle="pill"
-                                                        href="#v-pills-testcase<%=i%><%=j%>" role="tab"
-                                                        aria-controls="v-pills-home"
-                                                        aria-selected="true">Test<%=j+1%></a>
+                                                    <div class="tab-pane <%= j === 0 ? 'active' : 'fade'%>"
+                                                        id="v-pills-testcase<%=i%><%=j%>" role="tabpanel"
+                                                        aria-labelledby="v-pills-home-tab">
+                                                        <ul class="nav nav-tabs">
+                                                            <li class="nav-item">
+                                                                <a class="nav-link active" data-toggle="tab"
+                                                                    href="#input<%=i%><%=j%>">Input</a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" data-toggle="tab"
+                                                                    href="#output<%=i%><%=j%>">Output</a>
+                                                            </li>
+                                                        </ul>
+                                                        <div class="tab-content">
+                                                            <div class="tab-pane active" id="input<%=i%><%=j%>">
+                                                                <% index = (j+1 < 10) ? '0' + (j+1) : j+1 %>
+                                                                <%= fs.existsSync(path_testcase[i] +'/test' + index + '/' + path_testcase[i].split('/').pop() +'.inp') ? fs.readFileSync(path_testcase[i] +'/test' + index + '/' + path_testcase[i].split('/').pop() +'.inp', 'utf8') : ""%>
+                                                            </div>
+                                                            <div class="tab-pane fade" id="output<%=i%><%=j%>">
+                                                                <%= fs.existsSync(path_testcase[i] +'/test' + index + '/' + path_testcase[i].split('/').pop() +'.out') ? fs.readFileSync(path_testcase[i] +'/test' + index + '/' + path_testcase[i].split('/').pop() +'.out', 'utf8') : ""%>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     <% } %>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-9">
-                                            <div class="tab-content" id="v-pills-tabContent">
-                                                <% for (let j = 0; j < testcase_size[i]; ++j) { %>
-                                                <div class="tab-pane <%= j === 0 ? 'active' : 'fade'%>" id="v-pills-testcase<%=i%><%=j%>" role="tabpanel"
-                                                    aria-labelledby="v-pills-home-tab">
-                                                    <ul class="nav nav-tabs">
-                                                        <li class="nav-item">
-                                                            <a class="nav-link active" data-toggle="tab" href="#input<%=i%><%=j%>">Input</a>
-                                                        </li>
-                                                        <li class="nav-item">
-                                                            <a class="nav-link" data-toggle="tab" href="#output<%=i%><%=j%>">Output</a>
-                                                        </li>
-                                                    </ul>
-                                                    <div class="tab-content">
-                                                        <div class="tab-pane active" id="input<%=i%><%=j%>">
-                                                            <%= fs.readFileSync(storage.TESTCASE + contest_name + '/' + testcase[i] +'/test' + (j+1) + '/' + testcase[i] +'.inp', 'utf8') %>
-                                                        </div>
-                                                        <div class="tab-pane fade" id="output<%=i%><%=j%>">
-                                                            <%= fs.readFileSync(storage.TESTCASE + contest_name + '/' + testcase[i] +'/test' + (j+1) + '/' + testcase[i] +'.out', 'utf8') %>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <% } %>
-                                            </div>
-                                        </div>
                                     </div>
-                                </div>
 
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <!--Modal: editTestcase-->
-                    <% } %>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-6">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Upload problems</h6>
-                </div>
-                <div class="card-body">
-                    <div class="form-group">
-                        <label>Choose file (.pdf, .doc, .docx) - maximum 5MB:</label>
-                        <div class="custom-file">
-                            <form action="/contest/add-problem/upload-problem?contest_id=<%=contest_id%>" method="POST"
-                                enctype="multipart/form-data">
-                                <input type="hidden" name="contest_name" value="<%=contest_name%>">
-                                <input type="hidden" name="contest_id" value="<%=contest_id%>">
-                                <input type="file" class="custom-file-input" name="filetoupload"
-                                    accept=".pdf, .doc, .docx">
-                                <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
-                                <button type="submit" class="btn btn-info btn-md"><i class="fa fa-upload"></i>
-                                    Submit</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        <div class="col-lg-6">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Upload testcases</h6>
-                </div>
-                <div class="card-body">
-                    <div class="form-group">
-                        <label>Choose file (.zip) - maximum 5MB:</label>
-                        <div class="custom-file">
-                            <form action="/contest/add-problem/upload-testcase?contest_id=<%=contest_id%>" method="POST"
-                                enctype="multipart/form-data">
-                                <input type="hidden" name="contest_name" value="<%=contest_name%>">
-                                <input type="hidden" name="contest_id" value="<%=contest_id%>">
-                                <input type="file" class="custom-file-input" name="filetoupload" accept=".zip">
-                                <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
-                                <button type="submit" class="btn btn-info btn-md"><i class="fa fa-upload"></i>
-                                    Submit</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+                        <!--Modal: editTestcase-->
+                        <% } %>
+                    </tbody>
+                </table>
             </div>
 
         </div>
     </div>
-
 </div>
+<!--Modal: Add problem-->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h4 class="modal-title w-100 font-weight-bold">Add a new problem</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="/contest/add-problem/add" method="POST" enctype="multipart/form-data">
+                <div class="modal-body mx-3">
+                    <label>Name</label>
+                    <div class="form mb-3">
+                        <input type="text" name="nameProb" class="form-control">
+                    </div>
+                    <label>Problem</label>
+                    <div class="custom-file mb-3">
+                        <input type="file" class="custom-file-input" name="filetouploadProblem"
+                            accept=".pdf, .doc, .docx">
+                        <label class="custom-file-label" for="customFile">Choose file</label>
+                    </div>
+                    <label>Test case</label>
+                    <div class="custom-file mb-3">
+                        <input type="file" class="custom-file-input" name="filetouploadTestcase" accept=".zip">
+                        <label class="custom-file-label" for="customFile">Choose file</label>
+                    </div>
+                    <label>Limit Submission</label>
+                    <div class="form mb-3">
+                        <input type="number" name="limitSub" class="form-control" value="10">
+                    </div>
+                </div>
+                <script>
+                    // Add the following code if you want the name of the file appear on select
+                    $(".custom-file-input").on("change", function () {
+                        var fileName = $(this).val().split("\\").pop();
+                        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+                    });
+                </script>
+                <div class="modal-footer d-flex justify-content-center">
+                    <input type="hidden" name="contest_name" value="<%=contest_name%>">
+                    <input type="hidden" name="contest_id" value="<%=contest_id%>">
+                    <button class="btn btn-deep-orange">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- The Modal edit a problem-->
+<div class="modal fade" id="myModalEdit" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h4 class="modal-title w-100 font-weight-bold">Edit a problem</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="/contest/add-problem/edit" method="POST">
+                <div class="modal-body mx-3">
+                    <label>Problem</label>
+                    <label>Limit Submission</label>
+                    <div class="form mb-3">
+                        <input type="number" id="limitSubEdit" name="limitSubEdit" class="form-control">
+                    </div>
+                </div>
+                <script>
+                    // Add the following code if you want the name of the file appear on select
+                    $(".custom-file-input").on("change", function () {
+                        var fileName = $(this).val().split("\\").pop();
+                        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+                    });
+                </script>
+                <div class="modal-footer d-flex justify-content-center">
+                    <input type="hidden" name="contest_id" value="<%=contest_id%>">
+                    <input type="hidden" id="problem_id" name="problem_id">
+                    <button class="btn btn-deep-orange">Edit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--Modal: modalConfirmDelete-->
+<div class="modal fade" id="modalConfirmDelete" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
+        <div class="modal-content text-center">
+            <div class="modal-header d-flex justify-content-center">
+                <p class="heading">Are you sure?</p>
+            </div>
+            <div class="modal-body">
+                <i class="fas fa-times fa-4x animated rotateIn"></i><br>
+                <div class="text-danger" id="confirmdel"><b></b></div>
+            </div>
+            <div class="modal-footer flex-center">
+                <form action="/contest/add-problem/delete" method="POST">
+                    <input type="hidden" id="path_problem" name="path_problem">
+                    <input type="hidden" id="path_testcase" name="path_testcase">
+                    <input type="hidden" id="problem_id_del" name="problem_id_del">
+                    <input type="hidden" name="contest_id" value="<%=contest_id%>">
+                    <button type="submit" class="btn btn-outline-danger">Yes</button>
+                </form>
+                <a type="button" class="btn  btn-danger waves-effect" data-dismiss="modal">No</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Modal: modalConfirmDelete-->
+<script>
+    $(document).ready(function () {
+        let e = $('#datatableProblem').DataTable({
+            dom: 'rt',
+            columnDefs: [{
+                orderable: false,
+                className: 'select-checkbox',
+                targets: 0
+            }],
+            select: {
+                style: 'os',
+                selector: 'td:first-child'
+            },
+            order: [[1, 'asc']]
+        })
+        $('#btnedit').prop('disabled', true);
+        $('#btndel').prop('disabled', true);
+        e.on("select draw", function () {
+            var l = e.rows({
+                selected: !0
+            }).data().toArray()    
+            $('#btnedit').prop('disabled', false);
+            $('#btndel').prop('disabled', false);
+            var path_testcase = JSON.parse('<%-JSON.stringify(path_testcase)%>')
+            $('#confirmdel').html(l[0][1])      
+            $('#problem_id').val(l[0][1])
+            $('#problem_id_del').val(l[0][1])
+            $('#path_problem').val(l[0][2].split('\"')[1].replace('..', './public'))
+            $('#path_testcase').val(path_testcase[e.row({selected: !0}).index()])
+            $('#limitSubEdit').val(l[0][4])
+        })
+        e.on("deselect draw", function () {
+            $('#btnedit').prop('disabled', true);
+            $('#btndel').prop('disabled', true);
+        })
+    })
+</script>
 <%- include ("partials/footer") %>

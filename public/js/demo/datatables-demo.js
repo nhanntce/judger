@@ -10,9 +10,7 @@ $(document).ready(function() {
             style: "multi",
             selector: "td:first-child"
         },
-        order: [
-            [1, "asc"]
-        ]
+        order: [[ 1, 'asc' ]]
     });
     e.on("select deselect draw", function() {
         var t = e.rows({

@@ -1,40 +1,270 @@
 <%- include ("partials/header-admin" ) %>
 <script>
-    $(document).ready(function () {
-        let e = $("#dataTableStudent").DataTable({
-        })
+  $(document).ready(function () {
+    let e = $("#dataTableStudent").DataTable({
+      processing: true,
+      serverSide: true,
+      ajax: '/admin/student-data',
+      columnDefs: [{
+        searchable: !1,
+        orderable: !1,
+        className: "select-checkbox",
+        defaultContent: "",
+        targets: 0
+      }, {
+        targets: 9,
+        mRender: function (data, type, row, meta) {
+          return data.toLocaleString("it-IT")
+        }
+      }
+      ],
+      select: {
+        style: "multi",
+        selector: "td:first-child"
+      },
+      order: [[1, 'asc']]
+    });
+    e.on("select deselect draw", function () {
+      var t = e.rows({
+        search: "applied"
+      }).count();
+      e.rows({
+        selected: !0,
+        search: "applied"
+      }).count() < t ? $("#MyTableCheckAllButton i").attr("class", "far fa-square") : $("#MyTableCheckAllButton i").attr("class", "far fa-check-square");
+      var l = e.rows({
+        selected: !0
+      }).data().toArray()
+      console.log(l)
+      if (l.length == 1) {
+        $("#btnedit").prop('disabled', false);
+        document.getElementById("edit_id").value = l[0][1]
+        document.getElementById("edit_rollnumber").value = l[0][2]
+        document.getElementById("edit_username").value = l[0][3]
+        document.getElementById("edit_password").value = ""
+        document.getElementById("edit_name").value = l[0][5]
+        document.getElementById("edit_class").value = l[0][6]
+        document.getElementById("edit_contestid").value = l[0][7]
+        document.getElementById("edit_ip").value = l[0][8]
+        document.getElementById("edit_timeout").value = l[0][9]
+        if (l[0][10]) {
+          $("#edit_islogin").prop("checked", true);
+        } else {
+          $("#edit_islogin").prop("checked", false);
+        }
+      }
+      if (l.length < 1 || l.length > 1) {
+        $("#btnedit").prop('disabled', true);
+      }
+      a = [];
+      for (let e = 0; e < l.length; ++e) a.push(l[e][1]);
+      if (a.length == 0) {
+        $("#btnreset").prop('disabled', true);
+      } else {
+        $('#btnreset').prop('disabled', false);
+        document.getElementById("list_id").value = a
+      }
+    }), $("#MyTableCheckAllButton").click(function () {
+      var t = e.rows({
+        search: "applied"
+      }).count();
+      e.rows({
+        selected: !0,
+        search: "applied"
+      }).count() < t ? (e.rows({
+        search: "applied"
+      }).deselect(), e.rows({
+        search: "applied"
+      }).select()) : e.rows({
+        search: "applied"
+      }).deselect()
     })
+  })
 </script>
 <div class="container-fluid mt-4">
-    <div class="table-responsive">
-        <table class="table table-hover table-bordered" id="dataTableStudent" width="100%" cellspacing="0">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Roll number</th>
-                    <th>Name</th>
-                    <th>Class</th>
-                    <th>Contest ID</th>
-                    <th>IP</th>
-                    <th>Time out</th>
-                    <th>Online</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% for (let i = 0, l = data.length; i < l; ++i) {%>
-                <tr>
-                    <td><%= data[i].id %></td>
-                    <td><%= data[i].rollnumber %></td>
-                    <td><%= data[i].name %></td>
-                    <td><%= data[i].class %></td>
-                    <td><%= data[i].contest_id %></td>
-                    <td><%= data[i].ip %></td>
-                    <td><%= data[i].timeout %></td>
-                    <td><%= data[i].islogin %></td>
-                </tr>
-                <% } %>
-            </tbody>
-        </table>
-    </div>
+  <% if (message.length > 0) { %>
+  <script>toastr.success('<%=message%>')</script>
+  <% } %>
+  <% if (error.length > 0) { %>
+  <script>toastr.error('<%=error%>')</script>
+  <% } %>
+
+
+  <button type="button" class="btn btn-outline-blue waves-effect btn-sm" data-toggle="modal"
+    data-target="#myModalAdd"><i class="fa fa-plus fa-lg"></i> Add a new user</button>
+  <button type="button" class="btn btn-outline-blue waves-effect btn-sm"
+    onclick="window.location='/contest/add-class';"><i class="fa fa-plus fa-lg"></i> Add users by class</button>
+  <button type="button" id="btnedit" class="btn btn-outline-blue waves-effect btn-sm" data-toggle="modal"
+    data-target="#myModalEdit"><i class="fa fa-edit fa-lg"></i> Edit</button>
+  <button type="button" id="btnreset" class="btn btn-outline-blue waves-effect btn-sm" data-toggle="modal"
+    data-target="#centralModalSm"><i class="fa fa-sync fa-lg"></i> Reset</button>
+  <div class="table-responsive">
+    <table class="table table-hover table-bordered" id="dataTableStudent" width="100%" cellspacing="0">
+      <thead>
+        <tr>
+          <th class="text-center" width="5%">
+            <button type="button" style="border: none; background: transparent; font-size: 14px;"
+              id="MyTableCheckAllButton"><i class="far fa-square"></i></button>
+          </th>
+          <th>ID</th>
+          <th>Roll number</th>
+          <th>Username</th>
+          <th>Password</th>
+          <th>Name</th>
+          <th>Class</th>
+          <th>Contest ID</th>
+          <th>IP</th>
+          <th>Time out</th>
+          <th>Online</th>
+        </tr>
+      </thead>
+    </table>
+  </div>
 </div>
+<!-- The Modal add a student-->
+<div class="modal fade" id="myModalAdd" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Add a new student</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="/admin/add-student" method="POST">
+        <div class="modal-body mx-3">
+          <div class="md-form">
+            <i class="fas fa-id-card prefix grey-text"></i>
+            <input type="text" id="rollnumber" name="rollnumber" class="form-control validate">
+            <label data-error="wrong" data-success="" for="orangeForm-name">Roll Number</label>
+          </div>
+          <div class="md-form">
+            <i class="fas fa-user-alt prefix grey-text"></i>
+            <input type="text" id="name" name="name" class="form-control validate">
+            <label data-error="wrong" data-success="" for="orangeForm-email">Name</label>
+          </div>
+          <div class="md-form">
+            <i class="fas fa-users prefix grey-text"></i>
+            <input type="text" id="class" name="class" class="form-control validate">
+            <label data-error="wrong" data-success="" for="orangeForm-email">Class</label>
+          </div>
+          <div class="md-form">
+            <i class="fas fa-user prefix grey-text"></i>
+            <input type="text" id="username" name="username" class="form-control validate">
+            <label data-error="wrong" data-success="" for="orangeForm-pass">Username</label>
+          </div>
+          <div class="md-form">
+            <i class="fas fa-unlock-alt prefix grey-text"></i>
+            <input type="password" id="password" name="password" class="form-control validate">
+            <label data-error="wrong" data-success="" for="orangeForm-pass">Password</label>
+          </div>
+        </div>
+        <div class="modal-footer d-flex justify-content-center">
+          <button class="btn btn-deep-orange">Add</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- The Modal edit a student-->
+<div class="modal fade" id="myModalEdit" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Edit a student</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="/admin/edit-student" method="POST">
+        <div class="modal-body mx-3">
+          <div class="row">
+            <div class="col-6">
+              <div class="md-form">
+                ID
+                <input placeholder="Placeholder" type="text" id="edit_id" name="edit_id" class="form-control validate">
+              </div>
+              <div class="md-form">
+                Roll Number
+                <input type="text" id="edit_rollnumber" name="edit_rollnumber" class="form-control validate">
+              </div>
+              <div class="md-form">
+                Username
+                <input type="text" id="edit_username" name="edit_username" class="form-control validate">
+              </div>
+              <div class="md-form">
+                Password
+                <input type="password" id="edit_password" name="edit_password" class="form-control validate">
+              </div>
+              <div class="md-form">
+                Name
+                <input type="text" id="edit_name" name="edit_name" class="form-control validate">
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="md-form">
+                Class
+                <input type="text" id="edit_class" name="edit_class" class="form-control validate">
+              </div>
+              <div class="md-form">
+                Contest ID
+                <input type="text" id="edit_contestid" name="edit_contestid" class="form-control validate">
+              </div>
+              <div class="md-form">
+                IP
+                <input type="text" id="edit_ip" name="edit_ip" class="form-control validate">
+              </div>
+              <div class="md-form">
+                Time out
+                <input type="text" id="edit_timeout" name="edit_timeout" class="form-control validate">
+              </div>
+              Online
+              <div class="switch">
+                <label>
+                  No
+                  <input id="edit_islogin" name="edit_islogin" type="checkbox">
+                  <span class="lever"></span> Yes
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer d-flex justify-content-center">
+          <button class="btn btn-deep-orange">Update</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- Central Modal Small -->
+<div class="modal fade" id="centralModalSm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title w-100" id="myModalLabel">Select contest</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="/admin/reset-student" method="POST">
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="defaultChecked1" name="contest_id">
+            <label class="custom-control-label" for="defaultChecked1">Contest ID</label>
+          </div>
+          <input type="hidden" id="list_id" name="list_id">
+          <button type="submit" class="btn btn-success btn-sm float-right"><i class="fa fa-check"></i> OK</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<!-- Central Modal Small -->
+<script>
+  $('#edit_timeout').datetimepicker({
+    format: 'dd-mm-yyyy hh:ii:ss'
+  });                        
+</script>
 <%- include ("partials/footer-admin" ) %>

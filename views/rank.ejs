@@ -1,47 +1,15 @@
 <%- include ("partials/header") %>
 <div class="container">
-    <div class="bc-icons">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"> <a class="text-gray-700" href="/rank">Rank</a></li>
-            </ol>
-        </nav>
-    </div>
-    <script>
-		function Ajax(){
-		var xmlHttp;
-			try{
-				xmlHttp=new XMLHttpRequest();// Firefox, Opera 8.0+, Safari
-			}
-			catch (e){
-				try{
-					xmlHttp=new ActiveXObject("Msxml2.XMLHTTP"); // Internet Explorer
-				}
-				catch (e){
-				    try{
-						xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");
-					}
-					catch (e){
-						alert("No AJAX!?");
-						return false;
-					}
-				}
-			}
-
-		xmlHttp.onreadystatechange=function(){
-			if(xmlHttp.readyState==4){
-				document.getElementById('ReloadThis').innerHTML=xmlHttp.responseText;
-				setTimeout('Ajax()',1000);
-			}
-		}
-		xmlHttp.open("GET","/rank-time",true);
-		xmlHttp.send(null);
-		}
-
-		window.onload=function(){
-			setTimeout('Ajax()',0);
-		}
-		</script>
-		<div id="ReloadThis"> </div>
+	<div class="bc-icons">
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"> <a class="text-gray-700" href="/rank">Rank</a></li>
+			</ol>
+		</nav>
+	</div>
+	<script>
+		function Ajax() { var e; try { e = new XMLHttpRequest } catch (t) { try { e = new ActiveXObject("Msxml2.XMLHTTP") } catch (t) { try { e = new ActiveXObject("Microsoft.XMLHTTP") } catch (e) { return alert("No AJAX!?"), !1 } } } e.onreadystatechange = function () { 4 == e.readyState && (document.getElementById("ReloadThis").innerHTML = e.responseText, setTimeout("Ajax()", 1e3)) }, e.open("GET", "/rank-time", !0), e.send(null) } window.onload = function () { setTimeout("Ajax()", 0) };
+	</script>
+	<div id="ReloadThis"></div>
 </div>
 <%- include ("partials/footer") %>

@@ -21,7 +21,10 @@
     "extract-zip": "^2.0.0",
     "formidable": "^1.2.2",
     "lignator": "^1.0.2",
+    "moment": "^2.25.3",
     "mysql": "^2.18.0",
+    "nodemon": "^2.0.4",
+    "nodetable": "^1.0.2",
     "req-flash": "0.0.3",
     "xlsx": "^0.15.6",
     "zip-local": "^0.3.4"

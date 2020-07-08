@@ -1,0 +1,8 @@
+0.0
+Max time: 82
+Max memory: 83
+test01: Traceback (most recent call last):
+  File "[ffff10-65-171-108][2428137][FCoder][CE150394][B].py", line 2, in <module>
+    sys.stdin = open('A.inp', 'r')
+FileNotFoundError: [Errno 2] No such file or directory: 'A.inp'
+

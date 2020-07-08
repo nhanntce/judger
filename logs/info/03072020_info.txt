@@ -1,0 +1,15 @@
+03-07-2020 17:44:03 : Student h has conected
+03-07-2020 17:44:11 : Student h has disconected
+03-07-2020 17:44:14 : Teacher h has conected
+03-07-2020 17:44:29 : Contest 1 has changed time to begin:2020-06-01 11:16+00:00, end: 2020-07-11 23:55+00:00
+03-07-2020 17:44:31 : Teacher h has disconected
+03-07-2020 17:44:34 : Student h has conected
+03-07-2020 17:44:54 : Sumit code file [1][2788134802][Contest01][h][A].c of contest Contest01 problem A by SD-000001
+03-07-2020 17:52:51 : Sumit code file [1][2788611052][Contest01][h][B].cpp of contest Contest01 problem B by SD-000001
+03-07-2020 17:52:57 : Sumit code file [1][2788617272][Contest01][h][C].cpp of contest Contest01 problem C by SD-000001
+03-07-2020 19:35:00 : Teacher h has conected
+03-07-2020 19:36:15 : Teacher h has conected
+03-07-2020 19:37:04 : undefined undefined has disconected
+03-07-2020 19:37:12 : Student h has conected
+03-07-2020 19:50:31 : Teacher h has conected
+03-07-2020 19:57:23 : Teacher h has conected

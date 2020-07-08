@@ -1,0 +1,54 @@
+04-07-2020 10:00:46 : Teacher h has conected
+04-07-2020 10:03:42 : Teacher h has conected
+04-07-2020 10:04:57 : Reset student ip, timeout userId=SD-000001
+04-07-2020 10:05:25 : Teacher h has conected
+04-07-2020 10:05:36 : UPDATE student_account SET rollnumber='h',username='h',password='d41d8cd98f00b204e9800998ecf8427e',name='Khang Hy',class='IA1401',contest_id='1',ip='1',timeout='2020-07-04 00:00:00+00:00',islogin='0' WHERE userId='SD-000001'
+04-07-2020 10:09:25 : Reset student ip, timeout userId=SD-000001
+04-07-2020 10:20:33 : Teacher h has conected
+04-07-2020 10:22:23 : Reset student ip, timeout userId=SD-000002,SD-000003
+04-07-2020 10:22:33 : UPDATE student_account SET rollnumber='h',username='h',password='d41d8cd98f00b204e9800998ecf8427e',name='Khang Hy',class='IA1401',contest_id='1',ip='1',timeout='2020-07-04 00:00:00+00:00',islogin='0' WHERE userId='SD-000001'
+04-07-2020 10:22:38 : Reset student ip, timeout userId=SD-000001
+04-07-2020 10:22:44 : UPDATE student_account SET rollnumber='h',username='h',password='d41d8cd98f00b204e9800998ecf8427e',name='Khang Hy',class='IA1401',contest_id='1',ip='1',timeout='2020-07-04 00:00:00+00:00',islogin='0' WHERE userId='SD-000001'
+04-07-2020 10:27:35 : Student ce140237 has conected
+04-07-2020 13:04:51 : undefined undefined has disconected
+04-07-2020 13:05:03 : Teacher h has conected
+04-07-2020 13:05:34 : Reset student ip, timeout userId=SD-000048
+04-07-2020 13:05:40 : Reset student ip, timeout userId=SD-000043
+04-07-2020 13:05:51 : Teacher h has disconected
+04-07-2020 13:07:52 : Student h has conected
+04-07-2020 13:08:09 : Sumit code file [1][2857929725][Contest01][h][A].c of contest Contest01 problem A by SD-000001
+04-07-2020 13:08:21 : Sumit code file [1][2857941835][Contest01][h][A].cpp of contest Contest01 problem A by SD-000001
+04-07-2020 13:09:59 : Student h has disconected
+04-07-2020 13:10:02 : Teacher h has conected
+04-07-2020 13:10:14 : Sumit code file [1][2858054969][Contest01][abc123][A].c of contest Contest01 problem A by TC-000001
+04-07-2020 13:11:11 : Sumit code file [1][2858111176][Contest01][abc123][C].cpp of contest Contest01 problem C by TC-000001
+04-07-2020 13:11:36 : Sumit code file [1][2858136154][Contest01][abc123][B].cpp of contest Contest01 problem B by TC-000001
+04-07-2020 13:12:50 : Contest 2 has changed time to begin:2020-04-09 10:50+00:00, end: 2020-07-11 19:15+00:00
+04-07-2020 13:13:00 : Sumit code file [1][7438980633][Contest02][abc123][A].c of contest Contest02 problem A by TC-000001
+04-07-2020 13:19:43 : Teacher h has disconected
+04-07-2020 15:27:25 : Student h has conected
+04-07-2020 15:27:37 : Sumit code file [1][2866297632][Contest01][h][A].py of contest Contest01 problem A by SD-000001
+04-07-2020 16:02:20 : Sumit code file [1][2868380599][Contest01][h][A].c of contest Contest01 problem A by SD-000001
+04-07-2020 16:02:37 : Sumit code file [1][2868397708][Contest01][h][B].cpp of contest Contest01 problem B by SD-000001
+04-07-2020 16:02:45 : Sumit code file [1][2868405716][Contest01][h][C].cpp of contest Contest01 problem C by SD-000001
+04-07-2020 16:07:04 : Sumit code file [1][2868664905][Contest01][h][A].c of contest Contest01 problem A by SD-000001
+04-07-2020 16:11:36 : Student h has disconected
+04-07-2020 16:13:24 : Student anhlnqce130208 has conected
+04-07-2020 16:14:01 : Student phunhce140069 has conected
+04-07-2020 16:15:08 : Teacher h has conected
+04-07-2020 16:15:24 : Contest 4 has changed time to begin:2020-05-15 10:41+00:00, end: 2020-07-25 15:35+00:00
+04-07-2020 16:15:45 : Upload problem contest 4 : 1001 DIEU UOC.pdf .Testcase: A.zip
+04-07-2020 16:15:50 : Teacher h has disconected
+04-07-2020 16:16:16 : Sumit code file [1][4340116718][Contest04][CE130208][A].c of contest Contest04 problem A by SD-000002
+04-07-2020 16:16:17 : Sumit code file [1][4340117755][Contest04][CE140069][A].c of contest Contest04 problem A by SD-000003
+04-07-2020 16:16:32 : Teacher h has conected
+04-07-2020 16:16:53 : Upload problem contest 4 : DI-CƯ.docx .Testcase: B.zip
+04-07-2020 16:17:05 : Sumit code file [1][4340165821][Contest04][CE140069][B].cpp of contest Contest04 problem B by SD-000003
+04-07-2020 16:17:07 : Sumit code file [1][4340167006][Contest04][CE130208][B].cpp of contest Contest04 problem B by SD-000002
+04-07-2020 16:17:26 : Teacher h has disconected
+04-07-2020 16:17:50 : Student anvtce140345 has conected
+04-07-2020 16:18:42 : Sumit code file [1][4340262956][Contest04][CE140345][B].cpp of contest Contest04 problem B by SD-000005
+04-07-2020 16:18:43 : Sumit code file [1][4340263604][Contest04][CE140069][A].py of contest Contest04 problem A by SD-000003
+04-07-2020 16:18:44 : Sumit code file [1][4340264503][Contest04][CE130208][B].cpp of contest Contest04 problem B by SD-000002
+04-07-2020 17:10:48 : Student anvtce140345 has disconected
+04-07-2020 21:26:45 : Teacher h has conected

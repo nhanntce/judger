@@ -1,0 +1,8 @@
+0.0
+Max time: 88
+Max memory: 82
+test01: Traceback (most recent call last):
+  File "[ffff10-65-171-108][2150408][FCoder][CE150394][B].py", line 9, in <module>
+    y = int(input())
+EOFError: EOF when reading a line
+

@@ -55,7 +55,14 @@
         <input type="hidden" name="MemberCode" value="<%=MemberCode%>">
         <input type="hidden" name="FullName" value="<%=FullName%>">
         <input type="hidden" name="class_name" value="<%=class_name%>">
-        <button type="submit" class="btn btn-green btn-sm"><i class="fa fa-check-circle fa-lg"></i> Create</button>
+        <div class="row">
+            <div class="col-4">
+                <input type="text" class="form-control" id="password" name="password" placeholder="Enter Password - Default: fpt@user">
+            </div>
+            <div class="col-4">
+                <button type="submit" class="btn btn-green btn-sm"><i class="fa fa-check-circle fa-lg"></i> Create</button>
+            </div>
+        </div>
     </form>
     <div class="card-body">
         <table class="table table-bordered table-hover" id="dataTableClass" width="100%" cellspacing="0">

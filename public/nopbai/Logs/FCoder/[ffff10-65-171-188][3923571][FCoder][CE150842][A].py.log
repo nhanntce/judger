@@ -1,0 +1,8 @@
+0.0
+Max time: 87
+Max memory: 94
+test01: Traceback (most recent call last):
+  File "[ffff10-65-171-188][3923571][FCoder][CE150842][A].py", line 17, in <module>
+    print(something[a], end='')
+IndexError: list index out of range
+

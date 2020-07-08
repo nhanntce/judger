@@ -1,0 +1,10 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int main() {
+    freopen("A.inp", "r", stdin);
+    freopen("A.out", "w", stdout);
+    // Your code
+    return 0;
+}

@@ -1,0 +1,15 @@
+17-06-2020 09:17:04 : Teacher h has conected
+17-06-2020 09:21:27 : Create student_account rollnumber=CE150509 name=Bảo class=FCoder
+17-06-2020 09:21:54 : 1 students in contest 12 has added: CE150509
+17-06-2020 09:26:45 : Teacher h has conected
+17-06-2020 09:27:24 : Teacher h has conected
+17-06-2020 09:29:48 : Teacher h has conected
+17-06-2020 09:31:39 : Teacher h has conected
+17-06-2020 09:39:24 : Teacher h has disconected
+17-06-2020 09:39:34 : Student ce150130 has conected
+17-06-2020 09:45:05 : Teacher h has conected
+17-06-2020 10:06:02 : Teacher h has conected
+17-06-2020 10:06:19 : Teacher h has conected
+17-06-2020 10:06:51 : Teacher h has conected
+17-06-2020 10:10:09 : Teacher h has conected
+17-06-2020 10:10:38 : Teacher h has conected

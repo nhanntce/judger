@@ -1,0 +1,29 @@
+04-06-2020 10:54:14 : Student h has conected
+04-06-2020 20:41:05 : Student h has conected
+04-06-2020 20:43:19 : Sumit code file [1][293239313][Contest01][h][A].py of contest Contest01 problem A by SD-000001
+04-06-2020 20:51:29 : Student h has disconected
+04-06-2020 20:51:33 : Teacher h has conected
+04-06-2020 21:01:53 : Load file excel FCoder.xls
+04-06-2020 21:02:16 : Load file excel FCoder.xls
+04-06-2020 21:02:24 : 29 students has added to database: CE150076,CE140102,CE150394,CE150521,CE140196,CE130319,CE130100,CE130042,CE130109,CE130157,CE130204,CE130336,CE140401,CE140037,CE140085,CE140237,CE140520,CE140133,CS140536,CE140137,CE150130,CE150075,CE150280,CE150424,CE150842,CE150756,CE150471,CE150505,CE150695
+04-06-2020 21:02:58 : Teacher h has disconected
+04-06-2020 21:03:20 : Student ce140237 has conected
+04-06-2020 21:03:26 : Student ce140237 has disconected
+04-06-2020 21:03:29 : Teacher h has conected
+04-06-2020 21:05:13 : Create contest fail
+04-06-2020 21:06:28 : Teacher h has conected
+04-06-2020 21:06:44 : Create contest fail
+04-06-2020 21:08:09 : Create contest FCoder by TC-000001
+04-06-2020 21:08:37 : 29 students in contest 12 has added: CE130042,CE130100,CE130109,CE130157,CE130204,CE130319,CE130336,CE140037,CE140085,CE140102,CE140133,CE140137,CE140196,CE140237,CE140401,CE140520,CE150075,CE150076,CE150130,CE150280,CE150394,CE150424,CE150471,CE150505,CE150521,CE150695,CE150756,CE150842,CS140536
+04-06-2020 21:09:17 : Teacher h has disconected
+04-06-2020 21:09:28 : Student ce140237 has conected
+04-06-2020 21:17:00 : Student ce140237 has disconected
+04-06-2020 21:17:11 : Teacher h has conected
+04-06-2020 21:17:20 : Contest 12 has changed time to begin:2020-06-01 05:25+00:00, end: 2020-06-11 18:30+00:00
+04-06-2020 21:17:37 : Upload problem: 1001 DIEU UOC.pdf .Testcase: A.zip
+04-06-2020 21:17:44 : Teacher h has disconected
+04-06-2020 21:18:00 : Student ce140237 has conected
+04-06-2020 21:18:53 : Sumit code content field [1][316433063][FCoder][CE140237][A].py of contest FCoder problem A by SD-000043
+04-06-2020 21:22:38 : Student ce140237 has disconected
+04-06-2020 21:22:43 : Teacher h has conected
+04-06-2020 21:51:34 : Sumit code file [1][318394337][FCoder][abc123][A].py of contest FCoder problem A by TC-000001

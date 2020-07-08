@@ -1,7 +1,5 @@
-* {
-    font-family: Arial, Helvetica, sans-serif;
-}
 body {
+    font-family: Arial, Helvetica, sans-serif;
     background-color: #F8F8F8;
     position: relative;
 }
@@ -38,6 +36,9 @@ body {
 .container {
     max-width: 1200px!important
 }
+.container-fluid {
+    max-width: 1500px!important
+}
 .bc-icons .breadcrumb-item+.breadcrumb-item::before {
     content: none;
 }
@@ -70,13 +71,13 @@ body {
     margin: 0 13px;
 }
 .navbar-custom .nav-item:hover {
-    border-bottom: 3px solid #2c31cf;
+    border-bottom: 3px solid #e65100 ;
 }
 .navbar-custom .nav-item {
     border-bottom: 3px solid rgba(255, 255, 255, .9);
 }
 .navbar-custom .nav-item.select {
-    border-bottom: 3px solid #2c31cf;
+    border-bottom: 3px solid #e65100 ;
 }
 .solved {
     background: no-repeat center/32px url(../img/check.svg);
@@ -102,4 +103,66 @@ body {
 } 
 .scrollbar-light-blue {
     scrollbar-color: #82B1FF #F5F5F5;
+}
+.testcases {
+    min-height: 17px;
+}
+.testcases span {
+    display: block;
+    float: left;
+    border: 1px solid #C9C9C9;
+    margin-left: 2px;
+    padding: 0px;
+    text-align: center;
+    border-radius: 4px;
+    font-size: 11px;
+    height: 17px;
+    width: 17px;
+    background-color: #F9F9F9;
+    padding-top: 1px;
+}
+.accepted {
+    color: #35BD40;
+    font-weight: bold;
+}
+.rejected {
+    color: #F20707;
+    font-weight: bold;
+}
+.file_upload {
+    min-height: 180px;
+}
+.file_upload, .switch_button {
+    position: relative;
+    border: 1px solid rgba(0,0,0,0.03);
+    border-radius: 3px;
+    background: rgba(0,0,0,0.03);
+    padding: 23px;
+}
+.file_upload .message, .switch_button .message {
+    text-align: center;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.file_upload [type=file] {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+.open-ace {
+    margin-top: 15px;
+    display: block;
+}
+.btn-sm {
+    text-transform: unset !important;
+    padding: .4rem 1rem !important;
+    font-size: 12px !important;
 }

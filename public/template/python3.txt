@@ -1,0 +1,5 @@
+import sys
+sys.stdin = open('A.inp', 'r')
+sys.stdout = open('A.out', 'w')
+
+// Your code

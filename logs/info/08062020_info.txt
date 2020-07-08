@@ -1,0 +1,8 @@
+08-06-2020 08:47:57 : Teacher h has conected
+08-06-2020 08:48:17 : Contest 12 has changed time to begin:2020-06-11 05:25+00:00, end: 2020-06-11 18:30+00:00
+08-06-2020 08:57:49 : Student h has conected
+08-06-2020 08:57:56 : Student h has disconected
+08-06-2020 08:57:58 : Teacher h has conected
+08-06-2020 08:58:54 : Teacher h has conected
+08-06-2020 08:59:33 : Teacher h has conected
+08-06-2020 09:00:22 : Teacher h has conected

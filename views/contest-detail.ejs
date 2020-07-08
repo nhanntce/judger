@@ -13,15 +13,15 @@
     </div>
     <!-- Page Heading -->
     <h2>Total
-        <%= data.length %> student in contest
+        <%= totalStudent %> student in contest
         <%= data[0].contest_name %>
-        <button type="button" class="btn btn-outline-blue waves-effect btn-sm"
+        <button type="button" class="btn btn-indigo waves-effect btn-sm"
             onclick="window.location='/contest/add-user?contest_id=<%=data[0].contest_id%>';">
-            <i class="fa fa-plus fa-lg"></i> Add student
+            <i class="fa fa-plus"></i> Add student
         </button>
-        <button type="button" class="btn btn-outline-blue waves-effect btn-sm"
+        <button type="button" class="btn btn-indigo waves-effect btn-sm"
             onclick="window.location='/contest/add-problem?contest_id=<%=data[0].contest_id%>';">
-            <i class="fa fa-plus fa-lg"></i> Add problem and testcase
+            <i class="fa fa-plus"></i> Add problem and testcase
         </button>
     </h2>
     <% if (message.length > 0) { %>
@@ -30,25 +30,20 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <i class="m-0 font-weight-bold text-primary">From: </i><%= data[0].time_begin1 %> <i
-                class="m-0 font-weight-bold text-primary"> to: </i><%= data[0].time_end1 %>
+            <i class="m-0 font-weight-bold text-primary">From:
+            </i><%=moment(data[0].time_begin).format('DD-MM-YYYY, HH:mm')%> <i
+                class="m-0 font-weight-bold text-primary"> to:
+            </i><%=moment(data[0].time_end).format('DD-MM-YYYY, HH:mm')%>
             <button type="button" class="btn btn-primary waves-effect waves-light btn-sm" data-toggle="modal"
-                data-target="#myModal"><i class="far fa-edit"></i> Edit</button>
-            <div class="float-right">
-                <button type="button" class="btn btn-default btn-rounded btn-sm"
-                    onclick="window.location='/contest/download?contest_id=<%=data[0].contest_id%>';"><i
-                        class="fa fa-download"></i> Download</button>
-            </div>
+                data-target="#myModal"><i class="fa fa-edit"></i> Edit</button>
         </div>
         <div class="card-body">
             <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
-                        <th width=5%>
-                            <center>
+                        <th class="text-center" width="5%">
                                 <button type="button" style="border: none; background: transparent; font-size: 14px;"
                                     id="MyTableCheckAllButton"><i class="far fa-square"></i></button>
-                            </center>
                         </th>
                         <th>Roll number</th>
                         <th>Name</th>
@@ -72,43 +67,50 @@
                     <% } %>
                 </tbody>
             </table>
-            <button type="button" id="btnconfirm" class="btn btn-danger btn-md" data-toggle="modal"
-                data-target="#modalConfirmDelete"><i class="fa fa-trash-alt"></i> Delete selected</button>
+            <button type="button" id="btnconfirm" class="btn btn-danger btn-sm" data-toggle="modal"
+                data-target="#modalConfirmDelete" disabled><i class="fa fa-trash-alt"></i> Delete selected</button>
         </div>
     </div>
 
 </div>
 <!-- The Modal -->
-<div class="modal fade" id="myModal">
-    <div class="modal-dialog modal-lg">
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
-
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h4 class="modal-title">Edit time</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <div class="modal-header text-center">
+                <h4 class="modal-title w-100 font-weight-bold">Edit time</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-
-            <!-- Modal body -->
-            <div class="modal-body">
-                <form action="/contest/edit-contest" method="POST">
-                    <div class="form-group">
-                        <input type="hidden" name="contest_id" value="<%=data[0].contest_id%>">
-                        <label>Enter name</label>
+            <form action="/contest/edit-contest" method="POST">
+                <div class="modal-body mx-3">
+                    <label>Name</label>
+                    <div class="form mb-3">
                         <input type="text" class="form-control" id="contest_name" name="contest_name"
                             value="<%=data[0].contest_name%>">
-                        <label>Enter start time</label>
-                        <input type="datetime-local" class="form-control" id="time_begin" name="time_begin"
-                            value="<%=new Date(data[0].time_begin.getTime() - (data[0].time_begin.getTimezoneOffset() * 60000)).toISOString().substring(0, 19)%>">
-                        <label>Enter end time</label>
-                        <input type="datetime-local" class="form-control" id="time_end" name="time_end"
-                            value="<%=new Date(data[0].time_end.getTime() - (data[0].time_end.getTimezoneOffset() * 60000)).toISOString().substring(0, 19)%>">
                     </div>
-                    <button class="btn btn-primary" type="submit"><i class="fa fa-check"></i> Submit</button>
-                </form>
-                <div class="container">
+                    <label>Enter start time</label>
+                    <div class="form mb-3">
+                        <input type="text" class="form-control" id="time_begin" name="time_begin"
+                            value="<%=moment(data[0].time_begin).format('DD-MM-YYYY HH:mm')%>">
+                    </div>
+                    <label>Enter end time</label>
+                    <div class="form mb-3">
+                        <input type="text" class="form-control" id="time_end" name="time_end"
+                            value="<%=moment(data[0].time_end).format('DD-MM-YYYY HH:mm')%>">
+                    </div>
                 </div>
-            </div>
+                <script>
+                    $('#time_begin, #time_end').datetimepicker({
+                        format: 'dd-mm-yyyy hh:ii'
+                    }); 
+                </script>
+                <div class="modal-footer d-flex justify-content-center">
+                    <input type="hidden" name="contest_id" value="<%=data[0].contest_id%>">
+                    <button class="btn btn-deep-orange">Update</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -128,9 +130,10 @@
                 <form action="/contest/delete-user" method="POST">
                     <input type="hidden" id="list_rollnumber" name="list_rollnumber">
                     <input type="hidden" name="contest_id" value="<%=data[0].contest_id%>">
+                    <input type="hidden" name="contest_name" value="<%=data[0].contest_name%>">
                     <button type="submit" class="btn btn-outline-danger">Yes</button>
                 </form>
-                <a type="button" class="btn  btn-danger waves-effect" data-dismiss="modal">No</a>
+                <a type="button" class="btn btn-danger waves-effect" data-dismiss="modal">No</a>
             </div>
         </div>
     </div>

@@ -1,0 +1,2 @@
+05-06-2020 10:06:15 : Error: ER_DUP_ENTRY: Duplicate entry '1-B' for key 'PRIMARY'
+05-06-2020 10:06:40 : Error: ER_DUP_ENTRY: Duplicate entry '1-B' for key 'PRIMARY'

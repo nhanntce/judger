@@ -1,0 +1,1 @@
+10-06-2020 20:10:20 : Error: EPERM: operation not permitted, rename './public/thumuctest/Alo' -> './public/thumuctest/$Alo'

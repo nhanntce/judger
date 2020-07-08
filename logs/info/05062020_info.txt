@@ -1,0 +1,34 @@
+05-06-2020 08:35:56 : Teacher h has conected
+05-06-2020 09:10:48 : Teacher h has conected
+05-06-2020 09:38:17 : Teacher h has conected
+05-06-2020 09:49:20 : Teacher h has conected
+05-06-2020 09:50:25 : Delete in contest_detail where contest 1 and problem C
+05-06-2020 09:52:23 : Upload problem: Prime.pdf .Testcase: C.zip
+05-06-2020 09:57:30 : Teacher h has conected
+05-06-2020 09:57:37 : Delete in contest_detail where contest 1 and problem B
+05-06-2020 10:01:53 : Teacher h has conected
+05-06-2020 10:02:00 : Delete in contest_detail where contest 1 and problem B
+05-06-2020 10:06:22 : Teacher h has conected
+05-06-2020 10:07:10 : Delete in contest_detail where contest 1 and problem B
+05-06-2020 10:11:07 : Teacher h has conected
+05-06-2020 10:12:03 : Teacher h has conected
+05-06-2020 10:12:35 : Delete in contest_detail where contest 1 and problem B
+05-06-2020 10:13:23 : Teacher h has conected
+05-06-2020 10:13:29 : Delete in contest_detail where contest 1 and problem B
+05-06-2020 10:15:26 : Teacher h has conected
+05-06-2020 10:16:51 : Teacher h has conected
+05-06-2020 10:18:06 : Teacher h has conected
+05-06-2020 10:18:25 : Delete in contest_detail where contest 1 and problem B
+05-06-2020 10:18:41 : Upload problem: DI-CƯ.docx .Testcase: B.zip
+05-06-2020 10:22:18 : Teacher h has conected
+05-06-2020 10:22:24 : Delete in contest_detail where contest 1 and problem C
+05-06-2020 10:22:36 : Upload problem contest 1 : Prime.pdf .Testcase: C.zip
+05-06-2020 10:29:21 : Teacher h has conected
+05-06-2020 10:31:27 : Teacher h has conected
+05-06-2020 10:32:00 : Teacher h has conected
+05-06-2020 10:32:07 : Delete in contest_detail where contest 1 and problem D
+05-06-2020 10:32:24 : Upload problem contest 1 : DI-CƯ.docx .Testcase: D.zip
+05-06-2020 10:32:30 : Delete in contest_detail where contest 1 and problem D
+05-06-2020 10:34:36 : Teacher h has conected
+05-06-2020 10:34:46 : Teacher h has disconected
+05-06-2020 10:34:48 : Student h has conected

@@ -1,0 +1,29 @@
+10-06-2020 09:59:44 : Teacher h has conected
+10-06-2020 09:59:53 : Delete in contest_detail where contest 12 and problem A
+10-06-2020 10:25:10 : Upload problem contest 12 : Power of 8888.pdf .Testcase: A.zip
+10-06-2020 10:26:20 : Teacher h has conected
+10-06-2020 10:27:05 : Contest 12 has changed time to begin:2020-06-11 05:25+00:00, end: 2020-06-11 18:30+00:00
+10-06-2020 10:27:23 : Contest 12 has changed time to begin:2020-06-01 05:25+00:00, end: 2020-06-11 18:30+00:00
+10-06-2020 10:27:52 : Sumit code file [ffff127-0-0-1][795772679][FCoder][abc123][A].c of contest FCoder problem A by TC-000001
+10-06-2020 10:47:12 : Sumit code content field [ffff127-0-0-1][796932700][FCoder][abc123][A].py of contest FCoder problem A by TC-000001
+10-06-2020 10:54:03 : Sumit code content field [ffff127-0-0-1][797343756][FCoder][abc123][A].py of contest FCoder problem A by TC-000001
+10-06-2020 11:36:59 : Upload problem contest 12 : Non-Overlapping Area.pdf .Testcase: C.zip
+10-06-2020 11:37:27 : Sumit code file [ffff127-0-0-1][799947737][FCoder][abc123][C].c of contest FCoder problem C by TC-000001
+10-06-2020 11:46:48 : Sumit code content field [ffff127-0-0-1][800508711][FCoder][abc123][C].py of contest FCoder problem C by TC-000001
+10-06-2020 11:58:59 : Teacher h has conected
+10-06-2020 11:59:37 : Sumit code content field [1][801277309][FCoder][abc123][C].c of contest FCoder problem C by TC-000001
+10-06-2020 12:04:39 : Upload problem contest 12 : Division of Power 2.pdf .Testcase: B.zip
+10-06-2020 12:05:13 : Teacher h has conected
+10-06-2020 12:08:25 : Sumit code content field [1][801805355][FCoder][abc123][B].c of contest FCoder problem B by TC-000001
+10-06-2020 12:14:45 : Sumit code content field [1][802185013][FCoder][abc123][B].py of contest FCoder problem B by TC-000001
+10-06-2020 19:59:34 : Teacher h has conected
+10-06-2020 20:04:58 : Contest 12 has changed time to begin:2020-06-11 18:15+00:00, end: 2020-06-11 18:30+00:00
+10-06-2020 20:05:16 : Contest 12 has changed time to begin:2020-06-11 18:15+00:00, end: 2020-06-11 19:00+00:00
+10-06-2020 20:06:37 : Delete in contest_detail where contest 3 and problem B
+10-06-2020 20:07:24 : Upload problem contest 11 : Power of 8.pdf .Testcase: A.zip
+10-06-2020 20:07:40 : Upload problem contest 11 : Division of Power 2.pdf .Testcase: B.zip
+10-06-2020 20:09:07 : Upload problem contest 11 : Non-Overlapping Area.pdf .Testcase: C.zip
+10-06-2020 20:10:13 : Teacher h has conected
+10-06-2020 20:12:30 : Teacher h has conected
+10-06-2020 20:13:25 : Contest 11 has changed time to begin:2020-06-05 19:15+00:00, end: 2020-06-11 19:15+00:00
+10-06-2020 22:01:00 : Teacher h has disconected
