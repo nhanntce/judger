@@ -1,0 +1,17 @@
+26-05-2021 15:57:33 : Teacher abc123 has connected
+26-05-2021 15:58:50 : Create contest context-1 by TC-000001
+26-05-2021 15:59:39 : Contest 2 has changed time to begin:2020-11-05 06:30+00:00, end: 2021-07-15 11:55+00:00, language=MySQL
+26-05-2021 15:59:47 : Contest 2 has changed time to begin:2020-11-05 06:30+00:00, end: 2021-07-15 11:55+00:00, language=C++
+26-05-2021 16:00:40 : Sumit code content field [1][17487040890][demo2][abc123][A].cpp of contest demo2 problem A by TC-000001
+26-05-2021 16:01:13 : Teacher abc123 has disconnected
+26-05-2021 16:01:17 : Student h has connected
+26-05-2021 16:01:46 : Student h has disconnected
+26-05-2021 16:01:51 : Teacher abc123 has connected
+26-05-2021 16:02:11 : Contest 1 has changed time to begin:2020-11-05 06:30+00:00, end: 2021-12-31 19:50+00:00, language=C,C++
+26-05-2021 16:02:15 : Teacher abc123 has disconnected
+26-05-2021 16:02:20 : Student h has connected
+26-05-2021 16:02:31 : Sumit code content field [1][17487151125][demo1][h][A].c of contest demo1 problem A by SD-000001
+26-05-2021 16:06:28 : Student h has disconnected
+26-05-2021 16:06:33 : Teacher abc123 has connected
+26-05-2021 16:06:52 : Teacher abc123 has disconnected
+26-05-2021 16:06:57 : Student h has connected

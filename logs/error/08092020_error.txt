@@ -1,0 +1,2 @@
+08-09-2020 08:25:02 : Error: connect ECONNREFUSED 127.0.0.1:3306
+08-09-2020 21:40:41 : Error: EPERM: operation not permitted, rename 'C:\Users\Hy\Documents\Judge\judger\public\thumucbailam\demo5' -> 'C:\Users\Hy\Documents\Judge\judger\public\thumucbailam\demo5'

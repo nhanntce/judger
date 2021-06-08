@@ -1,0 +1,7 @@
+Compile Error
+[1][18582876241][demo1][h][A].c:1:1: error: unknown type name 'Nguyen'
+ Nguyen Thanh Nhan
+ ^~~~~~
+[1][18582876241][demo1][h][A].c:1:14: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'Nhan'
+ Nguyen Thanh Nhan
+              ^~~~

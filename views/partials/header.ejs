@@ -2,148 +2,150 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <title>F-Judge</title>
-    <link rel="stylesheet" href="../vendor/fontawesome-free/css/all.min.css" />
+  <meta charset="UTF-8">
+  <title>F-Judge</title>
+  <link rel="stylesheet" href="../vendor/fontawesome-free/css/all.min.css" />
 
-    <!-- Custom styles for this template -->
-    <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+  <!-- Custom styles for this template -->
+  <link href="../css/sb-admin-2.min.css" rel="stylesheet">
 
-    <link href="../css/mdb.min.css" rel="stylesheet">
-    <link href="../css/styles.css" rel="stylesheet">
-    <link href="../css/bootstrap-datetimepicker.min.css" rel="stylesheet">
-    <!-- Custom styles for this page -->
-    <link href="../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-    <link href="../vendor/datatables/select.dataTables.min.css" rel="stylesheet">
-    
+  <link href="../css/mdb.min.css" rel="stylesheet">
+  <link href="../css/styles.css" rel="stylesheet">
+  <link href="../css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+  <!-- Custom styles for this page -->
+  <link href="../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+  <link href="../vendor/datatables/select.dataTables.min.css" rel="stylesheet">
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="../vendor/jquery/jquery.min.js"></script>
-    <script src="../js/bootstrap.min.js"></script>
-    <script src="../js/bootstrap-datetimepicker.min.js"></script>
 
-    <!-- Core plugin JavaScript-->
-    <script src="../js/mdb.min.js"></script>
+  <!-- Bootstrap core JavaScript-->
+  <script src="../vendor/jquery/jquery.min.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
+  <script src="../js/bootstrap-datetimepicker.min.js"></script>
 
-    <!-- Page level plugins -->
-    <script type="text/javascript" src="../vendor/datatables/datatables.min.js"></script>
+  <!-- Core plugin JavaScript-->
+  <script src="../js/mdb.min.js"></script>
 
-    <!-- Page level custom scripts -->
-    <script src="../js/demo/datatables-demo.js"></script>
+  <!-- Page level plugins -->
+  <script src="../vendor/datatables/datatables.min.js"></script>
 
-    <script src="../js/ace.js"></script>
-    <script>
-        $(window).on("beforeunload", function (e) {
-            if (navigator.userAgent.indexOf("Firefox") !== -1 ) {
-                $.get('/session/destroy');
-            }
-        });
-        $(window).on("unload", function (e) {
-            if (navigator.userAgent.indexOf("Chrome") !== -1 || navigator.userAgent.indexOf("coc_coc_browser") !== -1 ) {
-                $.get('/session/destroy');
-            }
-        });
-        $(document).ready(function () {
-            // get current URL path and assign 'active' class
-            var pathname = window.location.pathname;
-            if (pathname.includes("home")) {
-                $('.navbar-nav > li > a[href="/home/dashboard"]').parent().addClass('select');
-            } else if (pathname.includes("contest")) {
-                $('.navbar-nav > li > a[href="/contest"]').parent().addClass('select');
-            } else if (pathname.includes("rank")) {
-                $('.navbar-nav > li > a[href="/rank"]').parent().addClass('select');
-            }
-        });
-    </script>
+  <!-- Page level custom scripts -->
+  <script src="../js/demo/datatables-demo.js"></script>
+
+  <script src="../js/ace.js"></script>
+  <script>
+    // $(window).on("beforeunload", function (e) {
+    //     if (navigator.userAgent.indexOf("Firefox") !== -1 ) {
+    //         $.get('/session/destroy');
+    //     }
+    // });
+    // $(window).on("unload", function (e) {
+    //     if (navigator.userAgent.indexOf("Chrome") !== -1 || navigator.userAgent.indexOf("coc_coc_browser") !== -1 ) {
+    //         $.get('/session/destroy');
+    //     }
+    // });
+    $(document).ready(function () {
+      // get current URL path and assign 'active' class
+      var pathname = window.location.pathname;
+      if (pathname.includes("home")) {
+        $('.navbar-nav > li > a[href="/home/dashboard"]').parent().addClass('select');
+      } else if (pathname.includes("contest")) {
+        $('.navbar-nav > li > a[href="/contest"]').parent().addClass('select');
+      } else if (pathname.includes("rank")) {
+        $('.navbar-nav > li > a[href="/rank"]').parent().addClass('select');
+      }
+    });
+  </script>
 </head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-light navbar-custom mb-4">
-        <div class="container">
-            <a class="navbar-brand" href="/home/dashboard"><img src="/img/logo.png" height="30" alt="Judger"> <b class="deep-orange-text">F-Judge</b></a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
-                aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="basicExampleNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/home/dashboard">Home</a>
-                    </li>
-                    <% if (role == "Teacher") { %>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/contest">Contest</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/rank">Rank</a>
-                    </li>
-                    <% } %>
-                </ul>
-                <ul class="nav navbar-nav nav-flex-icons ml-auto">
-                    <% if (role == "Teacher") { %>
-                    <button id="submission" class="btn white-text orange darken-3 btn-md my-0 my-sm-1 ml-3" type="button" data-toggle="modal" data-target="#centralModalSm">
-                        <a class="fa fa-upload"></a><b> Submit</b>
-                    </button>
-                    <% } else {%>
-                    <button class="btn white-text orange darken-3 btn-md my-0 my-sm-1 ml-3" type="button"
-                        onclick="window.location='/submission';">
-                        <a class="fa fa-upload"></a><b> Submit</b>
-                    </button>
-                    <% } %>
-                    <li class="dropdown">
-                        <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-4" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-user"></i> <%=user%> </a>
-                        <div class="dropdown-menu dropdown-menu-right dropdown-info"
-                            aria-labelledby="navbarDropdownMenuLink-4">
-                            <a class="dropdown-item" href="/home/profile">My account</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="/home/logout">Logout</a>
-                        </div>
-                    </li>
-                </ul>
 
+<body style="padding-top: 85px;">
+  <nav class="navbar fixed-top navbar-expand-lg navbar-light navbar-custom">
+    <div class="container">
+      <a class="navbar-brand" href="/home/dashboard"><img src="/img/logo.png" height="30" alt="Judger"> <b
+          class="deep-orange-text">F-Judge</b></a>
+      <button class="navbar-toggler first-button" type="button" data-toggle="collapse" data-target="#basicExampleNav"
+        aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
+        <div class="animated-icon1"><span></span><span></span><span></span></div>
+      </button>
+      <div class="collapse navbar-collapse" id="basicExampleNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/home/dashboard">Home</a>
+          </li>
+          <% if (role == "Teacher") { %>
+          <li class="nav-item">
+            <a class="nav-link" href="/contest">Contest</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/rank">Rank</a>
+          </li>
+          <% } %>
+        </ul>
+        <ul class="nav navbar-nav nav-flex-icons ml-auto">
+          <% if (role == "Teacher") { %>
+          <button id="submission" class="btn white-text orange darken-3 btn-md my-0 my-sm-1 ml-3" type="button"
+            data-toggle="modal" data-target="#centralModalSm">
+            <a class="fa fa-upload"></a><b> Submit</b>
+          </button>
+          <% } else {%>
+          <button class="btn white-text orange darken-3 btn-md my-0 my-sm-1 ml-3" type="button"
+            onclick="window.location='/submission';">
+            <a class="fa fa-upload"></a><b> Submit</b>
+          </button>
+          <% } %>
+          <li class="dropdown">
+            <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-4" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              <i class="fas fa-user"></i> <%=user%> </a>
+            <div class="dropdown-menu dropdown-menu-right dropdown-info" aria-labelledby="navbarDropdownMenuLink-4">
+              <a class="dropdown-item" href="/home/profile">My account</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="/home/logout">Logout</a>
             </div>
-        </div>
-    </nav>
-    <% if (role == "Teacher") { %>
-    <!-- Central Modal Small -->
-    <div class="modal fade" id="centralModalSm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-    aria-hidden="true">
-        <div class="modal-dialog modal-sm" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                <h4 class="modal-title w-100" id="myModalLabel">Select contest</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                </div>
-                <div id="results" class="modal-body">
-                
-                </div>
-            </div>
-        </div>
+          </li>
+        </ul>
+
+      </div>
     </div>
-    <!-- Central Modal Small -->
-    <script>
-        $(function(){
-        $('#submission').on('click', function(e){
-            $.post( '/searching', function(data) {
-                    var display='<form action="/submission" method="GET"><label class="font-weight-bold">Contest</label><select class="form-control" id="contest_name">'
-                    for(let i = 0; i < data.length; ++i) {
-                        display += '<option>' + data[i].contest_name + '</option>'
-                    }
-                    $('#results').html(display + '</select><input type="hidden" name="contest_id" id="contest_id"><button type="submit" class="btn btn-secondary btn-sm float-right"><i class="fa fa-sign-in-alt"></i> GO</button></form>');
-                    $('#contest_name').change(function () {
-                        for(let i = 0; i < data.length; ++i) {
-                            if ($('#contest_name').val() == data[i].contest_name) {
-                                $('#contest_id').val(data[i].contest_id)
-                            }   
-                        }  
-                    })
-                    $('#contest_name').change()
-                });
-            });
+  </nav>
+  <% if (role == "Teacher") { %>
+  <!-- Central Modal Small -->
+  <div class="modal fade" id="centralModalSm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title w-100" id="myModalLabel">Select contest</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div id="results" class="modal-body"></div>
+      </div>
+    </div>
+  </div>
+  <!-- Central Modal Small -->
+  <script>
+    $('.first-button').on('click', function () {
+      $('.animated-icon1').toggleClass('open');
+    });
+    $(function () {
+      $('#submission').on('click', function (e) {
+        $.post('/searching', function (data) {
+          var display = '<form action="/submission" method="GET"><label class="font-weight-bold">Contest</label><select class="form-control" id="contest_name">'
+          for (let i = 0; i < data.length; ++i) {
+            display += '<option>' + data[i].contest_name + '</option>'
+          }
+          $('#results').html(display + '</select><input type="hidden" name="contest_id" id="contest_id"><button type="submit" class="btn m-right btn-secondary btn-sm float-right mt-1"><i class="fa fa-sign-in-alt"></i> GO</button></form>');
+          $('#contest_name').change(function () {
+            for (let i = 0; i < data.length; ++i) {
+              if ($('#contest_name').val() == data[i].contest_name) {
+                $('#contest_id').val(data[i].contest_id)
+              }
+            }
+          })
+          $('#contest_name').change()
         });
-    </script>
-    <% } %>
-    
+      });
+    });
+  </script>
+  <% } %>

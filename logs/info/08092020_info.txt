@@ -1,0 +1,40 @@
+08-09-2020 08:25:08 : Teacher a has conected
+08-09-2020 08:31:48 : Contest 20 has changed time to begin:2020-09-08 09:30+00:00, end: 2020-09-08 10:30+00:00
+08-09-2020 08:49:22 : 19 students in contest 16 has deleted: CE140019,CE140212,CE140242,CE140284,CE140411,CE140426,CE140462,CE140520,CE140524,CE140556,CE150093,CE150124,CE150493,CE150499,CE150569,CE150623,CE150662,CE150718,CE150762
+08-09-2020 09:02:55 : Upload problem contest 20 : KhanhVH_PRF192_SE1502_1.pdf .Testcase: A.zip
+08-09-2020 09:17:44 : Student ce140237 has conected
+08-09-2020 09:18:48 : Sumit code content field [1][104328157][demo3][CE140237][A].cpp of contest demo3 problem A by SD-000043
+08-09-2020 09:18:54 : Student ce140237 has disconected
+08-09-2020 09:18:59 : Teacher h has conected
+08-09-2020 09:24:14 : Teacher h has disconected
+08-09-2020 09:24:27 : Student ce140237 has conected
+08-09-2020 09:45:35 : Student ce140237 has disconected
+08-09-2020 09:46:27 : Student ce140237 has conected
+08-09-2020 09:52:31 : Student ce140237 has disconected
+08-09-2020 09:52:35 : Teacher h has conected
+08-09-2020 12:21:36 : Teacher h has disconected
+08-09-2020 12:24:52 : Teacher h has conected
+08-09-2020 12:25:06 : Teacher h has disconected
+08-09-2020 14:31:08 : Teacher a has conected
+08-09-2020 14:54:37 : Teacher a has disconected
+08-09-2020 15:34:46 : Teacher a has conected
+08-09-2020 15:35:46 : Create contest demo5 by TC-000002
+08-09-2020 15:37:37 : 5 students in contest 21 has added: user1,user2,user3,user4,user5
+08-09-2020 15:37:58 : Load file excel a.xls
+08-09-2020 15:39:46 : Upload problem contest 21 : KhanhVH_PRF192_SE1502.HL.pdf .Testcase: A.zip
+08-09-2020 15:41:02 : Upload problem contest 21 : KhanhVH_PRF192_SE1502.HL.pdf .Testcase: B.zip
+08-09-2020 15:41:20 : Upload problem contest 21 : KhanhVH_PRF192_SE1502.HL.pdf .Testcase: C.zip
+08-09-2020 21:36:05 : Teacher h has conected
+08-09-2020 21:36:08 : Teacher h has disconected
+08-09-2020 21:36:10 : Student h has conected
+08-09-2020 21:36:14 : Student h has disconected
+08-09-2020 21:36:21 : Student user1 has conected
+08-09-2020 21:40:30 : Student user1 has disconected
+08-09-2020 21:40:34 : Teacher h has conected
+08-09-2020 21:40:41 : Contest 21 has changed time to begin:2020-09-08 15:00+00:00, end: 2020-09-09 16:35+00:00
+08-09-2020 21:40:53 : Teacher h has conected
+08-09-2020 21:41:00 : Teacher h has disconected
+08-09-2020 21:41:01 : Teacher a has conected
+08-09-2020 21:41:05 : Teacher a has disconected
+08-09-2020 21:41:09 : Student user1 has conected
+08-09-2020 21:42:00 : Sumit code content field [1][24120445][demo5][user1][A].c of contest demo5 problem A by SD-000077

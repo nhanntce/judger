@@ -2,186 +2,185 @@
 
 <div class="container">
 
-    <% if (message.length > 0) { %>
-    <div class="alert alert-danger col-sm-12"><%= message %></div>
-    <% } else { %>
-    <script>
-        $(document).ready(function () {
-            jQuery.fn.dataTableExt.oSort["ranks-desc"] = function (x, y) {
-                x = getRank(x);
-                y = getRank(y);
-                return ((x < y) ? 1 : ((x > y) ? -1 : 0));
-            };
-            jQuery.fn.dataTableExt.oSort["times-asc"] = function (x, y) {
-                return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-            };
-            function getRank(s) {
-                if (s.split('<br>')[0].split('<center>')[1] == 'Not submit') return -1
-                return parseFloat(s.split('<br>')[0].split('<center>')[1])
+  <% if (message.length > 0) { %>
+  <div class="alert alert-danger col-sm-12"><%= message %></div>
+  <% } else { %>
+  <script>
+    $(document).ready(function () {
+      jQuery.fn.dataTableExt.oSort["ranks-desc"] = function (x, y) {
+        x = getRank(x);
+        y = getRank(y);
+        return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+      };
+      jQuery.fn.dataTableExt.oSort["times-asc"] = function (x, y) {
+        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+      };
+      function getRank(s) {
+        if (s.split('<br>')[0].split('<center>')[1] == 'Not submit') return -1
+        return parseFloat(s.split('<br>')[0].split('<center>')[1])
+      }
+      var x = setInterval(function () {
+        var pro = (new Date().getTime() - parseInt('<%=data[0].time_begin.getTime()%>')) / (parseInt('<%=data[0].time_end.getTime()%>') - parseInt('<%=data[0].time_begin.getTime()%>')) * 100;
+
+        if (pro <= 100 && pro >= 0) {
+          $('#progress').attr('style', 'width:' + pro + '%');
+          $('#progress').text((pro | 0).toString() + '%');
+        } else if (pro > 100) {
+          $('#progress').attr('style', 'width:100%');
+          $('#progress').attr('class', 'progress-bar bg-danger');
+          $('#progress').text('The Contest is Over');
+          clearInterval(x);
+          return;
+        } else {
+          $('#progress').attr('style', 'width:100%');
+          $('#progress').attr('class', 'progress-bar bg-primary');
+          $('#progress').text('The Contest is not open');
+          clearInterval(x);
+          return;
+        }
+      }, 100);
+      var lastIndex = $("#dataTableRank").find('tr')[0].cells.length + $("#dataTableRank").find('tr')[1].cells.length - 2;
+      var dataTableRank = $('#dataTableRank').DataTable({
+        ajax: {
+          url: "/load-rank?contest_id=<%=data[0].contest_id%>",
+          type: "POST"
+        },
+        aaSorting: [[lastIndex, 'desc'], [4, 'asc']],
+        aoColumnDefs: [
+          { sType: "ranks", aTargets: lastIndex - 1 },
+          { sType: "times", aTargets: 4 },
+          {
+            aTargets: [1, 2],
+            mRender: function (data, type, row, meta) {
+              return '<a href="/detail-rank?rollnumber=' + row[1] + '">' + data + '</a>';
             }
-            var x = setInterval(function () {
-                var pro = (new Date().getTime() - parseInt('<%=data[0].time_begin.getTime()%>')) / (parseInt('<%=data[0].time_end.getTime()%>') - parseInt('<%=data[0].time_begin.getTime()%>')) * 100;
-
-                if (pro <= 100 && pro >= 0) {
-                    $('#progress').attr('style', 'width:' + pro + '%');
-                    $('#progress').text((pro | 0).toString() + '%');
-                } else if (pro > 100) {
-                    $('#progress').attr('style', 'width:100%');
-                    $('#progress').attr('class', 'progress-bar bg-danger');
-                    $('#progress').text('The Contest is Over');
-                    clearInterval(x);
-                    return;
+          }, {
+            bSearchable: false,
+            bSortable: false,
+            aTargets: 0
+          }, {
+            aTargets: 4,
+            mRender: function (data, type, row, meta) {
+              var minutes = Math.floor(data / 60000);
+              return minutes;
+            }
+          },
+          { visible: false, targets: lastIndex }
+        ],
+        lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        dom: "<'row'l>" +
+          "<'row'<'col-sm-6'B><'col-sm-6'f>>" +
+          "<'row'<'col-sm-12'tr>>" +
+          "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+        buttons: [{
+          extend: 'excelHtml5',
+          text: '<li class="fa fa-file-excel"></li> Export to Excel',
+          filename: '<%=data[0].contest_name.replace(/ /g, ' - ')%>',
+          title: '',
+          download: 'open',
+          orientation: 'landscape',
+          exportOptions: {
+            columns: ":not(:eq(0)):not(:eq(3))",
+            format: {
+              body: function (data, row, column, node) {
+                if (column != lastIndex - 2)
+                data = data.replace('<center>', '').replace('</center>', '').split('<br>(')[0]
+                if (column == 2 || column == lastIndex - 2 || column == lastIndex - 3) {
+                  return data == 'Not submit' ? 0 : data
                 } else {
-                    $('#progress').attr('style', 'width:100%');
-                    $('#progress').attr('class', 'progress-bar bg-primary');
-                    $('#progress').text('The Contest is not open');
-                    clearInterval(x);
-                    return;
+                  return data == 'Not submit' ? 0 : data.split('>')[1].split('<')[0]
                 }
-            }, 100);
-            var lastIndex = $("#dataTableRank").find('tr')[0].cells.length + $("#dataTableRank").find('tr')[1].cells.length - 2;
-            var dataTableRank = $('#dataTableRank').DataTable({
-                ajax: {
-                    url: "/load-rank?contest_id=<%=data[0].contest_id%>",
-                    type: "POST"
-                },
-                aaSorting: [[lastIndex, 'desc'], [4, 'asc']],
-                aoColumnDefs: [
-                    { sType: "ranks", aTargets: lastIndex },
-                    { sType: "times", aTargets: 4 },
-                    {
-                        aTargets: [1, 2],
-                        mRender: function (data, type, row, meta) {
-                            return '<a href="/detail-rank?rollnumber=' + row[1] + '">' + data + '</a>';
-                        }
-                    }, {
-                        bSearchable: false,
-                        bSortable: false,
-                        aTargets: 0
-                    }, {
-                        aTargets: 4,
-                        mRender: function (data, type, row, meta) {
-                            var minutes = Math.floor(data / 60000);
-                            return minutes;
-                        }
-                    }
-                ],
-                lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
-                dom: "<'row'l>" +
-                    "<'row'<'col-sm-6'B><'col-sm-6'f>>" +
-                    "<'row'<'col-sm-12'tr>>" +
-                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-                buttons: [{
-                    extend: 'excelHtml5',
-                    text: '<li class="fa fa-file-excel"></li> Export to Excel',
-                    filename: '<%=data[0].contest_name.replace(/ /g, ' - ')%>',
-                    title: '',
-                    download: 'open',
-                    orientation: 'landscape',
-                    exportOptions: {
-                        columns: ":not(:eq(0)):not(:eq(3))",
-                        format: {
-                            body: function (data, row, column, node) {
-                                data = data.replace('<center>', '').replace('</center>', '').split('<br>(')[0]
-                                if (column == 2 ||column == lastIndex-2) {
-                                    return data
-                                } else {
-                                    if (data == 'Not submit') {
-                                        return 0
-                                    } else {
-                                        return data.split('>')[1].split('<')[0]
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }, {
-                    text: '<li class="fa fa-download"></li> Download',
-                    action: function (e, dt, node, config) {
-                        window.location = '/contest/download?contest_id=<%=data[0].contest_id%>';
-                    }
-                }
-                ],
-                language: {
-                    emptyTable: "<i class='	fa fa-sync fa-spin'></i> Loading"
-                }
-            });
-            dataTableRank.on('order.dt search.dt', function () {
-                dataTableRank.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
-                    if (i < 3) {
-                        cell.innerHTML = "<center><img src='./img/" + (i + 1) + ".png'></center>"
-                    } else {
-                        cell.innerHTML = "<center class='font-weight-bold'>" + (i + 1) + "</center>"
-                    }
+              }
+            }
+          }
+        }, {
+          text: '<li class="fa fa-download"></li> Download',
+          className: 'ml-1',
+          action: function (e, dt, node, config) {
+            window.location = '/contest/download?contest_id=<%=data[0].contest_id%>';
+          }
+        }
+        ],
+        language: {
+          emptyTable: "<i class='	fa fa-sync fa-spin'></i> Loading"
+        }
+      });
+      dataTableRank.on('order.dt search.dt', function () {
+        dataTableRank.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+          if (i < 3) {
+            cell.innerHTML = "<center><img src='./img/" + (i + 1) + ".png'></center>"
+          } else {
+            cell.innerHTML = "<center class='font-weight-bold'>" + (i + 1) + "</center>"
+          }
 
-                });
-            }).draw();
-            setInterval(function () {
-                dataTableRank.ajax.reload();
-            }, 20000);
         });
-    </script>
-    <div class="bc-icons">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"> <a class="text-gray-700" href="/rank">Rank</a></li>
-                <li><i class="fas fa-angle-double-right mx-2 text-gray-700" aria-hidden="true"></i></li>
-                <li class="breadcrumb-item text-gray-700 font-italic"><%= data[0].contest_name %></li>
-            </ol>
-        </nav>
+      }).draw();
+      setInterval(function () {
+        dataTableRank.ajax.reload();
+      }, 20000);
+    });
+  </script>
+  <div class="bc-icons">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"> <a class="text-gray-700" href="/rank">Rank</a></li>
+        <li><i class="fas fa-angle-double-right mx-2 text-gray-700" aria-hidden="true"></i></li>
+        <li class="breadcrumb-item text-gray-700 font-italic"><%= data[0].contest_name %></li>
+      </ol>
+    </nav>
+  </div>
+  <div class="row">
+    <div class="col-md-3 text-left no-pad">
+      <h5 class="font-weight-bold">Start</h5>
+      <%= dayjs(data[0].time_begin).format('DD-MM-YYYY HH:mm') %>
     </div>
-    <div class="row">
-        <div class="col-md-3 text-left no-pad">
-            <h5 class="font-weight-bold">Start</h5>
-            <%= moment(data[0].time_begin).format('DD-MM-YYYY HH:mm') %>
-        </div>
-        <div class="col-md-6 text-center">
-            <h3 class="title">Contest <%= data[0].contest_name %></h3>
-        </div>
-        <div class="col-md-3 text-right no-pad">
-            <h5 class="font-weight-bold">End</h5>
-            <%= moment(data[0].time_end).format('DD-MM-YYYY HH:mm') %>
-        </div>
+    <div class="col-md-6 text-center">
+      <h3 class="title">Contest <%= data[0].contest_name %></h3>
     </div>
-    <div class="progress">
-        <div id="progress" class="progress-bar progress-bar-striped progress-bar-animated bg-success"></div>
+    <div class="col-md-3 text-right no-pad">
+      <h5 class="font-weight-bold">End</h5>
+      <%= dayjs(data[0].time_end).format('DD-MM-YYYY HH:mm') %>
     </div>
-    <br />
-    <div class="card shadow mb-4">
-        <div class="card-body">
-            <div class="table-responsive">
-                <table id="dataTableRank" class="table table-sm table-hover table-bordered">
-                    <thead>
-                        <tr>
-                            <th rowspan="2" class="align-middle font-weight-bold" width="5%">Rank</th>
-                            <th rowspan="2" class="align-middle font-weight-bold" width="10%">Roll number</th>
-                            <th rowspan="2" class="align-middle font-weight-bold">Name</th>
-                            <th rowspan="2" class="align-middle font-weight-bold" width="10%">Class</th>
-                            <th rowspan="2" class="align-middle font-weight-bold" width="10%">Time</th>
-                            <% if (problem_files.length > 0) { %>
-                            <th colspan="<%=problem_files.length%>" class="text-center align-middle font-weight-bold">Problem</th>
-                            <% } else { %>
-                            <th colspan="1" class="text-center align-middle font-weight-bold">Problem</th> 
-                            <% } %>
-                            <th rowspan="2" class="text-center align-middle font-weight-bold" width="10%">Total</th>
-                        </tr>
-                        <tr>
-                            <% if (problem_files.length > 0) { %>
-                            <% for (let i = 0, l = problem_files.length; i < l; ++i) { %>
-                            <th class="text-center" width="10%">
-                                <a href="<%=data[i].path_problem.replace('/public', '.')%>"
-                                    target="_blank" data-toggle="tooltip" data-placement="bottom"
-                                    title="<%=path.basename(data[i].path_problem)%>"><%=data[i].problem_id%></a>
-                            </th>
-                            <% }} else { %>
-                                <th class="text-center" width="10%">None</th>
-                            <% } %>
-                        </tr>
-                    </thead>
-                </table>
-            </div>
-        </div>
+  </div>
+  <div class="progress">
+    <div id="progress" class="progress-bar progress-bar-striped progress-bar-animated bg-success"></div>
+  </div>
+  <br />
+  <div class="card shadow mb-4">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table id="dataTableRank" class="table table-sm table-hover table-bordered" width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th rowspan="2" class="align-middle font-weight-bold" width="5%">Rank</th>
+              <th rowspan="2" class="align-middle font-weight-bold" width="15%">Roll number</th>
+              <th rowspan="2" class="align-middle font-weight-bold">Name</th>
+              <th rowspan="2" class="align-middle font-weight-bold" width="5%">Class</th>
+              <th rowspan="2" class="align-middle font-weight-bold" width="5%">Time</th>
+              <% if (problem_files.length > 0) { %>
+              <th colspan="<%=problem_files.length%>" class="text-center align-middle font-weight-bold">Problem</th>
+              <% } else { %>
+              <th colspan="1" class="text-center align-middle font-weight-bold">Problem</th>
+              <% } %>
+              <th rowspan="2" class="text-center align-middle font-weight-bold" width="8%">Total</th>
+              <th rowspan="2" class="text-center align-middle font-weight-bold">Final</th>
+            </tr>
+            <tr>
+              <% if (problem_files.length > 0) { %>
+              <% for (let i = 0, l = problem_files.length; i < l; ++i) { %>
+              <th class="text-center" width="8%">
+                <a href="<%=data[i].path_problem.replace('/public', '.')%>" target="_blank" data-toggle="tooltip"
+                  data-placement="bottom" title="<%=path.basename(data[i].path_problem)%>"><%=data[i].problem_id%></a>
+              </th>
+              <% }} else { %>
+              <th class="text-center" width="8%">None</th>
+              <% } %>
+            </tr>
+          </thead>
+        </table>
+      </div>
     </div>
-    <% } %>
+  </div>
+  <% } %>
 </div>
 <%- include ("partials/footer") %>

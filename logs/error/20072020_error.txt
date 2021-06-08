@@ -1,0 +1,5 @@
+20-07-2020 10:11:49 : Error: ER_BAD_FIELD_ERROR: Unknown column 'undefined' in 'where clause'
+20-07-2020 10:54:26 : Error: ER_BAD_FIELD_ERROR: Unknown column 'undefined' in 'where clause'
+20-07-2020 10:57:52 : Error: ER_BAD_FIELD_ERROR: Unknown column 'undefined' in 'where clause'
+20-07-2020 10:59:28 : Error: ER_BAD_FIELD_ERROR: Unknown column 'undefined' in 'where clause'
+20-07-2020 11:00:13 : Error: ER_BAD_FIELD_ERROR: Unknown column 'undefined' in 'where clause'

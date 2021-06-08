@@ -1,0 +1,14 @@
+05-09-2020 11:31:27 : Teacher h has conected
+05-09-2020 12:21:03 : Teacher h has conected
+05-09-2020 12:23:35 : Teacher h has conected
+05-09-2020 12:24:01 : Teacher h has conected
+05-09-2020 12:24:06 : Contest 15 has changed time to begin:2020-08-31 00:35+00:00, end: 2020-09-01 13:45+00:00
+05-09-2020 12:24:38 : Teacher h has conected
+05-09-2020 12:24:42 : Contest 15 has changed time to begin:2020-08-31 00:35+00:00, end: 2020-09-01 13:45+00:00
+05-09-2020 12:38:24 : Contest 16 has changed time to begin:2020-09-03 08:00+00:00, end: 2020-09-07 05:25+00:00
+05-09-2020 12:40:23 : Teacher h has disconected
+05-09-2020 14:30:00 : Teacher h has conected
+05-09-2020 20:13:35 : Teacher h has conected
+05-09-2020 20:15:09 : Teacher h has conected
+05-09-2020 20:18:56 : Teacher h has conected
+05-09-2020 20:32:55 : Student h has conected

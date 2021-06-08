@@ -1,0 +1,100 @@
+<%- include ("partials/header") %>
+<div class="container">
+  <div class="bc-icons">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"> <a class="text-gray-700" href="/contest">Contest</a></li>
+        <li><i class="fas fa-angle-double-right mx-2 text-gray-700" aria-hidden="true"></i></li>
+        <li class="breadcrumb-item"> <a class="text-gray-700"
+            href="/contest/detail?contest_id=<%=contest_id%>">Detail</a></li>
+        <li><i class="fas fa-angle-double-right mx-2 text-gray-700" aria-hidden="true"></i></li>
+        <li class="breadcrumb-item text-gray-700 font-italic">Add student</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold">Add students
+    </div>
+    <div class="card-body">
+      <form action="/contest/load-student" method="GET">
+        <div class="form-inline">
+          <div class="form-group">
+            <input type="text" class="form-control" id="class_name" name="class_name" placeholder="Enter name of class">
+            <input type="hidden" name="contest_id" value="<%=contest_id%>">
+          </div>
+
+          <button class="btn btn-primary btn-md" type="submit"><i class="fa fa-spinner"></i> Load</button>
+        </div>
+      </form>
+      <% if (message.length > 0) { %>
+      <script>toastr.success('<%=message%>')</script>
+      <% } %>
+      <% if (error.length > 0) { %>
+      <script>toastr.error('<%=error%>')</script>
+      <% } %>
+      <% if (warning.length > 0) { %>
+      <script>toastr.warning('<%=warning%>')</script>
+      <% } %>
+      <% if (data.length > 0) { %>
+      <br>
+      <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th class="text-center" width="5%">
+                <button type="button" style="border: none; background: transparent; font-size: 14px;"
+                  id="MyTableCheckAllButton">
+                  <i class="far fa-square"></i>
+                </button>
+              </th>
+              <th>Roll number</th>
+              <th>Name</th>
+              <th>Class</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% for (let i = 0, l = data.length; i < l; ++i) {%>
+            <tr>
+              <td></td>
+              <td><%= data[i].rollnumber %></td>
+              <td><%= data[i].name %></td>
+              <td><%= data[i].class %></td>
+            </tr>
+            <% } %>
+          </tbody>
+        </table>
+        <button type="button" id="btnconfirm" class="btn btn-info btn-sm" data-toggle="modal"
+          data-target="#modalConfirmAdd" disabled><i class="fa fa-plus"> Add selected</i></button>
+      </div>
+      <!--Modal: modalConfirmAdd-->
+      <div class="modal fade" id="modalConfirmAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-notify modal-success" role="document">
+          <div class="modal-content text-center">
+            <div class="modal-header d-flex justify-content-center">
+              <p class="heading">Are you sure?</p>
+            </div>
+            <div class="modal-body">
+              <i class="fas fa-check fa-4x mb-3 animated rotateIn"></i><br>
+              <font color=green><b id="totalrollnumber"></b></font>
+            </div>
+            <div class="modal-footer flex-center">
+              <form action="/contest/add-student" method="POST">
+                <input type="hidden" id="list_rollnumber" name="list_rollnumber" value="">
+                <input type="hidden" name="contest_id" value="<%=contest_id%>">
+                <input type="hidden" name="class_name" value="<%=class_name%>">
+                <button type="submit" class="btn btn-outline-success">Yes</button>
+              </form>
+              <a type="button" class="btn  btn-success waves-effect" data-dismiss="modal">No</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--Modal: modalConfirmAdd-->
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<%- include ("partials/footer") %>

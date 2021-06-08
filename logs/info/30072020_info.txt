@@ -1,0 +1,38 @@
+30-07-2020 10:50:27 : Teacher h has conected
+30-07-2020 11:38:44 : Teacher h has conected
+30-07-2020 11:46:40 : Teacher h has disconected
+30-07-2020 12:04:09 : Teacher h has conected
+30-07-2020 12:11:19 : Teacher h has disconected
+30-07-2020 12:11:31 : Student ce140237 has conected
+30-07-2020 12:11:42 : Sumit code content field [1][701202668][PE2][CE140237][A].c of contest PE2 problem A by SD-000043
+30-07-2020 12:15:06 : Teacher h has conected
+30-07-2020 12:15:08 : Teacher h has disconected
+30-07-2020 12:15:15 : Student ce140237 has conected
+30-07-2020 13:44:01 : Teacher h has conected
+30-07-2020 13:59:25 : Student h has conected
+30-07-2020 13:59:32 : Student h has disconected
+30-07-2020 13:59:38 : Teacher h has conected
+30-07-2020 13:59:58 : Reset student ip, timeout userId=SD-000043
+30-07-2020 14:00:13 : Student ce140237 has disconected
+30-07-2020 14:00:48 : Reset student ip, timeout userId=SD-000043
+30-07-2020 14:00:56 : Student ce140237 has conected
+30-07-2020 14:01:33 : Student ce140237 has disconected
+30-07-2020 14:01:37 : Reset student ip, timeout userId=SD-000043
+30-07-2020 14:02:03 : Student ce140237 has conected
+30-07-2020 14:02:28 : Student ce140237 has disconected
+30-07-2020 14:02:36 : Reset student ip, timeout userId=SD-000043
+30-07-2020 14:07:44 : Student ce140237 has conected
+30-07-2020 14:07:56 : Teacher h has conected
+30-07-2020 14:08:35 : Student danhlptce150056 has conected
+30-07-2020 14:08:48 : Student danhlptce150056 has disconected
+30-07-2020 14:08:52 : Reset student ip, timeout userId=SD-000010
+30-07-2020 14:09:07 : Student ce140237 has disconected
+30-07-2020 14:09:33 : Student anhlnqce130208 has conected
+30-07-2020 14:09:44 : Student anhlnqce130208 has disconected
+30-07-2020 14:09:50 : Reset student ip, timeout userId=SD-000002
+30-07-2020 14:27:09 : Student ce140237 has conected
+30-07-2020 14:27:24 : Student ce140237 has disconected
+30-07-2020 14:27:36 : Reset student ip, timeout userId=SD-000043
+30-07-2020 14:27:43 : Reset student ip, timeout userId=SD-000001
+30-07-2020 18:03:44 : Student ce140237 has conected
+30-07-2020 22:40:10 : Teacher h has conected

@@ -1,0 +1,14 @@
+07-09-2020 09:41:17 : Error: connect ECONNREFUSED 127.0.0.1:3306
+07-09-2020 10:29:27 : Error: ER_NON_UNIQ_ERROR: Column 'contest_id' in field list is ambiguous
+07-09-2020 10:34:10 : Error: ER_BAD_FIELD_ERROR: Unknown column 'teacher_id' in 'where clause'
+07-09-2020 10:34:11 : Error: ER_BAD_FIELD_ERROR: Unknown column 'teacher_id' in 'where clause'
+07-09-2020 10:34:13 : Error: ER_BAD_FIELD_ERROR: Unknown column 'teacher_id' in 'where clause'
+07-09-2020 10:34:14 : Error: ER_BAD_FIELD_ERROR: Unknown column 'teacher_id' in 'where clause'
+07-09-2020 10:34:15 : Error: ER_BAD_FIELD_ERROR: Unknown column 'teacher_id' in 'where clause'
+07-09-2020 10:34:16 : Error: ER_BAD_FIELD_ERROR: Unknown column 'teacher_id' in 'where clause'
+07-09-2020 10:34:17 : Error: ER_BAD_FIELD_ERROR: Unknown column 'teacher_id' in 'where clause'
+07-09-2020 11:44:47 : Error: ER_BAD_FIELD_ERROR: Unknown column 'undefined' in 'where clause'
+07-09-2020 12:01:51 : Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'SINSERT INTO contest_owner(contest_id, teacher_id) SELECT '15', userId FROM t...' at line 1
+07-09-2020 12:02:13 : Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 1
+07-09-2020 14:19:56 : Error: ER_BAD_FIELD_ERROR: Unknown column 'contest.teacher_id' in 'on clause'
+07-09-2020 14:21:42 : Error: ER_BAD_FIELD_ERROR: Unknown column 'contest.time_begin' in 'field list'

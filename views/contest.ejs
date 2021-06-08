@@ -1,23 +1,25 @@
 <%- include ("partials/header") %>
 <!-- Main component for a primary marketing message or call to action -->
 <div class="container">
-    <div class="bc-icons">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a class="text-gray-700" href="/contest">Contest</a></li>
-            </ol>
-        </nav>
-    </div>
-    <h2>Total
-        <%= data.length %> contests
-        <button type="submit" class="btn btn-indigo waves-effect btn-sm" data-toggle="modal"
-            data-target="#myModal"><i class="fa fa-plus"></i> Add a new contest</button>
-        <button type="submit" class="btn btn-indigo waves-effect btn-sm"
-            onclick="window.location='/contest/add-class';"><i class="fa fa-plus"></i> Add a new class</button>
-    </h2>
-    <div class="accordion md-accordion accordion-1" id="accordionEx1" role="tablist" aria-multiselectable="true">
-        <% for (let i = 0, l = data.length; i < l; ++i) {%>
-        <%
+  <div class="bc-icons">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a class="text-gray-700" href="/contest">Contest</a></li>
+      </ol>
+    </nav>
+  </div>
+  <h2>Total
+    <%= data.length %> contests
+    <button type="submit" class="btn btn-blue waves-effect btn-sm" data-toggle="modal" data-target="#myModal"><i
+        class="fa fa-plus"></i> Add a new contest</button>
+    <% if (teacher_role <= 1) { %>
+    <button type="submit" class="btn btn-blue waves-effect btn-sm" onclick="window.location='/contest/add-class';"><i
+        class="fa fa-plus"></i> Add a new class</button>
+    <% } %>
+  </h2>
+  <div class="accordion md-accordion accordion-1" id="accordionEx1" role="tablist" aria-multiselectable="true">
+    <% for (let i = 0, l = data.length; i < l; ++i) {%>
+    <%
         var curDate = new Date()
         var status = ""
         var bagde = ""
@@ -32,92 +34,103 @@
             bagde = "closed"
         }
     %>
-        <div class="card shadow mb-2">
-            <!-- Card Header - Accordion -->
-            <a href="#collapseCardExample<%=i%>" class="card-header z-depth-1 grey lighten-5" data-toggle="collapse"
-                role="tab" aria-expanded="true" aria-controls="collapseCardExample" data-parent="#accordionEx1">
-                <h6 class="m-0 text-gray-700">
-                    <%= data[i].contest_name %> <span class="badge badge-pill badge-<%=status%>"><%=bagde%></span>
-                </h6>
-            </a>
-            <!-- Card Content - Collapse -->
-            <div class="collapse" id="collapseCardExample<%=i%>" data-parent="#accordionEx1">
-                <div class="card-header">
-                    <button type="button" class="btn btn-info btn-sm"
-                        onclick="window.location='/contest/detail?contest_id=<%=data[i].contest_id%>';"><i
-                            class="fa fa-eye"></i> View Detail</button>
-                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                        data-target="#modalConfirmDelete<%=i%>"><i class="fa fa-trash-alt"></i> Delete</button>
-                </div>
-                <div class="card-body">
-                    <p><strong>Start:</strong> <%=moment(data[i].time_begin).format('DD-MM-YYYY, HH:mm')%></p>
-                    <p><strong>End:</strong> <%=moment(data[i].time_end).format('DD-MM-YYYY, HH:mm')%></p>
-                </div>
-            </div>
+    <div class="card shadow mb-2">
+      <!-- Card Header - Accordion -->
+      <a href="#collapseCardExample<%=i%>" class="card-header z-depth-1 grey lighten-5" data-toggle="collapse"
+        role="tab" aria-expanded="true" aria-controls="collapseCardExample" data-parent="#accordionEx1">
+        <h6 class="m-0 text-gray-700">
+          [<%= data[i].rollnumber %>] <%= data[i].contest_name %> <span class="badge badge-pill badge-<%=status%>"><%=bagde%></span>
+        </h6>
+      </a>
+      <!-- Card Content - Collapse -->
+      <div class="collapse" id="collapseCardExample<%=i%>" data-parent="#accordionEx1">
+        <div class="card-header">
+          <button type="button" class="btn btn-primary btn-sm"
+            onclick="window.location='/contest/detail?contest_id=<%=data[i].contest_id%>';"><i class="fa fa-eye"></i>
+            View Detail</button>
+          <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+            data-target="#modalConfirmDelete<%=i%>"><i class="fa fa-trash-alt"></i> Delete</button>
         </div>
-        <!--Modal: modalConfirmDelete-->
-        <div class="modal fade" id="modalConfirmDelete<%=i%>" tabindex="-1" role="dialog"
-            aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
-                <div class="modal-content text-center">
-                    <div class="modal-header d-flex justify-content-center">
-                        <p class="heading">Are you sure?</p>
-                    </div>
-                    <div class="modal-body">
-                        <i class="fas fa-times fa-4x animated rotateIn"></i><br>
-                        <font color=red><b><%= data[i].contest_name %></b></font>
-                    </div>
-                    <div class="modal-footer flex-center">
-                        <form action="/contest/delete-contest" method="POST">
-                            <input type="hidden" name="contest_id" value="<%=data[i].contest_id%>">
-                            <input type="hidden" name="contest_name" value="<%=data[i].contest_name%>">
-                            <button type="submit" class="btn btn-outline-danger">Yes</button>
-                        </form>
-                        <a type="button" class="btn  btn-danger waves-effect" data-dismiss="modal">No</a>
-                    </div>
-                </div>
-            </div>
+        <div class="card-body pt-0">
+          <p><span class="font-weight-bold">Start:</span> <%=dayjs(data[i].time_begin).format('DD-MM-YYYY, HH:mm')%></p>
+          <p><span class="font-weight-bold">End:</span> <%=dayjs(data[i].time_end).format('DD-MM-YYYY, HH:mm')%></p>
         </div>
-        <!--Modal: modalConfirmDelete-->
-        <% } %>
+      </div>
     </div>
+    <!--Modal: modalConfirmDelete-->
+    <div class="modal fade" id="modalConfirmDelete<%=i%>" tabindex="-1" role="dialog"
+      aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
+        <div class="modal-content text-center">
+          <div class="modal-header d-flex justify-content-center">
+            <p class="heading">Are you sure?</p>
+          </div>
+          <div class="modal-body">
+            <i class="fas fa-times fa-4x animated rotateIn"></i><br>
+            <font color=red><b><%= data[i].contest_name %></b></font>
+          </div>
+          <div class="modal-footer flex-center">
+            <form action="/contest/delete-contest" method="POST">
+              <input type="hidden" name="contest_id" value="<%=data[i].contest_id%>">
+              <input type="hidden" name="contest_name" value="<%=data[i].contest_name%>">
+              <button type="submit" class="btn btn-outline-danger">Yes</button>
+            </form>
+            <a type="button" class="btn  btn-danger waves-effect" data-dismiss="modal">No</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--Modal: modalConfirmDelete-->
+    <% } %>
+  </div>
 </div>
 <!-- The Modal add contest-->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header text-center">
-                <h4 class="modal-title w-100 font-weight-bold">Add a new contest</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form action="/contest/add-contest" method="POST">
-                <div class="modal-body mx-3">
-                    <label>Name</label>
-                    <div class="form mb-3">
-                        <input type="text" id="contest_name" name="contest_name" class="form-control">
-                    </div>
-                    <label>Enter start time</label>
-                    <div class="form mb-3">
-                        <input type="text" id="time_begin" name="time_begin" class="form-control">
-                    </div>
-                    <label>Enter end time</label>
-                    <div class="form mb-3">
-                        <input type="text" id="time_end" name="time_end" class="form-control">
-                    </div>
-                </div>
-                <script>
-                    $('#time_begin, #time_end').datetimepicker({
-                        format: 'dd-mm-yyyy hh:ii'
-                    }); 
-                </script>
-                <div class="modal-footer d-flex justify-content-center">
-                    <button class="btn btn-deep-orange">Add</button>
-                </div>
-            </form>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Add a new contest</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="/contest/add-contest" method="POST">
+        <div class="modal-body mx-3">
+          <label class="font-weight-bold">Name</label>
+          <div class="form mb-3">
+            <input type="text" id="contest_name" name="contest_name" class="form-control" required>
+          </div>
+          <label class="font-weight-bold">Enter start time</label>
+          <div class="form mb-3">
+            <input type="text" id="time_begin" name="time_begin" class="form-control" required>
+          </div>
+          <label class="font-weight-bold">Enter end time</label>
+          <div class="form mb-3">
+            <input type="text" id="time_end" name="time_end" class="form-control" required>
+          </div>
+          <label class="font-weight-bold">Language</label>
+          <select class="mdb-select md-form" name="language" multiple required>
+            <option disabled>Choose language</option>
+            <option>C</option>
+            <option>C++</option>
+            <option>Python 3</option>
+            <option>MySQL</option>
+          </select>
         </div>
+        <script>
+          $('#time_begin, #time_end').datetimepicker({
+            format: 'dd-mm-yyyy hh:ii'
+          });
+          $(document).ready(function () {
+            $('.mdb-select').materialSelect();
+          });
+        </script>
+        <div class="modal-footer d-flex justify-content-center">
+          <button class="btn btn-deep-orange">Add</button>
+        </div>
+      </form>
     </div>
+  </div>
 </div>
 <!-- The Modal add contest-->
 <%- include ("partials/footer") %>

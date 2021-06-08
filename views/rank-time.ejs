@@ -1,6 +1,6 @@
 <div class="row">
-    <% for (let i = 0, l = data.length; i < l; ++i) {%>
-    <% 
+  <% for (let i = 0, l = data.length; i < l; ++i) {%>
+  <% 
         var curDate = new Date()
         var status = ""
         var color = ""
@@ -14,27 +14,43 @@
             status = "fa fa-hourglass-start"
             color = "primary"
         }  
-    %> 
-    <div class="col-lg-6">
-        <div class="card border-<%=color%> mb-4">
-            <div class="card-header bg-transparent" align=center>
-                <a class="text-<%=color%>" href="/data-rank?contest_id=<%=data[i].contest_id%>"><%= data[i].contest_name %></a>
-            </div>
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                    <% 
+    %>
+  <div class="col-lg-6">
+    <div class="card border-<%=color%> mb-4">
+      <div class="card-header bg-transparent text-center">
+        <a class="text-<%=color%>" href="/data-rank?contest_id=<%=data[i].contest_id%>"><%= data[i].contest_name %></a>
+      </div>
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <% 
                         var countUpDate = data[i].time_begin.getTime()
                         var countDownDate = data[i].time_end.getTime()
                         var now = (new Date).getTime()
-                        if (now > countDownDate)  { %>  <b><p class='text-gray'>Contest is over</p></b><div class='count-down-time'><div class='count-down-part count-down-days' data-label='Days'> 0 </div>:<div class='count-down-part count-down-hours' data-label='Hours'>  0 </div>:<div class='count-down-part count-down-minutes' data-label='Minutes'> 0 </div>:<div class='count-down-part count-down-seconds' data-label='Seconds'> 0 </div></div><% }
+                        if (now > countDownDate)  { %> <b>
+              <p class='text-gray'>Contest is over</p>
+            </b>
+            <div class='count-down-time'>
+              <div class='count-down-part count-down-days' data-label='Days'> 0 </div>:<div
+                class='count-down-part count-down-hours' data-label='Hours'> 0 </div>:<div
+                class='count-down-part count-down-minutes' data-label='Minutes'> 0 </div>:<div
+                class='count-down-part count-down-seconds' data-label='Seconds'> 0 </div>
+            </div><% }
                         else if (now < countUpDate) {
                             var distance = countUpDate - now,
                                 days = Math.floor(distance / 864e5),
                                 hours = Math.floor(distance % 864e5 / 36e5),
                                 minutes = Math.floor(distance % 36e5 / 6e4),
                                 seconds = Math.floor(distance % 6e4 / 1e3);
-                            %> <b><p class='text-primary'>Contest start after</p></b><div class='count-down-time'><div class='count-down-part count-down-days' data-label='Days'> <%=days%> </div>:<div class='count-down-part count-down-hours' data-label='Hours'> <%=hours%> </div>:<div class='count-down-part count-down-minutes' data-label='Minutes'> <%=minutes%> </div>:<div class='count-down-part count-down-seconds' data-label='Seconds'> <%=seconds%> </div></div><%
+                            %> <b>
+              <p class='text-primary'>Contest start after</p>
+            </b>
+            <div class='count-down-time'>
+              <div class='count-down-part count-down-days' data-label='Days'> <%=days%> </div>:<div
+                class='count-down-part count-down-hours' data-label='Hours'> <%=hours%> </div>:<div
+                class='count-down-part count-down-minutes' data-label='Minutes'> <%=minutes%> </div>:<div
+                class='count-down-part count-down-seconds' data-label='Seconds'> <%=seconds%> </div>
+            </div><%
                             
                         } else if (now >= countUpDate && now <= countDownDate){
                             distance = countDownDate - now
@@ -42,17 +58,25 @@
                             hours = Math.floor(distance % 864e5 / 36e5)
                             minutes = Math.floor(distance % 36e5 / 6e4)
                             seconds = Math.floor(distance % 6e4 / 1e3)
-                            %> <b><p class='text-success'>Time remaining</p></b><div class='count-down-time'><div class='count-down-part count-down-days' data-label='Days'> <%=days%> </div>:<div class='count-down-part count-down-hours' data-label='Hours'> <%=hours%> </div>:<div class='count-down-part count-down-minutes' data-label='Minutes'> <%=minutes%> </div>:<div class='count-down-part count-down-seconds' data-label='Seconds'> <%=seconds%> </div></div><%
+                            %> <b>
+              <p class='text-success'>Time remaining</p>
+            </b>
+            <div class='count-down-time'>
+              <div class='count-down-part count-down-days' data-label='Days'> <%=days%> </div>:<div
+                class='count-down-part count-down-hours' data-label='Hours'> <%=hours%> </div>:<div
+                class='count-down-part count-down-minutes' data-label='Minutes'> <%=minutes%> </div>:<div
+                class='count-down-part count-down-seconds' data-label='Seconds'> <%=seconds%> </div>
+            </div><%
                         } 
                     %>
-                    </div>
-                    <div class="col-auto">
-                        <i class="<%=status%> fa-2x text-gray-300"></i>
-                    </div>
-                </div>
-            </div>
+          </div>
+          <div class="col-auto">
+            <i class="<%=status%> fa-2x text-gray-300"></i>
+          </div>
         </div>
-        
+      </div>
     </div>
-    <% } %>
+
+  </div>
+  <% } %>
 </div>

@@ -1,72 +1,80 @@
 <%- include ("partials/header-admin" ) %>
 <script>
-    $(document).ready(function () {
-        $("#dataTableTeacher").DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: '/admin/teacher-data'
-        })
+  $(document).ready(function () {
+    $("#dataTableTeacher").DataTable({
+      processing: true,
+      serverSide: true,
+      ajax: '/admin/teacher-data'
     })
+  })
 </script>
 <div class="container-fluid mt-4">
-    <% if (message.length > 0) { %>
-        <script>toastr.success('<%=message%>')</script>
-    <% } %>
-    <% if (error.length > 0) { %>
-        <script>toastr.error('<%=error%>')</script>
-    <% } %>
-    <button type="submit" class="btn btn-outline-blue waves-effect btn-sm" data-toggle="modal" data-target="#myModal"><i
-        class="fa fa-plus fa-lg"></i> Add a new user</button>
-    <div class="table-responsive">
-        <table class="table table-hover table-bordered" id="dataTableTeacher" width="100%" cellspacing="0">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Roll number</th>
-                    <th>Name</th>
-                </tr>
-            </thead>
-        </table>
-    </div>
+  <% if (message.length > 0) { %>
+  <script>toastr.success('<%=message%>')</script>
+  <% } %>
+  <% if (error.length > 0) { %>
+  <script>toastr.error('<%=error%>')</script>
+  <% } %>
+  <button type="submit" class="btn btn-outline-blue waves-effect btn-sm" data-toggle="modal" data-target="#myModal"><i
+      class="fa fa-plus fa-lg"></i> Add a new user</button>
+  <div class="table-responsive">
+    <table class="table table-hover table-bordered" id="dataTableTeacher" width="100%" cellspacing="0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Roll number</th>
+          <th>Name</th>
+        </tr>
+      </thead>
+    </table>
+  </div>
 </div>
 <!-- The Modal add a teacher-->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header text-center">
-                <h4 class="modal-title w-100 font-weight-bold">Add a new teacher</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form action="/admin/add-teacher" method="POST">
-            <div class="modal-body mx-3">
-                <div class="md-form mb-5">
-                    <i class="fas fa-user prefix grey-text"></i>
-                    <input type="text" id="rollnumber" name="rollnumber" class="form-control validate">
-                    <label data-error="wrong" data-success="" for="orangeForm-name">Roll Number</label>
-                </div>
-                <div class="md-form mb-5">
-                    <i class="fas fa-envelope prefix grey-text"></i>
-                    <input type="text" id="name" name="name" class="form-control validate">
-                    <label data-error="wrong" data-success="" for="orangeForm-email">Name</label>
-                </div>
-                <div class="md-form mb-4">
-                    <i class="fas fa-lock prefix grey-text"></i>
-                    <input type="text" id="username" name="username" class="form-control validate">
-                    <label data-error="wrong" data-success="" for="orangeForm-pass">Username</label>
-                </div>
-                <div class="md-form mb-4">
-                    <i class="fas fa-lock prefix grey-text"></i>
-                    <input type="password" id="password" name="password" class="form-control validate">
-                    <label data-error="wrong" data-success="" for="orangeForm-pass">Password</label>
-                </div>
-            </div>
-            <div class="modal-footer d-flex justify-content-center">
-                <button class="btn btn-deep-orange">Add</button>
-            </div>
-        </form>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Add a new teacher</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="/admin/add-teacher" method="POST">
+        <div class="modal-body mx-3">
+          <div class="md-form mb-5">
+            <i class="fas fa-user prefix grey-text"></i>
+            <input type="text" id="rollnumber" name="rollnumber" class="form-control validate">
+            <label data-error="wrong" data-success="" for="orangeForm-name">Roll Number</label>
+          </div>
+          <div class="md-form mb-5">
+            <i class="fas fa-envelope prefix grey-text"></i>
+            <input type="text" id="name" name="name" class="form-control validate">
+            <label data-error="wrong" data-success="" for="orangeForm-email">Name</label>
+          </div>
+          <div class="md-form mb-4">
+            <i class="fas fa-lock prefix grey-text"></i>
+            <input type="text" id="username" name="username" class="form-control validate">
+            <label data-error="wrong" data-success="" for="orangeForm-pass">Username</label>
+          </div>
+          <div class="md-form mb-4">
+            <i class="fas fa-lock prefix grey-text"></i>
+            <input type="password" id="password" name="password" class="form-control validate">
+            <label data-error="wrong" data-success="" for="orangeForm-pass">Password</label>
+          </div>
+          <div class="md-form mb-4">
+            
+            <select class="form-control" name="role">
+              <option value="2">Giảng viên</option>
+              <option value="1">giáo vụ</option>
+              <option value="0">IT</option>
+            </select>
+          </div>
         </div>
+        <div class="modal-footer d-flex justify-content-center">
+          <button class="btn btn-deep-orange">Add</button>
+        </div>
+      </form>
     </div>
+  </div>
 </div>
 <%- include ("partials/footer-admin" ) %>

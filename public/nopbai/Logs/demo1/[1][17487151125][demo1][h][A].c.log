@@ -1,0 +1,4 @@
+Compile Error
+[1][17487151125][demo1][h][A].c:1:1: error: expected '=', ',', ';', 'asm' or '__attribute__' at end of input
+ adasdasdasd
+ ^~~~~~~~~~~

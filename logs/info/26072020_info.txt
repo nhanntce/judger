@@ -1,0 +1,50 @@
+26-07-2020 15:34:10 : Teacher h has conected
+26-07-2020 15:34:21 : Teacher h has disconected
+26-07-2020 15:34:23 : Student h has conected
+26-07-2020 15:40:08 : Student h has conected
+26-07-2020 15:40:15 : Sumit code content field [1][4767855552][Contest01][h][A].c of contest Contest01 problem A by SD-000001
+26-07-2020 15:43:58 : Student h has disconected
+26-07-2020 15:44:07 : Teacher h has conected
+26-07-2020 15:44:22 : Reset student ip, timeout userId=SD-000001
+26-07-2020 15:44:26 : Student h has conected
+26-07-2020 15:47:16 : Teacher h has disconected
+26-07-2020 15:47:27 : Student h has disconected
+26-07-2020 15:47:29 : Teacher h has conected
+26-07-2020 15:47:50 : Teacher h has disconected
+26-07-2020 15:47:54 : Student h has conected
+26-07-2020 18:54:31 : Teacher h has conected
+26-07-2020 18:54:36 : Contest 13 has changed time to begin:2020-07-08 23:50+00:00, end: 2020-07-18 23:55+00:00
+26-07-2020 18:55:17 : Teacher h has conected
+26-07-2020 18:56:13 : Contest 13 has changed time to begin:2020-07-08 23:50+00:00, end: 2020-07-18 23:55+00:00
+26-07-2020 18:58:22 : Teacher h has conected
+26-07-2020 18:58:28 : Contest 13 has changed time to begin:2020-07-08 23:50+00:00, end: 2020-07-18 23:55+00:00
+26-07-2020 19:00:05 : Teacher h has conected
+26-07-2020 19:00:10 : Contest 13 has changed time to begin:2020-07-08 23:50+00:00, end: 2020-07-18 23:55+00:00
+26-07-2020 19:01:14 : Teacher h has conected
+26-07-2020 19:01:20 : Contest 13 has changed time to begin:2020-07-08 23:50+00:00, end: 2020-07-18 23:55+00:00
+26-07-2020 19:05:20 : Teacher h has conected
+26-07-2020 19:05:24 : Contest 13 has changed time to begin:2020-07-08 23:50+00:00, end: 2020-07-18 23:55+00:00
+26-07-2020 19:09:07 : Teacher h has conected
+26-07-2020 19:09:12 : Contest 13 has changed time to begin:2020-07-08 23:50+00:00, end: 2020-07-18 23:55+00:00
+26-07-2020 19:09:23 : Contest 12 has changed time to begin:2020-06-11 18:15+00:00, end: 2020-07-11 19:00+00:00
+26-07-2020 19:09:36 : Contest 12 has changed time to begin:2020-06-11 18:15+00:00, end: 2020-07-11 19:00+00:00
+26-07-2020 19:33:45 : Teacher h has conected
+26-07-2020 19:34:29 : Teacher h has conected
+26-07-2020 19:36:23 : Teacher h has conected
+26-07-2020 19:38:00 : Sumit code content field [1][4782120929][Contest01][abc123][A].c of contest Contest01 problem A by TC-000001
+26-07-2020 19:38:28 : Teacher h has conected
+26-07-2020 19:40:04 : Sumit code content field [1][4782244671][Contest01][abc123][A].c of contest Contest01 problem A by TC-000001
+26-07-2020 19:40:38 : Sumit code content field [1][4782278510][Contest01][abc123][B].c of contest Contest01 problem B by TC-000001
+26-07-2020 19:42:20 : Sumit code content field [1][4782380580][Contest01][abc123][C].cpp of contest Contest01 problem C by TC-000001
+26-07-2020 19:50:01 : Teacher h has conected
+26-07-2020 19:51:45 : Teacher h has disconected
+26-07-2020 19:51:51 : Teacher h has conected
+26-07-2020 19:52:02 : Reset student ip, timeout userId=SD-000001
+26-07-2020 19:52:07 : Teacher h has disconected
+26-07-2020 19:52:09 : Student h has conected
+26-07-2020 19:52:14 : Student h has disconected
+26-07-2020 19:52:21 : Student ce140237 has conected
+26-07-2020 20:07:44 : Student ce140237 has disconected
+26-07-2020 20:07:49 : Student h has conected
+26-07-2020 20:07:52 : Student h has disconected
+26-07-2020 20:07:55 : Teacher h has conected

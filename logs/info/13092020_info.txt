@@ -1,0 +1,23 @@
+13-09-2020 08:39:42 : Teacher a has connected
+13-09-2020 08:51:25 : Teacher a has connected
+13-09-2020 08:55:21 : Teacher a has connected
+13-09-2020 09:03:47 : Teacher a has connected
+13-09-2020 09:15:24 : Teacher a has connected
+13-09-2020 09:20:07 : Create contest demo7 by TC-000002
+13-09-2020 09:23:23 : Teacher a has connected
+13-09-2020 09:34:20 : Teacher a has connected
+13-09-2020 09:43:51 : Teacher a has connected
+13-09-2020 09:46:13 : Teacher a has connected
+13-09-2020 09:48:36 : Teacher a has connected
+13-09-2020 09:48:45 : Contest 23 has changed time to begin:2020-09-13 00:00+00:00, end: 2020-09-14 00:00+00:00
+13-09-2020 09:57:10 : Teacher a has connected
+13-09-2020 09:59:45 : Contest 21 has changed time to begin:2020-09-08 15:00+00:00, end: 2020-09-24 07:35+00:00
+13-09-2020 09:59:57 : Teacher a has connected
+13-09-2020 10:11:28 : Teacher a has connected
+13-09-2020 10:11:37 : Contest 23 has changed time to begin:2020-09-13 00:00+00:00, end: 2020-09-14 00:00+00:00
+13-09-2020 10:11:46 : Contest 23 has changed time to begin:2020-09-13 00:00+00:00, end: 2020-09-14 00:00+00:00
+13-09-2020 10:13:11 : Teacher a has connected
+13-09-2020 10:13:17 : Contest 23 has changed time to begin:2020-09-13 00:00+00:00, end: 2020-09-14 00:00+00:00, language=C,C++,Python 3,MySQL
+13-09-2020 10:13:29 : Contest 23 has changed time to begin:2020-09-13 00:00+00:00, end: 2020-09-14 00:00+00:00, language=MySQL
+13-09-2020 18:54:07 : Teacher a has connected
+13-09-2020 19:20:12 : Teacher a has connected

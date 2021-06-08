@@ -21,9 +21,9 @@
       select: {
         style: "multi",
         selector: "td:first-child"
-      },
-      order: [[1, 'asc']]
+      }
     });
+
     e.on("select deselect draw", function () {
       var t = e.rows({
         search: "applied"
@@ -35,7 +35,6 @@
       var l = e.rows({
         selected: !0
       }).data().toArray()
-      console.log(l)
       if (l.length == 1) {
         $("#btnedit").prop('disabled', false);
         document.getElementById("edit_id").value = l[0][1]

@@ -1,0 +1,8 @@
+08-08-2020 19:15:13 : Teacher h has conected
+08-08-2020 19:16:38 : Teacher h has conected
+08-08-2020 19:19:15 : Create contest PE2 by TC-000001
+08-08-2020 19:19:30 : 1 students in contest 13 has deleted: CE140237
+08-08-2020 19:19:53 : 1 students in contest 14 has added: CE140237
+08-08-2020 19:20:38 : Upload problem contest 14 : KhanhVH_PRF192_SE1502_1.pdf .Testcase: A.zip
+08-08-2020 19:21:02 : Upload problem contest 14 : KhanhVH_PRF192_SE1502_2.pdf .Testcase: B.zip
+08-08-2020 19:21:23 : Upload problem contest 14 : KhanhVH_PRF192_SE1502_2.pdf .Testcase: C.zip

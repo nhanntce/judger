@@ -1,0 +1,2 @@
+09-07-2020 07:59:59 : Error: ER_BAD_FIELD_ERROR: Unknown column 'undefined' in 'where clause'
+09-07-2020 10:28:05 : Error: EPERM: operation not permitted, rename 'D:\Judge\judger\public\thumucbailam\FCoder\CE140237' -> 'D:\Judge\judger\public\thumucbailam\FCoder\$CE140237'

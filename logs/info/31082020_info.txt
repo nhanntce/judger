@@ -1,0 +1,11 @@
+31-08-2020 17:31:12 : Teacher h has conected
+31-08-2020 17:33:22 : Teacher h has conected
+31-08-2020 17:35:59 : Teacher h has conected
+31-08-2020 17:36:53 : Create contest demo by TC-000001
+31-08-2020 17:42:06 : Upload problem contest 15 : 1001 DIEU UOC.pdf .Testcase: A.zip
+31-08-2020 17:44:33 : Sumit code content field [1][61773462][demo][abc123][A].c of contest demo problem A by TC-000001
+31-08-2020 17:48:04 : Sumit code content field [1][61984175][demo][abc123][A].cpp of contest demo problem A by TC-000001
+31-08-2020 21:10:57 : Reset student ip, timeout userId=SD-000001,SD-000002,SD-000003,SD-000004,SD-000005,SD-000006,SD-000007,SD-000008,SD-000009,SD-000010
+31-08-2020 21:11:14 : 1 students in contest 15 has added: h
+31-08-2020 21:11:29 : Teacher h has disconected
+31-08-2020 21:11:32 : Student h has conected

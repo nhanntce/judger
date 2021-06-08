@@ -1,0 +1,33 @@
+10-09-2020 15:02:57 : Teacher h has conected
+10-09-2020 15:03:54 : Student h has conected
+10-09-2020 15:04:19 : undefined undefined has disconected
+10-09-2020 15:04:22 : Student h has conected
+10-09-2020 15:04:33 : Student h has disconected
+10-09-2020 15:04:39 : Student user1 has conected
+10-09-2020 15:08:30 : Student user1 has connected
+10-09-2020 15:47:47 : Student user1 has disconnected
+10-09-2020 15:47:51 : Teacher h has connected
+10-09-2020 15:48:03 : Contest 21 has changed time to begin:2020-09-08 15:00+00:00, end: 2020-09-11 07:35+00:00
+10-09-2020 15:48:37 : Student user1 has connected
+10-09-2020 16:07:17 : Teacher a has connected
+10-09-2020 16:09:20 : Teacher a has disconnected
+10-09-2020 16:09:24 : Teacher a has connected
+10-09-2020 17:31:25 : Teacher a has disconnected
+10-09-2020 17:34:28 : Teacher b has connected
+10-09-2020 17:55:54 : Teacher h has connected
+10-09-2020 17:55:56 : Teacher h has disconnected
+10-09-2020 17:56:58 : Student h has connected
+10-09-2020 17:57:04 : Student h has disconnected
+10-09-2020 17:57:06 : Student h has connected
+10-09-2020 17:57:16 : Student h has disconnected
+10-09-2020 17:57:17 : Student h has connected
+10-09-2020 17:57:21 : Student h has disconnected
+10-09-2020 17:57:26 : Student user1 has connected
+10-09-2020 18:04:57 : Teacher a has connected
+10-09-2020 18:05:30 : Teacher a has disconnected
+10-09-2020 18:05:35 : Teacher b has connected
+10-09-2020 18:35:37 : Teacher a has connected
+10-09-2020 18:37:22 : Teacher a has connected
+10-09-2020 18:37:26 : Contest 20 has changed time to begin:2020-09-08 09:30+00:00, end: 2020-09-08 10:30+00:00
+10-09-2020 18:37:54 : Teacher a has connected
+10-09-2020 19:04:01 : Contest 21 has changed time to begin:2020-09-08 15:00+00:00, end: 2020-09-11 07:35+00:00

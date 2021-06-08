@@ -1,0 +1,20 @@
+12-09-2020 11:09:21 : Teacher a has connected
+12-09-2020 15:42:52 : Teacher a has connected
+12-09-2020 15:43:42 : Upload problem contest 22 : KhanhVH_PRF192_SE1502.HL.pdf .Testcase: A.zip
+12-09-2020 15:44:28 : Update submission times of contest 22 and problem A to 20
+12-09-2020 15:45:55 : Teacher a has connected
+12-09-2020 15:46:15 : Sumit code content field [1][66975179][demo6][GV123][A].sql of contest demo6 problem A by TC-000002
+12-09-2020 15:46:40 : Sumit code content field [1][67000060][demo6][GV123][A].sql of contest demo6 problem A by TC-000002
+12-09-2020 15:50:23 : Sumit code content field [1][67223386][demo6][GV123][A].sql of contest demo6 problem A by TC-000002
+12-09-2020 15:50:48 : Update submission times of contest 22 and problem A to 10
+12-09-2020 15:52:29 : Teacher a has connected
+12-09-2020 16:11:11 : Sumit code content field [1][68471568][demo6][GV123][A].sql of contest demo6 problem A by TC-000002
+12-09-2020 16:39:26 : Sumit code content field [1][70166121][demo6][GV123][A].sql of contest demo6 problem A by TC-000002
+12-09-2020 16:41:35 : Sumit code file [1][70295031][demo6][GV123][A].sql of contest demo6 problem A by TC-000002
+12-09-2020 16:43:13 : Sumit code content field [1][70393293][demo6][GV123][A].c of contest demo6 problem A by TC-000002
+12-09-2020 16:51:07 : 1 students in contest 22 has added: h
+12-09-2020 16:51:14 : Teacher a has disconnected
+12-09-2020 16:51:17 : Student h has connected
+12-09-2020 18:07:31 : Sumit code content field [1][75451435][demo6][h][A].sql of contest demo6 problem A by SD-000001
+12-09-2020 19:01:26 : Student h has disconnected
+12-09-2020 19:01:28 : Teacher h has connected

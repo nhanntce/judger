@@ -1,0 +1,148 @@
+07-09-2020 08:03:22 : Teacher h has conected
+07-09-2020 08:08:45 : Teacher h has disconected
+07-09-2020 08:08:47 : Teacher a has conected
+07-09-2020 08:11:52 : Teacher a has conected
+07-09-2020 08:12:03 : Create contest demo2 by TC-000002
+07-09-2020 08:13:36 : Teacher h has conected
+07-09-2020 08:13:38 : Teacher h has disconected
+07-09-2020 08:13:42 : Teacher a has conected
+07-09-2020 08:14:43 : Teacher a has disconected
+07-09-2020 08:14:45 : Teacher b has conected
+07-09-2020 08:14:56 : Create contest demo3 by TC-000003
+07-09-2020 08:14:58 : Teacher b has disconected
+07-09-2020 08:15:02 : Teacher a has conected
+07-09-2020 08:17:15 : undefined undefined has disconected
+07-09-2020 08:17:17 : Teacher a has conected
+07-09-2020 08:18:52 : Teacher a has conected
+07-09-2020 08:20:44 : Teacher a has conected
+07-09-2020 08:21:07 : Teacher a has conected
+07-09-2020 08:21:13 : Teacher a has disconected
+07-09-2020 08:21:16 : Teacher h has conected
+07-09-2020 08:21:18 : Teacher h has disconected
+07-09-2020 08:22:26 : Teacher a has conected
+07-09-2020 08:23:31 : Teacher a has conected
+07-09-2020 08:24:28 : Teacher a has conected
+07-09-2020 08:25:03 : Teacher a has conected
+07-09-2020 08:26:11 : Teacher a has conected
+07-09-2020 08:26:26 : Teacher a has conected
+07-09-2020 08:26:32 : Teacher a has disconected
+07-09-2020 08:26:46 : Teacher h has conected
+07-09-2020 08:28:04 : Teacher h has conected
+07-09-2020 08:33:02 : Teacher a has conected
+07-09-2020 08:33:53 : Teacher a has conected
+07-09-2020 08:33:56 : Contest 15 has downloaded
+07-09-2020 08:34:03 : Contest 16 has downloaded
+07-09-2020 08:34:07 : Contest 16 has downloaded
+07-09-2020 08:35:50 : 1 students in contest 18 has added: CE140237
+07-09-2020 08:36:14 : Upload problem contest 18 : KhanhVH_PRF192_SE1502_1.pdf .Testcase: A.zip
+07-09-2020 08:37:23 : Upload problem contest 18 : KhanhVH_PRF192_SE1502_1.pdf .Testcase: B.zip
+07-09-2020 08:39:46 : Upload problem contest 17 : KhanhVH_PRF192_SE1502_1.pdf .Testcase: A.zip
+07-09-2020 08:41:04 : Teacher a has conected
+07-09-2020 08:41:14 : Upload problem contest 17 : KhanhVH_PRF192_SE1502_1.pdf .Testcase: B.zip
+07-09-2020 08:41:54 : Teacher a has conected
+07-09-2020 08:42:06 : Upload problem contest 17 : KhanhVH_PRF192_SE1502_1.pdf .Testcase: C.zip
+07-09-2020 08:43:27 : Teacher a has conected
+07-09-2020 08:43:35 : Delete in contest_detail where contest 17 and problem A
+07-09-2020 08:43:43 : Upload problem contest 17 : 1001 DIEU UOC.pdf .Testcase: A.zip
+07-09-2020 08:45:32 : Delete in contest_detail where contest 17 and problem C
+07-09-2020 08:45:35 : Teacher a has conected
+07-09-2020 08:46:38 : Teacher a has conected
+07-09-2020 08:46:50 : Upload problem contest 17 : KhanhVH_PRF192_SE1502_1.pdf .Testcase: C.zip
+07-09-2020 08:47:22 : Delete in contest_detail where contest 17 and problem C
+07-09-2020 08:47:24 : Teacher a has conected
+07-09-2020 08:47:36 : Upload problem contest 17 : KhanhVH_PRF192_SE1502_1.pdf .Testcase: C.zip
+07-09-2020 08:49:01 : Teacher a has conected
+07-09-2020 08:49:06 : Delete in contest_detail where contest 17 and problem A
+07-09-2020 08:49:14 : Upload problem contest 17 : KhanhVH_PRF192_SE1502_1.pdf .Testcase: A.zip
+07-09-2020 08:50:15 : Delete in contest_detail where contest 17 and problem A
+07-09-2020 08:50:18 : Teacher h has conected
+07-09-2020 08:50:28 : Upload problem contest 17 : KhanhVH_PRF192_SE1502_1.pdf .Testcase: A.zip
+07-09-2020 08:50:42 : Delete in contest_detail where contest 17 and problem A
+07-09-2020 08:50:50 : Upload problem contest 17 : KhanhVH_PRF192_SE1502_1.pdf .Testcase: A.zip
+07-09-2020 08:51:07 : Delete in contest_detail where contest 17 and problem A
+07-09-2020 08:51:09 : Teacher a has conected
+07-09-2020 08:51:20 : Upload problem contest 17 : KhanhVH_PRF192_SE1502_1.pdf .Testcase: A.zip
+07-09-2020 08:51:45 : Delete in contest_detail where contest 17 and problem A
+07-09-2020 08:51:47 : Teacher h has conected
+07-09-2020 08:52:01 : Upload problem contest 17 : KhanhVH_PRF192_SE1502_1.pdf .Testcase: A.zip
+07-09-2020 08:54:08 : Delete in contest_detail where contest 17 and problem A
+07-09-2020 08:54:10 : Teacher a has conected
+07-09-2020 08:56:11 : Teacher h has conected
+07-09-2020 08:56:29 : Delete in contest_detail where contest 17 and problem C
+07-09-2020 08:57:11 : Teacher h has conected
+07-09-2020 08:57:22 : Upload problem contest 17 : KhanhVH_PRF192_SE1502_1.pdf .Testcase: C.zip
+07-09-2020 09:41:28 : Teacher h has conected
+07-09-2020 09:49:52 : Teacher h has conected
+07-09-2020 09:53:15 : Teacher h has conected
+07-09-2020 09:54:03 : Teacher h has conected
+07-09-2020 10:28:42 : Teacher h has disconected
+07-09-2020 10:28:44 : Teacher b has conected
+07-09-2020 10:28:47 : Teacher b has disconected
+07-09-2020 10:29:26 : Teacher b has conected
+07-09-2020 10:30:07 : Teacher b has conected
+07-09-2020 10:30:26 : undefined undefined has disconected
+07-09-2020 10:30:28 : Teacher b has conected
+07-09-2020 10:32:16 : Teacher b has conected
+07-09-2020 10:35:03 : Teacher b has conected
+07-09-2020 10:35:07 : Teacher b has disconected
+07-09-2020 10:35:09 : Teacher a has conected
+07-09-2020 10:35:13 : Teacher a has disconected
+07-09-2020 10:35:20 : Teacher b has conected
+07-09-2020 10:46:33 : Teacher b has conected
+07-09-2020 10:47:06 : Teacher b has conected
+07-09-2020 10:47:37 : Create contest demo4 by TC-000003
+07-09-2020 10:49:10 : Teacher b has disconected
+07-09-2020 10:49:12 : Teacher h has conected
+07-09-2020 10:57:08 : Teacher h has conected
+07-09-2020 11:09:48 : Teacher h has conected
+07-09-2020 11:09:54 : 1 students in contest 15 has deleted: h
+07-09-2020 11:11:20 : Teacher h has conected
+07-09-2020 11:13:53 : Teacher h has conected
+07-09-2020 11:19:31 : Teacher h has conected
+07-09-2020 11:20:45 : Teacher h has conected
+07-09-2020 11:41:24 : Teacher h has conected
+07-09-2020 12:01:39 : Teacher h has conected
+07-09-2020 12:02:07 : Teacher h has conected
+07-09-2020 12:04:44 : Teacher h has conected
+07-09-2020 12:05:34 : Teacher h has conected
+07-09-2020 13:52:23 : Teacher h has conected
+07-09-2020 13:54:00 : Teacher h has conected
+07-09-2020 13:55:10 : Teacher h has disconected
+07-09-2020 13:55:13 : Teacher b has conected
+07-09-2020 14:10:06 : Teacher a has conected
+07-09-2020 14:10:20 : Teacher a has disconected
+07-09-2020 14:10:22 : Teacher b has conected
+07-09-2020 14:11:49 : Teacher b has conected
+07-09-2020 14:13:40 : Teacher b has conected
+07-09-2020 14:15:29 : Teacher a has conected
+07-09-2020 14:15:31 : Teacher a has disconected
+07-09-2020 14:15:34 : Teacher b has conected
+07-09-2020 14:19:37 : Teacher b has conected
+07-09-2020 14:19:41 : Teacher b has disconected
+07-09-2020 14:19:44 : Teacher a has conected
+07-09-2020 14:19:51 : Teacher a has disconected
+07-09-2020 14:19:53 : Teacher b has conected
+07-09-2020 14:21:41 : Teacher b has conected
+07-09-2020 14:23:06 : Teacher b has conected
+07-09-2020 14:24:10 : Teacher b has conected
+07-09-2020 14:27:32 : Teacher b has conected
+07-09-2020 14:27:47 : Teacher b has disconected
+07-09-2020 14:27:50 : Teacher h has conected
+07-09-2020 14:39:20 : Teacher h has disconected
+07-09-2020 14:39:23 : Teacher b has conected
+07-09-2020 14:39:30 : Teacher b has disconected
+07-09-2020 14:40:30 : Teacher h has conected
+07-09-2020 14:42:25 : Teacher h has conected
+07-09-2020 14:42:41 : undefined undefined has disconected
+07-09-2020 14:42:43 : Teacher b has conected
+07-09-2020 14:54:11 : Create student_account rollnumber=user1 name=user1 class=test
+07-09-2020 14:54:34 : Create student_account rollnumber=user2 name=user2 class=test
+07-09-2020 14:54:44 : Create student_account rollnumber=user3 name=user3 class=test
+07-09-2020 14:54:57 : Create student_account rollnumber=user4 name=user4 class=test
+07-09-2020 14:56:25 : Create student_account rollnumber=user5 name=user5 class=test
+07-09-2020 15:00:27 : Teacher b has disconected
+07-09-2020 15:01:37 : Student user1 has conected
+07-09-2020 15:03:01 : Student user1 has disconected
+07-09-2020 15:03:04 : Teacher h has conected
+07-09-2020 17:47:26 : Teacher h has disconected
+07-09-2020 17:47:44 : Student ce140237 has conected

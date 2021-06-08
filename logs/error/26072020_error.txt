@@ -1,0 +1,7 @@
+26-07-2020 18:54:36 : Error: EPERM: operation not permitted, rename 'D:\Judge\judger\public\thumucbailam\PE' -> 'D:\Judge\judger\public\thumucbailam\PE1'
+26-07-2020 18:56:13 : Error: ENOENT: no such file or directory, rename 'D:\Judge\judger\public\thumucbailam\PE1' -> 'D:\Judge\judger\public\thumucbailam\PE1'
+26-07-2020 18:58:28 : Error: ENOENT: no such file or directory, rename 'D:\Judge\judger\public\thumucbailam\PE1' -> 'D:\Judge\judger\public\thumucbailam\PE1'
+26-07-2020 19:00:10 : Error: ENOENT: no such file or directory, rename 'D:\Judge\judger\public\thumucbailam\PE1' -> 'D:\Judge\judger\public\thumucbailam\PE1'
+26-07-2020 19:01:20 : Error: EPERM: operation not permitted, rename 'D:\Judge\judger\public\thumucbailam\PE1' -> 'D:\Judge\judger\public\thumucbailam\PE'
+26-07-2020 19:05:24 : Error: EPERM: operation not permitted, rename 'D:\Judge\judger\public\thumuctest\PE' -> 'D:\Judge\judger\public\thumuctest\PE1'
+26-07-2020 19:37:14 : Error: ER_BAD_FIELD_ERROR: Unknown column 'undefined' in 'where clause'

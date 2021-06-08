@@ -1,0 +1,9 @@
+03-09-2020 08:09:43 : Teacher h has conected
+03-09-2020 08:10:27 : Create contest PE-Test by TC-000001
+03-09-2020 08:10:45 : 19 students in contest 16 has added: CE140019,CE140212,CE140242,CE140284,CE140411,CE140426,CE140462,CE140520,CE140524,CE140556,CE150093,CE150124,CE150493,CE150499,CE150569,CE150623,CE150662,CE150718,CE150762
+03-09-2020 08:11:23 : Upload problem contest 16 : KhanhVH_PRF192_SE1502_1.pdf .Testcase: A.zip
+03-09-2020 08:11:36 : Upload problem contest 16 : KhanhVH_PRF192_SE1502_1.pdf .Testcase: B.zip
+03-09-2020 08:11:48 : Upload problem contest 16 : KhanhVH_PRF192_SE1502_1.pdf .Testcase: C.zip
+03-09-2020 08:48:50 : Teacher h has conected
+03-09-2020 09:48:04 : Teacher h has conected
+04-09-2020 00:00:16 : Teacher h has conected

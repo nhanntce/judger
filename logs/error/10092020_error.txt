@@ -1,0 +1,6 @@
+10-09-2020 15:48:03 : Error: EPERM: operation not permitted, rename 'C:\Users\Hy\Documents\Judge\judger\public\thumuctest\demo5' -> 'C:\Users\Hy\Documents\Judge\judger\public\thumuctest\demo5'
+10-09-2020 17:37:15 : Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '''' and contest_id=0' at line 1
+10-09-2020 17:55:59 : Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ''1' and password=MD5('h') and 1599735359166 >= ROUND(UNIX_TIMESTAMP(timeout) ...' at line 1
+10-09-2020 18:35:09 : Error: EPERM: operation not permitted, rename './public/thumucbailam/demo4' -> './public/thumucbailam/$demo4'
+10-09-2020 18:37:26 : Error: EPERM: operation not permitted, rename 'C:\Users\Hy\Documents\Judge\judger\public\thumucbailam\demo4' -> 'C:\Users\Hy\Documents\Judge\judger\public\thumucbailam\demo4'
+10-09-2020 19:04:01 : Error: EPERM: operation not permitted, rename 'C:\Users\Hy\Documents\Judge\judger\public\thumucbailam\demo5' -> 'C:\Users\Hy\Documents\Judge\judger\public\thumucbailam\demo5'

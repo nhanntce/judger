@@ -1,0 +1,35 @@
+06-11-2020 19:49:44 : Teacher abc123 has connected
+06-11-2020 19:55:34 : Teacher GV123 has connected
+06-11-2020 20:17:41 : Teacher abc123 has connected
+06-11-2020 20:18:36 : Teacher abc123 has connected
+06-11-2020 20:20:56 : Upload problem contest 2 : 1001 DIEU UOC.pdf .Testcase: A_sql.zip
+06-11-2020 20:21:17 : Delete in contest_detail where contest 2 and problem A
+06-11-2020 20:21:38 : Upload problem contest 2 : 1001 DIEU UOC.pdf .Testcase: A.zip
+06-11-2020 20:23:01 : Contest 2 has changed time to begin:2020-11-05 06:30+00:00, end: 2020-11-13 11:55+00:00, language=C,C++,Python 3,MySQL
+06-11-2020 20:23:10 : Contest 2 has changed time to begin:2020-11-05 06:30+00:00, end: 2020-11-13 11:55+00:00, language=MySQL
+06-11-2020 20:23:42 : Sumit code content field [1][136422237][demo2][abc123][A].sql of contest demo2 problem A by TC-000001
+06-11-2020 20:25:22 : Update submission times of contest 2 and problem A to 20
+06-11-2020 20:25:36 : Teacher abc123 has disconnected
+06-11-2020 20:25:40 : Teacher abc123 has connected
+06-11-2020 20:25:51 : Sumit code content field [1][136551732][demo2][abc123][A].sql of contest demo2 problem A by TC-000001
+06-11-2020 20:29:48 : Teacher abc123 has disconnected
+06-11-2020 20:29:50 : Teacher abc123 has connected
+06-11-2020 20:31:39 : Teacher abc123 has connected
+06-11-2020 20:36:36 : Teacher abc123 has connected
+06-11-2020 20:37:09 : Teacher abc123 has connected
+06-11-2020 20:37:58 : Teacher abc123 has connected
+06-11-2020 20:39:10 : Teacher abc123 has connected
+06-11-2020 20:40:05 : Sumit code content field [1][137405665][demo2][abc123][A].sql of contest demo2 problem A by TC-000001
+06-11-2020 20:40:59 : Teacher abc123 has connected
+06-11-2020 20:43:44 : Teacher abc123 has connected
+06-11-2020 20:49:08 : Teacher abc123 has connected
+06-11-2020 20:49:26 : Sumit code content field [1][137966622][demo2][abc123][A].sql of contest demo2 problem A by TC-000001
+06-11-2020 21:00:15 : Update submission times of contest 2 and problem A to 10
+06-11-2020 21:01:24 : Update submission times of contest 1 and problem A to 20
+06-11-2020 21:09:27 : Teacher abc123 has connected
+06-11-2020 21:09:52 : Teacher abc123 has connected
+06-11-2020 21:14:41 : Teacher abc123 has connected
+06-11-2020 21:18:37 : Teacher abc123 has connected
+06-11-2020 21:19:02 : Student h has connected
+06-11-2020 21:19:32 : Teacher abc123 has connected
+06-11-2020 21:20:12 : Update submission times of contest 1 and problem A to 10

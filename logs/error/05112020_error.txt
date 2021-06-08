@@ -1,0 +1,11 @@
+05-11-2020 20:46:13 : Error: ER_BAD_FIELD_ERROR: Unknown column 'contest.time_begin' in 'field list'
+05-11-2020 20:46:45 : Error: ER_BAD_FIELD_ERROR: Unknown column 'contest.time_begin' in 'field list'
+05-11-2020 20:51:13 : Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'INNER JOIN contest ON contest.teacher_id=teacher_account.userId INNER JOIN co...' at line 1
+05-11-2020 20:54:55 : Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'INNER JOIN contest ON contest.teacher_id=teacher_account.userId INNER JOIN co...' at line 1
+05-11-2020 21:10:09 : Error: ER_NONUNIQ_TABLE: Not unique table/alias: 'contest'
+05-11-2020 21:10:21 : Error: ER_NONUNIQ_TABLE: Not unique table/alias: 'contest'
+05-11-2020 21:10:37 : Error: ER_NONUNIQ_TABLE: Not unique table/alias: 'contest'
+05-11-2020 21:10:40 : Error: ER_NONUNIQ_TABLE: Not unique table/alias: 'contest'
+05-11-2020 21:10:44 : Error: ER_NONUNIQ_TABLE: Not unique table/alias: 'contest'
+05-11-2020 21:11:23 : Error: ER_NONUNIQ_TABLE: Not unique table/alias: 'contest'
+05-11-2020 21:35:53 : Error: EPERM: operation not permitted, rename 'D:\Judge\judger\public\thumuctest\demo1' -> 'D:\Judge\judger\public\thumuctest\demo1'

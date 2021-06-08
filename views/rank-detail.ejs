@@ -1,37 +1,38 @@
 <%- include ("partials/header") %>
 <div class="container">
-    <div class="bc-icons">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"> <a class="text-gray-700" href="/rank">Rank</a></li>
-                <li><i class="fas fa-angle-double-right mx-2 text-gray-700" aria-hidden="true"></i></li>
-                <li class="breadcrumb-item"> <a class="text-gray-700"  href="/data-rank?contest_id=<%= contest_id %>"><%= contest_name %></a></li>
-                <li><i class="fas fa-angle-double-right mx-2 text-gray-700" aria-hidden="true"></i></li>
-                <li class="breadcrumb-item text-gray-700 font-italic"><%= rollnumber %></li>
-            </ol>
-        </nav>
-    </div>
-    <table class="table table-hover" id="dataTableRankDetail">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Submit Time</th>
-                <th>Problem</th>
-                <th>Language</th>
-                <th>Time</th>
-                <th>Memory</th>
-                <th>TestCase</th>
-                <th>Score</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% 
+  <div class="bc-icons">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"> <a class="text-gray-700" href="/rank">Rank</a></li>
+        <li><i class="fas fa-angle-double-right mx-2 text-gray-700" aria-hidden="true"></i></li>
+        <li class="breadcrumb-item"> <a class="text-gray-700"
+            href="/data-rank?contest_id=<%= contest_id %>"><%= contest_name %></a></li>
+        <li><i class="fas fa-angle-double-right mx-2 text-gray-700" aria-hidden="true"></i></li>
+        <li class="breadcrumb-item text-gray-700 font-italic"><%= rollnumber %></li>
+      </ol>
+    </nav>
+  </div>
+  <table class="table table-hover" id="dataTableRankDetail">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Submit Time</th>
+        <th>Problem</th>
+        <th>Language</th>
+        <th>Time</th>
+        <th>Memory</th>
+        <th>TestCase</th>
+        <th>Score</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% 
                 var logcontent = ''
                 var baicontent = ''
                 for (let i = 0; i < log_files.length; ++i) {
                     var mtime = fs.existsSync(bailam[i]) ? fs.statSync(bailam[i]).mtime : 0
                     var tenbai = bailam[i].split('][')[4].replace('].', '.')
-                    var filedate = moment(mtime).format('DD-MM-YYYY, HH:mm:ss')
+                    var filedate = dayjs(mtime).format('DD-MM-YYYY, HH:mm:ss')
                     var logcontent = fs.existsSync(storage.NOPBAI + 'Logs/' + contest_name + '/' + log_files[i]) ? fs.readFileSync(storage.NOPBAI + 'Logs/' + contest_name + '/' + log_files[i], 'utf8') : ""
                     var baicontent = fs.existsSync(bailam[i]) ? fs.readFileSync(bailam[i], 'utf8') : ""
                     var testcase = ''
@@ -56,81 +57,83 @@
                         }
                     }
             %>
-            <tr href="#" data-toggle="modal" data-target="#myModal<%=i%>">
-                <td>
-                    <%=i+1%>
-                </td>
-                <td>
-                    <%=filedate%>
-                </td>
-                <td>
-                    <%=tenbai.split('.')[0]%>
-                </td>
-                <td>
-                    <%=tenbai.split('.')[1].toUpperCase()%>
-                </td>
-                <td>
-                    <%=timeLimit%>
-                </td>
-                <td>
-                    <%=memoryLimit%>
-                </td>
-                <td>
-                    <%=testcase%>
-                </td>
-                <td>
-                    <%=score%>
-                </td>
-            </tr>
-            <div class="modal fade" id="myModal<%=i%>">
-                <div class="modal-dialog modal-xl">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title"><%= filedate %> - <%= tenbai %></h4>
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="row">
-                                <div class="col">
-                                    Result
-                                    <div id="editorlog<%=i%>" style="height: 360px;"><%= logcontent %></div>
-                                </div>
-                                <div class="col">
-                                    Submission
-                                    <div id="editorbai<%=i%>" style="height: 360px;"><%= baicontent %></div>
-                                </div>
-                                <script>
-                                    var editorlog = ace.edit('editorlog<%=i%>');
-                                    editorlog.getSession().setMode("ace/mode/c_cpp");
-                                    editorlog.setOptions({
-                                        readOnly: true
-                                    })
-                                    editorlog.renderer.$cursorLayer.element.style.opacity = 0
-                                    document.getElementById('editorlog<%=i%>').style.fontSize = '15px';
-                                    var editorbai = ace.edit('editorbai<%=i%>');
-                                    editorbai.getSession().setMode("ace/mode/c_cpp");
-                                    editorbai.setOptions({
-                                        readOnly: true
-                                    })
-                                    editorbai.renderer.$cursorLayer.element.style.opacity = 0
-                                    document.getElementById('editorbai<%=i%>').style.fontSize = '15px';
-                                    
-                                </script>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+      <tr href="#" data-toggle="modal" data-target="#myModal<%=i%>">
+        <td>
+          <%=i+1%>
+        </td>
+        <td>
+          <%=filedate%>
+        </td>
+        <td>
+          <%=tenbai.split('.')[0]%>
+        </td>
+        <td>
+          <%=tenbai.split('.')[1].toUpperCase()%>
+        </td>
+        <td>
+          <%=timeLimit%>
+        </td>
+        <td>
+          <%=memoryLimit%>
+        </td>
+        <td>
+          <%=testcase%>
+        </td>
+        <td>
+          <%=score%>
+        </td>
+      </tr>
+      <div class="modal fade" id="myModal<%=i%>">
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title"><%= filedate %> - <%= tenbai %></h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
-            <% } %>
-        </tbody>
-    </table>
+            <div class="modal-body">
+              <div class="row">
+                <div class="col">
+                  Result
+                  <div id="editorlog<%=i%>" style="height: 360px;"><%= logcontent %></div>
+                </div>
+                <div class="col">
+                  Submission
+                  <div id="editorbai<%=i%>" style="height: 360px;"><%= baicontent %></div>
+                </div>
+                <script>
+                  var editorlog = ace.edit('editorlog<%=i%>');
+                  editorlog.getSession().setMode("ace/mode/c_cpp");
+                  editorlog.setOptions({
+                    wrap: true,
+                    indentedSoftWrap: false,
+                    readOnly: true
+                  })
+                  editorlog.renderer.$cursorLayer.element.style.opacity = 0
+                  document.getElementById('editorlog<%=i%>').style.fontSize = '15px';
+                  var editorbai = ace.edit('editorbai<%=i%>');
+                  editorbai.getSession().setMode("ace/mode/c_cpp");
+                  editorbai.setOptions({
+                    readOnly: true
+                  })
+                  editorbai.renderer.$cursorLayer.element.style.opacity = 0
+                  document.getElementById('editorbai<%=i%>').style.fontSize = '15px';
+
+                </script>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% } %>
+    </tbody>
+  </table>
 </div>
 </div>
 <script>
-    $("#dataTableRankDetail").DataTable({
-        searching: false,
-        ordering: false,
-        lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
-    })
+  $("#dataTableRankDetail").DataTable({
+    searching: false,
+    ordering: false,
+    lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
+  })
 </script>
 <%- include ("partials/footer") %>

@@ -1,0 +1,53 @@
+08-07-2020 12:56:05 : Teacher h has conected
+08-07-2020 18:46:05 : Teacher h has conected
+08-07-2020 19:12:07 : Teacher h has conected
+08-07-2020 23:53:27 : Create contest PE by TC-000001
+08-07-2020 23:56:12 : Upload problem contest 13 : repair_practical_test.docx .Testcase: A.zip
+08-07-2020 23:56:22 : Upload problem contest 13 : repair_practical_test.docx .Testcase: B.zip
+08-07-2020 23:56:34 : Upload problem contest 13 : repair_practical_test.docx .Testcase: C.zip
+08-07-2020 23:56:47 : Upload problem contest 13 : repair_practical_test.docx .Testcase: D.zip
+08-07-2020 23:56:59 : Upload problem contest 13 : repair_practical_test.docx .Testcase: E.zip
+08-07-2020 23:57:28 : Sumit code file [1][448240][PE][abc123][A].c of contest PE problem A by TC-000001
+08-07-2020 23:57:35 : Sumit code file [1][455763][PE][abc123][B].c of contest PE problem B by TC-000001
+08-07-2020 23:57:42 : Sumit code file [1][462052][PE][abc123][C].c of contest PE problem C by TC-000001
+08-07-2020 23:57:48 : Sumit code file [1][468848][PE][abc123][D].c of contest PE problem D by TC-000001
+08-07-2020 23:57:57 : Sumit code file [1][477726][PE][abc123][E].cpp of contest PE problem E by TC-000001
+09-07-2020 00:04:55 : Sumit code file [1][895507][PE][abc123][E].cpp of contest PE problem E by TC-000001
+09-07-2020 00:05:05 : Sumit code file [1][905978][PE][abc123][D].c of contest PE problem D by TC-000001
+09-07-2020 00:05:10 : Sumit code file [1][910348][PE][abc123][A].c of contest PE problem A by TC-000001
+09-07-2020 00:05:15 : Sumit code file [1][915705][PE][abc123][B].c of contest PE problem B by TC-000001
+09-07-2020 00:05:25 : Sumit code file [1][925282][PE][abc123][C].c of contest PE problem C by TC-000001
+09-07-2020 00:06:42 : Sumit code file [1][1002278][PE][abc123][A].c of contest PE problem A by TC-000001
+09-07-2020 00:06:48 : Sumit code file [1][1008207][PE][abc123][B].c of contest PE problem B by TC-000001
+09-07-2020 00:06:53 : Sumit code file [1][1013016][PE][abc123][C].c of contest PE problem C by TC-000001
+09-07-2020 00:06:58 : Sumit code file [1][1018925][PE][abc123][D].c of contest PE problem D by TC-000001
+09-07-2020 00:07:03 : Sumit code file [1][1023979][PE][abc123][E].cpp of contest PE problem E by TC-000001
+09-07-2020 00:08:31 : Sumit code file [1][1111600][PE][abc123][A].c of contest PE problem A by TC-000001
+09-07-2020 00:08:36 : Sumit code file [1][1116629][PE][abc123][B].c of contest PE problem B by TC-000001
+09-07-2020 00:08:41 : Sumit code file [1][1121919][PE][abc123][C].c of contest PE problem C by TC-000001
+09-07-2020 00:09:35 : Sumit code file [1][1175566][PE][abc123][A].c of contest PE problem A by TC-000001
+09-07-2020 00:12:58 : Sumit code file [1][1378222][PE][abc123][A].c of contest PE problem A by TC-000001
+09-07-2020 00:13:03 : Sumit code file [1][1383031][PE][abc123][B].c of contest PE problem B by TC-000001
+09-07-2020 00:13:08 : Sumit code file [1][1388285][PE][abc123][C].c of contest PE problem C by TC-000001
+09-07-2020 00:13:14 : Sumit code file [1][1394429][PE][abc123][D].c of contest PE problem D by TC-000001
+09-07-2020 00:13:20 : Sumit code file [1][1400386][PE][abc123][E].cpp of contest PE problem E by TC-000001
+09-07-2020 00:14:51 : Sumit code file [1][1491758][PE][abc123][E].cpp of contest PE problem E by TC-000001
+09-07-2020 00:18:59 : Sumit code file [1][1739849][PE][abc123][E].cpp of contest PE problem E by TC-000001
+09-07-2020 00:19:05 : Sumit code file [1][1745105][PE][abc123][A].c of contest PE problem A by TC-000001
+09-07-2020 00:24:12 : Sumit code file [1][2052122][PE][abc123][E].cpp of contest PE problem E by TC-000001
+09-07-2020 00:24:19 : Sumit code file [1][2059110][PE][abc123][A].c of contest PE problem A by TC-000001
+09-07-2020 00:24:24 : Sumit code file [1][2064422][PE][abc123][B].c of contest PE problem B by TC-000001
+09-07-2020 00:25:06 : Sumit code file [1][2106773][PE][abc123][E].cpp of contest PE problem E by TC-000001
+09-07-2020 00:25:23 : Sumit code file [1][2123996][PE][abc123][D].c of contest PE problem D by TC-000001
+09-07-2020 00:31:11 : Sumit code file [1][2471257][PE][abc123][E].cpp of contest PE problem E by TC-000001
+09-07-2020 00:31:17 : Sumit code file [1][2477509][PE][abc123][D].c of contest PE problem D by TC-000001
+09-07-2020 00:31:39 : Sumit code file [1][2499903][PE][abc123][A].c of contest PE problem A by TC-000001
+09-07-2020 00:31:54 : Sumit code file [1][2514082][PE][abc123][B].c of contest PE problem B by TC-000001
+09-07-2020 00:32:23 : Sumit code file [1][2543020][PE][abc123][B].c of contest PE problem B by TC-000001
+09-07-2020 00:32:37 : Sumit code file [1][2557357][PE][abc123][A].c of contest PE problem A by TC-000001
+09-07-2020 00:32:49 : Sumit code file [1][2569846][PE][abc123][D].c of contest PE problem D by TC-000001
+09-07-2020 00:32:54 : Sumit code file [1][2574523][PE][abc123][C].c of contest PE problem C by TC-000001
+09-07-2020 00:34:30 : Sumit code file [1][2670789][PE][abc123][E].cpp of contest PE problem E by TC-000001
+09-07-2020 00:35:10 : Sumit code file [1][2710139][PE][abc123][A].c of contest PE problem A by TC-000001
+09-07-2020 00:36:05 : Sumit code file [1][2765726][PE][abc123][B].c of contest PE problem B by TC-000001
+09-07-2020 00:39:03 : Teacher h has disconected

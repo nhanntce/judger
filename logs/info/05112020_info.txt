@@ -1,0 +1,61 @@
+05-11-2020 19:59:38 : Teacher h has connected
+05-11-2020 20:11:50 : Teacher h has connected
+05-11-2020 20:16:47 : Teacher h has disconnected
+05-11-2020 20:16:50 : Teacher b has connected
+05-11-2020 20:17:27 : Teacher h has connected
+05-11-2020 20:19:29 : Teacher h has connected
+05-11-2020 20:25:04 : Teacher h has connected
+05-11-2020 20:42:18 : Teacher h has connected
+05-11-2020 20:42:21 : Teacher h has disconnected
+05-11-2020 20:42:24 : Teacher b has connected
+05-11-2020 20:42:40 : Create contest demo1 by TC-000003
+05-11-2020 20:43:34 : Teacher b has connected
+05-11-2020 20:43:50 : Teacher b has disconnected
+05-11-2020 20:43:53 : Teacher h has connected
+05-11-2020 20:44:07 : Create contest demo2 by TC-000001
+05-11-2020 20:44:11 : Teacher h has disconnected
+05-11-2020 20:44:13 : Teacher b has connected
+05-11-2020 20:44:16 : Teacher b has disconnected
+05-11-2020 20:44:18 : Teacher a has connected
+05-11-2020 20:46:10 : Teacher h has connected
+05-11-2020 20:46:44 : Teacher h has connected
+05-11-2020 20:51:11 : Teacher h has connected
+05-11-2020 20:54:53 : Upload problem contest 1 : KhanhVH_PRF192_SE1502_1.pdf .Testcase: A.zip
+05-11-2020 20:56:06 : Teacher h has connected
+05-11-2020 20:56:39 : Teacher h has disconnected
+05-11-2020 20:56:41 : Teacher b has connected
+05-11-2020 20:57:52 : Teacher b has connected
+05-11-2020 20:58:10 : Teacher b has connected
+05-11-2020 21:01:52 : Teacher h has connected
+05-11-2020 21:02:18 : Teacher h has disconnected
+05-11-2020 21:02:23 : Teacher a has connected
+05-11-2020 21:07:34 : Teacher h has connected
+05-11-2020 21:10:09 : Teacher h has connected
+05-11-2020 21:10:19 : Teacher h has disconnected
+05-11-2020 21:10:21 : Teacher h has connected
+05-11-2020 21:11:23 : Teacher h has connected
+05-11-2020 21:12:04 : Teacher h has connected
+05-11-2020 21:16:01 : Teacher h has disconnected
+05-11-2020 21:16:04 : Teacher b has connected
+05-11-2020 21:18:29 : Teacher abc123 has connected
+05-11-2020 21:18:33 : Teacher abc123 has disconnected
+05-11-2020 21:18:35 : Student h has connected
+05-11-2020 21:35:17 : Student h has disconnected
+05-11-2020 21:35:20 : Teacher abc123 has connected
+05-11-2020 21:35:53 : Contest 1 has changed time to begin:2020-11-05 06:30+00:00, end: 2020-11-13 18:50+00:00, language=C,C++
+05-11-2020 21:36:10 : Teacher abc123 has connected
+05-11-2020 21:36:39 : Reset student ip, timeout userId=SD-000001,SD-000043,SD-000058,SD-000059,SD-000060,SD-000061,SD-000062,SD-000063,SD-000064,SD-000065,SD-000066,SD-000067,SD-000068,SD-000069,SD-000070,SD-000071,SD-000072,SD-000073,SD-000074,SD-000075,SD-000076,SD-000077,SD-000078,SD-000079,SD-000080,SD-000081
+05-11-2020 21:36:55 : 1 students in contest 1 has added: h
+05-11-2020 21:36:57 : Teacher abc123 has disconnected
+05-11-2020 21:36:59 : Student h has connected
+05-11-2020 21:37:48 : Sumit code content field [1][54468661][demo1][h][A].c of contest demo1 problem A by SD-000001
+05-11-2020 21:40:14 : Sumit code content field [1][54614605][demo1][h][A].cpp of contest demo1 problem A by SD-000001
+05-11-2020 21:41:30 : Sumit code content field [1][54690853][demo1][h][A].c of contest demo1 problem A by SD-000001
+05-11-2020 21:41:51 : Sumit code content field [1][54711299][demo1][h][A].cpp of contest demo1 problem A by SD-000001
+05-11-2020 21:42:40 : Student h has disconnected
+05-11-2020 21:42:44 : Teacher GV123 has connected
+05-11-2020 21:48:03 : Teacher GV123 has disconnected
+05-11-2020 21:48:06 : Teacher abc123 has connected
+05-11-2020 21:49:58 : Teacher abc123 has connected
+05-11-2020 21:50:22 : Upload problem contest 1 : KhanhVH_PRF192_SE1502.HL.pdf .Testcase: B.zip
+05-11-2020 21:50:43 : Sumit code content field [1][55243377][demo1][GV456][B].cpp of contest demo1 problem B by TC-000001

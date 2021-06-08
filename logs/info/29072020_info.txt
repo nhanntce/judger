@@ -1,0 +1,64 @@
+29-07-2020 09:24:17 : Teacher h has conected
+29-07-2020 09:26:34 : Teacher h has conected
+29-07-2020 09:28:56 : Teacher h has conected
+29-07-2020 09:29:21 : Teacher h has conected
+29-07-2020 09:29:44 : Teacher h has conected
+29-07-2020 09:30:25 : Teacher h has conected
+29-07-2020 09:33:06 : Teacher h has conected
+29-07-2020 09:33:34 : Contest 13 has changed time to begin:2020-07-08 23:50+00:00, end: 2020-08-01 19:55+00:00
+29-07-2020 09:34:10 : Teacher h has conected
+29-07-2020 09:34:15 : Contest 13 has changed time to begin:2020-07-08 23:50+00:00, end: 2020-08-01 19:55+00:00
+29-07-2020 10:34:29 : Teacher h has conected
+29-07-2020 10:36:58 : Teacher h has conected
+29-07-2020 10:38:57 : Teacher h has conected
+29-07-2020 10:41:13 : Teacher h has conected
+29-07-2020 10:42:38 : Teacher h has conected
+29-07-2020 10:44:04 : Teacher h has conected
+29-07-2020 10:45:07 : Teacher h has conected
+29-07-2020 10:45:33 : Teacher h has conected
+29-07-2020 10:47:52 : Teacher h has conected
+29-07-2020 10:50:45 : Teacher h has conected
+29-07-2020 11:33:25 : Teacher h has conected
+29-07-2020 11:35:52 : Teacher h has conected
+29-07-2020 11:37:20 : Teacher h has conected
+29-07-2020 15:56:06 : Teacher h has conected
+29-07-2020 15:56:20 : Teacher h has conected
+29-07-2020 15:56:46 : Teacher h has conected
+29-07-2020 15:56:48 : Teacher h has conected
+29-07-2020 15:57:34 : Sumit code content field [1][1786054782][PE][abc123][A].cpp of contest PE problem A by TC-000001
+29-07-2020 15:57:37 : Sumit code content field [1][1786057027][PE][abc123][A].cpp of contest PE problem A by TC-000001
+29-07-2020 15:57:38 : Sumit code content field [1][1786058367][PE][abc123][A].cpp of contest PE problem A by TC-000001
+29-07-2020 15:57:40 : Sumit code content field [1][1786060092][PE][abc123][A].cpp of contest PE problem A by TC-000001
+29-07-2020 15:59:21 : Teacher h has conected
+29-07-2020 15:59:30 : Teacher h has conected
+29-07-2020 15:59:39 : Teacher h has conected
+29-07-2020 15:59:50 : Teacher h has conected
+29-07-2020 16:00:16 : Sumit code content field [1][1786216245][PE][abc123][A].cpp of contest PE problem A by TC-000001
+29-07-2020 16:00:16 : Sumit code content field [1][1786216985][PE][abc123][A].cpp of contest PE problem A by TC-000001
+29-07-2020 16:00:17 : Sumit code content field [1][1786217897][PE][abc123][A].cpp of contest PE problem A by TC-000001
+29-07-2020 16:00:18 : Sumit code content field [1][1786218899][PE][abc123][A].cpp of contest PE problem A by TC-000001
+29-07-2020 16:03:21 : Teacher h has disconected
+29-07-2020 16:03:23 : Teacher h has conected
+29-07-2020 16:15:49 : Sumit code content field [1][1787149311][PE][abc123][A].cpp of contest PE problem A by TC-000001
+29-07-2020 16:19:06 : Sumit code content field [1][1787346637][PE][abc123][A].c of contest PE problem A by TC-000001
+29-07-2020 16:35:26 : Teacher h has disconected
+29-07-2020 16:35:28 : Teacher h has conected
+29-07-2020 16:54:34 : Teacher h has conected
+29-07-2020 16:54:40 : Teacher h has conected
+29-07-2020 16:55:14 : Sumit code content field [1][1789514627][PE][abc123][B].cpp of contest PE problem B by TC-000001
+29-07-2020 16:55:15 : Sumit code content field [1][1789515990][PE][abc123][B].cpp of contest PE problem B by TC-000001
+29-07-2020 16:56:53 : 1 students in contest 13 has deleted: CE140237
+29-07-2020 16:57:50 : 1 students in contest 14 has added: CE140237
+29-07-2020 16:57:56 : Teacher h has disconected
+29-07-2020 16:58:08 : Student ce140237 has conected
+29-07-2020 16:58:17 : Teacher h has disconected
+29-07-2020 16:58:24 : Student ce140237 has conected
+29-07-2020 16:58:48 : Sumit code content field [1][632028857][PE2][CE140237][B].cpp of contest PE2 problem B by SD-000043
+29-07-2020 16:58:49 : Sumit code content field [1][632029710][PE2][CE140237][B].cpp of contest PE2 problem B by SD-000043
+29-07-2020 17:37:24 : Sumit code content field [1][634344281][PE2][CE140237][B].cpp of contest PE2 problem B by SD-000043
+29-07-2020 17:38:04 : Teacher h has conected
+29-07-2020 17:38:13 : Teacher h has disconected
+29-07-2020 17:38:18 : Student ce140237 has conected
+29-07-2020 17:38:32 : Sumit code content field [1][634412047][PE2][CE140237][B].cpp of contest PE2 problem B by SD-000043
+29-07-2020 17:38:48 : Sumit code content field [1][634428965][PE2][CE140237][B].cpp of contest PE2 problem B by SD-000043
+29-07-2020 22:06:52 : Teacher h has conected

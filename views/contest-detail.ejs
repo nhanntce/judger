@@ -2,141 +2,158 @@
 <!-- Main component for a primary marketing message or call to action -->
 
 <div class="container">
-    <div class="bc-icons">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"> <a class="text-gray-700" href="/contest">Contest</a></li>
-                <li><i class="fas fa-angle-double-right mx-2 text-gray-700" aria-hidden="true"></i></li>
-                <li class="breadcrumb-item text-gray-700 font-italic">Detail</li>
-            </ol>
-        </nav>
+  <div class="bc-icons">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"> <a class="text-gray-700" href="/contest">Contest</a></li>
+        <li><i class="fas fa-angle-double-right mx-2 text-gray-700" aria-hidden="true"></i></li>
+        <li class="breadcrumb-item text-gray-700 font-italic">Detail</li>
+      </ol>
+    </nav>
+  </div>
+  <!-- Page Heading -->
+  <h2>Total
+    <%= totalStudent %> student in contest
+    <%= data[0].contest_name %>
+    <button type="button" class="btn btn-blue waves-effect btn-sm"
+      onclick="window.location='/contest/add-student?contest_id=<%=data[0].contest_id%>';">
+      <i class="fa fa-plus"></i> Add student
+    </button>
+    <button type="button" class="btn btn-blue waves-effect btn-sm"
+      onclick="window.location='/contest/add-problem?contest_id=<%=data[0].contest_id%>';">
+      <i class="fa fa-plus"></i> Add problem and testcase
+    </button>
+  </h2>
+  <% if (message.length > 0) { %>
+  <script>toastr.success('<%=message%>')</script>
+  <% } %>
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <span class="m-0 font-weight-bold text-primary">From:
+      </span><%=dayjs(data[0].time_begin).format('DD-MM-YYYY, HH:mm')%> <span class="m-0 font-weight-bold text-primary"> to: 
+      </span><%=dayjs(data[0].time_end).format('DD-MM-YYYY, HH:mm')%>
+      <button type="button" class="btn btn-primary waves-effect waves-light btn-sm" data-toggle="modal"
+        data-target="#myModal"><i class="fa fa-edit"></i> Edit</button>
+      <div class="float-right">
+        <% let language=data[0].language.split(","); for (let i = 0; i < language.length; ++i) { %>
+        <span class="badge badge-default z-depth-0"><%=language[i]%></span>
+        <% } %>
+      </div>
     </div>
-    <!-- Page Heading -->
-    <h2>Total
-        <%= totalStudent %> student in contest
-        <%= data[0].contest_name %>
-        <button type="button" class="btn btn-indigo waves-effect btn-sm"
-            onclick="window.location='/contest/add-user?contest_id=<%=data[0].contest_id%>';">
-            <i class="fa fa-plus"></i> Add student
-        </button>
-        <button type="button" class="btn btn-indigo waves-effect btn-sm"
-            onclick="window.location='/contest/add-problem?contest_id=<%=data[0].contest_id%>';">
-            <i class="fa fa-plus"></i> Add problem and testcase
-        </button>
-    </h2>
-    <% if (message.length > 0) { %>
-    <script>toastr.success('<%=message%>')</script>
-    <% } %>
-    <!-- DataTales Example -->
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <i class="m-0 font-weight-bold text-primary">From:
-            </i><%=moment(data[0].time_begin).format('DD-MM-YYYY, HH:mm')%> <i
-                class="m-0 font-weight-bold text-primary"> to:
-            </i><%=moment(data[0].time_end).format('DD-MM-YYYY, HH:mm')%>
-            <button type="button" class="btn btn-primary waves-effect waves-light btn-sm" data-toggle="modal"
-                data-target="#myModal"><i class="fa fa-edit"></i> Edit</button>
-        </div>
-        <div class="card-body">
-            <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
-                <thead>
-                    <tr>
-                        <th class="text-center" width="5%">
-                                <button type="button" style="border: none; background: transparent; font-size: 14px;"
-                                    id="MyTableCheckAllButton"><i class="far fa-square"></i></button>
-                        </th>
-                        <th>Roll number</th>
-                        <th>Name</th>
-                        <th>Class</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% for (let i = 0, l = data.length; i < l; ++i) {%>
-                    <tr>
-                        <td></td>
-                        <td>
-                            <%= data[i].rollnumber %>
-                        </td>
-                        <td>
-                            <%= data[i].name %>
-                        </td>
-                        <td>
-                            <%= data[i].class %>
-                        </td>
-                    </tr>
-                    <% } %>
-                </tbody>
-            </table>
-            <button type="button" id="btnconfirm" class="btn btn-danger btn-sm" data-toggle="modal"
-                data-target="#modalConfirmDelete" disabled><i class="fa fa-trash-alt"></i> Delete selected</button>
-        </div>
+    <div class="card-body">
+      <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+        <thead>
+          <tr>
+            <th class="text-center" width="5%">
+              <button type="button" style="border: none; background: transparent; font-size: 14px;"
+                id="MyTableCheckAllButton"><i class="far fa-square"></i></button>
+            </th>
+            <th>Roll number</th>
+            <th>Name</th>
+            <th>Class</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for (let i = 0, l = data.length; i < l; ++i) {%>
+          <tr>
+            <td></td>
+            <td>
+              <%= data[i].rollnumber %>
+            </td>
+            <td>
+              <%= data[i].name %>
+            </td>
+            <td>
+              <%= data[i].class %>
+            </td>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
+      <button type="button" id="btnconfirm" class="btn btn-danger btn-sm" data-toggle="modal"
+        data-target="#modalConfirmDelete" disabled><i class="fa fa-trash-alt"></i> Delete</button>
     </div>
+  </div>
 
 </div>
 <!-- The Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header text-center">
-                <h4 class="modal-title w-100 font-weight-bold">Edit time</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form action="/contest/edit-contest" method="POST">
-                <div class="modal-body mx-3">
-                    <label>Name</label>
-                    <div class="form mb-3">
-                        <input type="text" class="form-control" id="contest_name" name="contest_name"
-                            value="<%=data[0].contest_name%>">
-                    </div>
-                    <label>Enter start time</label>
-                    <div class="form mb-3">
-                        <input type="text" class="form-control" id="time_begin" name="time_begin"
-                            value="<%=moment(data[0].time_begin).format('DD-MM-YYYY HH:mm')%>">
-                    </div>
-                    <label>Enter end time</label>
-                    <div class="form mb-3">
-                        <input type="text" class="form-control" id="time_end" name="time_end"
-                            value="<%=moment(data[0].time_end).format('DD-MM-YYYY HH:mm')%>">
-                    </div>
-                </div>
-                <script>
-                    $('#time_begin, #time_end').datetimepicker({
-                        format: 'dd-mm-yyyy hh:ii'
-                    }); 
-                </script>
-                <div class="modal-footer d-flex justify-content-center">
-                    <input type="hidden" name="contest_id" value="<%=data[0].contest_id%>">
-                    <button class="btn btn-deep-orange">Update</button>
-                </div>
-            </form>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Edit time</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="/contest/edit-contest" method="POST">
+        <div class="modal-body mx-3">
+          <label class="font-weight-bold">Name</label>
+          <div class="form mb-3">
+            <input type="text" class="form-control" id="contest_name" name="contest_name_new"
+              value="<%=data[0].contest_name%>" required>
+            <input type="hidden" name="contest_name_old" value="<%=data[0].contest_name%>">
+          </div>
+          <label class="font-weight-bold">Enter start time</label>
+          <div class="form mb-3">
+            <input type="text" class="form-control" id="time_begin" name="time_begin"
+              value="<%=dayjs(data[0].time_begin).format('DD-MM-YYYY HH:mm')%>" required>
+          </div>
+          <label class="font-weight-bold">Enter end time</label>
+          <div class="form mb-3">
+            <input type="text" class="form-control" id="time_end" name="time_end"
+              value="<%=dayjs(data[0].time_end).format('DD-MM-YYYY HH:mm')%>" required>
+          </div>
+          <label class="font-weight-bold">Language</label>
+          <select class="mdb-select md-form" id="language" name="language" multiple required>
+            <option disabled>Choose language</option>
+            <option>C</option>
+            <option>C++</option>
+            <option>Python 3</option>
+            <option>MySQL</option>
+          </select>
         </div>
+        <script>
+          $('#time_begin, #time_end').datetimepicker({
+            format: 'dd-mm-yyyy hh:ii'
+          }); 
+          $(document).ready(function () {
+            $('.mdb-select').materialSelect();
+            $("#language").val(JSON.parse('<%-JSON.stringify(data[0].language.split(","))%>')).trigger('change');
+          });
+        </script>
+        <div class="modal-footer d-flex justify-content-center">
+          <input type="hidden" name="contest_id" value="<%=data[0].contest_id%>">
+          <button class="btn btn-deep-orange">Update</button>
+        </div>
+      </form>
     </div>
+  </div>
 </div>
 <!--Modal: modalConfirmDelete-->
 <div class="modal fade" id="modalConfirmDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
-        <div class="modal-content text-center">
-            <div class="modal-header d-flex justify-content-center">
-                <p class="heading">Are you sure?</p>
-            </div>
-            <div class="modal-body">
-                <i class="fas fa-times fa-4x animated rotateIn"></i><br>
-                <font color=red><b id="totalrollnumber"></b></font>
-            </div>
-            <div class="modal-footer flex-center">
-                <form action="/contest/delete-user" method="POST">
-                    <input type="hidden" id="list_rollnumber" name="list_rollnumber">
-                    <input type="hidden" name="contest_id" value="<%=data[0].contest_id%>">
-                    <input type="hidden" name="contest_name" value="<%=data[0].contest_name%>">
-                    <button type="submit" class="btn btn-outline-danger">Yes</button>
-                </form>
-                <a type="button" class="btn btn-danger waves-effect" data-dismiss="modal">No</a>
-            </div>
-        </div>
+  aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
+    <div class="modal-content text-center">
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">Are you sure?</p>
+      </div>
+      <div class="modal-body">
+        <i class="fas fa-times fa-4x animated rotateIn"></i><br>
+        <font color=red><b id="totalrollnumber"></b></font>
+      </div>
+      <div class="modal-footer flex-center">
+        <form action="/contest/delete-student" method="POST">
+          <input type="hidden" id="list_rollnumber" name="list_rollnumber">
+          <input type="hidden" name="contest_id" value="<%=data[0].contest_id%>">
+          <input type="hidden" name="contest_name" value="<%=data[0].contest_name%>">
+          <button type="submit" class="btn btn-outline-danger">Yes</button>
+        </form>
+        <a type="button" class="btn btn-danger waves-effect" data-dismiss="modal">No</a>
+      </div>
     </div>
+  </div>
 </div>
 <!--Modal: modalConfirmDelete-->
 <%- include ("partials/footer") %>

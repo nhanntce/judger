@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.3
+-- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 04, 2020 at 04:29 PM
--- Server version: 10.1.36-MariaDB
--- PHP Version: 5.6.38
+-- Generation Time: Nov 07, 2020 at 04:38 AM
+-- Server version: 10.4.14-MariaDB
+-- PHP Version: 7.2.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -72,29 +71,21 @@ DELIMITER ;
 
 CREATE TABLE `contest` (
   `contest_id` int(11) NOT NULL,
-  `contest_name` varchar(50) NOT NULL,
   `teacher_id` varchar(20) NOT NULL,
+  `contest_name` varchar(50) NOT NULL,
   `time_begin` datetime NOT NULL,
   `time_end` datetime NOT NULL,
-  `deleted` int(1) NOT NULL DEFAULT '0'
+  `language` varchar(30) NOT NULL,
+  `deleted` int(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `contest`
 --
 
-INSERT INTO `contest` (`contest_id`, `contest_name`, `teacher_id`, `time_begin`, `time_end`, `deleted`) VALUES
-(1, 'Contest01', 'TC-000001', '2020-06-01 11:16:00', '2020-07-11 23:55:00', 0),
-(2, 'Contest02', 'TC-000001', '2020-04-09 10:50:00', '2020-07-11 19:15:00', 0),
-(3, 'Contest03', 'TC-000001', '2020-04-11 00:00:00', '2020-04-13 00:00:00', 0),
-(4, 'Contest04', 'TC-000001', '2020-05-15 10:41:00', '2020-07-25 15:35:00', 0),
-(5, 'Contest05', 'TC-000001', '2020-04-14 01:00:00', '2020-04-30 01:00:00', 1),
-(6, 'hy', 'TC-000001', '2020-05-28 18:35:00', '2020-05-29 15:35:00', 1),
-(7, 'Con heo biet noi', 'TC-000001', '2020-05-17 12:40:00', '2020-06-05 16:15:00', 1),
-(8, 'Alo 123', 'TC-000001', '2020-05-24 16:40:00', '2020-06-03 17:45:00', 1),
-(9, 'asdf', 'TC-000001', '2020-06-03 06:30:00', '2020-06-05 08:15:00', 1),
-(11, 'alo', 'TC-000001', '2020-06-05 19:15:00', '2020-06-11 19:15:00', 0),
-(12, 'FCoder', 'TC-000001', '2020-06-11 18:15:00', '2020-07-11 19:00:00', 0);
+INSERT INTO `contest` (`contest_id`, `teacher_id`, `contest_name`, `time_begin`, `time_end`, `language`, `deleted`) VALUES
+(1, 'TC-000003', 'demo1', '2020-11-05 06:30:00', '2020-11-13 18:50:00', 'C,C++', 0),
+(2, 'TC-000001', 'demo2', '2020-11-05 06:30:00', '2020-11-13 11:55:00', 'MySQL', 0);
 
 -- --------------------------------------------------------
 
@@ -115,18 +106,20 @@ CREATE TABLE `contest_detail` (
 --
 
 INSERT INTO `contest_detail` (`contest_id`, `problem_id`, `path_problem`, `path_testcase`, `times`) VALUES
-(1, 'A', './public/debai/Contest01/1001 DIEU UOC.pdf', './public/thumuctest/Contest01/A', 10),
-(1, 'B', './public/debai/Contest01/DI-CƯ.docx', './public/thumuctest/Contest01/B', 10),
-(1, 'C', './public/debai/Contest01/Prime.pdf', './public/thumuctest/Contest01/C', 10),
-(2, 'A', './public/debai/Contest02/1001 DIEU UOC.pdf', './public/thumuctest/Contest02/A', 10),
-(4, 'A', './public/debai/Contest04/1001 DIEU UOC.pdf', './public/thumuctest/Contest04/A', 10),
-(4, 'B', './public/debai/Contest04/DI-CƯ.docx', './public/thumuctest/Contest04/B', 10),
-(11, 'A', './public/debai/alo/Power of 8.pdf', './public/thumuctest/alo/A', 10),
-(11, 'B', './public/debai/alo/Division of Power 2.pdf', './public/thumuctest/alo/B', 10),
-(11, 'C', './public/debai/alo/Non-Overlapping Area.pdf', './public/thumuctest/alo/C', 10),
-(12, 'A', './public/debai/FCoder/Power of 8.pdf', './public/thumuctest/FCoder/A', 10),
-(12, 'B', './public/debai/FCoder/Division of Power 2.pdf', './public/thumuctest/FCoder/B', 10),
-(12, 'C', './public/debai/FCoder/Non-Overlapping Area.pdf', './public/thumuctest/FCoder/C', 10);
+(1, 'A', './public/debai/demo1/KhanhVH_PRF192_SE1502_1.pdf', './public/thumuctest/demo1/A', 10),
+(1, 'B', './public/debai/demo1/KhanhVH_PRF192_SE1502.HL.pdf', './public/thumuctest/demo1/B', 10),
+(2, 'A', './public/debai/demo2/1001 DIEU UOC.pdf', './public/thumuctest/demo2/A', 10);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `contest_owner`
+--
+
+CREATE TABLE `contest_owner` (
+  `contest_id` int(11) NOT NULL,
+  `teacher_id` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -142,10 +135,10 @@ CREATE TABLE `student_account` (
   `password` varchar(50) NOT NULL,
   `name` varchar(100) NOT NULL,
   `class` varchar(50) NOT NULL,
-  `contest_id` int(11) NOT NULL DEFAULT '0',
+  `contest_id` int(11) NOT NULL DEFAULT 0,
   `ip` varchar(20) NOT NULL DEFAULT '1',
-  `timeout` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `islogin` int(1) NOT NULL DEFAULT '0'
+  `timeout` datetime NOT NULL DEFAULT current_timestamp(),
+  `islogin` int(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -153,63 +146,32 @@ CREATE TABLE `student_account` (
 --
 
 INSERT INTO `student_account` (`id`, `userId`, `rollnumber`, `username`, `password`, `name`, `class`, `contest_id`, `ip`, `timeout`, `islogin`) VALUES
-(1, 'SD-000001', 'h', 'h', '2510c39011c5be704182423e3a695e91', 'Khang Hy', 'IA1401', 1, '1', '2020-07-04 16:26:36', 0),
-(2, 'SD-000002', 'CE130208', 'anhlnqce130208', '46e0e6ce167bbf79b81892b7f58ce01a', 'Lê Nguyễn Quốc Anh', 'SE1503', 4, '1', '2020-07-04 16:28:24', 1),
-(3, 'SD-000003', 'CE140069', 'phunhce140069', '46e0e6ce167bbf79b81892b7f58ce01a', 'Nguyễn Hào Phú', 'SE1503', 4, '1', '2020-07-04 16:29:01', 1),
-(4, 'SD-000004', 'CE140212', 'nghiantce140212', '46e0e6ce167bbf79b81892b7f58ce01a', 'Nguyễn Trọng Nghĩa', 'SE1503', 4, '1', '2020-06-02 19:31:35', 0),
-(5, 'SD-000005', 'CE140345', 'anvtce140345', '46e0e6ce167bbf79b81892b7f58ce01a', 'Võ Thành An', 'SE1503', 4, '1', '2020-07-04 17:25:48', 0),
-(6, 'SD-000006', 'CE150004', 'khangtdce150004', '46e0e6ce167bbf79b81892b7f58ce01a', 'Thượng Duy Khang', 'SE1503', 3, '1', '2020-06-02 19:31:35', 0),
-(7, 'SD-000007', 'CE150019', 'thotace150019', '46e0e6ce167bbf79b81892b7f58ce01a', 'Tiêu Anh Thọ', 'SE1503', 3, '1', '2020-06-02 19:31:35', 0),
-(8, 'SD-000008', 'CE150020', 'thanhndce150020', '46e0e6ce167bbf79b81892b7f58ce01a', 'Nguyễn Đại Thành', 'SE1503', 3, '1', '2020-06-02 19:31:35', 0),
-(9, 'SD-000009', 'CE150022', 'minhdnce150022', '46e0e6ce167bbf79b81892b7f58ce01a', 'Đoàn Ngọc Minh', 'SE1503', 3, '1', '2020-06-02 19:31:35', 0),
-(10, 'SD-000010', 'CE150056', 'danhlptce150056', '46e0e6ce167bbf79b81892b7f58ce01a', 'Lê Phạm Thành Danh', 'SE1503', 3, '1', '2020-06-02 19:31:35', 0),
-(11, 'SD-000011', 'CE150063', 'lamttce150063', '46e0e6ce167bbf79b81892b7f58ce01a', 'Tống Thanh Lâm', 'SE1503', 3, '1', '2020-06-02 19:31:35', 0),
-(12, 'SD-000012', 'CE150099', 'datltce150099', '46e0e6ce167bbf79b81892b7f58ce01a', 'Lê Thành Đạt', 'SE1503', 3, '1', '2020-06-02 19:31:35', 0),
-(13, 'SD-000013', 'CE150103', 'khoinmce150103', '46e0e6ce167bbf79b81892b7f58ce01a', 'Nguyễn Minh Khôi', 'SE1503', 3, '1', '2020-06-02 19:31:35', 0),
-(14, 'SD-000014', 'CE150141', 'longlhhce150141', '46e0e6ce167bbf79b81892b7f58ce01a', 'Lê Hoàng Hải Long', 'SE1503', 3, '1', '2020-06-02 19:31:35', 0),
-(15, 'SD-000015', 'CE150161', 'duyenhmce150161', '46e0e6ce167bbf79b81892b7f58ce01a', 'Huỳnh Mỹ Duyên', 'SE1503', 3, '1', '2020-06-02 19:31:35', 0),
-(16, 'SD-000016', 'CE150226', 'hoangnnce150226', '46e0e6ce167bbf79b81892b7f58ce01a', 'Nguyễn Nhật Hoàng', 'SE1503', 3, '1', '2020-06-02 19:31:35', 0),
-(17, 'SD-000017', 'CE150261', 'kietptce150261', '46e0e6ce167bbf79b81892b7f58ce01a', 'Phạm Tuấn Kiệt', 'SE1503', 3, '1', '2020-06-02 19:31:35', 0),
-(18, 'SD-000018', 'CE150269', 'toantkce150269', '46e0e6ce167bbf79b81892b7f58ce01a', 'Trần Khánh Toàn', 'SE1503', 3, '1', '2020-06-02 19:31:35', 0),
-(19, 'SD-000019', 'CE150284', 'vinhce150284', '46e0e6ce167bbf79b81892b7f58ce01a', 'Nguyễn Hoàng Vĩ', 'SE1503', 3, '1', '2020-06-02 19:31:35', 0),
-(20, 'SD-000020', 'CE150337', 'phucnnhce150337', '46e0e6ce167bbf79b81892b7f58ce01a', 'Ngô Nguyễn Hoàng Phúc', 'SE1503', 3, '1', '2020-06-02 19:31:35', 0),
-(21, 'SD-000021', 'CE150405', 'locpbce150405', '46e0e6ce167bbf79b81892b7f58ce01a', 'Phạm Bảo Lộc', 'SE1503', 3, '1', '2020-06-02 19:31:35', 0),
-(22, 'SD-000022', 'CE150568', 'thinhnpce150568', '46e0e6ce167bbf79b81892b7f58ce01a', 'Nguyễn Phúc Thịnh', 'SE1503', 3, '1', '2020-06-02 19:31:35', 0),
-(23, 'SD-000023', 'CE150569', 'haoltce150569', '46e0e6ce167bbf79b81892b7f58ce01a', 'Lê Trí Hào', 'SE1503', 3, '1', '2020-06-02 19:31:35', 0),
-(24, 'SD-000024', 'CE150599', 'phuttce150599', '46e0e6ce167bbf79b81892b7f58ce01a', 'Trần Thiện Phú', 'SE1503', 3, '1', '2020-06-02 19:31:35', 0),
-(25, 'SD-000025', 'CE150696', 'vynlce150696', '46e0e6ce167bbf79b81892b7f58ce01a', 'Nguyễn Lê Vỹ', 'SE1503', 3, '1', '2020-06-02 19:31:35', 0),
-(26, 'SD-000026', 'CE150706', 'binhthce150706', '46e0e6ce167bbf79b81892b7f58ce01a', 'Trần Hòa Bình', 'SE1503', 3, '1', '2020-06-02 19:31:35', 0),
-(27, 'SD-000027', 'CE150762', 'nguyenvgce150762', '46e0e6ce167bbf79b81892b7f58ce01a', 'Võ Gia Nguyên', 'SE1503', 3, '1', '2020-06-02 19:31:35', 0),
-(28, 'SD-000028', 'CE150076', 'ce150076', '46e0e6ce167bbf79b81892b7f58ce01a', 'Võ Ngọc Thiên', 'FCoder', 12, '1', '2020-06-04 21:02:24', 0),
-(29, 'SD-000029', 'CE140102', 'ce140102', '46e0e6ce167bbf79b81892b7f58ce01a', 'Phan Lê Trọng Nghĩa', 'FCoder', 12, '1', '2020-06-04 21:02:24', 0),
-(30, 'SD-000030', 'CE150394', 'ce150394', '46e0e6ce167bbf79b81892b7f58ce01a', 'Huỳnh Tấn Phúc', 'FCoder', 12, '1', '2020-06-04 21:02:24', 0),
-(31, 'SD-000031', 'CE150521', 'ce150521', '46e0e6ce167bbf79b81892b7f58ce01a', 'Trần Văn Hảo', 'FCoder', 12, '1', '2020-06-04 21:02:24', 0),
-(32, 'SD-000032', 'CE140196', 'ce140196', '46e0e6ce167bbf79b81892b7f58ce01a', 'Nguyễn Đức Tông', 'FCoder', 12, '1', '2020-06-04 21:02:24', 0),
-(33, 'SD-000033', 'CE130319', 'ce130319', '46e0e6ce167bbf79b81892b7f58ce01a', 'Phan Tấn Phát', 'FCoder', 12, '1', '2020-06-04 21:02:24', 0),
-(34, 'SD-000034', 'CE130100', 'ce130100', '46e0e6ce167bbf79b81892b7f58ce01a', 'Lê Đức An', 'FCoder', 12, '1', '2020-06-04 21:02:24', 0),
-(35, 'SD-000035', 'CE130042', 'ce130042', '46e0e6ce167bbf79b81892b7f58ce01a', 'Trịnh Đức Thống', 'FCoder', 12, '1', '2020-06-04 21:02:24', 0),
-(36, 'SD-000036', 'CE130109', 'ce130109', '46e0e6ce167bbf79b81892b7f58ce01a', 'Phạm Chí Đức', 'FCoder', 12, '1', '2020-06-04 21:02:24', 0),
-(37, 'SD-000037', 'CE130157', 'ce130157', '46e0e6ce167bbf79b81892b7f58ce01a', 'Đỗ Trung Tín', 'FCoder', 12, '1', '2020-06-04 21:02:24', 0),
-(38, 'SD-000038', 'CE130204', 'ce130204', '46e0e6ce167bbf79b81892b7f58ce01a', 'Lý Dương', 'FCoder', 12, '1', '2020-06-04 21:02:24', 0),
-(39, 'SD-000039', 'CE130336', 'ce130336', '46e0e6ce167bbf79b81892b7f58ce01a', 'Phan Minh Đức', 'FCoder', 12, '1', '2020-06-04 21:02:24', 0),
-(40, 'SD-000040', 'CE140401', 'ce140401', '46e0e6ce167bbf79b81892b7f58ce01a', 'Dương Trí Tín', 'FCoder', 12, '1', '2020-06-04 21:02:24', 0),
-(41, 'SD-000041', 'CE140037', 'ce140037', '46e0e6ce167bbf79b81892b7f58ce01a', 'Quản Đức Lộc', 'FCoder', 12, '1', '2020-06-04 21:02:24', 0),
-(42, 'SD-000042', 'CE140085', 'ce140085', '46e0e6ce167bbf79b81892b7f58ce01a', 'Trần Minh Thắng', 'FCoder', 12, '1', '2020-06-04 21:02:24', 0),
-(43, 'SD-000043', 'CE140237', 'ce140237', '46e0e6ce167bbf79b81892b7f58ce01a', 'Nguyễn Vương Khang Hy', 'FCoder', 12, '1', '2020-07-04 00:00:00', 0),
-(44, 'SD-000044', 'CE140520', 'ce140520', '46e0e6ce167bbf79b81892b7f58ce01a', 'Đào Anh Tuấn', 'FCoder', 12, '1', '2020-06-04 21:02:24', 0),
-(45, 'SD-000045', 'CE140133', 'ce140133', '46e0e6ce167bbf79b81892b7f58ce01a', 'Nguyễn Huỳnh Tuấn Khôi', 'FCoder', 12, '1', '2020-06-04 21:02:24', 0),
-(46, 'SD-000046', 'CS140536', 'cs140536', '46e0e6ce167bbf79b81892b7f58ce01a', 'Nguyễn Thanh Trúc', 'FCoder', 12, '1', '2020-06-04 21:02:24', 0),
-(47, 'SD-000047', 'CE140137', 'ce140137', '46e0e6ce167bbf79b81892b7f58ce01a', 'Pham Văn Trọng Nhân', 'FCoder', 12, '1', '2020-06-04 21:02:24', 0),
-(48, 'SD-000048', 'CE150130', 'ce150130', '46e0e6ce167bbf79b81892b7f58ce01a', 'Huỳnh Quang Tiên', 'FCoder', 12, '1', '2020-07-04 00:00:00', 0),
-(49, 'SD-000049', 'CE150075', 'ce150075', '46e0e6ce167bbf79b81892b7f58ce01a', 'Nguyễn Mạnh Tân', 'FCoder', 12, '1', '2020-06-04 21:02:24', 0),
-(50, 'SD-000050', 'CE150280', 'ce150280', '46e0e6ce167bbf79b81892b7f58ce01a', 'Nguyễn Hoàng Khang', 'FCoder', 12, '1', '2020-06-04 21:02:24', 0),
-(51, 'SD-000051', 'CE150424', 'ce150424', '46e0e6ce167bbf79b81892b7f58ce01a', 'Bùi Hữu Khang', 'FCoder', 12, '1', '2020-06-04 21:02:24', 0),
-(52, 'SD-000052', 'CE150842', 'ce150842', '46e0e6ce167bbf79b81892b7f58ce01a', 'Nguyễn Phi Trường', 'FCoder', 12, '1', '2020-06-04 21:02:24', 0),
-(53, 'SD-000053', 'CE150756', 'ce150756', '46e0e6ce167bbf79b81892b7f58ce01a', 'Đặng Minh Cảnh', 'FCoder', 12, '1', '2020-06-04 21:02:24', 0),
-(54, 'SD-000054', 'CE150471', 'ce150471', '46e0e6ce167bbf79b81892b7f58ce01a', 'Lê Quốc Hùng', 'FCoder', 12, '1', '2020-06-04 21:02:24', 0),
-(55, 'SD-000055', 'CE150505', 'ce150505', '46e0e6ce167bbf79b81892b7f58ce01a', 'Trần Thị Bích Trâm', 'FCoder', 12, '1', '2020-06-04 21:02:24', 0),
-(56, 'SD-000056', 'CE150695', 'ce150695', '46e0e6ce167bbf79b81892b7f58ce01a', 'Trần Minh Kha', 'FCoder', 12, '1', '2020-06-04 21:02:24', 0),
-(57, 'SD-000057', 'CE150509', 'ce150509', '46e0e6ce167bbf79b81892b7f58ce01a', 'Bảo', 'FCoder', 12, '1', '2020-06-19 01:34:14', 0);
+(1, 'SD-000001', 'h', 'h', '2510c39011c5be704182423e3a695e91', 'Khang Hy', 'IA1401', 1, '1', '2020-11-06 21:34:02', 1),
+(43, 'SD-000043', 'CE140237', 'ce140237', '46e0e6ce167bbf79b81892b7f58ce01a', 'Nguyễn Vương Khang Hy', 'FCoder', 0, '1', '2020-11-05 00:00:00', 0),
+(77, 'SD-000058', 'CE140019', 'ce140019', '46e0e6ce167bbf79b81892b7f58ce01a', 'Trịnh Đình Quang', 'PE0309', 0, '1', '2020-11-05 00:00:00', 0),
+(78, 'SD-000059', 'CE140212', 'ce140212', '46e0e6ce167bbf79b81892b7f58ce01a', 'Nguyễn Trọng Nghĩa', 'PE0309', 0, '1', '2020-11-05 00:00:00', 0),
+(79, 'SD-000060', 'CE140242', 'ce140242', '46e0e6ce167bbf79b81892b7f58ce01a', 'Nguyễn Hứa Quốc Bảo', 'PE0309', 0, '1', '2020-11-05 00:00:00', 0),
+(80, 'SD-000061', 'CE140284', 'ce140284', '46e0e6ce167bbf79b81892b7f58ce01a', 'Biện Minh Thông', 'PE0309', 0, '1', '2020-11-05 00:00:00', 0),
+(81, 'SD-000062', 'CE140411', 'ce140411', '46e0e6ce167bbf79b81892b7f58ce01a', 'Lê Thanh Sang', 'PE0309', 0, '1', '2020-11-05 00:00:00', 0),
+(82, 'SD-000063', 'CE140426', 'ce140426', '46e0e6ce167bbf79b81892b7f58ce01a', 'Bùi Quách Thịnh', 'PE0309', 0, '1', '2020-11-05 00:00:00', 0),
+(83, 'SD-000064', 'CE140462', 'ce140462', '46e0e6ce167bbf79b81892b7f58ce01a', 'Nguyễn Khắc Huy', 'PE0309', 0, '1', '2020-11-05 00:00:00', 0),
+(84, 'SD-000065', 'CE140520', 'ce140520', '46e0e6ce167bbf79b81892b7f58ce01a', 'Trần Nguyễn Quốc Huy', 'PE0309', 0, '1', '2020-11-05 00:00:00', 0),
+(85, 'SD-000066', 'CE140524', 'ce140524', '46e0e6ce167bbf79b81892b7f58ce01a', 'Nguyễn Tấn Hiệp', 'PE0309', 0, '1', '2020-11-05 00:00:00', 0),
+(86, 'SD-000067', 'CE140556', 'ce140556', '46e0e6ce167bbf79b81892b7f58ce01a', 'Huỳnh Hải Giang', 'PE0309', 0, '1', '2020-11-05 00:00:00', 0),
+(87, 'SD-000068', 'CE150093', 'ce150093', '46e0e6ce167bbf79b81892b7f58ce01a', 'Phạm Minh Nhí', 'PE0309', 0, '1', '2020-11-05 00:00:00', 0),
+(88, 'SD-000069', 'CE150124', 'ce150124', '46e0e6ce167bbf79b81892b7f58ce01a', 'Nguyễn Quốc Trung Nhân', 'PE0309', 0, '1', '2020-11-05 00:00:00', 0),
+(89, 'SD-000070', 'CE150493', 'ce150493', '46e0e6ce167bbf79b81892b7f58ce01a', 'Phạm Đặng Lan Thịnh', 'PE0309', 0, '1', '2020-11-05 00:00:00', 0),
+(90, 'SD-000071', 'CE150499', 'ce150499', '46e0e6ce167bbf79b81892b7f58ce01a', 'Trần Thị Hồng Mai', 'PE0309', 0, '1', '2020-11-05 00:00:00', 0),
+(91, 'SD-000072', 'CE150569', 'ce150569', '46e0e6ce167bbf79b81892b7f58ce01a', 'Lê Trí Hào', 'PE0309', 0, '1', '2020-11-05 00:00:00', 0),
+(92, 'SD-000073', 'CE150623', 'ce150623', '46e0e6ce167bbf79b81892b7f58ce01a', 'Trương Trung Tín', 'PE0309', 0, '1', '2020-11-05 00:00:00', 0),
+(93, 'SD-000074', 'CE150662', 'ce150662', '46e0e6ce167bbf79b81892b7f58ce01a', 'Nguyễn Đăng Khánh', 'PE0309', 0, '1', '2020-11-05 00:00:00', 0),
+(94, 'SD-000075', 'CE150718', 'ce150718', '46e0e6ce167bbf79b81892b7f58ce01a', 'Lý Tuấn Đạt', 'PE0309', 0, '1', '2020-11-05 00:00:00', 0),
+(95, 'SD-000076', 'CE150762', 'ce150762', '46e0e6ce167bbf79b81892b7f58ce01a', 'Võ Gia Nguyên', 'PE0309', 0, '1', '2020-11-05 00:00:00', 0),
+(96, 'SD-000077', 'user1', 'user1', '24c9e15e52afc47c225b757e7bee1f9d', 'user1', 'test', 0, '1', '2020-11-05 00:00:00', 0),
+(97, 'SD-000078', 'user2', 'user2', '7e58d63b60197ceb55a1c487989a3720', 'user2', 'test', 0, '1', '2020-11-05 00:00:00', 0),
+(98, 'SD-000079', 'user3', 'user3', '92877af70a45fd6a2ed7fe81e1236b78', 'user3', 'test', 0, '1', '2020-11-05 00:00:00', 0),
+(99, 'SD-000080', 'user4', 'user4', '3f02ebe3d7929b091e3d8ccfde2f3bc6', 'user4', 'test', 0, '1', '2020-11-05 00:00:00', 0),
+(100, 'SD-000081', 'user5', 'user5', '0a791842f52a0acfbb3a783378c066b8', 'user5', 'test', 0, '1', '2020-11-05 00:00:00', 0);
 
 --
 -- Triggers `student_account`
@@ -233,15 +195,18 @@ CREATE TABLE `teacher_account` (
   `rollnumber` varchar(10) NOT NULL,
   `username` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL,
-  `name` varchar(100) NOT NULL
+  `name` varchar(100) NOT NULL,
+  `role` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `teacher_account`
 --
 
-INSERT INTO `teacher_account` (`id`, `userId`, `rollnumber`, `username`, `password`, `name`) VALUES
-(1, 'TC-000001', 'abc123', 'h', '2510c39011c5be704182423e3a695e91', 'Teacher');
+INSERT INTO `teacher_account` (`id`, `userId`, `rollnumber`, `username`, `password`, `name`, `role`) VALUES
+(1, 'TC-000001', 'abc123', 'h', '2510c39011c5be704182423e3a695e91', 'IT', 0),
+(2, 'TC-000002', 'GV123', 'a', '0cc175b9c0f1b6a831c399e269772661', 'Giáo vụ', 1),
+(3, 'TC-000003', 'GV456', 'b', '92eb5ffee6ae2fec3ad71c777531578f', 'Giảng viên', 2);
 
 --
 -- Triggers `teacher_account`
@@ -270,8 +235,8 @@ CREATE TABLE `_sequence` (
 --
 
 INSERT INTO `_sequence` (`seq_name`, `seq_group`, `seq_val`) VALUES
-('userId', 'SD', 57),
-('userId1', 'TC', 1);
+('userId', 'SD', 81),
+('userId1', 'TC', 3);
 
 --
 -- Indexes for dumped tables
@@ -288,6 +253,12 @@ ALTER TABLE `contest`
 --
 ALTER TABLE `contest_detail`
   ADD PRIMARY KEY (`contest_id`,`problem_id`);
+
+--
+-- Indexes for table `contest_owner`
+--
+ALTER TABLE `contest_owner`
+  ADD PRIMARY KEY (`contest_id`,`teacher_id`);
 
 --
 -- Indexes for table `student_account`
@@ -321,19 +292,19 @@ ALTER TABLE `_sequence`
 -- AUTO_INCREMENT for table `contest`
 --
 ALTER TABLE `contest`
-  MODIFY `contest_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `contest_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `student_account`
 --
 ALTER TABLE `student_account`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
 
 --
 -- AUTO_INCREMENT for table `teacher_account`
 --
 ALTER TABLE `teacher_account`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

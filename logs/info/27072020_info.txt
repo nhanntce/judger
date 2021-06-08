@@ -1,0 +1,26 @@
+27-07-2020 18:44:45 : Teacher h has conected
+27-07-2020 18:44:56 : Delete in contest_detail where contest 13 and problem A
+27-07-2020 18:44:59 : Delete in contest_detail where contest 13 and problem B
+27-07-2020 18:45:01 : Delete in contest_detail where contest 13 and problem C
+27-07-2020 18:45:03 : Delete in contest_detail where contest 13 and problem D
+27-07-2020 18:45:06 : Delete in contest_detail where contest 13 and problem E
+27-07-2020 18:54:58 : Upload problem contest 13 : KhanhVH_PRF192_SE1502_1.pdf .Testcase: A.zip
+27-07-2020 18:56:42 : Teacher h has conected
+27-07-2020 18:56:58 : Upload problem contest 13 : KhanhVH_PRF192_SE1502_1.pdf .Testcase: B.zip
+27-07-2020 18:57:07 : Upload problem contest 13 : KhanhVH_PRF192_SE1502_1.pdf .Testcase: C.zip
+27-07-2020 18:58:36 : Contest 13 has changed time to begin:2020-07-08 23:50+00:00, end: 2020-07-31 19:55+00:00
+27-07-2020 18:59:11 : Teacher h has conected
+27-07-2020 18:59:16 : Contest 13 has changed time to begin:2020-07-08 23:50+00:00, end: 2020-07-31 19:55+00:00
+27-07-2020 18:59:33 : Sumit code content field [1][1624173855][PE][abc123][A].cpp of contest PE problem A by TC-000001
+27-07-2020 19:00:56 : Sumit code content field [1][1624256655][PE][abc123][B].cpp of contest PE problem B by TC-000001
+27-07-2020 19:01:32 : Sumit code content field [1][1624292805][PE][abc123][C].cpp of contest PE problem C by TC-000001
+27-07-2020 19:05:20 : Create contest PE2 by TC-000001
+27-07-2020 19:06:20 : Upload problem contest 14 : KhanhVH_PRF192_SE1502_2.pdf .Testcase: A.zip
+27-07-2020 19:06:34 : Upload problem contest 14 : KhanhVH_PRF192_SE1502_2.pdf .Testcase: B.zip
+27-07-2020 19:06:42 : Upload problem contest 14 : KhanhVH_PRF192_SE1502_2.pdf .Testcase: C.zip
+27-07-2020 19:07:11 : Contest 14 has changed time to begin:2020-07-22 09:25+00:00, end: 2020-08-08 11:15+00:00
+27-07-2020 19:07:45 : Sumit code content field [1][466965948][PE2][abc123][A].cpp of contest PE2 problem A by TC-000001
+27-07-2020 19:08:18 : Teacher h has disconected
+27-07-2020 19:08:21 : Teacher h has conected
+27-07-2020 19:08:45 : Sumit code content field [1][467025283][PE2][abc123][B].cpp of contest PE2 problem B by TC-000001
+27-07-2020 19:09:03 : Sumit code content field [1][467043940][PE2][abc123][C].cpp of contest PE2 problem C by TC-000001

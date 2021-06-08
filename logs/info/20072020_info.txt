@@ -1,0 +1,39 @@
+20-07-2020 09:55:40 : Teacher h has conected
+20-07-2020 09:55:53 : Sumit code content field [1][5699693168][Contest04][abc123][A].c of contest Contest04 problem A by TC-000001
+20-07-2020 09:56:04 : Sumit code content field [1][5699704569][Contest04][abc123][A].c of contest Contest04 problem A by TC-000001
+20-07-2020 10:10:30 : Teacher h has conected
+20-07-2020 10:11:01 : Sumit code content field [1][5700601593][Contest04][abc123][A].c of contest Contest04 problem A by TC-000001
+20-07-2020 10:11:13 : Sumit code content field [1][5700613271][Contest04][abc123][A].c of contest Contest04 problem A by TC-000001
+20-07-2020 10:11:17 : Sumit code content field [1][5700617753][Contest04][abc123][A].c of contest Contest04 problem A by TC-000001
+20-07-2020 10:11:21 : Sumit code content field [1][5700621020][Contest04][abc123][A].c of contest Contest04 problem A by TC-000001
+20-07-2020 10:11:24 : Sumit code content field [1][5700624209][Contest04][abc123][A].c of contest Contest04 problem A by TC-000001
+20-07-2020 10:11:28 : Sumit code content field [1][5700628215][Contest04][abc123][A].c of contest Contest04 problem A by TC-000001
+20-07-2020 10:11:32 : Sumit code content field [1][5700632161][Contest04][abc123][A].c of contest Contest04 problem A by TC-000001
+20-07-2020 10:11:37 : Sumit code content field [1][5700637436][Contest04][abc123][A].c of contest Contest04 problem A by TC-000001
+20-07-2020 10:11:41 : Sumit code content field [1][5700641227][Contest04][abc123][A].c of contest Contest04 problem A by TC-000001
+20-07-2020 10:11:45 : Sumit code content field [1][5700645771][Contest04][abc123][A].c of contest Contest04 problem A by TC-000001
+20-07-2020 10:57:42 : Teacher h has conected
+20-07-2020 10:58:53 : Teacher h has conected
+20-07-2020 10:59:59 : Teacher h has conected
+20-07-2020 11:01:05 : Teacher h has disconected
+20-07-2020 11:01:08 : Student h has conected
+20-07-2020 11:01:12 : Student h has disconected
+20-07-2020 11:01:15 : Teacher h has conected
+20-07-2020 11:02:01 : Student h has conected
+20-07-2020 11:02:15 : Student h has disconected
+20-07-2020 11:02:19 : Teacher h has conected
+20-07-2020 11:03:09 : Contest 1 has changed time to begin:2020-06-01 11:16+00:00, end: 2020-08-08 07:35+00:00
+20-07-2020 11:03:11 : Teacher h has disconected
+20-07-2020 11:03:13 : Student h has conected
+20-07-2020 11:03:18 : Sumit code content field [1][4232838626][Contest01][h][A].c of contest Contest01 problem A by SD-000001
+20-07-2020 11:03:24 : Sumit code content field [1][4232844085][Contest01][h][A].c of contest Contest01 problem A by SD-000001
+20-07-2020 11:03:28 : Sumit code content field [1][4232848172][Contest01][h][A].c of contest Contest01 problem A by SD-000001
+20-07-2020 11:07:04 : Student h has conected
+20-07-2020 11:08:15 : Teacher h has conected
+20-07-2020 11:08:20 : Teacher h has disconected
+20-07-2020 11:08:23 : Student h has conected
+20-07-2020 11:09:00 : Student h has conected
+20-07-2020 11:09:41 : Student h has conected
+20-07-2020 11:10:30 : Student h has conected
+20-07-2020 11:11:39 : Student h has conected
+20-07-2020 11:11:55 : Sumit code content field [1][4233355685][Contest01][h][C].cpp of contest Contest01 problem C by SD-000001
