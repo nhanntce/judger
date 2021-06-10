@@ -6,7 +6,9 @@ exports.dashboard = function (req, res, next) {
   }
   var sql = "SELECT * FROM student_account"
   db.query(sql, function (err, result) {
-    if (err) { res.redirect("/error"); return }
+    if (err) { 
+      console.log("loi");
+      res.redirect("/error"); return }
     res.render('admin.ejs', { data: result });
   })
 

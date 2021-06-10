@@ -2,3 +2,33 @@
 08-06-2021 08:23:55 : Sumit code content field [1][18582835856][demo1][h][A].c of contest demo1 problem A by SD-000001
 08-06-2021 08:24:36 : Sumit code content field [1][18582876241][demo1][h][A].c of contest demo1 problem A by SD-000001
 08-06-2021 08:26:03 : Sumit code content field [1][18582963122][demo1][h][A].c of contest demo1 problem A by SD-000001
+08-06-2021 09:27:55 : Student h has connected
+08-06-2021 09:28:02 : Student h has disconnected
+08-06-2021 09:28:06 : Teacher abc123 has connected
+08-06-2021 13:38:40 : Teacher abc123 has connected
+08-06-2021 13:40:13 : Create contest test-08-06 by TC-000001
+08-06-2021 13:42:53 : Upload problem contest 4 : Assignment_1_SE1302_SU21_MAS291.pdf .Testcase: A.zip
+08-06-2021 13:44:17 : Teacher abc123 has disconnected
+08-06-2021 13:44:21 : Student h has connected
+08-06-2021 13:45:16 : Student h has disconnected
+08-06-2021 13:45:21 : Teacher abc123 has connected
+08-06-2021 13:47:02 : 19 students in contest 4 has added: CE140019,CE140212,CE140242,CE140284,CE140411,CE140426,CE140462,CE140520,CE140524,CE140556,CE150093,CE150124,CE150493,CE150499,CE150569,CE150623,CE150662,CE150718,CE150762
+08-06-2021 13:47:21 : Teacher abc123 has disconnected
+08-06-2021 13:48:40 : Student CE140237 has connected
+08-06-2021 13:49:07 : Student CE140237 has disconnected
+08-06-2021 13:49:10 : Student CE140019 has connected
+08-06-2021 13:49:29 : Sumit code content field [1][102269117][test-08-06][CE140019][A].c of contest test-08-06 problem A by SD-000058
+08-06-2021 13:54:59 : Sumit code content field [1][102599041][test-08-06][CE140019][A].c of contest test-08-06 problem A by SD-000058
+08-06-2021 13:55:44 : Sumit code content field [1][102644769][test-08-06][CE140019][A].c of contest test-08-06 problem A by SD-000058
+08-06-2021 13:56:42 : Sumit code content field [1][102702565][test-08-06][CE140019][A].c of contest test-08-06 problem A by SD-000058
+08-06-2021 13:58:07 : Sumit code content field [1][102787101][test-08-06][CE140019][A].c of contest test-08-06 problem A by SD-000058
+08-06-2021 14:02:34 : Student CE140019 has disconnected
+08-06-2021 14:02:38 : Teacher abc123 has connected
+08-06-2021 14:02:51 : Teacher abc123 has disconnected
+08-06-2021 14:02:54 : Student h has connected
+08-06-2021 14:04:01 : Sumit code content field [1][18603241828][demo1][h][A].c of contest demo1 problem A by SD-000001
+08-06-2021 14:05:30 : Sumit code content field [1][18603330715][demo1][h][A].c of contest demo1 problem A by SD-000001
+08-06-2021 14:19:43 : Student h has disconnected
+08-06-2021 14:20:00 : Student h has connected
+08-06-2021 14:20:24 : Sumit code content field [1][18604224897][demo1][h][A].c of contest demo1 problem A by SD-000001
+08-06-2021 14:20:41 : Sumit code content field [1][18604241717][demo1][h][A].c of contest demo1 problem A by SD-000001

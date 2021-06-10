@@ -1,0 +1,37 @@
+09-06-2021 14:45:48 : Teacher abc123 has connected
+09-06-2021 14:46:07 : 19 students in contest 4 has deleted: CE140019,CE140212,CE140242,CE140284,CE140411,CE140426,CE140462,CE140520,CE140524,CE140556,CE150093,CE150124,CE150493,CE150499,CE150569,CE150623,CE150662,CE150718,CE150762
+09-06-2021 14:47:43 : 5 students in contest 4 has added: user1,user2,user3,user4,user5
+09-06-2021 14:47:49 : 5 students in contest 4 has deleted: user1,user2,user3,user4,user5
+09-06-2021 14:51:17 : Teacher abc123 has disconnected
+09-06-2021 14:51:20 : Student h has connected
+09-06-2021 14:52:14 : Student h has disconnected
+09-06-2021 14:52:37 : Student CE140237 has connected
+09-06-2021 14:52:41 : Student CE140237 has disconnected
+09-06-2021 14:52:46 : Teacher abc123 has connected
+09-06-2021 14:53:06 : 1 students in contest 4 has added: CE140237
+09-06-2021 14:53:15 : Teacher abc123 has disconnected
+09-06-2021 14:53:22 : Student CE140237 has connected
+09-06-2021 14:53:34 : Student CE140237 has disconnected
+09-06-2021 14:54:08 : Teacher abc123 has connected
+09-06-2021 14:55:05 : Create contest test-08-06 by TC-000001
+09-06-2021 14:55:27 : Teacher abc123 has disconnected
+09-06-2021 14:55:33 : Student CE140237 has connected
+09-06-2021 14:55:37 : Student CE140237 has disconnected
+09-06-2021 14:55:43 : Teacher abc123 has connected
+09-06-2021 14:58:10 : 1 students in contest 5 has added: CE140237
+09-06-2021 14:58:13 : Teacher abc123 has disconnected
+09-06-2021 14:58:18 : Student CE140237 has connected
+09-06-2021 14:58:33 : Student CE140237 has disconnected
+09-06-2021 14:58:38 : Teacher abc123 has connected
+09-06-2021 14:59:23 : Upload problem contest 5 : linh.docx .Testcase: A.zip
+09-06-2021 14:59:25 : Teacher abc123 has disconnected
+09-06-2021 14:59:29 : Student CE140237 has connected
+09-06-2021 14:59:41 : Sumit code content field [1][192881609][test-08-06][CE140237][A].c of contest test-08-06 problem A by SD-000043
+09-06-2021 15:02:31 : Student CE140237 has disconnected
+09-06-2021 15:02:34 : Student h has connected
+09-06-2021 15:02:42 : Student h has disconnected
+09-06-2021 15:02:45 : Teacher abc123 has connected
+09-06-2021 15:02:55 : 1 students in contest 5 has added: h
+09-06-2021 15:02:58 : Teacher abc123 has disconnected
+09-06-2021 15:03:01 : Student h has connected
+09-06-2021 15:03:09 : Sumit code content field [1][193089362][test-08-06][h][A].c of contest test-08-06 problem A by SD-000001

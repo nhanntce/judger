@@ -1,0 +1,13 @@
+Compile Error
+[1][18604224897][demo1][h][A].c:1:1: error: stray '\341' in program
+ ấdasdasdasd
+ ^
+[1][18604224897][demo1][h][A].c:1:2: error: stray '\272' in program
+ ấdasdasdasd
+  ^
+[1][18604224897][demo1][h][A].c:1:3: error: stray '\245' in program
+ ấdasdasdasd
+   ^
+[1][18604224897][demo1][h][A].c:1:1: error: expected '=', ',', ';', 'asm' or '__attribute__' at end of input
+ ấdasdasdasd
+ ^

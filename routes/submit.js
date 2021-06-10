@@ -1,6 +1,7 @@
 const getFolders = require('./tool').getFolders
 const RoundAndFix = require('./tool').RoundAndFix
 const formidable = require('formidable')
+const storage = require('./storage');
 //---------------------------------submissions page----------------------------------
 exports.submission = function (req, res) {
   var userId = req.session.userId
@@ -60,6 +61,7 @@ exports.submission = function (req, res) {
       if (req.session.role != "Student" && !fs.existsSync(storage.BAILAM + contest_name + '/' + results[0].rollnumber)) {
         fs.mkdirSync(storage.BAILAM + contest_name + '/' + results[0].rollnumber, (err) => {
           if (err) {
+            console.log("obj 63");
             return res.redirect("/error")
           }
         });
@@ -78,10 +80,13 @@ exports.submission = function (req, res) {
         }).map(function (v) {
           return v.name
         })
-      } catch (err) { }
+      } catch (err) {
+        console.log("obj 82");
+      }
       // get all judged Logs in folder './public/nopbai/Logs/' + contest_name
       fs.readdir(storage.NOPBAI + 'Logs/' + contest_name, function (err, files) {
         if (err) {
+          console.log("obj1 87");
           res.redirect("/error")
           return
         }
