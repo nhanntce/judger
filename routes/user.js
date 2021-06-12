@@ -1,6 +1,15 @@
 //TIME OUT
 const minutes = 15
 //-----------------------------------------------login page call------------------------------------------------------
+/**
+ * Check login
+ * If role is student => GET submission page
+ * Else role is teacher => GET contest page
+ * When login fail => GET login page
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 exports.login = function (req, res) {
   var message = ''
 
@@ -71,7 +80,14 @@ exports.login = function (req, res) {
 
 }
 //-----------------------------------------------dashboard page functionality----------------------------------------------
-
+/**
+ * If exist any session => GET home page
+ * Else => GET login page
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ * @returns 
+ */
 exports.dashboard = function (req, res, next) {
   var userId = req.session.userId
   if (userId == null) {
@@ -81,6 +97,13 @@ exports.dashboard = function (req, res, next) {
   res.render('dashboard.ejs', { role: req.session.role, user: req.session.user })
 }
 //------------------------------------logout functionality----------------------------------------------
+/**
+ * When logout => update ip address and timeout
+ * Then destroy this session
+ * => GET login page
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.logout = function (req, res) {
   if (req.session.role == "Student") { // update record ip address and time out
     var sql = "UPDATE student_account SET ip=?,timeout='" + new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000) + minutes * 60000).toISOString().substring(0, 19) + "', islogin=0 WHERE userId=?"
@@ -92,6 +115,12 @@ exports.logout = function (req, res) {
   })
 }
 //--------------------------------render user details after login--------------------------------
+/**
+ * Check role => GET the corresponding profile page
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 exports.profile = function (req, res) {
   var userId = req.session.userId,
     role = (req.session.role == "Student") ? "student_account" : "teacher_account"

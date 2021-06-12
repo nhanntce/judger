@@ -27,3 +27,26 @@
 10-06-2021 09:37:30 : Student h has connected
 10-06-2021 09:49:36 : Student h has connected
 10-06-2021 09:52:05 : Sumit code content field [1][18760925849][demo1][h][A].c of contest demo1 problem A by SD-000001
+10-06-2021 20:38:04 : Student h has connected
+10-06-2021 20:43:16 : Student h has disconnected
+10-06-2021 20:43:21 : Teacher abc123 has connected
+10-06-2021 20:43:36 : Teacher abc123 has disconnected
+10-06-2021 20:43:38 : Student h has connected
+10-06-2021 20:54:29 : Student h has disconnected
+10-06-2021 20:54:35 : Student h has connected
+10-06-2021 20:56:42 : Student h has disconnected
+10-06-2021 20:56:48 : Teacher abc123 has connected
+10-06-2021 21:30:11 : Teacher abc123 has disconnected
+10-06-2021 21:30:31 : Student h has connected
+10-06-2021 21:30:47 : Student h has disconnected
+10-06-2021 21:30:52 : Teacher abc123 has connected
+10-06-2021 21:31:51 : Teacher abc123 has disconnected
+10-06-2021 21:31:58 : Student h has connected
+10-06-2021 21:32:29 : Student h has disconnected
+10-06-2021 21:32:35 : Teacher abc123 has connected
+10-06-2021 21:34:31 : Teacher abc123 has disconnected
+10-06-2021 21:35:49 : Teacher abc123 has connected
+10-06-2021 21:54:18 : Create student_account rollnumber=CE130136 name=Pham Truong Anh Tu class=SE1302
+10-06-2021 21:54:18 : Teacher abc123 has disconnected
+10-06-2021 21:55:12 : Reset student ip, timeout userId=SD-000082
+10-06-2021 22:08:01 : Teacher abc123 has connected

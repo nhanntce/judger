@@ -1,0 +1,6 @@
+12-06-2021 10:36:57 : Error: ENOENT: no such file or directory, rename 'D:\LuanVan\commentCode\judger\public\thumucbailam\demo1\CE140237' -> 'D:\LuanVan\commentCode\judger\public\thumucbailam\demo1\$CE140237'
+12-06-2021 10:37:19 : Error: ENOENT: no such file or directory, rename 'D:\LuanVan\commentCode\judger\public\thumucbailam\demo1\CE140237' -> 'D:\LuanVan\commentCode\judger\public\thumucbailam\demo1\$CE140237'
+12-06-2021 10:41:08 : Error: ENOENT: no such file or directory, rename 'D:\LuanVan\commentCode\judger\public\thumucbailam\demo1\CE140237' -> 'D:\LuanVan\commentCode\judger\public\thumucbailam\demo1\$CE140237'
+12-06-2021 10:42:56 : Error: ENOENT: no such file or directory, rename 'D:\LuanVan\commentCode\judger\public\thumucbailam\demo1\h' -> 'D:\LuanVan\commentCode\judger\public\thumucbailam\demo1\$h'
+12-06-2021 10:48:07 : Error: EPERM: operation not permitted, rename 'D:\LuanVan\commentCode\judger\public\thumucbailam\demo1\h' -> 'D:\LuanVan\commentCode\judger\public\thumucbailam\demo1\$h'
+12-06-2021 14:41:04 : TypeError: Cannot read property 'RollNumber' of undefined

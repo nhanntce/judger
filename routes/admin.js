@@ -1,3 +1,13 @@
+/**
+ * TuPTA
+ * If session of user is null will redirect login page
+ * Else render admin.ejs
+ * When query statement error => GET error page
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ * @returns 
+ */
 exports.dashboard = function (req, res, next) {
   var userId = req.session.userId
   if (userId == null) {
@@ -6,13 +16,21 @@ exports.dashboard = function (req, res, next) {
   }
   var sql = "SELECT * FROM student_account"
   db.query(sql, function (err, result) {
-    if (err) { 
-      console.log("loi");
+    if (err) {  // query statement error
       res.redirect("/error"); return }
     res.render('admin.ejs', { data: result });
   })
 
 }
+/**
+ * TuPTA
+ * If session of user == null will GET login page
+ * Else render admin-student.ejs
+ * Show message or error if available
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 exports.admin_student = function (req, res) {
   var userId = req.session.userId
   if (userId == null) {
@@ -21,6 +39,7 @@ exports.admin_student = function (req, res) {
   }
   var error = ""
   var message = ""
+  // req.session.sql_err = true it means 
   if (req.session.sql_err) {
     req.session.sql_err = false
     error = "Student acocunt has exist!"
@@ -31,6 +50,16 @@ exports.admin_student = function (req, res) {
   }
   res.render('admin-student.ejs', { message: message, error: error })
 }
+
+/**
+ * TuPTA
+ * If session of user == null will GET login page
+ * Else render admin-teacher.ejs, 
+ * Show message or error if available
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 exports.admin_teacher = function (req, res) {
   var userId = req.session.userId
   if (userId == null) {
@@ -41,15 +70,20 @@ exports.admin_teacher = function (req, res) {
   var message = ""
   if (req.session.sql_err) {
     req.session.sql_err = false
-    error = "Student acocunt has exist!"
+    error = "Teacher acocunt has exist!"
   }
   if (req.session.added) {
     req.session.added = false
-    message = "Succesfully! Students have been added."
+    message = "Succesfully! Teacher have been added."
   }
   res.render('admin-teacher.ejs', { message: message, error: error });
 }
 //-----------------------------------------------Load data student account------------------------------------------------------
+/**
+ * Send list student to admin-student.ejs page
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.admin_student_data = function (req, res) {
   const requestQuery = req.query;
   let columnsMap = [
@@ -67,6 +101,13 @@ exports.admin_student_data = function (req, res) {
   })
 }
 //-----------------------------------------------Create a student account------------------------------------------------------
+/**
+ * Create a new student 
+ * Then, redirect to admin/student 
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 exports.create_student = function (req, res) {
   if (req.method == "POST") {
     var post = req.body
@@ -77,10 +118,10 @@ exports.create_student = function (req, res) {
     var password = post.password
     var sql = "INSERT INTO student_account(rollnumber, username, password, name, class) VALUES (?, ?, MD5(?), ?, ?)"
     db.query(sql, [rollnumber, username, password, name, classname], function (err) {
-      if (err) {
+      if (err) { // if error => set req.session.sql_err = true
         req.session.sql_err = true
         res.redirect("/admin/student")
-      } else {
+      } else { // if added => set req.session.added = true
         logger.info("Create student_account rollnumber=" + rollnumber + " name=" + name + " class=" + classname)
         req.session.added = true
         res.redirect('/admin/student')
@@ -127,6 +168,12 @@ exports.edit_student = function (req, res) {
   }
 }
 //-----------------------------------------------reset student ip, timeout------------------------------------------------------
+/**
+ * If checkbox Contest ID is checked => Reset student ip, timeout, and contest id 
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 exports.reset_student = function (req, res) {
   if (req.method == "POST") {
     var post = req.body
@@ -140,6 +187,7 @@ exports.reset_student = function (req, res) {
     for (let i = 0; i < list_id.length; ++i) {
       sql += "userId='" + list_id[i] + "' OR "
     }
+    // -4 means 4 characters of ' OR '
     sql = sql.slice(0, -4)
     db.query(sql, function (err) {
       if (err) {
@@ -158,6 +206,11 @@ exports.reset_student = function (req, res) {
   }
 }
 //-----------------------------------------------Load data teacher account------------------------------------------------------
+/**
+ * Send list teacher to admin-teacher.ejs page
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.admin_teacher_data = function (req, res) {
   const requestQuery = req.query;
   let columnsMap = [

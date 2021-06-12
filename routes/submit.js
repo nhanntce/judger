@@ -81,12 +81,10 @@ exports.submission = function (req, res) {
           return v.name
         })
       } catch (err) {
-        console.log("obj 82");
       }
       // get all judged Logs in folder './public/nopbai/Logs/' + contest_name
       fs.readdir(storage.NOPBAI + 'Logs/' + contest_name, function (err, files) {
         if (err) {
-          console.log("obj1 87");
           res.redirect("/error")
           return
         }

@@ -1,0 +1,17 @@
+11-06-2021 09:08:20 : Teacher abc123 has connected
+11-06-2021 09:13:06 : Create teacher_account rollnumber=TC-000004 name=Tu
+11-06-2021 09:23:57 : Teacher abc123 has disconnected
+11-06-2021 09:42:24 : Reset student ip, timeout userId=SD-000001
+11-06-2021 09:42:31 : Teacher abc123 has connected
+11-06-2021 09:42:56 : Create contest demo4 by TC-000001
+11-06-2021 09:43:27 : Reset student ip, timeout userId=SD-000001
+11-06-2021 09:48:10 : Reset student ip, timeout userId=SD-000001
+11-06-2021 09:48:32 : Reset student ip, timeout userId=SD-000001,SD-000043,SD-000058
+11-06-2021 09:48:52 : Teacher abc123 has disconnected
+11-06-2021 09:49:01 : Reset student ip, timeout userId=SD-000043,SD-000058
+11-06-2021 09:49:07 : Teacher abc123 has connected
+11-06-2021 09:52:54 : Reset student ip, timeout userId=SD-000082
+11-06-2021 09:53:41 : Reset student ip, timeout userId=SD-000001
+11-06-2021 09:53:47 : Reset student ip, timeout userId=SD-000001
+11-06-2021 09:54:30 : Reset student ip, timeout userId=SD-000001,SD-000043
+11-06-2021 09:54:59 : Reset student ip, timeout userId=SD-000001,SD-000043

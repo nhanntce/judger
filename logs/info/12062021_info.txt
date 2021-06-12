@@ -1,0 +1,23 @@
+12-06-2021 10:05:35 : Teacher abc123 has connected
+12-06-2021 10:07:32 : Teacher abc123 has connected
+12-06-2021 10:09:55 : Teacher abc123 has connected
+12-06-2021 10:36:57 : 2 students in contest 1 has deleted: CE140237,h
+12-06-2021 10:37:19 : 1 students in contest 1 has deleted: CE140237
+12-06-2021 10:40:44 : Teacher abc123 has connected
+12-06-2021 10:41:08 : 1 students in contest 1 has deleted: CE140237
+12-06-2021 10:42:44 : Teacher abc123 has connected
+12-06-2021 10:42:56 : 1 students in contest 1 has deleted: h
+12-06-2021 10:45:22 : 1 students in contest 1 has deleted: h
+12-06-2021 10:47:52 : 1 students in contest 1 has added: h
+12-06-2021 10:48:07 : 1 students in contest 1 has deleted: h
+12-06-2021 10:48:34 : 1 students in contest 1 has deleted: h
+12-06-2021 14:32:26 : Teacher abc123 has connected
+12-06-2021 14:41:04 : Load file excel a.xls
+12-06-2021 15:54:44 : Teacher abc123 has connected
+12-06-2021 16:14:21 : Teacher abc123 has connected
+12-06-2021 16:15:10 : undefined undefined has disconnected
+12-06-2021 16:15:19 : Teacher abc123 has connected
+12-06-2021 16:16:44 : Teacher abc123 has connected
+12-06-2021 16:18:52 : Create contest new-contest by TC-000001
+12-06-2021 16:20:39 : Contest 3 has deleted
+12-06-2021 16:22:22 : Contest 1 has deleted

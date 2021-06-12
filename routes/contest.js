@@ -7,6 +7,9 @@ const formidable = require('formidable')
 const zipper = require('zip-local')
 const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs))
 //---------------------------------contest----------------------------------
+/**
+ * GET contest page
+ */
 exports.contest = function (req, res) {
   var userId = req.session.userId
   if (userId == null) {
@@ -25,6 +28,12 @@ exports.contest = function (req, res) {
   })
 }
 //---------------------------------Add a new contest----------------------------------
+/**
+ * Add a new contest
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 exports.add_contest = function (req, res) {
   var userId = req.session.userId
   if (userId == null) {
@@ -70,6 +79,12 @@ exports.add_contest = function (req, res) {
   }
 }
 //---------------------------------Delete a contest----------------------------------
+/**
+ * Delete a contest
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 exports.delete_contest = function (req, res) {
   var userId = req.session.userId
   if (userId == null) {
@@ -102,8 +117,10 @@ exports.delete_contest = function (req, res) {
             if (err) { logger.error(err); res.redirect("/error"); return }
           })
         }
+        // SET deleted=1 means this contest deleted
         sql = "UPDATE contest SET deleted=1 WHERE contest_id=?"
         db.query(sql, [contest_id]);
+        // UPDATE all these contest_id=0 which correspond to student_account 
         sql = "UPDATE student_account SET contest_id=0 WHERE contest_id=?"
         db.query(sql, [contest_id])
         logger.info("Contest " + contest_id + " has deleted")
@@ -120,6 +137,12 @@ exports.delete_contest = function (req, res) {
   }
 }
 //---------------------------------Edit a contest----------------------------------
+/**
+ * Update a contest
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 exports.edit_contest = function (req, res) {
   var userId = req.session.userId
   if (userId == null) {
@@ -184,6 +207,14 @@ exports.download = function (req, res) {
   })
 }
 //---------------------------------contest-detail-get----------------------------------
+/**
+ * GET contest detail page
+ * if no student in this contest => Get only contest_name, contest_id, time_begin, time_end, language
+ * if least a student in this contest => Get full information of both tables
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 exports.contest_detail = function (req, res) {
   var userId = req.session.userId
   var contest_id = req.query.contest_id
@@ -218,6 +249,13 @@ exports.contest_detail = function (req, res) {
   })
 }
 //---------------------------------delete selected student----------------------------------
+/**
+ * Delete student in contest page
+ * Then Rename file<name> deleted to $<name>
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 exports.delete_student = function (req, res) {
   var userId = req.session.userId
   if (userId == null) {
@@ -236,7 +274,9 @@ exports.delete_student = function (req, res) {
       for (let i = 0, l = list.length; i < l; ++i) {
         sql += "rollnumber='" + list[i] + "' OR "
         fs.rename(storage.BAILAM + contest_name + '/' + list[i], storage.BAILAM + contest_name + '/$' + list[i], function (err) {
-          if (err) { logger.error(err); res.redirect("/error"); return }
+          if (err) { 
+            console.log('loi')
+            logger.error(err); res.redirect("/error"); return }
         })
       }
       sql = sql.slice(0, -4)
@@ -256,6 +296,14 @@ exports.delete_student = function (req, res) {
   }
 }
 //---------------------------------load student----------------------------------
+/**
+ * Load student have not entered class yet (load all student have contest_id = 0 of a class identiied)
+ * But if all student joined into this contest => show message 'All student are in contest'
+ * if do not have at least rollnumber => show message 'Sorry, the system cannot fild class'
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 exports.load_student = function (req, res) {
   var userId = req.session.userId
   if (userId == null) {
@@ -295,6 +343,14 @@ exports.load_student = function (req, res) {
 
 }
 //---------------------------------add student----------------------------------
+/**
+ * Add student to contest
+ * Then create a new folder contains submission files of student
+ * And update contest_id in student_account
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 exports.add_student = function (req, res) {
   var userId = req.session.userId
   if (userId == null) {
@@ -339,6 +395,12 @@ exports.add_student = function (req, res) {
   }
 }
 //---------------------------------Load class----------------------------------
+/**
+ * Load class from file excel
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 exports.load_class = function (req, res) {
   var userId = req.session.userId
   if (userId == null) {
@@ -368,6 +430,12 @@ exports.load_class = function (req, res) {
   }
 }
 //---------------------------------Add class----------------------------------
+/**
+ * Add class from file excel loaded before
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 exports.add_class = function (req, res) {
   if (req.method == "POST") {
     var form = new formidable.IncomingForm()
@@ -413,6 +481,12 @@ exports.add_class = function (req, res) {
   }
 }
 //-----------------------------------------------Create Class------------------------------------------------------
+/**
+ * Create a new Class
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 exports.create_class = function (req, res) {
   if (req.method == "POST") {
     var post = req.body
@@ -446,6 +520,12 @@ exports.create_class = function (req, res) {
   }
 }
 //---------------------------------add problem----------------------------------
+/**
+ * Add a new problem 
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 exports.add_problem = function (req, res) {
   var userId = req.session.userId
   if (userId == null) {
@@ -454,10 +534,12 @@ exports.add_problem = function (req, res) {
   }
   var error = ""
   var message = ""
+  // if file upload error
   if (req.session.upload_err) {
     req.session.upload_err = false
     error = "Upload error!"
   }
+  // if file upload sucess
   if (req.session.upload_success) {
     req.session.upload_success = false
     message = "Upload successfully!"
@@ -493,6 +575,12 @@ exports.add_problem = function (req, res) {
   })
 }
 //---------------------------------upload problem and testcase----------------------------------
+/**
+ * Add problem and testcase
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 exports.add_problem_testcase = function (req, res) {
   if (req.session.role == "Student") {
     res.redirect("/error")
@@ -570,6 +658,12 @@ exports.add_problem_testcase = function (req, res) {
   }
 }
 //---------------------------------edit problem and testcase----------------------------------
+/**
+ * Edit times of limit submission
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 exports.edit_problem_testcase = function (req, res) {
   if (req.session.role == "Student") {
     res.redirect("/error")
@@ -592,6 +686,12 @@ exports.edit_problem_testcase = function (req, res) {
   }
 }
 //---------------------------------delete problem and testcase----------------------------------
+/**
+ * Delete Problem and testcase of a contesst
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 exports.delete_problem_testcase = function (req, res) {
   if (req.session.role == "Student") {
     res.redirect("/error")
@@ -612,6 +712,7 @@ exports.delete_problem_testcase = function (req, res) {
     return
   }
 }
+
 // Check testcase is valid
 function checkTestcase(dir, req) {
   var results = []
