@@ -5,7 +5,7 @@ module.exports = {
     // TESTCASE: './public/thumuctest/',
     // EXCEL: './public/excel/'
     DEBAI: './public/problem/',
-    NOPBAI: './public/submission/',
+    NOPBAI: './public/Student_submission/',
     BAILAM: './public/workspace/',
     TESTCASE: './public/testcase/',
     EXCEL: './public/excel/'

@@ -1,0 +1,18 @@
+13-06-2021 20:55:17 : Student h has connected
+13-06-2021 21:01:29 : Student h has disconnected
+13-06-2021 21:01:59 : Student h has connected
+13-06-2021 21:03:29 : Student h has connected
+13-06-2021 21:05:07 : Student h has connected
+13-06-2021 21:05:24 : Student h has disconnected
+13-06-2021 21:06:45 : Teacher abc123 has connected
+13-06-2021 21:07:09 : Create contest MyContest by TC-000001
+13-06-2021 21:07:38 : 19 students in contest 3 has added: CE140019,CE140212,CE140242,CE140284,CE140411,CE140426,CE140462,CE140520,CE140524,CE140556,CE150093,CE150124,CE150493,CE150499,CE150569,CE150623,CE150662,CE150718,CE150762
+13-06-2021 21:08:10 : Teacher abc123 has disconnected
+13-06-2021 21:08:18 : Student CE140237 has connected
+13-06-2021 21:09:03 : Student CE140237 has disconnected
+13-06-2021 21:09:06 : Student CE140019 has connected
+13-06-2021 21:10:20 : Student CE140019 has disconnected
+13-06-2021 21:10:24 : Teacher abc123 has connected
+13-06-2021 21:11:19 : Upload problem contest 3 : Java.docx .Testcase: A.zip
+13-06-2021 21:11:27 : Teacher abc123 has disconnected
+13-06-2021 21:11:39 : Student CE140019 has connected
