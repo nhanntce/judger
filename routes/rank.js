@@ -1,6 +1,12 @@
 const getFolders = require('./tool').getFolders
 const RoundAndFix = require('./tool').RoundAndFix
 //---------------------------------rank-time----------------------------------
+/**
+ * Load time
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 exports.rank_time = function (req, res) {
   var userId = req.session.userId
   if (req.session.role == "Student") {
@@ -20,6 +26,12 @@ exports.rank_time = function (req, res) {
   })
 }
 //---------------------------------data rank----------------------------------
+/**
+ * load data to divide problems in <th> tag
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 exports.data_rank = function (req, res) {
   var userId = req.session.userId
   if (userId == null) {
@@ -40,7 +52,7 @@ exports.data_rank = function (req, res) {
         "WHERE contest.contest_id=?"
       db.query(sql, [contest_id], function (err, results) {
         if (err) { logger.error(err); res.redirect("/error"); return }
-        if (results.length == 0) {
+        if (results.length == 0) { // if contest donnt have any problem
           sql = "SELECT contest_name, contest_id, time_begin, time_end FROM contest WHERE contest_id=?"
           db.query(sql, [contest_id], function (err, results) {
             res.render('data-rank.ejs', { data: results, problem_files: [], message: message, role: req.session.role, user: req.session.user })
@@ -57,6 +69,11 @@ exports.data_rank = function (req, res) {
   })
 }
 //---------------------------------load rank -> json----------------------------------
+/**
+ * Load data into body of table
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.load_rank = function (req, res) {
   var contest_id = req.query.contest_id
   var sql = "SELECT student_account.userId, student_account.rollnumber, student_account.name, student_account.class, contest.contest_id, contest.contest_name, contest.time_begin, contest.time_end FROM contest " +
@@ -189,6 +206,12 @@ exports.load_rank = function (req, res) {
 
 }
 //---------------------------------rank detail----------------------------------
+/**
+ * Get detail data for the table in rank page following to student
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 exports.detail_rank = function (req, res) {
   var userId = req.session.userId
   if (userId == null) {

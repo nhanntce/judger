@@ -1,0 +1,18 @@
+15-06-2021 08:29:56 : Teacher abc123 has connected
+15-06-2021 09:10:12 : Teacher abc123 has disconnected
+15-06-2021 09:10:16 : Student h has connected
+15-06-2021 09:10:41 : Sumit code content field [1][19190441852][demo1][h][A].c of contest demo1 problem A by SD-000001
+15-06-2021 09:11:04 : Sumit code content field [1][19190464151][demo1][h][B].c of contest demo1 problem B by SD-000001
+15-06-2021 09:11:10 : Student h has disconnected
+15-06-2021 09:11:15 : Teacher abc123 has connected
+15-06-2021 09:19:59 : Teacher abc123 has connected
+15-06-2021 09:22:20 : Teacher abc123 has disconnected
+15-06-2021 09:22:24 : Student h has connected
+15-06-2021 09:22:32 : Sumit code content field [1][19191152217][demo1][h][B].c of contest demo1 problem B by SD-000001
+15-06-2021 09:22:46 : Sumit code content field [1][19191166371][demo1][h][A].c of contest demo1 problem A by SD-000001
+15-06-2021 09:23:54 : Student h has disconnected
+15-06-2021 09:26:15 : Student h has connected
+15-06-2021 09:26:22 : Sumit code content field [1][19191382377][demo1][h][B].c of contest demo1 problem B by SD-000001
+15-06-2021 09:26:30 : Sumit code content field [1][19191390400][demo1][h][A].c of contest demo1 problem A by SD-000001
+15-06-2021 09:28:21 : Student h has disconnected
+15-06-2021 09:28:25 : Teacher abc123 has connected
