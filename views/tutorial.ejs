@@ -9,21 +9,25 @@
       <p class="card-text"><b>Note: </b>Please check your <b>*.inp</b> and <b>*.out</b> before submit, <b>*</b> is a
         problem id. <u>Example:</u> A.inp, A.out</p>
       <div class="row">
-        <div class="col-lg-4 col-sm-6">
+        <div class="col-lg-6 col-sm-6">
           <span class="badge badge-default mb-2">C</span>
           <div id="editor1" style="height: 180px;"><%= fs.existsSync('./public/template/c.txt') ? fs.readFileSync('./public/template/c.txt', 'utf8') : ""%></div>
         </div>
-        <div class="col-lg-4 col-sm-6">
+        <div class="col-lg-6 col-sm-6">
           <span class="badge badge-default mb-2">C++</span>
           <div id="editor2" style="height: 180px;"><%= fs.existsSync('./public/template/cpp.txt') ? fs.readFileSync('./public/template/cpp.txt', 'utf8'): ""%></div>
         </div>
-        <div class="col-lg-4 col-sm-6">
+        <div class="col-lg-6 col-sm-6">
+          <span class="badge badge-default mb-2">Java</span>
+          <div id="editor4" style="height: 180px;"><%= fs.existsSync('./public/template/java.txt') ? fs.readFileSync('./public/template/java.txt', 'utf8'): ""%></div>
+        </div>
+        <div class="col-lg-6 col-sm-6">
           <span class="badge badge-default mb-2">Python 3</span>
           <div id="editor3" style="height: 180px;"><%= fs.existsSync('./public/template/python3.txt') ? fs.readFileSync('./public/template/python3.txt', 'utf8') : ""%></div>
         </div>
       </div>
       <script type="text/javascript">
-        for (let i = 1; i <= 3; ++i) {
+        for (let i = 1; i < 5; ++i) {
           var editor = ace.edit('editor' + i);
           editor.setOptions({
             readOnly: true,
