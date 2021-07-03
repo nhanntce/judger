@@ -48,16 +48,30 @@ exports.add_contest = function (req, res) {
     var formatTimeBegin = new Date(formatTime(time_begin))
     var formatTimeEnd = new Date(formatTime(time_end))
     var language = Array.isArray(post.language) ? post.language.join() : post.language
+    var time_limit = post.time_limit;
+    var memory_limit = post.memory_limit;
+    var check_format = post.check_format;
+    var check_comment = post.check_comment;
+    var data_config = "time_limit=" + time_limit + "\nmemory_limit=" + memory_limit + "\ncheck_format=" + 
+    (check_format? "true" : "false") + "\ncheck_comment=" + (check_comment ? "true" : "false");
+
     if (contest_name !== "" && ValidateDate(time_begin) && ValidateDate(time_end) && formatTimeBegin < formatTimeEnd) {
       // create 4 folder when add new contest
       if (!fs.existsSync(storage.BAILAM + contest_name)) {
         fs.mkdirSync(storage.BAILAM + contest_name)
+      } else {
+        logger.info("Create contest fail")
+        res.redirect("/contest");
+        return;
       }
       if (!fs.existsSync(storage.DEBAI + contest_name)) {
         fs.mkdirSync(storage.DEBAI + contest_name)
       }
       if (!fs.existsSync(storage.TESTCASE + contest_name)) {
-        fs.mkdirSync(storage.TESTCASE + contest_name)
+        fs.mkdirSync(storage.TESTCASE + contest_name);
+        fs.exists(storage.TESTCASE + contest_name + "/config.txt", function (exists) {
+          fs.writeFileSync(storage.TESTCASE + contest_name + "/config.txt", data_config);
+        });
       }
       if (!fs.existsSync(storage.NOPBAI + 'Logs/' + contest_name)) {
         fs.mkdirSync(storage.NOPBAI + 'Logs/' + contest_name)
@@ -158,7 +172,14 @@ exports.edit_contest = function (req, res) {
     var time_end = post.time_end
     var formatTimeBegin = new Date(formatTime(time_begin))
     var formatTimeEnd = new Date(formatTime(time_end))
-    var language = Array.isArray(post.language) ? post.language.join() : post.language
+    var language = Array.isArray(post.language) ? post.language.join() : post.language;
+    var time_limit = post.time_limit;
+    var memory_limit = post.memory_limit;
+    var check_format = post.check_format;
+    var check_comment = post.check_comment;
+    var data_config = "time_limit=" + time_limit + "\nmemory_limit=" + memory_limit + "\ncheck_format=" + 
+    (check_format? "true" : "false") + "\ncheck_comment=" + (check_comment ? "true" : "false");
+
     if (contest_name_new !== "" && ValidateDate(time_begin) && ValidateDate(time_end) && formatTimeBegin < formatTimeEnd) {
       // update contest_name, time_begin, time_end
       var sql = "UPDATE contest SET contest_name=?, time_begin=?, time_end=?, language=? WHERE contest_id=?"
@@ -166,12 +187,26 @@ exports.edit_contest = function (req, res) {
         if (err) { logger.error(err); res.redirect("/error"); return }
         fs.rename(storage.BAILAM + contest_name_old, storage.BAILAM + contest_name_new, function (err) {
           if (err) { logger.error(err); res.redirect("/error"); return }
+          fs.readdir(storage.BAILAM + contest_name_new, (err, folders) => {
+            folders.forEach(folder => {
+              fs.readdir(storage.BAILAM + contest_name_new + '/' + folder , (err, files) => {
+                files.forEach(file => {
+                  var filenew = file.replace(contest_name_old, contest_name_new);
+                  fs.rename(storage.BAILAM + contest_name_new +'/'+ folder +'/' + file,
+                   storage.BAILAM + contest_name_new + '/'+ folder + '/' + filenew, (err) => {});
+                })
+              });
+            });
+          });
         })
         fs.rename(storage.DEBAI + contest_name_old, storage.DEBAI + contest_name_new, function (err) {
           if (err) { logger.error(err); res.redirect("/error"); return }
         })
         fs.rename(storage.TESTCASE + contest_name_old, storage.TESTCASE + contest_name_new, function (err) {
           if (err) { logger.error(err); res.redirect("/error"); return }
+          fs.exists(storage.TESTCASE + contest_name_new + "/config.txt", function (exists) {
+            fs.writeFileSync(storage.TESTCASE + contest_name_new + "/config.txt", data_config);
+          })
         })
         fs.rename(storage.NOPBAI + 'Logs/' + contest_name_old, storage.NOPBAI + 'Logs/' + contest_name_new, function (err) {
           if (err) { logger.error(err); res.redirect("/error"); return }
@@ -236,13 +271,26 @@ exports.contest_detail = function (req, res) {
     "WHERE contest.contest_id=?"
   db.query(sql, [contest_id], function (err, results) {
     if (err) { logger.error(err); res.redirect("/error"); return }
+    
     if (results.length == 0) { // if no student in contest
       sql = "SELECT contest_name, contest_id, time_begin, time_end, language FROM contest WHERE contest_id=?"
       db.query(sql, [contest_id], function (err, results) {
         if (err) { logger.error(err); res.redirect("/error"); return }
+        var data_config =  fs.readFileSync(storage.TESTCASE + results[0].contest_name + "/config.txt", {encoding:'utf8', flag:'r'});
+        var data_config_inline = data_config.split('\n');
+        results[0].time_limit = data_config_inline[0].split('=')[1];
+        results[0].memory_limit = data_config_inline[1].split('=')[1];
+        results[0].check_format = data_config_inline[2].split('=')[1];
+        results[0].check_comment = data_config_inline[3].split('=')[1];
         res.render('contest-detail.ejs', { data: results, totalStudent: 0, message: message, teacher_role: req.session.teacher_role, role: req.session.role, user: req.session.user })
       })
     } else { // at least 1 student
+      var data_config =  fs.readFileSync(storage.TESTCASE + results[0].contest_name + "/config.txt", {encoding:'utf8', flag:'r'});
+      var data_config_inline = data_config.split('\n');
+      results[0].time_limit = data_config_inline[0].split('=')[1];
+      results[0].memory_limit = data_config_inline[1].split('=')[1];
+      results[0].check_format = data_config_inline[2].split('=')[1];
+      results[0].check_comment = data_config_inline[3].split('=')[1];
       res.render('contest-detail.ejs', { data: results, totalStudent: results.length, message: message, teacher_role: req.session.teacher_role, role: req.session.role, user: req.session.user })
     }
 
@@ -275,7 +323,6 @@ exports.delete_student = function (req, res) {
         sql += "rollnumber='" + list[i] + "' OR "
         fs.rename(storage.BAILAM + contest_name + '/' + list[i], storage.BAILAM + contest_name + '/$' + list[i], function (err) {
           if (err) { 
-            console.log('loi')
             logger.error(err); res.redirect("/error"); return }
         })
       }

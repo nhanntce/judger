@@ -105,6 +105,56 @@
             <input type="text" class="form-control" id="time_end" name="time_end"
               value="<%=dayjs(data[0].time_end).format('DD-MM-YYYY HH:mm')%>" required>
           </div>
+          <label class="font-weight-bold">Time Limit</label>
+          <div class="form mb-3">
+            <div class="row">
+                <div class="col-8">
+                  <input type="number" id="time_limit" name="time_limit" class="form-control" value="<%=data[0].time_limit%>" required>
+                </div>
+                <div class="col-4">
+                  <scan class="font-weight-bold" style="vertical-align: middle; margin-top: 5px;">ms</scan>
+                </div>
+            </div>
+          </div>
+          <div class="form mb-3">
+            <div class="row">
+                <div class="col-8">
+                  <input type="number" id="memory_limit" name="memory_limit" class="form-control" value="<%=data[0].memory_limit%>" required>
+                </div>
+                <div class="col-4">
+                  <scan class="font-weight-bold" style="vertical-align: middle; margin-top: 5px;">MB</scan>
+                </div>
+            </div>
+          </div>
+          <div class="form mb-3">
+            <% 
+              if(data[0].check_format === 'true') {
+            %>
+            <input type="checkbox" style="pointer-events: auto; width:4rem; z-index: 10; cursor:pointer;"  class="form-check-input" name="check_format" checked>
+            <%
+              } else {
+            %>
+            <input type="checkbox" style="pointer-events: auto; width:4rem; z-index: 10; cursor:pointer;"  class="form-check-input" name="check_format">
+            <%
+              }
+            %>
+            <label class="font-weight-bold" style="cursor:default;">Formatted Checking</label>
+          </div>
+          <div class="form mb-3">
+            <% 
+              if(data[0].check_comment === 'true') {
+            %>
+            <input type="checkbox" style="pointer-events: auto; width:4rem; z-index: 10; cursor:pointer;"  class="form-check-input" id="check_comment" name="check_comment" checked>
+            <%
+              } else {
+            %>
+            <input type="checkbox" style="pointer-events: auto; width:4rem; z-index: 10; cursor:pointer;"  class="form-check-input" id="check_comment" name="check_comment">
+            <%
+              }
+            %>
+            <label class="font-weight-bold" style="cursor:default;">Commentted Checking</label>
+          </div>
+          
           <label class="font-weight-bold">Language</label>
           <select class="mdb-select md-form" id="language" name="language" multiple required>
             <option disabled>Choose language</option>

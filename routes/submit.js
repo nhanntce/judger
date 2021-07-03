@@ -61,7 +61,6 @@ exports.submission = function (req, res) {
       if (req.session.role != "Student" && !fs.existsSync(storage.BAILAM + contest_name + '/' + results[0].rollnumber)) {
         fs.mkdirSync(storage.BAILAM + contest_name + '/' + results[0].rollnumber, (err) => {
           if (err) {
-            console.log("obj 63");
             return res.redirect("/error")
           }
         });
@@ -158,7 +157,8 @@ exports.submission_realtime = function (req, res) {
       var tmp = log_files[i].split('][')[log_files[i].split('][').length - 1].split('].')[0]
       if (log_files[i].includes(rollnumber) && !check[tmp]) {
         testcase_size = getFolders(storage.TESTCASE + contest_name + '/' + tmp).length
-        var logcontent = fs.existsSync(storage.NOPBAI + 'Logs/' + contest_name + '/' + log_files[i]) ? fs.readFileSync(storage.NOPBAI + 'Logs/' + contest_name + '/' + log_files[i], 'utf8') : ""
+        var logcontent = fs.existsSync(storage.NOPBAI + 'Logs/' + contest_name + '/' + log_files[i]) ?
+         fs.readFileSync(storage.NOPBAI + 'Logs/' + contest_name + '/' + log_files[i], 'utf8') : "";
         if (logcontent) {
           if (!logcontent.split('\n')[0].includes('Error')) {
             score[tmp] = parseFloat(logcontent.split('\n')[0])
@@ -187,7 +187,8 @@ exports.submission_realtime = function (req, res) {
       var data = "<div class='testcases'>"
       var tmp = req.session.problem_id[i]
       tb = new Array()
-      tb.push(tmp, "<a href='/debai/" + contest_name + "/" + req.session.debai[i] + "' target='_blank'>" + req.session.debai[i].split('.')[0] + "</a>")
+      tb.push(tmp, "<a href='/problem/" + contest_name + "/" + req.session.debai[i] + "' target='_blank'>"
+       + req.session.debai[i].split('.')[0] + "</a>")
       if (fs.readdirSync(storage.NOPBAI).some(v => v.includes('[' + contest_name + '][' + req.session.rollnumber + '][' + tmp + ']'))) {
         data += "<i class='fa fa-hourglass fa-spin'></i> In queue"
         tb.push(data + "</div>")
@@ -231,9 +232,6 @@ exports.submission_realtime = function (req, res) {
       }
       // Calculate penalty: for more than 1 submit, subtract 10%
       var pen = req.session.times[tmp]
-      // console.log(pen)
-      // console.log(score[tmp])
-      // console.log(req.session.maxtimes[tmp])
       tb.push("<div class='text-right'>" + RoundAndFix(score[tmp] * (pen + 1) / req.session.maxtimes[tmp], 1).toFixed(1) + "</div>")
       if (!score[tmp]) score[tmp] = 0
       total += RoundAndFix(score[tmp] * (pen + 1) / req.session.maxtimes[tmp], 1)
@@ -265,7 +263,7 @@ exports.submit = function (req, res) {
     form.parse(req, function (err, fields, files) {
       if (fields.content == "") {
         // check file is valid
-        if (err || typeof files.filetoupload === "undefined" || files.filetoupload.name == "" || !/^\w+\.(c|cpp|py|sql)$/.test(files.filetoupload.name)) {
+        if (err || typeof files.filetoupload === "undefined" || files.filetoupload.name == "" || !/^\w+\.(c|cpp|py|sql|java)$/.test(files.filetoupload.name)) {
           req.session.submit_error = true
           res.redirect("/submission")
           return
@@ -291,6 +289,8 @@ exports.submit = function (req, res) {
           type = 'py'
         } else if (fields.language == 'MySQL') {
           type = 'sql'
+        } else if (fields.language == 'Java') {
+          type = 'java';
         } else {
           req.session.submit_error = true
           res.redirect("/submission")
