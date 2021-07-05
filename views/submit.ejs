@@ -54,8 +54,10 @@
                     } else {
                       format.push('Yes')
                     }
-                    if(logcontent.split('\n')[4].split(': ')[1] > 0) {
+                    if(logcontent.split('\n')[4].split(': ')[1] ) {
                       comment.push(logcontent.split('\n')[4].split(': ')[1])
+                    } else {
+                      
                     }
                 }
             }
@@ -277,10 +279,11 @@
                 <%=pen[i]==0 ? 'OK' : '-'+pen[i] / tmp_maxtimes[i]*100+'%'%>
               </td>
               <td>
-                <%=format[i]%>
+                <i class="<%=format[i]=='No'?'fas fa-times-circle text-danger':'fas fa-check-circle text-success'%>"></i>
+                <!-- <%=format[i]%> -->
               </td>
               <td>
-                <%=comment[i] ? comment[i] : "0.0"%>
+                <%=comment[i]%>
               </td>
             </tr>
             <div class="modal fade" id="myModal<%=i%>">
