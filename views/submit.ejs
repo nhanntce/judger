@@ -18,6 +18,8 @@
         var pen = []
         var tmp_pen = {}
         var tmp_maxtimes = []
+        var format = []
+        var comment = []
         for (let i = 0, l = debai.length; i < l; ++i) { 
           tmp_pen[debai[i]] = 0
         }
@@ -32,6 +34,8 @@
                     score.push(0)
                     timeLimit.push('0s')
                     memoryLimit.push('0MB')
+                    format.push('NaN')
+                    comment.push(0)
                 } else {
                     rescheck.push(parseInt(parseFloat(logcontent.split('\n')[0]) * testcase_size[i] / 10) + '/' + testcase_size[i])
                     score.push(parseFloat(logcontent.split('\n')[0]))
@@ -44,6 +48,14 @@
                         memoryLimit.push('> 1000MB')
                     } else {
                         memoryLimit.push(logcontent.split('\n')[2].split(': ')[1] + 'MB')
+                    }
+                    if(logcontent.split('\n')[3].split(': ')[1] == 'false') {
+                      format.push('No')
+                    } else {
+                      format.push('Yes')
+                    }
+                    if(logcontent.split('\n')[4].split(': ')[1] > 0) {
+                      comment.push(logcontent.split('\n')[4].split(': ')[1])
                     }
                 }
             }
@@ -131,7 +143,7 @@
             <h4 id="fileupload">Drag &amp; drop a file here to upload</h4>
             <i class="font-weight-bold text-gray-500">(Or click and choose file)</i>
           </div>
-          <input type="file" name="filetoupload" id="filetoupload" accept=".c, .cpp, .py, .sql, .java">
+          <input type="file" name="filetoupload" id="filetoupload" accept=".c, .cpp, .py, .sql">
         </div>
         <a class="open-ace" id="editor">
           <div class="switch_button">
@@ -226,6 +238,8 @@
               <th class="font-weight-bold">TestCase</th>
               <th class="font-weight-bold">Score</th>
               <th class="font-weight-bold">Penalty</th>
+              <th class="font-weight-bold">Format</th>
+              <th class="font-weight-bold">Comment</th>
             </tr>
           </thead>
           <tbody>
@@ -261,6 +275,12 @@
               </td>
               <td class="<%=pen[i]==0?'text-success':'text-danger'%> font-weight-bold">
                 <%=pen[i]==0 ? 'OK' : '-'+pen[i] / tmp_maxtimes[i]*100+'%'%>
+              </td>
+              <td>
+                <%=format[i]%>
+              </td>
+              <td>
+                <%=comment[i] ? comment[i] : "0.0"%>
               </td>
             </tr>
             <div class="modal fade" id="myModal<%=i%>">
@@ -363,29 +383,24 @@
           <p class="card-text"><b>Note: </b>Please check your <b>*.inp</b> and <b>*.out</b> before submit, <b>*</b> is a
             problem id. <u>Example:</u> A.inp, A.out</p>
           <div class="row">
-            <div class="col-lg-6 col-sm-6">
+            <div class="col-lg-4 col-sm-6">
               <span class="badge badge-default mb-2">C</span>
               <div id="editor01" style="height: 200px;"><%= fs.existsSync('./public/template/c.txt') ? fs.readFileSync('./public/template/c.txt', 'utf8') : ""%>
               </div>
             </div>
-            <div class="col-lg-6 col-sm-6">
+            <div class="col-lg-4 col-sm-6">
               <span class="badge badge-default mb-2">C++</span>
               <div id="editor02" style="height: 200px;"><%= fs.existsSync('./public/template/cpp.txt') ? fs.readFileSync('./public/template/cpp.txt', 'utf8'): ""%>
               </div>
             </div>
-            <div class="col-lg-6 col-sm-6">
-              <span class="badge badge-default mb-2">Java</span>
-              <div id="editor04" style="height: 200px;"><%= fs.existsSync('./public/template/cpp.txt') ? fs.readFileSync('./public/template/java.txt', 'utf8'): ""%>
-              </div>
-            </div>
-            <div class="col-lg-6 col-sm-6">
+            <div class="col-lg-4 col-sm-6">
               <span class="badge badge-default mb-2">Python 3</span>
               <div id="editor03" style="height: 200px;"><%= fs.existsSync('./public/template/python3.txt') ? fs.readFileSync('./public/template/python3.txt', 'utf8') : ""%>
               </div>
             </div>
           </div>
           <script type="text/javascript">
-            for (let i = 1; i < 5; ++i) {
+            for (let i = 1; i <= 3; ++i) {
               var editor = ace.edit('editor0' + i);
               editor.setOptions({
                 readOnly: true,
