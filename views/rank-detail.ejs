@@ -22,6 +22,8 @@
         <th>Time</th>
         <th>Memory</th>
         <th>TestCase</th>
+        <th>Format</th>
+        <th>Comment</th>
         <th>Score</th>
       </tr>
     </thead>
@@ -39,9 +41,13 @@
                     var score = 0
                     var timeLimit = '0s'
                     var memoryLimit = '0MB'
+                    var format = ''
+                    var comment = ''
                     if (logcontent.split('\n')[0].includes('Error') || logcontent.split('\n')[0] == "0.0") {
                         testcase = '0/' + testcase_size[i]
                         score = 0
+                        format = 'NaN'
+                        comment = 'NaN'
                     } else {
                         testcase = parseInt(logcontent.split('\n')[0] * testcase_size[i] / 10) + '/' + testcase_size[i]
                         score = logcontent.split('\n')[0]
@@ -54,6 +60,19 @@
                             memoryLimit = '> 1000MB'
                         } else {
                             memoryLimit = logcontent.split('\n')[2].split(': ')[1] + 'MB'
+                        }
+                        
+                        if(logcontent.split('\n')[3].split(': ')[1] == 'false') {
+                          format = 'No'
+                        } else if (logcontent.split('\n')[3].split(': ')[1] == 'true') {
+                          format = 'Yes'
+                        } else {
+                          format = 'NaN'
+                        }
+                        if(logcontent.split('\n')[4].split(': ')[1] >= 0) {
+                          comment = logcontent.split('\n')[4].split(': ')[1] + '%'
+                        } else {
+                          comment = 'NaN'
                         }
                     }
             %>
@@ -79,6 +98,40 @@
         <td>
           <%=testcase%>
         </td>
+        <%
+          if (format == 'NaN') {
+        %>
+        <td class="text-danger font-weight-bold">
+          <%=format%>
+          </td>
+        <%    
+          } else {
+
+        %>
+        <td>
+        <i class="<%=format[i]=='No'?'fas fa-times-circle text-danger':'fas fa-check-circle text-success'%>"></i>
+        <!-- <%=format[i]%> -->
+      </td>
+        <%
+          }
+        %>
+        <%
+          if (comment == 'NaN') {
+        %>
+        <td class="text-danger font-weight-bold">
+          <%=comment%>
+          </td>
+        <%    
+          } else {
+
+        %>
+        <td>
+        <%=comment%>
+        <!-- <%=format[i]%> -->
+      </td>
+        <%
+          }
+        %>
         <td>
           <%=score%>
         </td>

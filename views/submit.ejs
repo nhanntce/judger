@@ -24,7 +24,7 @@
           tmp_pen[debai[i]] = 0
         }
         for (let i = 0, l = log_files.length; i < l; ++i) {
-            tmp = log_files[i].split('][')[log_files[i].split('][').length - 1].split('].')[0]
+            tmp = log_files[i].split('][')[log_files[i].split('][').length - 1].split('].')[0] //get name of problem
             logcontent = fs.existsSync(storage.NOPBAI + 'Logs/' + contest_name.replace(/ /g, '-') + '/' + log_files[i]) ? fs.readFileSync(storage.NOPBAI + 'Logs/' + contest_name.replace(/ /g, '-') + '/' + log_files[i], 'utf8') : ""
             if (logcontent) {
                 pen.push(tmp_pen[tmp]++)
@@ -35,7 +35,7 @@
                     timeLimit.push('0s')
                     memoryLimit.push('0MB')
                     format.push('NaN')
-                    comment.push(0)
+                    comment.push('NaN')
                 } else {
                     rescheck.push(parseInt(parseFloat(logcontent.split('\n')[0]) * testcase_size[i] / 10) + '/' + testcase_size[i])
                     score.push(parseFloat(logcontent.split('\n')[0]))
@@ -51,13 +51,15 @@
                     }
                     if(logcontent.split('\n')[3].split(': ')[1] == 'false') {
                       format.push('No')
-                    } else {
+                    } else if (logcontent.split('\n')[3].split(': ')[1] == 'true') {
                       format.push('Yes')
-                    }
-                    if(logcontent.split('\n')[4].split(': ')[1] ) {
-                      comment.push(logcontent.split('\n')[4].split(': ')[1])
                     } else {
-                      
+                      format.push('NaN')
+                    }
+                    if(logcontent.split('\n')[4].split(': ')[1] >= 0) {
+                      comment.push(logcontent.split('\n')[4].split(': ')[1] + '%')
+                    } else {
+                      comment.push('NaN')
                     }
                 }
             }
@@ -238,10 +240,10 @@
               <th class="font-weight-bold">Time</th>
               <th class="font-weight-bold">Memory</th>
               <th class="font-weight-bold">TestCase</th>
-              <th class="font-weight-bold">Score</th>
               <th class="font-weight-bold">Penalty</th>
               <th class="font-weight-bold">Format</th>
               <th class="font-weight-bold">Comment</th>
+              <th class="font-weight-bold">Score</th>
             </tr>
           </thead>
           <tbody>
@@ -272,18 +274,45 @@
               <td>
                 <%=rescheck[i]%>
               </td>
+              <td class="<%=pen[i]==0?'text-success':'text-danger'%> font-weight-bold">
+                <%=pen[i]==0 ? 'OK' : '-'+ (pen[i] / tmp_maxtimes[i]*100).toFixed(0) +'%'%>
+              </td>
+              <%
+                if (format[i] == 'NaN') {
+              %>
+              <td class="text-danger font-weight-bold">
+                <%=format[i]%>
+                </td>
+              <%    
+                } else {
+
+              %>
+              <td>
+              <i class="<%=format[i]=='No'?'fas fa-times-circle text-danger':'fas fa-check-circle text-success'%>"></i>
+              <!-- <%=format[i]%> -->
+            </td>
+              <%
+                }
+              %>
+              <%
+                if (comment[i] == 'NaN') {
+              %>
+              <td class="text-danger font-weight-bold">
+                <%=comment[i]%>
+                </td>
+              <%    
+                } else {
+
+              %>
+              <td>
+              <%=comment[i]%>
+              <!-- <%=format[i]%> -->
+            </td>
+              <%
+                }
+              %>
               <td>
                 <%=score[i] ? score[i].toFixed(1) : "0.0"%>
-              </td>
-              <td class="<%=pen[i]==0?'text-success':'text-danger'%> font-weight-bold">
-                <%=pen[i]==0 ? 'OK' : '-'+pen[i] / tmp_maxtimes[i]*100+'%'%>
-              </td>
-              <td>
-                <i class="<%=format[i]=='No'?'fas fa-times-circle text-danger':'fas fa-check-circle text-success'%>"></i>
-                <!-- <%=format[i]%> -->
-              </td>
-              <td>
-                <%=comment[i]%>
               </td>
             </tr>
             <div class="modal fade" id="myModal<%=i%>">
