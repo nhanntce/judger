@@ -417,10 +417,12 @@ exports.add_student = function (req, res) {
         var contest_name = results[0].contest_name.replace(/ /g, '-')
         var list = list_rollnumber.split(",")
         var sql = "UPDATE student_account SET contest_id=? WHERE "
+        var student_name = "";
         for (let i = 0, l = list.length; i < l; ++i) {
           // create a new folder contains submission files of student
           if (!fs.existsSync(storage.BAILAM + contest_name + '/' + list[i])) {
             fs.mkdirSync(storage.BAILAM + contest_name + '/' + list[i])
+            student_name += "\n" + list[i];
           }
           // update contest_id in student_account
           sql += "rollnumber='" + list[i] + "' OR "
@@ -430,6 +432,7 @@ exports.add_student = function (req, res) {
           if (err) { logger.error(err); res.redirect("/error"); return }
           logger.info(list.length + " students in contest " + contest_id + " has added: " + list)
           sleep(500).then(() => {
+            fs.writeFileSync(storage.EVENT + 'workspaceEvent/workspaceEvent.txt', results[0].contest_name + student_name);
             res.redirect("/contest/load-student?class_name=" + class_name + "&contest_id=" + contest_id)
           })
         })
@@ -689,6 +692,7 @@ exports.add_problem_testcase = function (req, res) {
                 if (!req.session.upload_err) {
                   req.session.upload_success = true
                 }
+                fs.writeFileSync(storage.EVENT + 'testcaseEvent/testcaseEvent.txt', Math.random(1000) + 'changed');
                 logger.info("Upload problem contest " + contest_id + " : " + files.filetouploadProblem.name + " .Testcase: " + files.filetouploadTestcase.name)
                 res.redirect("/contest/add-problem?contest_id=" + contest_id)
               })
