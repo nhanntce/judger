@@ -16,6 +16,19 @@ exports.contest = function (req, res) {
     res.redirect("/login")
     return
   }
+
+  var error = ""
+  var message = ""
+  // req.session.sql_err = true it means 
+  if (req.session.sql_err) {
+    req.session.sql_err = false
+    error = "Contest acocunt has exist!"
+  }
+  if (req.session.added) {
+    req.session.added = false
+    message = "Succesfully! Contest have been added."
+  }
+
   var sql = ""
   if (req.session.teacher_role <= 1) {
     sql = "SELECT contest.contest_id, teacher_account.rollnumber, contest.contest_name, contest.time_begin, contest.time_end FROM contest INNER JOIN teacher_account ON contest.teacher_id=teacher_account.userId WHERE deleted=0 ORDER BY contest.contest_id"
@@ -24,7 +37,7 @@ exports.contest = function (req, res) {
   }
   db.query(sql, function (err, results) {
     if (err) { logger.error(err); res.redirect("/error"); return }
-    res.render('contest.ejs', { data: results, role: req.session.role, teacher_role: req.session.teacher_role, user: req.session.user })
+    res.render('contest.ejs', { data: results, role: req.session.role, teacher_role: req.session.teacher_role, user: req.session.user, message: message, error: error })
   })
 }
 //---------------------------------Add a new contest----------------------------------
@@ -79,11 +92,13 @@ exports.add_contest = function (req, res) {
       // add contest to db
       var sql = "INSERT INTO contest(teacher_id, contest_name, time_begin, time_end, language) VALUES (?,?,?,?,?)"
       db.query(sql, [userId, contest_name, formatTime(time_begin), formatTime(time_end), language], function (err) {
-        if (err) { logger.error(err); res.redirect("/error"); return }
+        if (err) { logger.error(err);req.session.sql_err = true; res.redirect("/error"); return }
+          req.session.added = true
           logger.info("Create contest " + contest_name + " by " + userId)
           res.redirect("/contest")
       })
     } else {
+      req.session.sql_err = true
       logger.info("Create contest fail")
       res.redirect("/contest")
     }
