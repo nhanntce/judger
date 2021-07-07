@@ -1,0 +1,194 @@
+05-07-2021 09:13:35 : Teacher abc123 has connected
+05-07-2021 09:14:32 : Create contest Demo3 by TC-000001
+05-07-2021 09:14:55 : Contest 1 has changed time to begin:2020-11-05 06:30+00:00, end: 2022-11-17 14:50+00:00, language=C,C++
+05-07-2021 09:18:59 : Teacher abc123 has connected
+05-07-2021 09:19:13 : Contest 2 has changed time to begin:2020-11-05 06:30+00:00, end: 2020-11-13 11:55+00:00, language=MySQL
+05-07-2021 09:44:02 : Teacher abc123 has connected
+05-07-2021 09:44:59 : Create contest demo1 by TC-000001
+05-07-2021 09:45:52 : 19 students in contest 1 has added: CE140019,CE140212,CE140242,CE140284,CE140411,CE140426,CE140462,CE140520,CE140524,CE140556,CE150093,CE150124,CE150493,CE150499,CE150569,CE150623,CE150662,CE150718,CE150762
+05-07-2021 09:48:35 : Upload problem contest 1 : 1001 DIEU UOC.pdf .Testcase: A.zip
+05-07-2021 09:49:46 : Upload problem contest 1 : KhanhVH_PRF192_SE1502.HL.pdf .Testcase: B.zip
+05-07-2021 09:56:48 : Upload problem contest 1 : 1001 DIEU UOC.pdf .Testcase: A.zip
+05-07-2021 09:57:04 : Delete in contest_detail where contest 1 and problem A
+05-07-2021 10:02:55 : Upload problem contest 1 : 1001 DIEU UOC.pdf .Testcase: A.zip
+05-07-2021 10:11:59 : Upload problem contest 1 : 1 - if.doc .Testcase: C.zip
+05-07-2021 10:15:32 : Delete in contest_detail where contest 1 and problem C
+05-07-2021 10:16:11 : Upload problem contest 1 : 1 - if.doc .Testcase: C.zip
+05-07-2021 10:19:00 : Upload problem contest 1 : 1001 DIEU UOC.pdf .Testcase: D.zip
+05-07-2021 10:19:21 : Upload problem contest 1 : 1001 DIEU UOC.pdf .Testcase: E.zip
+05-07-2021 10:20:17 : Student CE150762 has connected
+05-07-2021 10:21:53 : Student CE150718 has connected
+05-07-2021 10:26:52 : Sumit code content field [118-69-133-17][89212124][demo1][CE150762][C].c of contest demo1 problem C by SD-000076
+05-07-2021 10:29:31 : Sumit code content field [118-69-133-17][89371521][demo1][CE150762][C].cpp of contest demo1 problem C by SD-000076
+05-07-2021 10:32:51 : Sumit code content field [118-69-133-17][89571595][demo1][CE150762][C].c of contest demo1 problem C by SD-000076
+05-07-2021 10:35:02 : Sumit code content field [118-69-133-17][89702741][demo1][CE150718][C].c of contest demo1 problem C by SD-000075
+05-07-2021 10:35:49 : Sumit code content field [118-69-133-17][89749371][demo1][CE150762][D].cpp of contest demo1 problem D by SD-000076
+05-07-2021 10:36:10 : Sumit code content field [118-69-133-17][89770960][demo1][CE150762][E].c of contest demo1 problem E by SD-000076
+05-07-2021 10:37:23 : Sumit code content field [118-69-133-17][89843004][demo1][CE150762][B].cpp of contest demo1 problem B by SD-000076
+05-07-2021 10:37:48 : Sumit code content field [118-69-133-17][89868848][demo1][CE150762][A].cpp of contest demo1 problem A by SD-000076
+05-07-2021 10:38:25 : Student CE150762 has disconnected
+05-07-2021 10:38:33 : Student CE150662 has connected
+05-07-2021 10:38:52 : Sumit code content field [118-69-133-17][89932471][demo1][CE150662][B].cpp of contest demo1 problem B by SD-000074
+05-07-2021 10:38:55 : Sumit code content field [118-69-133-17][89935776][demo1][CE150718][B].c of contest demo1 problem B by SD-000075
+05-07-2021 10:39:10 : Sumit code content field [118-69-133-17][89950018][demo1][CE150662][A].cpp of contest demo1 problem A by SD-000074
+05-07-2021 10:39:29 : Sumit code content field [118-69-133-17][89969486][demo1][CE150718][B].c of contest demo1 problem B by SD-000075
+05-07-2021 10:40:03 : Sumit code content field [118-69-133-17][90003522][demo1][CE150662][D].c of contest demo1 problem D by SD-000074
+05-07-2021 10:40:10 : Sumit code content field [118-69-133-17][90010817][demo1][CE150718][E].c of contest demo1 problem E by SD-000075
+05-07-2021 10:40:19 : Sumit code content field [118-69-133-17][90019748][demo1][CE150662][E].cpp of contest demo1 problem E by SD-000074
+05-07-2021 10:40:37 : Sumit code content field [118-69-133-17][90037236][demo1][CE150718][E].cpp of contest demo1 problem E by SD-000075
+05-07-2021 10:41:02 : Sumit code content field [118-69-133-17][90062990][demo1][CE150662][C].cpp of contest demo1 problem C by SD-000074
+05-07-2021 10:41:24 : Sumit code content field [118-69-133-17][90084982][demo1][CE150662][C].cpp of contest demo1 problem C by SD-000074
+05-07-2021 10:42:06 : Sumit code content field [118-69-133-17][90126732][demo1][CE150718][D].cpp of contest demo1 problem D by SD-000075
+05-07-2021 10:42:23 : Student CE150662 has disconnected
+05-07-2021 10:42:35 : Student CE150623 has connected
+05-07-2021 10:42:52 : Sumit code content field [118-69-133-17][90172076][demo1][CE150718][E].cpp of contest demo1 problem E by SD-000075
+05-07-2021 10:42:52 : Sumit code content field [118-69-133-17][90172357][demo1][CE150623][B].cpp of contest demo1 problem B by SD-000073
+05-07-2021 10:43:05 : Sumit code content field [118-69-133-17][90185673][demo1][CE150623][A].cpp of contest demo1 problem A by SD-000073
+05-07-2021 10:43:32 : Sumit code content field [118-69-133-17][90212776][demo1][CE150718][E].cpp of contest demo1 problem E by SD-000075
+05-07-2021 10:44:49 : Sumit code content field [118-69-133-17][90289343][demo1][CE150623][C].cpp of contest demo1 problem C by SD-000073
+05-07-2021 10:44:51 : Sumit code content field [118-69-133-17][90291695][demo1][CE150718][C].cpp of contest demo1 problem C by SD-000075
+05-07-2021 10:45:08 : Sumit code content field [118-69-133-17][90308869][demo1][CE150623][D].cpp of contest demo1 problem D by SD-000073
+05-07-2021 10:45:17 : Sumit code content field [118-69-133-17][90317821][demo1][CE150623][E].c of contest demo1 problem E by SD-000073
+05-07-2021 10:45:32 : Sumit code content field [118-69-133-17][90332386][demo1][CE150623][E].cpp of contest demo1 problem E by SD-000073
+05-07-2021 10:46:00 : Student CE150623 has disconnected
+05-07-2021 10:46:06 : Student CE150569 has connected
+05-07-2021 10:46:52 : Sumit code content field [118-69-133-17][90412617][demo1][CE150569][A].c of contest demo1 problem A by SD-000072
+05-07-2021 10:46:59 : Sumit code content field [118-69-133-17][90419872][demo1][CE150569][A].cpp of contest demo1 problem A by SD-000072
+05-07-2021 10:47:08 : Sumit code content field [118-69-133-17][90428828][demo1][CE150569][B].c of contest demo1 problem B by SD-000072
+05-07-2021 10:47:29 : Sumit code content field [118-69-133-17][90449872][demo1][CE150569][B].cpp of contest demo1 problem B by SD-000072
+05-07-2021 10:47:30 : Sumit code content field [118-69-133-17][90450357][demo1][CE150718][A].cpp of contest demo1 problem A by SD-000075
+05-07-2021 10:47:43 : Sumit code content field [118-69-133-17][90463580][demo1][CE150569][C].c of contest demo1 problem C by SD-000072
+05-07-2021 10:47:55 : Sumit code content field [118-69-133-17][90475091][demo1][CE150569][D].c of contest demo1 problem D by SD-000072
+05-07-2021 10:48:11 : Sumit code content field [118-69-133-17][90491140][demo1][CE150718][B].c of contest demo1 problem B by SD-000075
+05-07-2021 10:48:13 : Sumit code content field [118-69-133-17][90493838][demo1][CE150569][E].c of contest demo1 problem E by SD-000072
+05-07-2021 10:48:29 : Sumit code content field [118-69-133-17][90509057][demo1][CE150569][E].c of contest demo1 problem E by SD-000072
+05-07-2021 10:48:35 : Student CE150569 has disconnected
+05-07-2021 10:48:45 : Student CE150499 has connected
+05-07-2021 10:49:14 : Sumit code content field [118-69-133-17][90554044][demo1][CE150718][E].cpp of contest demo1 problem E by SD-000075
+05-07-2021 10:49:37 : Sumit code content field [118-69-133-17][90577271][demo1][CE150499][A].c of contest demo1 problem A by SD-000071
+05-07-2021 10:49:37 : Sumit code content field [118-69-133-17][90577560][demo1][CE150718][B].cpp of contest demo1 problem B by SD-000075
+05-07-2021 10:49:50 : Sumit code content field [118-69-133-17][90590176][demo1][CE150499][B].cpp of contest demo1 problem B by SD-000071
+05-07-2021 10:50:00 : Sumit code content field [118-69-133-17][90600480][demo1][CE150499][C].cpp of contest demo1 problem C by SD-000071
+05-07-2021 10:50:13 : Sumit code content field [118-69-133-17][90613871][demo1][CE150499][D].c of contest demo1 problem D by SD-000071
+05-07-2021 10:50:22 : Sumit code content field [118-69-133-17][90622144][demo1][CE150499][E].c of contest demo1 problem E by SD-000071
+05-07-2021 10:51:59 : Sumit code content field [118-69-133-17][90719359][demo1][CE150499][E].c of contest demo1 problem E by SD-000071
+05-07-2021 10:52:12 : Student CE150718 has disconnected
+05-07-2021 10:52:18 : Sumit code content field [118-69-133-17][90738434][demo1][CE150499][E].c of contest demo1 problem E by SD-000071
+05-07-2021 10:52:25 : Student CE150499 has disconnected
+05-07-2021 10:52:30 : Student CE140212 has connected
+05-07-2021 10:52:31 : Student CE140212 has connected
+05-07-2021 10:52:37 : Student CE150493 has connected
+05-07-2021 10:53:12 : Sumit code content field [118-69-133-17][90792611][demo1][CE140212][E].cpp of contest demo1 problem E by SD-000059
+05-07-2021 10:54:07 : Sumit code content field [118-69-133-17][90847162][demo1][CE150493][E].c of contest demo1 problem E by SD-000070
+05-07-2021 10:54:19 : Sumit code content field [118-69-133-17][90859990][demo1][CE150493][D].c of contest demo1 problem D by SD-000070
+05-07-2021 10:54:34 : Sumit code content field [118-69-133-17][90874639][demo1][CE150493][C].c of contest demo1 problem C by SD-000070
+05-07-2021 10:54:47 : Sumit code content field [118-69-133-17][90887901][demo1][CE150493][B].cpp of contest demo1 problem B by SD-000070
+05-07-2021 10:54:58 : Sumit code content field [118-69-133-17][90898317][demo1][CE150493][A].cpp of contest demo1 problem A by SD-000070
+05-07-2021 10:55:34 : Student CE150493 has disconnected
+05-07-2021 10:55:46 : Student CE150124 has connected
+05-07-2021 10:56:20 : Sumit code content field [118-69-133-17][90980460][demo1][CE140212][D].cpp of contest demo1 problem D by SD-000059
+05-07-2021 10:56:26 : Sumit code content field [118-69-133-17][90986095][demo1][CE150124][A].c of contest demo1 problem A by SD-000069
+05-07-2021 10:56:33 : Sumit code content field [118-69-133-17][90993623][demo1][CE150124][A].c of contest demo1 problem A by SD-000069
+05-07-2021 10:56:38 : Sumit code content field [118-69-133-17][90998664][demo1][CE140212][B].cpp of contest demo1 problem B by SD-000059
+05-07-2021 10:56:47 : Teacher abc123 has disconnected
+05-07-2021 10:57:15 : Sumit code content field [118-69-133-17][91035915][demo1][CE140212][C].cpp of contest demo1 problem C by SD-000059
+05-07-2021 10:57:26 : Student CE140212 has disconnected
+05-07-2021 10:57:46 : Student CE140284 has connected
+05-07-2021 10:57:56 : Student CE140242 has connected
+05-07-2021 10:58:01 : Sumit code content field [118-69-133-17][91081484][demo1][CE140284][C].cpp of contest demo1 problem C by SD-000061
+05-07-2021 10:58:51 : Sumit code content field [118-69-133-17][91131166][demo1][CE150124][B].cpp of contest demo1 problem B by SD-000069
+05-07-2021 10:59:02 : Sumit code content field [118-69-133-17][91142267][demo1][CE150124][C].c of contest demo1 problem C by SD-000069
+05-07-2021 10:59:13 : Sumit code content field [118-69-133-17][91153214][demo1][CE140284][D].cpp of contest demo1 problem D by SD-000061
+05-07-2021 10:59:19 : Sumit code content field [118-69-133-17][91159191][demo1][CE150124][D].c of contest demo1 problem D by SD-000069
+05-07-2021 10:59:26 : Sumit code content field [118-69-133-17][91166940][demo1][CE140242][E].cpp of contest demo1 problem E by SD-000060
+05-07-2021 10:59:28 : Sumit code content field [118-69-133-17][91168608][demo1][CE150124][E].c of contest demo1 problem E by SD-000069
+05-07-2021 10:59:37 : Sumit code content field [118-69-133-17][91177061][demo1][CE140284][E].cpp of contest demo1 problem E by SD-000061
+05-07-2021 10:59:42 : Sumit code content field [118-69-133-17][91182156][demo1][CE140242][B].cpp of contest demo1 problem B by SD-000060
+05-07-2021 10:59:43 : Student CE150124 has disconnected
+05-07-2021 10:59:49 : Student CE150093 has connected
+05-07-2021 10:59:54 : Sumit code content field [118-69-133-17][91194428][demo1][CE140284][E].cpp of contest demo1 problem E by SD-000061
+05-07-2021 10:59:54 : Sumit code content field [118-69-133-17][91194453][demo1][CE140242][A].c of contest demo1 problem A by SD-000060
+05-07-2021 11:00:04 : Sumit code content field [118-69-133-17][91204588][demo1][CE150093][E].c of contest demo1 problem E by SD-000068
+05-07-2021 11:00:06 : Sumit code content field [118-69-133-17][91206188][demo1][CE140242][A].cpp of contest demo1 problem A by SD-000060
+05-07-2021 11:00:19 : Sumit code content field [118-69-133-17][91219142][demo1][CE140284][B].cpp of contest demo1 problem B by SD-000061
+05-07-2021 11:00:25 : Sumit code content field [118-69-133-17][91225470][demo1][CE150093][D].c of contest demo1 problem D by SD-000068
+05-07-2021 11:00:25 : Sumit code content field [118-69-133-17][91225624][demo1][CE140242][C].cpp of contest demo1 problem C by SD-000060
+05-07-2021 11:00:36 : Sumit code content field [118-69-133-17][91236793][demo1][CE150093][C].cpp of contest demo1 problem C by SD-000068
+05-07-2021 11:00:47 : Sumit code content field [118-69-133-17][91247541][demo1][CE150093][A].c of contest demo1 problem A by SD-000068
+05-07-2021 11:00:50 : Sumit code content field [118-69-133-17][91250616][demo1][CE140242][D].cpp of contest demo1 problem D by SD-000060
+05-07-2021 11:00:55 : Sumit code content field [118-69-133-17][91255855][demo1][CE150093][A].c of contest demo1 problem A by SD-000068
+05-07-2021 11:00:59 : Student CE140242 has disconnected
+05-07-2021 11:01:06 : Sumit code content field [118-69-133-17][91266111][demo1][CE150093][B].cpp of contest demo1 problem B by SD-000068
+05-07-2021 11:01:15 : Sumit code content field [118-69-133-17][91275735][demo1][CE140284][A].cpp of contest demo1 problem A by SD-000061
+05-07-2021 11:01:16 : Student CE140411 has connected
+05-07-2021 11:01:16 : Sumit code content field [118-69-133-17][91276889][demo1][CE150093][C].c of contest demo1 problem C by SD-000068
+05-07-2021 11:01:22 : Student CE150093 has disconnected
+05-07-2021 11:01:24 : Student CE140284 has disconnected
+05-07-2021 11:01:30 : Student CE140556 has connected
+05-07-2021 11:01:35 : Sumit code content field [118-69-133-17][91295968][demo1][CE140411][D].cpp of contest demo1 problem D by SD-000062
+05-07-2021 11:01:44 : Sumit code content field [118-69-133-17][91304482][demo1][CE140556][E].c of contest demo1 problem E by SD-000067
+05-07-2021 11:01:50 : Sumit code content field [118-69-133-17][91310650][demo1][CE140411][E].cpp of contest demo1 problem E by SD-000062
+05-07-2021 11:01:52 : Sumit code content field [118-69-133-17][91312220][demo1][CE140556][D].c of contest demo1 problem D by SD-000067
+05-07-2021 11:01:56 : Student CE140411 has connected
+05-07-2021 11:02:03 : Sumit code content field [118-69-133-17][91323659][demo1][CE140556][C].c of contest demo1 problem C by SD-000067
+05-07-2021 11:02:08 : Sumit code content field [118-69-133-17][91328849][demo1][CE140411][B].c of contest demo1 problem B by SD-000062
+05-07-2021 11:02:12 : Student CE140411 has disconnected
+05-07-2021 11:02:20 : Sumit code content field [118-69-133-17][91340899][demo1][CE140556][B].c of contest demo1 problem B by SD-000067
+05-07-2021 11:02:56 : Sumit code content field [118-69-133-17][91376752][demo1][CE140556][B].cpp of contest demo1 problem B by SD-000067
+05-07-2021 11:03:03 : Sumit code content field [118-69-133-17][91383476][demo1][CE140556][A].c of contest demo1 problem A by SD-000067
+05-07-2021 11:03:09 : Student CE140426 has connected
+05-07-2021 11:03:13 : Sumit code content field [118-69-133-17][91393403][demo1][CE140556][A].c of contest demo1 problem A by SD-000067
+05-07-2021 11:03:19 : Student CE140556 has disconnected
+05-07-2021 11:03:23 : Sumit code content field [118-69-133-17][91403848][demo1][CE140426][A].cpp of contest demo1 problem A by SD-000063
+05-07-2021 11:03:29 : Sumit code content field [118-69-133-17][91409879][demo1][CE140411][B].cpp of contest demo1 problem B by SD-000062
+05-07-2021 11:03:32 : Student CE140524 has connected
+05-07-2021 11:03:40 : Sumit code content field [118-69-133-17][91420667][demo1][CE140426][B].cpp of contest demo1 problem B by SD-000063
+05-07-2021 11:03:42 : Sumit code content field [118-69-133-17][91422208][demo1][CE140524][A].cpp of contest demo1 problem A by SD-000066
+05-07-2021 11:03:44 : Sumit code content field [118-69-133-17][91424171][demo1][CE140411][A].cpp of contest demo1 problem A by SD-000062
+05-07-2021 11:03:53 : Sumit code content field [118-69-133-17][91433674][demo1][CE140524][B].cpp of contest demo1 problem B by SD-000066
+05-07-2021 11:03:56 : Sumit code content field [118-69-133-17][91436046][demo1][CE140411][C].cpp of contest demo1 problem C by SD-000062
+05-07-2021 11:04:03 : Sumit code content field [118-69-133-17][91443345][demo1][CE140524][C].c of contest demo1 problem C by SD-000066
+05-07-2021 11:04:07 : Student CE140411 has disconnected
+05-07-2021 11:04:13 : Sumit code content field [118-69-133-17][91453244][demo1][CE140524][D].c of contest demo1 problem D by SD-000066
+05-07-2021 11:04:22 : Student CE140426 has connected
+05-07-2021 11:04:23 : Sumit code content field [118-69-133-17][91463785][demo1][CE140524][E].c of contest demo1 problem E by SD-000066
+05-07-2021 11:04:33 : Student CE140426 has disconnected
+05-07-2021 11:04:35 : Student CE140524 has disconnected
+05-07-2021 11:04:45 : Student CE140520 has connected
+05-07-2021 11:04:59 : Student CE140462 has connected
+05-07-2021 11:05:02 : Sumit code content field [118-69-133-17][91502913][demo1][CE140520][A].cpp of contest demo1 problem A by SD-000065
+05-07-2021 11:05:12 : Sumit code content field [118-69-133-17][91512314][demo1][CE140520][B].cpp of contest demo1 problem B by SD-000065
+05-07-2021 11:05:19 : Sumit code content field [118-69-133-17][91519913][demo1][CE140462][C].cpp of contest demo1 problem C by SD-000064
+05-07-2021 11:05:21 : Sumit code content field [118-69-133-17][91521376][demo1][CE140520][C].c of contest demo1 problem C by SD-000065
+05-07-2021 11:05:33 : Sumit code content field [118-69-133-17][91533234][demo1][CE140462][A].cpp of contest demo1 problem A by SD-000064
+05-07-2021 11:05:33 : Sumit code content field [118-69-133-17][91533516][demo1][CE140520][D].c of contest demo1 problem D by SD-000065
+05-07-2021 11:05:44 : Sumit code content field [118-69-133-17][91544015][demo1][CE140520][E].c of contest demo1 problem E by SD-000065
+05-07-2021 11:05:52 : Sumit code content field [118-69-133-17][91552643][demo1][CE140462][B].cpp of contest demo1 problem B by SD-000064
+05-07-2021 11:06:09 : Sumit code content field [118-69-133-17][91569191][demo1][CE140462][E].cpp of contest demo1 problem E by SD-000064
+05-07-2021 11:06:19 : Sumit code content field [118-69-133-17][91579213][demo1][CE140426][D].cpp of contest demo1 problem D by SD-000063
+05-07-2021 11:06:24 : Sumit code content field [118-69-133-17][91584934][demo1][CE140462][D].cpp of contest demo1 problem D by SD-000064
+05-07-2021 11:06:31 : Student CE140462 has disconnected
+05-07-2021 11:06:36 : Teacher abc123 has connected
+05-07-2021 11:06:37 : Sumit code content field [118-69-133-17][91597730][demo1][CE140426][C].cpp of contest demo1 problem C by SD-000063
+05-07-2021 11:07:02 : Sumit code content field [118-69-133-17][91622158][demo1][CE140426][D].cpp of contest demo1 problem D by SD-000063
+05-07-2021 11:07:17 : Sumit code content field [118-69-133-17][91637964][demo1][CE140426][E].cpp of contest demo1 problem E by SD-000063
+05-07-2021 11:07:28 : Student CE140426 has disconnected
+05-07-2021 11:08:04 : Student CE140462 has connected
+05-07-2021 11:08:20 : Student CE140462 has disconnected
+05-07-2021 11:08:34 : Student CE140520 has connected
+05-07-2021 11:08:51 : Student CE140524 has connected
+05-07-2021 11:09:59 : Create contest demo2 by TC-000001
+05-07-2021 11:10:39 : 19 students in contest 2 has added: CE140019,CE140212,CE140242,CE140284,CE140411,CE140426,CE140462,CE140520,CE140524,CE140556,CE150093,CE150124,CE150493,CE150499,CE150569,CE150623,CE150662,CE150718,CE150762
+05-07-2021 11:12:37 : Student CE140524 has disconnected
+05-07-2021 11:12:44 : Teacher abc123 has connected
+05-07-2021 11:13:41 : Student CE140520 has disconnected
+05-07-2021 11:13:53 : Teacher abc123 has connected
+05-07-2021 11:14:46 : Teacher abc123 has disconnected
+05-07-2021 11:15:03 : Student CE140462 has connected
+05-07-2021 11:15:22 : Student CE140462 has disconnected
+05-07-2021 11:16:05 : Student CE140462 has connected
+05-07-2021 11:18:17 : Upload problem contest 2 : 1 - if.doc .Testcase: A.zip
+05-07-2021 11:19:00 : Sumit code content field [118-69-133-17][92340204][demo2][CE140462][A].c of contest demo2 problem A by SD-000064
+05-07-2021 11:19:09 : Upload problem contest 2 : 2 - for.doc .Testcase: B.zip
+05-07-2021 12:56:36 : Teacher abc123 has disconnected
+05-07-2021 12:56:47 : Teacher abc123 has connected
