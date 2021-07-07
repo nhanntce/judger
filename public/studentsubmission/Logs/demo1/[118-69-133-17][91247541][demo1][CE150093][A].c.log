@@ -1,0 +1,7 @@
+Compile Error
+[118-69-133-17][91247541][demo1][CE150093][A].c:3:1: error: unknown type name 'using'
+ using namespace std;
+ ^~~~~
+[118-69-133-17][91247541][demo1][CE150093][A].c:3:17: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'std'
+ using namespace std;
+                 ^~~
