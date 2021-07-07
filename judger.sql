@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 5.1.0
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Nov 07, 2020 at 04:38 AM
--- Server version: 10.4.14-MariaDB
--- PHP Version: 7.2.33
+-- Máy chủ: 127.0.0.1
+-- Thời gian đã tạo: Th7 05, 2021 lúc 04:31 AM
+-- Phiên bản máy phục vụ: 10.4.19-MariaDB
+-- Phiên bản PHP: 8.0.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,12 +18,12 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `judger`
+-- Cơ sở dữ liệu: `judger`
 --
 
 DELIMITER $$
 --
--- Procedures
+-- Thủ tục
 --
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_setCustomVal` (`sSeqName` VARCHAR(50), `sSeqGroup` VARCHAR(10), `nVal` INT UNSIGNED)  BEGIN
     IF (SELECT COUNT(*) FROM _sequence  
@@ -38,7 +38,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_setCustomVal` (`sSeqName` VARCHA
 END$$
 
 --
--- Functions
+-- Các hàm
 --
 CREATE DEFINER=`root`@`localhost` FUNCTION `getNextCustomSeq` (`sSeqName` VARCHAR(50), `sSeqGroup` VARCHAR(10)) RETURNS VARCHAR(20) CHARSET utf8 BEGIN
     DECLARE nLast_val INT; 
@@ -66,7 +66,7 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Table structure for table `contest`
+-- Cấu trúc bảng cho bảng `contest`
 --
 
 CREATE TABLE `contest` (
@@ -79,18 +79,10 @@ CREATE TABLE `contest` (
   `deleted` int(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `contest`
---
-
-INSERT INTO `contest` (`contest_id`, `teacher_id`, `contest_name`, `time_begin`, `time_end`, `language`, `deleted`) VALUES
-(1, 'TC-000003', 'demo1', '2020-11-05 06:30:00', '2020-11-13 18:50:00', 'C,C++', 0),
-(2, 'TC-000001', 'demo2', '2020-11-05 06:30:00', '2020-11-13 11:55:00', 'MySQL', 0);
-
 -- --------------------------------------------------------
 
 --
--- Table structure for table `contest_detail`
+-- Cấu trúc bảng cho bảng `contest_detail`
 --
 
 CREATE TABLE `contest_detail` (
@@ -101,19 +93,10 @@ CREATE TABLE `contest_detail` (
   `times` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `contest_detail`
---
-
-INSERT INTO `contest_detail` (`contest_id`, `problem_id`, `path_problem`, `path_testcase`, `times`) VALUES
-(1, 'A', './public/debai/demo1/KhanhVH_PRF192_SE1502_1.pdf', './public/thumuctest/demo1/A', 10),
-(1, 'B', './public/debai/demo1/KhanhVH_PRF192_SE1502.HL.pdf', './public/thumuctest/demo1/B', 10),
-(2, 'A', './public/debai/demo2/1001 DIEU UOC.pdf', './public/thumuctest/demo2/A', 10);
-
 -- --------------------------------------------------------
 
 --
--- Table structure for table `contest_owner`
+-- Cấu trúc bảng cho bảng `contest_owner`
 --
 
 CREATE TABLE `contest_owner` (
@@ -124,7 +107,7 @@ CREATE TABLE `contest_owner` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `student_account`
+-- Cấu trúc bảng cho bảng `student_account`
 --
 
 CREATE TABLE `student_account` (
@@ -142,18 +125,18 @@ CREATE TABLE `student_account` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `student_account`
+-- Đang đổ dữ liệu cho bảng `student_account`
 --
 
 INSERT INTO `student_account` (`id`, `userId`, `rollnumber`, `username`, `password`, `name`, `class`, `contest_id`, `ip`, `timeout`, `islogin`) VALUES
-(1, 'SD-000001', 'h', 'h', '2510c39011c5be704182423e3a695e91', 'Khang Hy', 'IA1401', 1, '1', '2020-11-06 21:34:02', 1),
-(43, 'SD-000043', 'CE140237', 'ce140237', '46e0e6ce167bbf79b81892b7f58ce01a', 'Nguyễn Vương Khang Hy', 'FCoder', 0, '1', '2020-11-05 00:00:00', 0),
-(77, 'SD-000058', 'CE140019', 'ce140019', '46e0e6ce167bbf79b81892b7f58ce01a', 'Trịnh Đình Quang', 'PE0309', 0, '1', '2020-11-05 00:00:00', 0),
-(78, 'SD-000059', 'CE140212', 'ce140212', '46e0e6ce167bbf79b81892b7f58ce01a', 'Nguyễn Trọng Nghĩa', 'PE0309', 0, '1', '2020-11-05 00:00:00', 0),
-(79, 'SD-000060', 'CE140242', 'ce140242', '46e0e6ce167bbf79b81892b7f58ce01a', 'Nguyễn Hứa Quốc Bảo', 'PE0309', 0, '1', '2020-11-05 00:00:00', 0),
-(80, 'SD-000061', 'CE140284', 'ce140284', '46e0e6ce167bbf79b81892b7f58ce01a', 'Biện Minh Thông', 'PE0309', 0, '1', '2020-11-05 00:00:00', 0),
-(81, 'SD-000062', 'CE140411', 'ce140411', '46e0e6ce167bbf79b81892b7f58ce01a', 'Lê Thanh Sang', 'PE0309', 0, '1', '2020-11-05 00:00:00', 0),
-(82, 'SD-000063', 'CE140426', 'ce140426', '46e0e6ce167bbf79b81892b7f58ce01a', 'Bùi Quách Thịnh', 'PE0309', 0, '1', '2020-11-05 00:00:00', 0),
+(1, 'SD-000001', 'h', 'h', '2510c39011c5be704182423e3a695e91', 'Khang Hy', 'IA1401', 0, '14-160-188-220', '2021-06-30 21:44:02', 1),
+(43, 'SD-000043', 'CE140237', 'ce140237', '2510c39011c5be704182423e3a695e91', 'Nguyễn Vương Khang Hy', 'FCoder', 0, '1', '2021-06-29 22:31:46', 1),
+(77, 'SD-000058', 'CE140019', 'ce140019', '2510c39011c5be704182423e3a695e91', 'Trịnh Đình Quang', 'PE0309', 0, '1', '2021-06-29 22:35:47', 0),
+(78, 'SD-000059', 'CE140212', 'ce140212', '2510c39011c5be704182423e3a695e91', 'Nguyễn Trọng Nghĩa', 'PE0309', 0, '1', '2021-06-29 22:19:13', 0),
+(79, 'SD-000060', 'CE140242', 'ce140242', '2510c39011c5be704182423e3a695e91', 'Nguyễn Hứa Quốc Bảo', 'PE0309', 0, '1', '2021-06-29 22:19:59', 1),
+(80, 'SD-000061', 'CE140284', 'ce140284', '2510c39011c5be704182423e3a695e91', 'Biện Minh Thông', 'PE0309', 0, '1', '2021-06-29 22:28:56', 0),
+(81, 'SD-000062', 'CE140411', 'ce140411', '2510c39011c5be704182423e3a695e91', 'Lê Thanh Sang', 'PE0309', 0, '1', '2021-06-29 22:31:39', 0),
+(82, 'SD-000063', 'CE140426', 'ce140426', '2510c39011c5be704182423e3a695e91', 'Bùi Quách Thịnh', 'PE0309', 0, '1', '2021-06-29 22:36:51', 1),
 (83, 'SD-000064', 'CE140462', 'ce140462', '46e0e6ce167bbf79b81892b7f58ce01a', 'Nguyễn Khắc Huy', 'PE0309', 0, '1', '2020-11-05 00:00:00', 0),
 (84, 'SD-000065', 'CE140520', 'ce140520', '46e0e6ce167bbf79b81892b7f58ce01a', 'Trần Nguyễn Quốc Huy', 'PE0309', 0, '1', '2020-11-05 00:00:00', 0),
 (85, 'SD-000066', 'CE140524', 'ce140524', '46e0e6ce167bbf79b81892b7f58ce01a', 'Nguyễn Tấn Hiệp', 'PE0309', 0, '1', '2020-11-05 00:00:00', 0),
@@ -174,7 +157,7 @@ INSERT INTO `student_account` (`id`, `userId`, `rollnumber`, `username`, `passwo
 (100, 'SD-000081', 'user5', 'user5', '0a791842f52a0acfbb3a783378c066b8', 'user5', 'test', 0, '1', '2020-11-05 00:00:00', 0);
 
 --
--- Triggers `student_account`
+-- Bẫy `student_account`
 --
 DELIMITER $$
 CREATE TRIGGER `student_account_bi` BEFORE INSERT ON `student_account` FOR EACH ROW BEGIN
@@ -186,7 +169,7 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Table structure for table `teacher_account`
+-- Cấu trúc bảng cho bảng `teacher_account`
 --
 
 CREATE TABLE `teacher_account` (
@@ -200,7 +183,7 @@ CREATE TABLE `teacher_account` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `teacher_account`
+-- Đang đổ dữ liệu cho bảng `teacher_account`
 --
 
 INSERT INTO `teacher_account` (`id`, `userId`, `rollnumber`, `username`, `password`, `name`, `role`) VALUES
@@ -209,7 +192,7 @@ INSERT INTO `teacher_account` (`id`, `userId`, `rollnumber`, `username`, `passwo
 (3, 'TC-000003', 'GV456', 'b', '92eb5ffee6ae2fec3ad71c777531578f', 'Giảng viên', 2);
 
 --
--- Triggers `teacher_account`
+-- Bẫy `teacher_account`
 --
 DELIMITER $$
 CREATE TRIGGER `teacher_account_bi` BEFORE INSERT ON `teacher_account` FOR EACH ROW BEGIN
@@ -221,7 +204,7 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Table structure for table `_sequence`
+-- Cấu trúc bảng cho bảng `_sequence`
 --
 
 CREATE TABLE `_sequence` (
@@ -231,7 +214,7 @@ CREATE TABLE `_sequence` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `_sequence`
+-- Đang đổ dữ liệu cho bảng `_sequence`
 --
 
 INSERT INTO `_sequence` (`seq_name`, `seq_group`, `seq_val`) VALUES
@@ -239,29 +222,29 @@ INSERT INTO `_sequence` (`seq_name`, `seq_group`, `seq_val`) VALUES
 ('userId1', 'TC', 3);
 
 --
--- Indexes for dumped tables
+-- Chỉ mục cho các bảng đã đổ
 --
 
 --
--- Indexes for table `contest`
+-- Chỉ mục cho bảng `contest`
 --
 ALTER TABLE `contest`
   ADD PRIMARY KEY (`contest_id`);
 
 --
--- Indexes for table `contest_detail`
+-- Chỉ mục cho bảng `contest_detail`
 --
 ALTER TABLE `contest_detail`
   ADD PRIMARY KEY (`contest_id`,`problem_id`);
 
 --
--- Indexes for table `contest_owner`
+-- Chỉ mục cho bảng `contest_owner`
 --
 ALTER TABLE `contest_owner`
   ADD PRIMARY KEY (`contest_id`,`teacher_id`);
 
 --
--- Indexes for table `student_account`
+-- Chỉ mục cho bảng `student_account`
 --
 ALTER TABLE `student_account`
   ADD PRIMARY KEY (`id`),
@@ -270,7 +253,7 @@ ALTER TABLE `student_account`
   ADD UNIQUE KEY `userId` (`userId`);
 
 --
--- Indexes for table `teacher_account`
+-- Chỉ mục cho bảng `teacher_account`
 --
 ALTER TABLE `teacher_account`
   ADD PRIMARY KEY (`id`),
@@ -279,29 +262,29 @@ ALTER TABLE `teacher_account`
   ADD UNIQUE KEY `userId` (`userId`);
 
 --
--- Indexes for table `_sequence`
+-- Chỉ mục cho bảng `_sequence`
 --
 ALTER TABLE `_sequence`
   ADD PRIMARY KEY (`seq_name`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT cho các bảng đã đổ
 --
 
 --
--- AUTO_INCREMENT for table `contest`
+-- AUTO_INCREMENT cho bảng `contest`
 --
 ALTER TABLE `contest`
-  MODIFY `contest_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `contest_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
--- AUTO_INCREMENT for table `student_account`
+-- AUTO_INCREMENT cho bảng `student_account`
 --
 ALTER TABLE `student_account`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
 
 --
--- AUTO_INCREMENT for table `teacher_account`
+-- AUTO_INCREMENT cho bảng `teacher_account`
 --
 ALTER TABLE `teacher_account`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
