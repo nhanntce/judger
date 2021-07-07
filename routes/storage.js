@@ -8,5 +8,6 @@ module.exports = {
     NOPBAI: './public/studentsubmission/',
     BAILAM: './public/workspace/',
     TESTCASE: './public/testcase/',
-    EXCEL: './public/excel/'
+    EXCEL: './public/excel/',
+    EVENT: './public/events/'
 }

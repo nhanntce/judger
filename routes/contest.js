@@ -16,6 +16,19 @@ exports.contest = function (req, res) {
     res.redirect("/login")
     return
   }
+
+  var error = ""
+  var message = ""
+  // req.session.sql_err = true it means 
+  if (req.session.sql_err) {
+    req.session.sql_err = false
+    error = "Contest acocunt has exist!"
+  }
+  if (req.session.added) {
+    req.session.added = false
+    message = "Succesfully! Contest have been added."
+  }
+
   var sql = ""
   if (req.session.teacher_role <= 1) {
     sql = "SELECT contest.contest_id, teacher_account.rollnumber, contest.contest_name, contest.time_begin, contest.time_end FROM contest INNER JOIN teacher_account ON contest.teacher_id=teacher_account.userId WHERE deleted=0 ORDER BY contest.contest_id"
@@ -24,7 +37,7 @@ exports.contest = function (req, res) {
   }
   db.query(sql, function (err, results) {
     if (err) { logger.error(err); res.redirect("/error"); return }
-    res.render('contest.ejs', { data: results, role: req.session.role, teacher_role: req.session.teacher_role, user: req.session.user })
+    res.render('contest.ejs', { data: results, role: req.session.role, teacher_role: req.session.teacher_role, user: req.session.user, message: message, error: error })
   })
 }
 //---------------------------------Add a new contest----------------------------------
@@ -79,11 +92,13 @@ exports.add_contest = function (req, res) {
       // add contest to db
       var sql = "INSERT INTO contest(teacher_id, contest_name, time_begin, time_end, language) VALUES (?,?,?,?,?)"
       db.query(sql, [userId, contest_name, formatTime(time_begin), formatTime(time_end), language], function (err) {
-        if (err) { logger.error(err); res.redirect("/error"); return }
+        if (err) { logger.error(err);req.session.sql_err = true; res.redirect("/error"); return }
+          req.session.added = true
           logger.info("Create contest " + contest_name + " by " + userId)
           res.redirect("/contest")
       })
     } else {
+      req.session.sql_err = true
       logger.info("Create contest fail")
       res.redirect("/contest")
     }
@@ -417,10 +432,12 @@ exports.add_student = function (req, res) {
         var contest_name = results[0].contest_name.replace(/ /g, '-')
         var list = list_rollnumber.split(",")
         var sql = "UPDATE student_account SET contest_id=? WHERE "
+        var student_name = "";
         for (let i = 0, l = list.length; i < l; ++i) {
           // create a new folder contains submission files of student
           if (!fs.existsSync(storage.BAILAM + contest_name + '/' + list[i])) {
             fs.mkdirSync(storage.BAILAM + contest_name + '/' + list[i])
+            student_name += "\n" + list[i];
           }
           // update contest_id in student_account
           sql += "rollnumber='" + list[i] + "' OR "
@@ -430,6 +447,7 @@ exports.add_student = function (req, res) {
           if (err) { logger.error(err); res.redirect("/error"); return }
           logger.info(list.length + " students in contest " + contest_id + " has added: " + list)
           sleep(500).then(() => {
+            fs.writeFileSync(storage.EVENT + 'workspaceEvent/workspaceEvent.txt', results[0].contest_name + student_name);
             res.redirect("/contest/load-student?class_name=" + class_name + "&contest_id=" + contest_id)
           })
         })
@@ -689,6 +707,7 @@ exports.add_problem_testcase = function (req, res) {
                 if (!req.session.upload_err) {
                   req.session.upload_success = true
                 }
+                fs.writeFileSync(storage.EVENT + 'testcaseEvent/testcaseEvent.txt', Math.random(1000) + 'changed');
                 logger.info("Upload problem contest " + contest_id + " : " + files.filetouploadProblem.name + " .Testcase: " + files.filetouploadTestcase.name)
                 res.redirect("/contest/add-problem?contest_id=" + contest_id)
               })
