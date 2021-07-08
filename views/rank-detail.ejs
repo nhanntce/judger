@@ -43,6 +43,10 @@
                     var memoryLimit = '0MB'
                     var format = ''
                     var comment = ''
+                    var plagiarism = ''
+                    var detectedFile = ''
+                    var detectedLine = []
+                    var origLine = []
                     if (logcontent.split('\n')[0].includes('Error') || logcontent.split('\n')[0] == "0.0") {
                         testcase = '0/' + testcase_size[i]
                         score = 0
@@ -73,6 +77,17 @@
                           comment = logcontent.split('\n')[4].split(': ')[1] + '%'
                         } else {
                           comment = 'NaN'
+                        }
+                        if(logcontent.split('\n')[5].split(': ')[1] >= 75) {
+                          plagiarism = logcontent.split('\n')[5].split(': ')[1]
+                          detectedFile = logcontent.split('\n')[6]
+                          for(let k = 7, j = 0; j < logcontent.split('\n')[7]; j++){
+                            origLine.push(logcontent.split('\n')[++k])
+                            detectedLine.push(logcontent.split('\n')[++k])
+                          }
+
+                        } else {
+                          plagiarism = '0'
                         }
                     }
             %>
