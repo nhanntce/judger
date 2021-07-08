@@ -20,6 +20,7 @@
         var tmp_maxtimes = []
         var format = []
         var comment = []
+        var plagiarism = []
         for (let i = 0, l = debai.length; i < l; ++i) { 
           tmp_pen[debai[i]] = 0
         }
@@ -36,6 +37,7 @@
                     memoryLimit.push('0MB')
                     format.push('NaN')
                     comment.push('NaN')
+                    plagiarism.push('NaN')
                 } else {
                     rescheck.push(parseInt(parseFloat(logcontent.split('\n')[0]) * testcase_size[i] / 10) + '/' + testcase_size[i])
                     score.push(parseFloat(logcontent.split('\n')[0]))
@@ -61,6 +63,10 @@
                     } else {
                       comment.push('NaN')
                     }
+                    if(logcontent.split('\n')[5].split(': ')[1] >= 0) {
+                      plagiarism.push(logcontent.split('\n')[5].split(': ')[1] + '%')
+                    } 
+                    
                 }
             }
         }
@@ -243,6 +249,7 @@
               <th class="font-weight-bold">Penalty</th>
               <th class="font-weight-bold">Format</th>
               <th class="font-weight-bold">Comment</th>
+              <th class="font-weight-bold">Plagiarism</th>
               <th class="font-weight-bold">Score</th>
             </tr>
           </thead>
@@ -311,6 +318,9 @@
               <%
                 }
               %>
+              <td>
+                <%=plagiarism[i]%>
+              </td>
               <td>
                 <%=score[i] ? score[i].toFixed(1) : "0.0"%>
               </td>

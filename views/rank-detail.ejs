@@ -24,6 +24,7 @@
         <th>TestCase</th>
         <th>Format</th>
         <th>Comment</th>
+        <th>Plagiarism</th>
         <th>Score</th>
       </tr>
     </thead>
@@ -43,11 +44,22 @@
                     var memoryLimit = '0MB'
                     var format = ''
                     var comment = ''
+                    var plagiarism = ''
+                    var plagiarismPercent = 0;
+                    var detectedFile = ''
+                    var n = 0
+                  	var d = 0
+                  	
+                    var origStartLine = []
+                    var origEndLine = []
+                    var detectedStartLine = []
+                    var detectedEndLine = []
                     if (logcontent.split('\n')[0].includes('Error') || logcontent.split('\n')[0] == "0.0") {
                         testcase = '0/' + testcase_size[i]
                         score = 0
                         format = 'NaN'
                         comment = 'NaN'
+                        plagiarism = '0%'
                     } else {
                         testcase = parseInt(logcontent.split('\n')[0] * testcase_size[i] / 10) + '/' + testcase_size[i]
                         score = logcontent.split('\n')[0]
@@ -73,6 +85,20 @@
                           comment = logcontent.split('\n')[4].split(': ')[1] + '%'
                         } else {
                           comment = 'NaN'
+                        }
+                        plagiarismPercent = logcontent.split('\n')[5].split(': ')[1]
+                        plagiarism =  plagiarismPercent + '%'
+                        if (plagiarismPercent > 0) {
+                        	detectedFile = logcontent.split('\n')[6]
+                        	var detectedFileContent = fs.existsSync(detectedFile) ? fs.readFileSync(detectedFile, 'utf8') : ""
+                        	n = logcontent.split('\n')[7]
+                        	var k = 8
+                        	for (let j = 0; j < n; j++) {
+                        		origStartLine.push(logcontent.split('\n')[k].split(' ')[0])
+                        		origEndLine.push(logcontent.split('\n')[k++].split(' ')[1])
+                        		detectedStartLine.push(logcontent.split('\n')[k].split(' ')[0])
+                        		detectedEndLine.push(logcontent.split('\n')[k++].split(' ')[1])
+                        	}
                         }
                     }
             %>
@@ -109,8 +135,7 @@
 
         %>
         <td>
-        <i class="<%=format[i]=='No'?'fas fa-times-circle text-danger':'fas fa-check-circle text-success'%>"></i>
-        <!-- <%=format[i]%> -->
+        <i class="<%=format=='No'?'fas fa-times-circle text-danger':'fas fa-check-circle text-success'%>"></i>
       </td>
         <%
           }
@@ -127,11 +152,13 @@
         %>
         <td>
         <%=comment%>
-        <!-- <%=format[i]%> -->
       </td>
         <%
           }
         %>
+        <td>
+          <%=plagiarism%>
+        </td>
         <td>
           <%=score%>
         </td>
@@ -145,32 +172,52 @@
             </div>
             <div class="modal-body">
               <div class="row">
-                <div class="col">
-                  Result
-                  <div id="editorlog<%=i%>" style="height: 360px;"><%= logcontent %></div>
-                </div>
-                <div class="col">
+              	<div class="col">
                   Submission
                   <div id="editorbai<%=i%>" style="height: 360px;"><%= baicontent %></div>
                 </div>
+                <%
+                	if (logcontent.split('\n')[5].split(': ')[1] > 0) {
+                %>
+                <div class="col">
+                  [<%=detectedFile.split('\\[')[1]%>
+                  <div id="editorlog<%=i%>" style="height: 360px;"><%= detectedFileContent %></div>
+                </div>
+                <%
+            	  }
+                %>
                 <script>
-                  var editorlog = ace.edit('editorlog<%=i%>');
-                  editorlog.getSession().setMode("ace/mode/c_cpp");
-                  editorlog.setOptions({
-                    wrap: true,
-                    indentedSoftWrap: false,
-                    readOnly: true
-                  })
-                  editorlog.renderer.$cursorLayer.element.style.opacity = 0
-                  document.getElementById('editorlog<%=i%>').style.fontSize = '15px';
-                  var editorbai = ace.edit('editorbai<%=i%>');
-                  editorbai.getSession().setMode("ace/mode/c_cpp");
-                  editorbai.setOptions({
-                    readOnly: true
-                  })
-                  editorbai.renderer.$cursorLayer.element.style.opacity = 0
-                  document.getElementById('editorbai<%=i%>').style.fontSize = '15px';
-
+                  if (<%=plagiarismPercent%> > 0) {
+                  	var editorlog = ace.edit('editorlog<%=i%>');
+                    editorlog.getSession().setMode("ace/mode/c_cpp");
+                    editorlog.setOptions({
+                      wrap: true,
+                      indentedSoftWrap: false,
+                      readOnly: true
+                    })
+                    var editorbai = ace.edit('editorbai<%=i%>');
+                    editorbai.getSession().setMode("ace/mode/c_cpp");
+                    editorbai.setOptions({
+                      readOnly: true
+                    })
+                    var Range = ace.require('ace/range').Range;
+                    for (var j = 0; j < <%=n%>; j++) {
+                  	  editorlog.getSession().addMarker(new Range(<%=detectedStartLine[d]%>-1, 0, <%=detectedEndLine[d]%>-1, 1), "myMarker", "fullLine");		
+                  	  editorbai.getSession().addMarker(new Range(<%=origStartLine[d]%>-1, 0, <%=origEndLine[d++]%>-1, 1), "myMarker", "fullLine");
+                    }
+					editorlog.renderer.$cursorLayer.element.style.opacity = 0
+                    document.getElementById('editorlog<%=i%>').style.fontSize = '15px';
+                    editorbai.renderer.$cursorLayer.element.style.opacity = 0
+                    document.getElementById('editorbai<%=i%>').style.fontSize = '15px';
+                  } else {
+                  	var editorbai = ace.edit('editorbai<%=i%>');
+                    editorbai.getSession().setMode("ace/mode/c_cpp");
+                    editorbai.setOptions({
+                      readOnly: true
+                    })
+                    editorbai.renderer.$cursorLayer.element.style.opacity = 0
+                    document.getElementById('editorbai<%=i%>').style.fontSize = '15px';
+                  }
                 </script>
               </div>
             </div>
