@@ -434,23 +434,35 @@ exports.load_student = function (req, res) {
   var sql = "SELECT rollnumber, name, class FROM student_account WHERE class=? and contest_id=0"
   db.query(sql, [class_name], function (err, results) {
     if (err) { logger.error(err); res.redirect("/error"); return }
-    if (results.length == 0) { // if query empty
-      sql = "SELECT rollnumber FROM student_account WHERE class=? LIMIT 1"
-      db.query(sql, [class_name], function (err, results) {
-        if (err) { logger.error(err); res.redirect("/error"); return }
-        if (results.length == 0) {
-          error = "Sorry, the system cannot find class " + class_name
-          res.render('add-student.ejs', { data: results, contest_id: contest_id, message: message, error: error, warning: warning, class_name: class_name, role: req.session.role, user: req.session.user })
-          return
-        } else {
-          warning = "All student are in contest"
-          res.render('add-student.ejs', { data: [], contest_id: contest_id, message: message, error: error, warning: warning, class_name: class_name, role: req.session.role, user: req.session.user })
-          return
-        }
+    // if (results.length == 0) { // if query empty
+    //   sql = "SELECT rollnumber FROM student_account WHERE class=? LIMIT 1"
+    //   db.query(sql, [class_name], function (err, results) {
+    //     if (err) { logger.error(err); res.redirect("/error"); return }
+    //     if (results.length == 0) {
+
+    //       error = "Sorry, the system cannot find class " + class_name
+    //       res.render('add-student.ejs', { list_class : [], data: results, contest_id: contest_id, message: message, error: error, warning: warning, class_name: class_name, role: req.session.role, user: req.session.user })
+    //       return
+    //     } else {
+    //       warning = "All student are in contest"
+    //       res.render('add-student.ejs', { list_class:[], data: [], contest_id: contest_id, message: message, error: error, warning: warning, class_name: class_name, role: req.session.role, user: req.session.user })
+    //       return
+    //     }
+    //   })
+    // } else {
+      // List all class
+      var sql = "SELECT DISTINCT class FROM `student_account` WHERE contest_id = 0"
+      var listClass = [];
+      db.query(sql, function (err, listClassDB) {
+        if (err) { logger.error(err); res.redirect("/error"); return; }
+         for(var i = 0, len = listClassDB.length; i < len; i++) {
+          listClass.push(listClassDB[i].class);
+         }
+         res.render('add-student.ejs', { list_class: listClass, data: results, contest_id: contest_id, message: message, 
+          error: error, warning: warning, class_name: class_name, role: req.session.role, user: req.session.user });
       })
-    } else {
-      res.render('add-student.ejs', { data: results, contest_id: contest_id, message: message, error: error, warning: warning, class_name: class_name, role: req.session.role, user: req.session.user })
-    }
+      
+    // }
   })
 
 }
