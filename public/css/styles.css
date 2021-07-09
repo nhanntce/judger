@@ -4,6 +4,12 @@ body {
   position: relative;
 }
 
+.myMarker {
+  position:absolute;
+  background:rgba(255,50,50,0.3);
+  z-index:20
+}
+
 .count-down-time {
   color: #ee4035;
   display: inline-flex;
