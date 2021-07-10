@@ -29,15 +29,15 @@
             <% if (message.length > 0) { %>
             <div class="alert alert-danger col-sm-12 animated shake fast" align=center><%= message %></div>
             <% } %>
-            <form class="user" method="POST" action="/login">
-              <div class="form-group">
-                <input type="text" class="form-control form-control-user" name="user_name" value="<%=username%>"
+            <!-- <form class="user" method="GET" action="/google"> -->
+              <!-- <div class="form-group"> -->
+                <!-- <input type="text" class="form-control form-control-user" name="user_name" value="<%=username%>"
                   placeholder="Username">
-              </div>
-              <div class="form-group">
+              </div> -->
+              <!-- <div class="form-group">
                 <input type="password" class="form-control form-control-user" name="password" placeholder="Password">
-              </div>
-              <div class="form-group">
+              </div> -->
+              <!-- <div class="form-group">
                 <div class="form-check form-check-inline">
                   <input type="radio" class="form-check-input" id="materialInline1" name="role" checked value="Student">
                   <label class="form-check-label" for="materialInline1">Student</label>
@@ -46,9 +46,11 @@
                   <input type="radio" class="form-check-input" id="materialInline2" name="role" value="Teacher">
                   <label class="form-check-label" for="materialInline2">Teacher</label>
                 </div>
-              </div>
-              <button type="submit" class="btn btn-deep-orange btn-user btn-block">Login </button>
-            </form>
+              </div> -->
+              <!-- <button type="submit" class="btn btn-deep-orange btn-user btn-block">Login </button> -->
+              <a href="/google"><button type="submit" style="background-color: white; "><img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" style="width:max-content; background:white;" alt=""><b style="padding-left: 5px;">Sign in with google</b></button></a>
+            <!-- </form> -->
+            
           </div>
         </div>
       </div>
