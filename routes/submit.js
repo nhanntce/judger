@@ -131,6 +131,21 @@ exports.submission_realtime = function (req, res) {
   }
   var contest_name = req.session.contest_name
   var rollnumber = req.session.rollnumber
+  var configContent = fs.readFileSync(storage.TESTCASE + contest_name + '/config.txt', 'utf8')
+  var checkCmt = configContent.split('\n')[3].split('=')[1]
+  var checkCmtMode = ''
+  var percentCmtAcp = 0
+  var minusPoint = 0
+  var minusPercent = 0
+  if (checkCmt == 'true') {
+    checkCmtMode = configContent.split('\n')[4].split('=')[1]
+    percentCmtAcp = parseFloat(configContent.split('\n')[5])
+    if (checkCmtMode == 'Fixed') {
+      minusPoint = configContent.split('\n')[6]
+    } else {
+      minusPercent = configContent.split('\n')[6]
+    }
+  }
   // get all judged Logs in folder './public/nopbai/Logs/' + contest_name
   fs.readdir(storage.NOPBAI + 'Logs/' + contest_name, function (err, log_files) {
     if (err) { res.redirect("/error"); return }
@@ -161,7 +176,20 @@ exports.submission_realtime = function (req, res) {
          fs.readFileSync(storage.NOPBAI + 'Logs/' + contest_name + '/' + log_files[i], 'utf8') : "";
         if (logcontent) {
           if (!logcontent.split('\n')[0].includes('Error')) {
-            score[tmp] = parseFloat(logcontent.split('\n')[0])
+            if (logcontent.split('\n')[5].split(': ')[1] >= 75) {
+              score[tmp] = 0
+            } else {
+              var comment = parseFloat(logcontent.split('\n')[4].split(': ')[1])
+              score[tmp] = parseFloat(logcontent.split('\n')[0])
+              if (comment < percentCmtAcp) {
+                if (checkCmtMode == 'Fixed') {
+                  score[tmp] = score[tmp] - minusPoint
+                } else {
+                  score[tmp] = score[tmp] - (score[tmp] * minusPercent / 100)
+                }
+              }  
+            }
+            
             result[tmp] = parseInt(parseFloat(logcontent.split('\n')[0]) * testcase_size / 10)
             if (result[tmp] < testcase_size) {
               if (logcontent.includes('Time Limit Exceeded')) {
