@@ -2,6 +2,26 @@
 const minutes = 15
 //-----------------------------------------------login page call------------------------------------------------------
 /**
+ * check is logged in
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+exports.isLoggedIn = (req, res, next) => {
+  if (req.user) {
+      next();
+  } else {
+    res.render('index.ejs')
+  }
+}
+
+exports.LogOutGG = (req, res) => {
+    req.session = null;
+    req.logout();
+    res.redirect('/login');
+}
+
+/**
  * Check login
  * If role is student => GET submission page
  * Else role is teacher => GET contest page

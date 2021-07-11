@@ -15,6 +15,8 @@
   "dependencies": {
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",
+    "cookie-session": "^1.4.0",
+    "cors": "^2.8.5",
     "dayjs": "^1.8.30",
     "ejs": "^3.0.2",
     "express": "^4.17.1",
@@ -25,6 +27,8 @@
     "mysql": "^2.18.0",
     "nodemon": "^2.0.4",
     "nodetable": "^1.0.2",
+    "passport": "^0.4.1",
+    "passport-google-oauth20": "^2.0.0",
     "req-flash": "0.0.3",
     "xlsx": "^0.15.6",
     "zip-local": "^0.3.4"
