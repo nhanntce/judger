@@ -105,25 +105,18 @@
             <input type="text" class="form-control" id="time_end" name="time_end"
               value="<%=dayjs(data[0].time_end).format('DD-MM-YYYY HH:mm')%>" required>
           </div>
-          <label class="font-weight-bold">Time Limit</label>
-          <div class="form mb-3">
-            <div class="row">
-                <div class="col-8">
-                  <input type="number" id="time_limit" name="time_limit" class="form-control" value="<%=data[0].time_limit%>" required>
-                </div>
-                <div class="col-4">
-                  <scan class="font-weight-bold" style="vertical-align: middle; margin-top: 5px;">ms</scan>
-                </div>
+          <div class="row">
+            <div class="col-6">
+              <label class="font-weight-bold">Time Limit (ms)</label>
+              <div class="form mb-3">
+                <input type="number" id="time_limit" name="time_limit" class="form-control" value="<%=data[0].time_limit%>" required>
+              </div>
             </div>
-          </div>
-          <div class="form mb-3">
-            <div class="row">
-                <div class="col-8">
-                  <input type="number" id="memory_limit" name="memory_limit" class="form-control" value="<%=data[0].memory_limit%>" required>
-                </div>
-                <div class="col-4">
-                  <scan class="font-weight-bold" style="vertical-align: middle; margin-top: 5px;">MB</scan>
-                </div>
+            <div class="col-6">
+              <label class="font-weight-bold">Memory Limit (MB)</label>
+              <div class="form mb-3">
+                <input type="number" id="memory_limit" name="memory_limit" class="form-control" value="<%=data[0].memory_limit%>" required>
+              </div>
             </div>
           </div>
           <div class="form mb-3">
@@ -140,21 +133,83 @@
             %>
             <label class="font-weight-bold" style="cursor:default;">Formatted Checking</label>
           </div>
+<!--start Comment checking-->
+          <div class="row">
+            <div class="form mb-3 col-7">
+              <% 
+                if(data[0].check_comment === 'true') {
+              %>
+              <input type="checkbox" style="pointer-events: auto; width:4rem; z-index: 10; cursor:pointer;"  class="form-check-input" id="check_comment" name="check_comment"  onclick="checkComment()" checked>
+              <%
+                } else {
+              %>
+              <input type="checkbox" style="pointer-events: auto; width:4rem; z-index: 10; cursor:pointer;"  class="form-check-input" id="check_comment"  onclick="checkComment()" name="check_comment">
+              <%
+                }
+              %>
+              <label class="font-weight-bold" style="cursor:default;">Commentted Checking</label>
+            </div>
+            <div id="check_comment_mode_div" class="form mb-3 col-5" style="display: none;">
+              <select class="mdb-select" name="check_comment_mode" id="check_comment_mode">
+                <%
+                  if(data[0].check_comment_mode === "Fixed") {
+                %>
+                <option value="Fixed" selected>Fixed</option>
+                <option value="By Percentage">By Percentage</option>
+                <%
+                  } else {
+                %>
+                <option value="Fixed">Fixed</option>
+                <option value="By Percentage" selected>By Percentage</option>
+                <%
+                  }
+                %>
+              </select>
+            </div>
+          </div>          
+            <div id="has_check_comment" style="display: none;">
+              <div class="row">
+                <div class="col-6">
+                  <label class="font-weight-bold">Percentage Accept (%)</label>
+                  <div class="form mb-3">
+                    <input type="number" id="percentage_accept" name="percentage_accept" class="form-control" value="<%=data[0].percentage_accept%>">
+                  </div>              
+                </div>
+                <div class="col-6">
+                  <label class="font-weight-bold" id="lb_minus_point">Minus Points (point)</label>
+                  <div class="form mb-3">
+                    <div class="row">
+                        <div class="col-10">
+                          <input type="number" id="percentage_minus_point" name="percentage_minus_point" class="form-control" value=<%=data[0].percentage_minus_point%>>
+                        </div>
+                    </div>
+                  </div>              
+                </div>
+              </div>
+            </div>
+<!-- end Comment checking -->                        
+<!-- start Plagiarism Checking-->
           <div class="form mb-3">
-            <% 
-              if(data[0].check_comment === 'true') {
-            %>
-            <input type="checkbox" style="pointer-events: auto; width:4rem; z-index: 10; cursor:pointer;"  class="form-check-input" id="check_comment" name="check_comment" checked>
-            <%
-              } else {
-            %>
-            <input type="checkbox" style="pointer-events: auto; width:4rem; z-index: 10; cursor:pointer;"  class="form-check-input" id="check_comment" name="check_comment">
-            <%
-              }
-            %>
-            <label class="font-weight-bold" style="cursor:default;">Commentted Checking</label>
+            <input type="checkbox" style="pointer-events: auto; width:4rem; z-index: 10; cursor:pointer;"  class="form-check-input" id="check_plagiarism" name="check_plagiarism">
+            <label class="font-weight-bold" style="cursor:default;">Plagiarism Checking</label>
           </div>
-          
+
+          <div id="has_check_plagiarism" class="row" style="display: none;">
+            <div class="form mb-3 col-6">
+              <label class="font-weight-bold">Percentage Allow</label>
+              <div class="form mb-3">
+                <div class="row">
+                    <div class="col-10">
+                      <input type="number" id="percentage_allow" name="percentage_allow" class="form-control">
+                    </div>
+                    <div class="col-2">
+                      <scan class="font-weight-bold" style="vertical-align: middle; margin-top: 5px;">%</scan>
+                    </div>
+                </div>
+              </div>              
+            </div>
+          </div>
+<!-- end Plagiarism Checking-->
           <label class="font-weight-bold">Language</label>
           <select class="mdb-select md-form" id="language" name="language" multiple required>
             <option disabled>Choose language</option>
@@ -165,6 +220,42 @@
             <option>MySQL</option>
           </select>
         </div>
+        <script>
+            var check_comment_mode_div = document.getElementById('check_comment_mode_div');
+            var check_comment_mode_ = document.getElementById('check_comment_mode');
+            var has_check_comment = document.getElementById('has_check_comment');
+            var lb_minus_point = document.getElementById('lb_minus_point');
+            var has_check_plagiarism = document.getElementById('has_check_plagiarism');
+            var check_comment = document.getElementById('check_comment');
+            var check_plagiarism = document.getElementById('check_plagiarism');
+            console.log(check_comment.checked);
+            function checkComment() {
+              if(check_comment.checked == true) {
+                check_comment.classList.remove("mb-3");
+                check_comment_mode_div.classList.remove("mb-3");
+                check_comment_mode_div.style.display = "inline";
+                has_check_comment.style.display = "inline";
+                console.log("block");
+              } else {
+                check_comment_mode_div.style.display = "none";
+                has_check_comment.style.display = "none";
+              }
+            }
+            
+            function checkCommentMode() {
+              var v = check_comment_mode.value;
+              if(v === "Fixed") {
+                lb_minus_point.innerHTML = "Minus Points (point)";
+              } else {
+                lb_minus_point.innerHTML = "Minus Points (%)";
+              }
+            }
+            //add event
+            check_comment_mode.addEventListener('change', checkCommentMode); 
+            //call init
+            checkComment();
+            checkCommentMode();
+        </script>
         <script>
           $('#time_begin, #time_end').datetimepicker({
             format: 'dd-mm-yyyy hh:ii'

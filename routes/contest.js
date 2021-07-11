@@ -65,8 +65,17 @@ exports.add_contest = function (req, res) {
     var memory_limit = post.memory_limit;
     var check_format = post.check_format;
     var check_comment = post.check_comment;
+    var check_comment_mode = post.check_comment_mode;
+    var percentage_accept = post.percentage_accept;
+    var percentage_minus_point = post.percentage_minus_point;
+    var check_plagiarism = post.check_plagiarism;
     var data_config = "time_limit=" + time_limit + "\nmemory_limit=" + memory_limit + "\ncheck_format=" + 
     (check_format? "true" : "false") + "\ncheck_comment=" + (check_comment ? "true" : "false");
+    if(check_comment) {
+      data_config += "\ncheck_comment_mode=" + check_comment_mode + "\n" + percentage_accept + 
+      "\n" + percentage_minus_point;
+    }
+    data_config += "\ncheck_plagiarism=" + (check_plagiarism ? "true" : "false");
 
     if (contest_name !== "" && ValidateDate(time_begin) && ValidateDate(time_end) && formatTimeBegin < formatTimeEnd) {
       // create 4 folder when add new contest
@@ -192,41 +201,66 @@ exports.edit_contest = function (req, res) {
     var memory_limit = post.memory_limit;
     var check_format = post.check_format;
     var check_comment = post.check_comment;
+    var check_comment_mode = post.check_comment_mode;
+    var percentage_accept = post.percentage_accept;
+    var percentage_minus_point = post.percentage_minus_point;
+    var check_plagiarism = post.check_plagiarism;
+
     var data_config = "time_limit=" + time_limit + "\nmemory_limit=" + memory_limit + "\ncheck_format=" + 
     (check_format? "true" : "false") + "\ncheck_comment=" + (check_comment ? "true" : "false");
-
+    if(check_comment) {
+      data_config += "\ncheck_comment_mode=" + check_comment_mode + "\n" + percentage_accept + 
+      "\n" + percentage_minus_point;
+    }
+    data_config += "\ncheck_plagiarism=" + (check_plagiarism ? "true" : "false");
     if (contest_name_new !== "" && ValidateDate(time_begin) && ValidateDate(time_end) && formatTimeBegin < formatTimeEnd) {
       // update contest_name, time_begin, time_end
       var sql = "UPDATE contest SET contest_name=?, time_begin=?, time_end=?, language=? WHERE contest_id=?"
       db.query(sql, [contest_name_new, formatTime(time_begin), formatTime(time_end), language, contest_id], function (err) {
         if (err) { logger.error(err); res.redirect("/error"); return }
-        fs.rename(storage.BAILAM + contest_name_old, storage.BAILAM + contest_name_new, function (err) {
-          if (err) { logger.error(err); res.redirect("/error"); return }
-          fs.readdir(storage.BAILAM + contest_name_new, (err, folders) => {
-            folders.forEach(folder => {
-              fs.readdir(storage.BAILAM + contest_name_new + '/' + folder , (err, files) => {
-                files.forEach(file => {
-                  var filenew = file.replace(contest_name_old, contest_name_new);
-                  fs.rename(storage.BAILAM + contest_name_new +'/'+ folder +'/' + file,
-                   storage.BAILAM + contest_name_new + '/'+ folder + '/' + filenew, (err) => {});
-                })
+        if(contest_name_old !== contest_name_new) {
+          fs.rename(storage.BAILAM + contest_name_old, storage.BAILAM + contest_name_new, function (err) {
+            if (err) { logger.error(err); res.redirect("/error"); return }
+            fs.readdir(storage.BAILAM + contest_name_new, (err, folders) => {
+              folders.forEach(folder => {
+                fs.readdir(storage.BAILAM + contest_name_new + '/' + folder , (err, files) => {
+                  files.forEach(file => {
+                    var filenew = file.replace(contest_name_old, contest_name_new);
+                    fs.rename(storage.BAILAM + contest_name_new +'/'+ folder +'/' + file,
+                     storage.BAILAM + contest_name_new + '/'+ folder + '/' + filenew, (err) => {
+                      if(err) { logger.error(err); res.redirect("/error"); return; }
+                     });
+                  })
+                });
               });
             });
-          });
-        })
-        fs.rename(storage.DEBAI + contest_name_old, storage.DEBAI + contest_name_new, function (err) {
-          if (err) { logger.error(err); res.redirect("/error"); return }
-        })
-        fs.rename(storage.TESTCASE + contest_name_old, storage.TESTCASE + contest_name_new, function (err) {
-          if (err) { logger.error(err); res.redirect("/error"); return }
-          fs.exists(storage.TESTCASE + contest_name_new + "/config.txt", function (exists) {
-            fs.writeFileSync(storage.TESTCASE + contest_name_new + "/config.txt", data_config);
           })
-        })
-        fs.rename(storage.NOPBAI + 'Logs/' + contest_name_old, storage.NOPBAI + 'Logs/' + contest_name_new, function (err) {
-          if (err) { logger.error(err); res.redirect("/error"); return }
-        })
-
+          fs.rename(storage.DEBAI + contest_name_old, storage.DEBAI + contest_name_new, function (err) {
+            if (err) { logger.error(err); res.redirect("/error"); return }
+          })
+          fs.rename(storage.TESTCASE + contest_name_old, storage.TESTCASE + contest_name_new, function (err) {
+            if (err) { logger.error(err); res.redirect("/error"); return }
+            fs.exists(storage.TESTCASE + contest_name_new + "/config.txt", function (exists) {
+              fs.writeFileSync(storage.TESTCASE + contest_name_new + "/config.txt", data_config);
+            })
+          })
+          fs.rename(storage.NOPBAI + 'Logs/' + contest_name_old, storage.NOPBAI + 'Logs/' + contest_name_new, function (err) {
+            if (err) { logger.error(err); res.redirect("/error"); return }
+            fs.readdir(storage.NOPBAI + 'Logs/' + contest_name_new, (err, folders) => {
+              folders.forEach(file => {
+                  var filenew = file.replace(contest_name_old, contest_name_new);
+                  fs.rename(storage.NOPBAI + 'Logs/' + contest_name_new +'/' + file,
+                   storage.NOPBAI + 'Logs/' + contest_name_new + '/' + filenew, (err) => {
+                    if(err) {ogger.error(err); res.redirect("/error"); return;}
+                   });
+                })
+            });
+          })
+        } else {
+          fs.exists(storage.TESTCASE + contest_name_new + "/config.txt", function (exists) {
+              fs.writeFileSync(storage.TESTCASE + contest_name_new + "/config.txt", data_config);
+          })
+        }
         logger.info("Contest " + contest_id + " has changed time to begin:" + formatTime(time_begin) + ", end: " + formatTime(time_end) + ", language=" + language)
         res.redirect("/contest/detail?contest_id=" + contest_id)
       })
@@ -297,6 +331,14 @@ exports.contest_detail = function (req, res) {
         results[0].memory_limit = data_config_inline[1].split('=')[1];
         results[0].check_format = data_config_inline[2].split('=')[1];
         results[0].check_comment = data_config_inline[3].split('=')[1];
+        if(results[0].check_comment === 'true') {
+          results[0].check_comment_mode = data_config_inline[4].split('=')[1];
+          results[0].percentage_accept = data_config_inline[5];
+          results[0].percentage_minus_point = data_config_inline[6];
+          results[0].check_plagiarism = data_config_inline[7].split('=')[1]
+        } else {
+          results[0].check_plagiarism = data_config_inline[4].split('=')[1]
+        }
         res.render('contest-detail.ejs', { data: results, totalStudent: 0, message: message, teacher_role: req.session.teacher_role, role: req.session.role, user: req.session.user })
       })
     } else { // at least 1 student
@@ -306,6 +348,14 @@ exports.contest_detail = function (req, res) {
       results[0].memory_limit = data_config_inline[1].split('=')[1];
       results[0].check_format = data_config_inline[2].split('=')[1];
       results[0].check_comment = data_config_inline[3].split('=')[1];
+      if(results[0].check_comment === 'true') {
+        results[0].check_comment_mode = data_config_inline[4].split('=')[1];
+        results[0].percentage_accept = data_config_inline[5];
+        results[0].percentage_minus_point = data_config_inline[6];
+        results[0].check_plagiarism = data_config_inline[7].split('=')[1]
+      } else {
+        results[0].check_plagiarism = data_config_inline[4].split('=')[1]
+      }
       res.render('contest-detail.ejs', { data: results, totalStudent: results.length, message: message, teacher_role: req.session.teacher_role, role: req.session.role, user: req.session.user })
     }
 
@@ -339,7 +389,17 @@ exports.delete_student = function (req, res) {
         fs.rename(storage.BAILAM + contest_name + '/' + list[i], storage.BAILAM + contest_name + '/$' + list[i], function (err) {
           if (err) { 
             logger.error(err); res.redirect("/error"); return }
-        })
+        });
+        //select id of student by rollnumber NhanNT
+          sql_contest_student = "SELECT `id` FROM `student_account` WHERE rollnumber = ?";
+          db.query(sql_contest_student, [list[i]], (errSelect, resSelect) => {
+            if (errSelect) { logger.error(errSelect); res.redirect("/error"); return; }
+              //insert student id and contest id into contest_student NhanNT
+              sql_contest_student = 'UPDATE `contest_student` SET `status`= 0 WHERE student_id = ? AND contest_id = ?';
+              db.query(sql_contest_student, [resSelect[0].id, contest_id], (errInsert, resInsert) => {
+                if (errInsert) { logger.error(errInsert); res.redirect("/error"); return; }
+              });
+          });
       }
       sql = sql.slice(0, -4)
       db.query(sql, function (err) {
@@ -347,6 +407,7 @@ exports.delete_student = function (req, res) {
         req.session.deleted = true
         logger.info(list.length + " students in contest " + contest_id + " has deleted: " + list)
         sleep(500).then(() => {
+          fs.writeFileSync(storage.EVENT + 'workspaceEvent/workspaceEvent.txt', Math.random(1000) + "changed");
           res.redirect("/contest/detail?contest_id=" + contest_id)
         })
       })
@@ -384,23 +445,35 @@ exports.load_student = function (req, res) {
   var sql = "SELECT rollnumber, name, class FROM student_account WHERE class=? and contest_id=0"
   db.query(sql, [class_name], function (err, results) {
     if (err) { logger.error(err); res.redirect("/error"); return }
-    if (results.length == 0) { // if query empty
-      sql = "SELECT rollnumber FROM student_account WHERE class=? LIMIT 1"
-      db.query(sql, [class_name], function (err, results) {
-        if (err) { logger.error(err); res.redirect("/error"); return }
-        if (results.length == 0) {
-          error = "Sorry, the system cannot find class " + class_name
-          res.render('add-student.ejs', { data: results, contest_id: contest_id, message: message, error: error, warning: warning, class_name: class_name, role: req.session.role, user: req.session.user })
-          return
-        } else {
-          warning = "All student are in contest"
-          res.render('add-student.ejs', { data: [], contest_id: contest_id, message: message, error: error, warning: warning, class_name: class_name, role: req.session.role, user: req.session.user })
-          return
-        }
+    // if (results.length == 0) { // if query empty
+    //   sql = "SELECT rollnumber FROM student_account WHERE class=? LIMIT 1"
+    //   db.query(sql, [class_name], function (err, results) {
+    //     if (err) { logger.error(err); res.redirect("/error"); return }
+    //     if (results.length == 0) {
+
+    //       error = "Sorry, the system cannot find class " + class_name
+    //       res.render('add-student.ejs', { list_class : [], data: results, contest_id: contest_id, message: message, error: error, warning: warning, class_name: class_name, role: req.session.role, user: req.session.user })
+    //       return
+    //     } else {
+    //       warning = "All student are in contest"
+    //       res.render('add-student.ejs', { list_class:[], data: [], contest_id: contest_id, message: message, error: error, warning: warning, class_name: class_name, role: req.session.role, user: req.session.user })
+    //       return
+    //     }
+    //   })
+    // } else {
+      // List all class
+      var sql = "SELECT DISTINCT class FROM `student_account` WHERE contest_id = 0"
+      var listClass = [];
+      db.query(sql, function (err, listClassDB) {
+        if (err) { logger.error(err); res.redirect("/error"); return; }
+         for(var i = 0, len = listClassDB.length; i < len; i++) {
+          listClass.push(listClassDB[i].class);
+         }
+         res.render('add-student.ejs', { list_class: listClass, data: results, contest_id: contest_id, message: message, 
+          error: error, warning: warning, class_name: class_name, role: req.session.role, user: req.session.user });
       })
-    } else {
-      res.render('add-student.ejs', { data: results, contest_id: contest_id, message: message, error: error, warning: warning, class_name: class_name, role: req.session.role, user: req.session.user })
-    }
+      
+    // }
   })
 
 }
@@ -433,13 +506,25 @@ exports.add_student = function (req, res) {
         var list = list_rollnumber.split(",")
         var sql = "UPDATE student_account SET contest_id=? WHERE "
         var student_name = "";
+        var sql_contest_student = '';
         for (let i = 0, l = list.length; i < l; ++i) {
           // create a new folder contains submission files of student
           if (!fs.existsSync(storage.BAILAM + contest_name + '/' + list[i])) {
             fs.mkdirSync(storage.BAILAM + contest_name + '/' + list[i])
             student_name += "\n" + list[i];
           }
-          // update contest_id in student_account
+          //select id of student by rollnumber NhanNT
+          sql_contest_student = "SELECT `id` FROM `student_account` WHERE rollnumber = ?";
+          db.query(sql_contest_student, [list[i]], (errSelect, resSelect) => {
+            if (errSelect) { logger.error(errSelect); res.redirect("/error"); return; }
+              //insert student id and contest id into contest_student NhanNT
+              sql_contest_student = 'INSERT INTO `contest_student`( `student_id`, `contest_id`, `status`) VALUES (?,?,?)';
+              db.query(sql_contest_student, [resSelect[0].id, contest_id, 1], (errInsert, resInsert) => {
+                if (errInsert) { logger.error(errInsert); res.redirect("/error"); return; }
+              });
+          });
+          
+          //update contest_id in student_account
           sql += "rollnumber='" + list[i] + "' OR "
         }
         sql = sql.slice(0, -4)

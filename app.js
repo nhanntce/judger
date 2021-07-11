@@ -8,12 +8,17 @@ const express = require('express')
   , rank = require('./routes/rank')
   , submit = require('./routes/submit')
   , admin = require('./routes/admin')
+  , auth = require('./routes/auth')
   , http = require('http')
   , session = require('express-session')
   , mysql = require('mysql')
   , bodyParser = require('body-parser')
   , compression = require('compression')
   , https = require('https')
+  , cors = require('cors')
+  , passport = require('passport')
+  , cookieSession = require('cookie-session')
+  require('./passport-setup');
 // set maximum sockets
 http.globalAgent.maxSockets = Infinity
 https.globalAgent.maxSockets = Infinity
@@ -65,6 +70,41 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(protectPath(/^\/thumucbailam|thumuctest|nopbai|excel\/.*$/))
 app.use(express.static(path.join(__dirname, 'public')))
+app.use(cors())
+// For an actual app you should configure this with an experation time, better keys, proxy and secure
+app.use(cookieSession({
+  name: 'tuto-session',
+  keys: ['key1', 'key2']
+}))
+
+// Auth middleware that checks if the user is logged in
+const isLoggedIn = (req, res, next) => {
+  if (req.user) {
+      next();
+  } else {
+      res.sendStatus(401);
+  }
+}
+
+// Initializes passport and passport sessions
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Example protected and unprotected routes
+// app.get('/', (req, res) => res.send('Example Home page!'))
+// app.get('/failed', (req, res) => res.send('You Failed to log in!'))
+
+
+// In this route you can see that if the user is logged in u can acess his info in: req.user
+app.get('/success', auth.success);
+
+// Auth Routes
+app.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+app.get('/google/callback', passport.authenticate('google', { failureRedirect: '/error' }), auth.googleCallback);
+
+app.get('/logout', user.LogOutGG);
+
 app.use(session({
   secret: 'keyboard cat',
   resave: false,
@@ -74,7 +114,7 @@ app.use(session({
 // development only
 app.get('*', (req, res, next) => {
   var url = req.url.split('?')[0]
-  if (['/', '/login', '/home/dashboard', '/home/tutorial', '/home/logout', '/home/profile', '/submission', '/session/destroy', '/error'].indexOf(url) !== -1) {
+  if (['/', '/login', '/home/dashboard', '/home/tutorial', '/home/logout', '/home/profile', '/submission', '/session/destroy', '/error', '/google', '/good', '/logout'].indexOf(url) !== -1) {
     return next()
   }
   if (req.session.role === "Student") {
@@ -122,7 +162,17 @@ app.get('/contest/add-student', (req, res) => {
     return
   }
   var contest_id = req.query.contest_id
-  res.render('add-student.ejs', { data: [], contest_id: contest_id, message: "", error: "", warning: "", role: req.session.role, user: req.session.user })
+  // List all class
+  var sql = "SELECT DISTINCT class FROM `student_account` WHERE contest_id = 0"
+  var listClass = [];
+  db.query(sql, function (err, results) {
+    if (err) { logger.error(err); res.redirect("/error"); return; }
+     for(var i = 0, len = results.length; i < len; i++) {
+      listClass.push(results[i].class);
+     }
+     res.render('add-student.ejs', { list_class: listClass, data: [], contest_id: contest_id, message: "", 
+      error: "", warning: "", role: req.session.role, user: req.session.user })
+  })
 })
 app.post('/contest/add-student', contest.add_student)
 // Load class
