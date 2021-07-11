@@ -389,7 +389,17 @@ exports.delete_student = function (req, res) {
         fs.rename(storage.BAILAM + contest_name + '/' + list[i], storage.BAILAM + contest_name + '/$' + list[i], function (err) {
           if (err) { 
             logger.error(err); res.redirect("/error"); return }
-        })
+        });
+        //select id of student by rollnumber NhanNT
+          sql_contest_student = "SELECT `id` FROM `student_account` WHERE rollnumber = ?";
+          db.query(sql_contest_student, [list[i]], (errSelect, resSelect) => {
+            if (errSelect) { logger.error(errSelect); res.redirect("/error"); return; }
+              //insert student id and contest id into contest_student NhanNT
+              sql_contest_student = 'UPDATE `contest_student` SET `status`= 0 WHERE student_id = ? AND contest_id = ?';
+              db.query(sql_contest_student, [resSelect[0].id, contest_id], (errInsert, resInsert) => {
+                if (errInsert) { logger.error(errInsert); res.redirect("/error"); return; }
+              });
+          });
       }
       sql = sql.slice(0, -4)
       db.query(sql, function (err) {
@@ -397,6 +407,7 @@ exports.delete_student = function (req, res) {
         req.session.deleted = true
         logger.info(list.length + " students in contest " + contest_id + " has deleted: " + list)
         sleep(500).then(() => {
+          fs.writeFileSync(storage.EVENT + 'workspaceEvent/workspaceEvent.txt', Math.random(1000) + "changed");
           res.redirect("/contest/detail?contest_id=" + contest_id)
         })
       })
@@ -495,13 +506,25 @@ exports.add_student = function (req, res) {
         var list = list_rollnumber.split(",")
         var sql = "UPDATE student_account SET contest_id=? WHERE "
         var student_name = "";
+        var sql_contest_student = '';
         for (let i = 0, l = list.length; i < l; ++i) {
           // create a new folder contains submission files of student
           if (!fs.existsSync(storage.BAILAM + contest_name + '/' + list[i])) {
             fs.mkdirSync(storage.BAILAM + contest_name + '/' + list[i])
             student_name += "\n" + list[i];
           }
-          // update contest_id in student_account
+          //select id of student by rollnumber NhanNT
+          sql_contest_student = "SELECT `id` FROM `student_account` WHERE rollnumber = ?";
+          db.query(sql_contest_student, [list[i]], (errSelect, resSelect) => {
+            if (errSelect) { logger.error(errSelect); res.redirect("/error"); return; }
+              //insert student id and contest id into contest_student NhanNT
+              sql_contest_student = 'INSERT INTO `contest_student`( `student_id`, `contest_id`, `status`) VALUES (?,?,?)';
+              db.query(sql_contest_student, [resSelect[0].id, contest_id, 1], (errInsert, resInsert) => {
+                if (errInsert) { logger.error(errInsert); res.redirect("/error"); return; }
+              });
+          });
+          
+          //update contest_id in student_account
           sql += "rollnumber='" + list[i] + "' OR "
         }
         sql = sql.slice(0, -4)
