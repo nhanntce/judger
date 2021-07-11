@@ -6,25 +6,35 @@
   <link href="../css/sb-admin-2.min.css" rel="stylesheet">
   <link href="../css/mdb.min.css" rel="stylesheet">
   <style>
+    .button {
+      border-color: blue;
+      border-width: 1.5px;
+}
+    .img {
+      padding: 5px 5px 5px 5px;
+      margin: -1.5px -1px -1.5px -6px;
+
+    }
     body {
       box-shadow: inset 0 0 0 100vw rgba(0, 0, 0, 0.5);
       background-image: url(/img/bg.jpg);
       background-position: center center;
       background-repeat: no-repeat;
       background-attachment: fixed;
-      background-size: cover;
+      background-size: cover;       
     }
+
   </style>
 </head>
 
 <body>
   <div class="container">
     <div class="row">
-      <div class="col-sm-9 col-md-7 col-lg-4 mx-auto">
+      <div class="col-sm-1 col-md-1 col-lg-4 mx-auto">
         <div class="card o-hidden border-0 shadow-lg my-5">
           <div class="card-body">
             <div class="text-center">
-              <h1 class="h4 text-gray-900 mb-4">Sign In</h1>
+              <h1 class="h4 text-gray-900 mb-4">Sinh viên, Giảng viên ĐH-FPT</h1>
             </div>
             <% if (message.length > 0) { %>
             <div class="alert alert-danger col-sm-12 animated shake fast" align=center><%= message %></div>
@@ -48,7 +58,7 @@
                 </div>
               </div> -->
               <!-- <button type="submit" class="btn btn-deep-orange btn-user btn-block">Login </button> -->
-              <a href="/google"><button type="submit" style="background-color: white; "><img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" style="width:max-content; background:white;" alt=""><b style="padding-left: 5px;">Sign in with google</b></button></a>
+              <a href="/google" style="margin-left: 80px;"><button type="submit" class="button" style="background-color: #5882FA; "><img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" class="img" style="width:max-content; background:white;" alt=""><h9 style="padding-left: 5px; color: white">Đăng nhập</h9></button></a>
             <!-- </form> -->
             
           </div>

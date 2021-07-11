@@ -87,7 +87,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form action="/contest/edit-contest" method="POST">
+      <form action="/contest/edit-contest" method="POST" id="editContestForm">
         <div class="modal-body mx-3">
           <label class="font-weight-bold">Name</label>
           <div class="form mb-3">
@@ -270,6 +270,45 @@
           <button class="btn btn-deep-orange">Update</button>
         </div>
       </form>
+      <script>
+         $(document).ready(function() {
+        $('#editContestForm').submit(function(e) {
+    var time_limit = $('#time_limit').val();
+    var memory_limit = $('#memory_limit').val();
+    $(".error").remove();
+    if (time_limit < 0) {
+      
+      $('#time_limit').after('<span class="error">Time limit must be greater than 0 !</span>');
+      e.preventDefault();
+    }
+    if (memory_limit < 0) {
+      $('#memory_limit').after('<span class="error">Memory limit must be greater than 0 !</span>');
+      e.preventDefault();
+    }
+    var begin = $('#time_begin').val();
+    var end = $('#time_end').val();
+    if(begin > end ){
+      $('#time_end').after('<span class="error">End time must be greater than Start time !</span>');
+      e.preventDefault();
+    }
+    var dt = new Date();
+    var dateTime = 
+    (`${dt.getDate().toString().padStart(2, '0')}-${
+    (dt.getMonth()+1).toString().padStart(2, '0')}-${
+    dt.getFullYear().toString().padStart(4, '0')} ${
+    dt.getHours().toString().padStart(2, '0')}:${
+    dt.getMinutes().toString().padStart(2, '0')}`
+);
+    console.log(dateTime)
+      console.log("aaaaaaaaaaa")
+    if(dateTime > begin){
+      $('#time_begin').after('<span class="error">The start time must be in the future !</span>');
+      e.preventDefault();
+    }
+  });
+        });
+    
+        </script>
     </div>
   </div>
 </div>
