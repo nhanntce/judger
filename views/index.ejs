@@ -15,6 +15,15 @@
       margin: -1.5px -1px -1.5px -6px;
 
     }
+    .card {
+      background: #fff;
+      border-radius: 2px;
+      display: inline-block;
+      position: relative;
+    }
+    .card-2:hover {
+      box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    }
     body {
       box-shadow: inset 0 0 0 100vw rgba(0, 0, 0, 0.5);
       background-image: url(/img/bg.jpg);
@@ -31,10 +40,10 @@
   <div class="container">
     <div class="row">
       <div class="col-sm-1 col-md-1 col-lg-4 mx-auto">
-        <div class="card o-hidden border-0 shadow-lg my-5">
-          <div class="card-body">
+        <div class="card o-hidden border-0 shadow-lg my-5" style="width: 120%;">
+          <div class="card-body" style="align-items: center;">
             <div class="text-center">
-              <h1 class="h4 text-gray-900 mb-4">Sinh viên, Giảng viên ĐH-FPT</h1>
+              <h1 class="h4 text-gray-900 mb-4">Student, Teacher FPT University</h1>
             </div>
             <% if (message.length > 0) { %>
             <div class="alert alert-danger col-sm-12 animated shake fast" align=center><%= message %></div>
@@ -58,7 +67,7 @@
                 </div>
               </div> -->
               <!-- <button type="submit" class="btn btn-deep-orange btn-user btn-block">Login </button> -->
-              <a href="/google" style="margin-left: 80px;"><button type="submit" class="button" style="background-color: #5882FA; "><img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" class="img" style="width:max-content; background:white;" alt=""><h9 style="padding-left: 5px; color: white">Đăng nhập</h9></button></a>
+              <a class="card card-2" href="/google" style="margin-left: 85px;"><button type="submit" class="button" style="background-color: #5882FA; "><img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" class="img" style="width:max-content; background:white;" alt=""><h9 style="padding-left: 5px; color: white">Sign in with Google</h9></button></a>
             <!-- </form> -->
             
           </div>

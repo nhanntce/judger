@@ -109,13 +109,13 @@
             <div class="col-6">
               <label class="font-weight-bold">Time Limit (ms)</label>
               <div class="form mb-3">
-                <input type="number" id="time_limit" name="time_limit" class="form-control" value="<%=data[0].time_limit%>" required>
+                <input type="number" id="time_limit" min="1" name="time_limit" class="form-control" value="<%=data[0].time_limit%>" required>
               </div>
             </div>
             <div class="col-6">
               <label class="font-weight-bold">Memory Limit (MB)</label>
               <div class="form mb-3">
-                <input type="number" id="memory_limit" name="memory_limit" class="form-control" value="<%=data[0].memory_limit%>" required>
+                <input type="number" id="memory_limit" min="1" name="memory_limit" class="form-control" value="<%=data[0].memory_limit%>" required>
               </div>
             </div>
           </div>
@@ -172,7 +172,7 @@
                 <div class="col-6">
                   <label class="font-weight-bold">Percentage Accept (%)</label>
                   <div class="form mb-3">
-                    <input type="number" id="percentage_accept" name="percentage_accept" class="form-control" value="<%=data[0].percentage_accept%>">
+                    <input type="number" id="percentage_accept" min="1" name="percentage_accept" class="form-control" value="<%=data[0].percentage_accept%>">
                   </div>              
                 </div>
                 <div class="col-6">
@@ -180,7 +180,7 @@
                   <div class="form mb-3">
                     <div class="row">
                         <div class="col-10">
-                          <input type="number" id="percentage_minus_point" name="percentage_minus_point" class="form-control" value=<%=data[0].percentage_minus_point%>>
+                          <input type="number" id="percentage_minus_point" min="1" name="percentage_minus_point" class="form-control" value=<%=data[0].percentage_minus_point%>>
                         </div>
                     </div>
                   </div>              
