@@ -228,6 +228,7 @@ app.post('/submission/submit', submit.submit)
 // Destroy session when closing tab or browse
 app.get('/session/destroy', user.session_destroy)
 // Admin page
+app.use('/admin/*', auth_admin);
 app.get('/admin', admin.dashboard)
 app.get('/admin/student', admin.admin_student)
 app.get('/admin/student-data', admin.admin_student_data)
@@ -240,6 +241,18 @@ app.post('/admin/add-teacher', admin.create_teacher)
 app.get('/error', (req, res) => {
   res.render('404.ejs')
 })
+
+function auth_admin(req, res, next) {
+  if(req.session.user == null) {
+    res.redirect("/login");
+    return;
+  }
+  if(req.session.teacher_role > 1) {
+    res.redirect("/error"); 
+    return;
+  }
+  next();
+}
 app.post('/searching', function (req, res) {
   var userId = req.session.userId
   var sql = ""
