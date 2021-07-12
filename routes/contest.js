@@ -161,6 +161,7 @@ exports.delete_contest = function (req, res) {
         // UPDATE all these contest_id=0 which correspond to student_account 
         sql = "UPDATE student_account SET contest_id=0 WHERE contest_id=?"
         db.query(sql, [contest_id])
+        fs.writeFileSync(storage.EVENT + 'workspaceEvent/workspaceEvent.txt', Math.random(1000) + "changed");
         logger.info("Contest " + contest_id + " has deleted")
         res.redirect("/contest")
       })
@@ -321,7 +322,7 @@ exports.contest_detail = function (req, res) {
   var sql = "SELECT student_account.userId, student_account.rollnumber, student_account.name, " +
     "student_account.class, contest.contest_id, contest.contest_name,contest.time_begin,contest.time_end, " +
     "contest.language FROM contest, student_account, contest_student WHERE contest_student.student_id " +
-    "= student_account.id AND contest_student.contest_id = ? AND contest.contest_id = contest_student.contest_id";
+    "= student_account.id AND contest_student.contest_id = ? AND contest.contest_id = contest_student.contest_id AND contest_student.status = 1";
   db.query(sql, [contest_id], function (err, results) {
     if (err) { logger.error(err); res.redirect("/error"); return }
     

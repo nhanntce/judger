@@ -40,7 +40,7 @@ exports.data_rank = function (req, res) {
   }
   var message = ""
   var contest_id = req.query.contest_id
-  var sql = "SELECT rollnumber FROM student_account WHERE contest_id=? LIMIT 1"
+  var sql = "SELECT student_id FROM `contest_student` WHERE contest_id = ? LIMIT 1"
   db.query(sql, [contest_id], function (err, results) {
     if (err) { logger.error(err); res.redirect("/error"); return }
     if (results.length == 0) { // if No student in contest
@@ -76,9 +76,13 @@ exports.data_rank = function (req, res) {
  */
 exports.load_rank = function (req, res) {
   var contest_id = req.query.contest_id
-  var sql = "SELECT student_account.userId, student_account.rollnumber, student_account.name, student_account.class, contest.contest_id, contest.contest_name, contest.time_begin, contest.time_end FROM contest " +
-    "INNER JOIN student_account ON student_account.contest_id=contest.contest_id " +
-    "WHERE contest.contest_id=?"
+  // var sql = "SELECT student_account.userId, student_account.rollnumber, student_account.name, student_account.class, contest.contest_id, contest.contest_name, contest.time_begin, contest.time_end FROM contest " +
+  //   "INNER JOIN student_account ON student_account.contest_id=contest.contest_id " +
+  //   "WHERE contest.contest_id=?";
+  var sql = "SELECT student_account.userId, student_account.rollnumber, student_account.name, " +
+  "student_account.class, contest.contest_id, contest.contest_name,contest.time_begin,contest.time_end " +
+  " FROM contest, student_account, contest_student WHERE contest_student.student_id = student_account.id " +
+  " AND contest_student.contest_id = ? AND contest.contest_id = contest_student.contest_id AND contest_student.status = 1";
   db.query(sql, [contest_id], function (err, results) {
     if (err || results.length == 0) { logger.error(err); res.redirect("/error"); return }
     var contest_name = results[0].contest_name.replace(/ /g, '-')
