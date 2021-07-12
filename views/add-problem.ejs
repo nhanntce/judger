@@ -135,25 +135,25 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form action="/contest/add-problem/add" method="POST" enctype="multipart/form-data">
+      <form action="/contest/add-problem/add" method="POST" enctype="multipart/form-data" id="addProblemForm">
         <div class="modal-body mx-3">
           <label>Name</label>
           <div class="form mb-3">
-            <input type="text" name="nameProb" class="form-control">
+            <input type="text" name="nameProb" class="form-control" required>
           </div>
           <label>Problem</label>
           <div class="custom-file mb-3">
-            <input type="file" class="custom-file-input" name="filetouploadProblem" accept=".pdf, .doc, .docx">
+            <input type="file" class="custom-file-input" name="filetouploadProblem" accept=".pdf, .doc, .docx" required>
             <label class="custom-file-label" for="customFile">Choose file</label>
           </div>
           <label>Test case</label>
           <div class="custom-file mb-3">
-            <input type="file" class="custom-file-input" name="filetouploadTestcase" accept=".zip">
+            <input type="file" class="custom-file-input" name="filetouploadTestcase" accept=".zip" required>
             <label class="custom-file-label" for="customFile">Choose file</label>
           </div>
           <label>Limit Submission</label>
           <div class="form mb-3">
-            <input type="number" name="limitSub" class="form-control" value="10">
+            <input type="number" id="limitSud" min="1" name="limitSub" class="form-control" value="10" required>
           </div>
         </div>
         <script>
@@ -169,6 +169,20 @@
           <button class="btn btn-deep-orange">Add</button>
         </div>
       </form>
+      <script>
+         $(document).ready(function() {
+        $('#addProblemForm').submit(function(e) {
+    var limitSud = $('#limitSud').val();
+    $(".error").remove();
+    if (limitSud < 0) {
+      
+      $('#limitSud').after('<span class="error">Limit Submission must be greater than 0 !</span>');
+      e.preventDefault();
+    }
+    });
+        });
+    
+        </script>
     </div>
   </div>
 </div>
@@ -182,12 +196,12 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form action="/contest/add-problem/edit" method="POST">
+      <form action="/contest/add-problem/edit" method="POST" id="editSudForm">
         <div class="modal-body mx-3">
           <label>Problem</label>
           <label>Limit Submission</label>
           <div class="form mb-3">
-            <input type="number" id="limitSubEdit" name="limitSubEdit" class="form-control">
+            <input type="number" id="limitSubEdit" min="1" name="limitSubEdit" class="form-control" required>
           </div>
         </div>
         <script>
@@ -203,6 +217,20 @@
           <button class="btn btn-deep-orange">Edit</button>
         </div>
       </form>
+      <script>
+         $(document).ready(function() {
+        $('#editSudForm').submit(function(e) {
+    var limitSudEdit = $('#limitSubEdit').val();
+    $(".error").remove();
+    if (limitSudEdit < 0) {
+      
+      $('#limitSubEdit').after('<span class="error">Limit Submission must be greater than 0 !</span>');
+      e.preventDefault();
+    }
+    });
+        });
+    
+        </script>
     </div>
   </div>
 </div>

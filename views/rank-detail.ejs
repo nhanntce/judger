@@ -32,6 +32,21 @@
       <% 
                 var logcontent = ''
                 var baicontent = ''
+                var configContent = fs.readFileSync(storage.TESTCASE + contest_name + '/config.txt', 'utf8')
+		        var checkCmt = configContent.split('\n')[3].split('=')[1]
+		        var checkCmtMode = ''
+		        var percentCmtAcp = 0
+		        var minusPoint = 0
+		        var minusPercent = 0
+		        if (checkCmt == 'true') {
+		          checkCmtMode = configContent.split('\n')[4].split('=')[1]
+		          percentCmtAcp = parseInt(configContent.split('\n')[5])
+		          if (checkCmtMode == 'Fixed') {
+		            minusPoint = configContent.split('\n')[6]
+		          } else {
+		            minusPercent = configContent.split('\n')[6]
+		          }
+		        }
                 for (let i = 0; i < log_files.length; ++i) {
                     var mtime = fs.existsSync(bailam[i]) ? fs.statSync(bailam[i]).mtime : 0
                     var tenbai = bailam[i].split('][')[4].replace('].', '.')
@@ -84,13 +99,13 @@
                           format = 'NaN'
                         }
                         if(logcontent.split('\n')[4].split(': ')[1] >= 0) {
-                          comment = logcontent.split('\n')[4].split(': ')[1] + '%'
+                          comment = logcontent.split('\n')[4].split(': ')[1]
                         } else {
                           comment = 'NaN'
                         }
 
                         plagiarismPercent = logcontent.split('\n')[5].split(': ')[1]
-                        plagiarism =  plagiarismPercent + '%'
+                        plagiarism =  plagiarismPercent
                         if (plagiarismPercent > 0) {
                         	detectedFile = logcontent.split('\n')[6]
                         	var detectedFileContent = fs.existsSync(detectedFile) ? fs.readFileSync(detectedFile, 'utf8') : ""
@@ -145,24 +160,55 @@
           }
         %>
         <%
-          if (comment == 'NaN') {
-        %>
-        <td class="text-danger font-weight-bold">
-          <%=comment%>
-          </td>
-        <%    
-          } else {
+                if (comment >= percentCmtAcp) {
+              %>
+              <td class="text-success font-weight-bold">
+                <%=comment%>%
+              </td>
+              <%
+                } else if (comment == 'NaN') {
+              %>
+              <td class="text-danger font-weight-bold">
+                <%=comment%>
+              </td>
+              <%
+                } else {
+              %>
+              <td class="text-danger font-weight-bold">
+                <%=comment%>%
+              </td>
+              <%
+            }
+              %>
+              <%
+                if (plagiarism >= 75) {
+              %>
+              <td class="text-danger font-weight-bold">
+                <%=plagiarism%>%
+              </td>
+              <%    
+                } else {
 
-        %>
-        <td>
-        <%=comment%>
-      </td>
-        <%
-          }
-        %>
-        <td>
-          <%=plagiarism%>
-        </td>
+              %>
+              <td class="text-success font-weight-bold">
+                <%=plagiarism%>%
+              </td>
+              <%
+                }
+              %>
+              <%
+                if (plagiarism >= 75) {
+                  score = 0
+                } else {
+                  if (comment < percentCmtAcp) {
+                    if (checkCmtMode == 'Fixed') {
+                      score = score - minusPoint;
+                    } else {
+                      score = score - (score * minusPercent / 100)
+                    }
+                  }
+                }
+              %>
         <td>
           <%=score%>
         </td>
@@ -206,8 +252,8 @@
                     })
                     var Range = ace.require('ace/range').Range;
                     for (var j = 0; j < <%=n%>; j++) {
-                  	  editorlog.getSession().addMarker(new Range(<%=detectedStartLine[d]%>-1, 0, <%=detectedEndLine[d]%>-1, 1), "myMarker", "fullLine");		
-                  	  editorbai.getSession().addMarker(new Range(<%=origStartLine[d]%>-1, 0, <%=origEndLine[d++]%>-1, 1), "myMarker", "fullLine");
+                  	  editorlog.getSession().addMarker(new Range(<%=detectedStartLine[d]%>-1, 0, <%=detectedEndLine[d]%>-1, 1), "myMarker", "ace_line");		
+                  	  editorbai.getSession().addMarker(new Range(<%=origStartLine[d]%>-1, 0, <%=origEndLine[d++]%>-1, 1), "myMarker", "ace_line");
                     }
 					editorlog.renderer.$cursorLayer.element.style.opacity = 0
                     document.getElementById('editorlog<%=i%>').style.fontSize = '15px';

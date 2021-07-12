@@ -94,7 +94,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form action="/contest/add-contest" method="POST">
+      <form action="/contest/add-contest" method="POST" id="form_contest">
         <div class="modal-body mx-3">
           <label class="font-weight-bold">Name</label>
           <div class="form mb-3">
@@ -112,13 +112,13 @@
             <div class="col-6">
               <label class="font-weight-bold">Time Limit (ms)</label>
               <div class="form mb-3">
-                <input type="number" id="time_limit" name="time_limit" class="form-control" required>
+                <input type="number" id="time_limit" min="1" name="time_limit" class="form-control" required>
               </div>
             </div>
             <div class="col-6">
               <label class="font-weight-bold">Memory Limit (MB)</label>
               <div class="form mb-3">
-                <input type="number" id="memory_limit" name="memory_limit" class="form-control" required>
+                <input type="number" id="memory_limit" min="1" name="memory_limit" class="form-control" required>
               </div>
             </div>
           </div>
@@ -147,8 +147,8 @@
                 <label class="font-weight-bold">Percentage Accept</label>
                 <div class="form mb-3">
                   <div class="row">
-                      <div class="col-10">
-                        <input type="number" id="percentage_accept" name="percentage_accept" class="form-control">
+                      <div class="col-10"> 
+                        <input type="number" id="percentage_accept" min="1" name="percentage_accept" class="form-control" require>
                       </div>
                       <div class="col-2">
                         <scan class="font-weight-bold" style="vertical-align: middle; margin-top: 5px;">%</scan>
@@ -161,7 +161,7 @@
                 <div class="form mb-3">
                   <div class="row">
                       <div class="col-10">
-                        <input type="number" id="percentage_minus_point" name="percentage_minus_point" class="form-control">
+                        <input type="number" id="percentage_minus_point" min="1" name="percentage_minus_point" class="form-control" require>
                       </div>
                   </div>
                 </div>              
@@ -251,10 +251,51 @@
       <% if (message.length > 0) { %>
         <script>toastr.success('<%=message%>')</script>
         <% } %>
+         <!-- check validation form add contest -->
+        <script>
+         $(document).ready(function() {
+        $('#form_contest').submit(function(e) {
+    var time_limit = $('#time_limit').val();
+    var memory_limit = $('#memory_limit').val();
+    $(".error").remove();
+    if (time_limit < 0) {
+      
+      $('#time_limit').after('<span class="error">Time limit must be greater than 0 !</span>');
+      e.preventDefault();
+    }
+    if (memory_limit < 0) {
+      $('#memory_limit').after('<span class="error">Memory limit must be greater than 0 !</span>');
+      e.preventDefault();
+    }
+    var begin = $('#time_begin').val();
+    var end = $('#time_end').val();
+    if(begin > end ){
+      $('#time_end').after('<span class="error">End time must be greater than Start time !</span>');
+      e.preventDefault();
+    }
+    var dt = new Date();
+    var dateTime = 
+    (`${dt.getDate().toString().padStart(2, '0')}-${
+    (dt.getMonth()+1).toString().padStart(2, '0')}-${
+    dt.getFullYear().toString().padStart(4, '0')} ${
+    dt.getHours().toString().padStart(2, '0')}:${
+    dt.getMinutes().toString().padStart(2, '0')}`
+);
+    console.log(dateTime)
+      console.log("aaaaaaaaaaa")
+    if(dateTime > begin){
+      $('#time_begin').after('<span class="error">The start time must be in the future !</span>');
+      e.preventDefault();
+    }
+  });
+        });
+    
+        </script>
         <!-- check if it is having any error, then show it TuPTA -->
         <% if (error.length > 0) { %>
         <script>toastr.error('<%=error%>')</script>
         <% } %>
+
     </div>
   </div>
 </div>
