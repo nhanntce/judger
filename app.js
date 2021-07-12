@@ -114,7 +114,7 @@ app.use(session({
 // development only
 app.get('*', (req, res, next) => {
   var url = req.url.split('?')[0]
-  if (['/', '/login', '/home/dashboard', '/home/tutorial', '/home/logout', '/home/profile', '/submission', '/session/destroy', '/error', '/google', '/good', '/logout'].indexOf(url) !== -1) {
+  if (['/', '/login', '/home/dashboard', '/home/tutorial', '/home/logout', '/home/profile', '/submission', '/session/destroy', '/error', '/google', '/good', '/logout', '/success'].indexOf(url) !== -1) {
     return next()
   }
   if (req.session.role === "Student") {

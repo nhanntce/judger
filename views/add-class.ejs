@@ -23,8 +23,8 @@
     <script>toastr.error('<%=error%>')</script>
     <% } %>
     <form action="/contest/add-class" method="POST" enctype="multipart/form-data">
-      <label>Enter name of class</label>
-      <input type="text" class="form-control" id="class_name" name="class_name">
+      <!-- <label>Enter name of class</label>
+      <input type="text" class="form-control" id="class_name" name="class_name"> -->
       <label>Choose file (.xls, .xlsx):</label>
       <div class="custom-file">
         <input type="file" class="custom-file-input" name="filetoupload" accept=".xls, .xlsx">
@@ -38,10 +38,13 @@
         var RollNumber = []
         var MemberCode = []
         var FullName = []
+        var Email = []
+
         for (let i = 0, l = xlData.length; i < l; ++i) {
             RollNumber.push(JSON.stringify(xlData[i].RollNumber).replace(/"/g,'').toUpperCase())
             MemberCode.push(JSON.stringify(xlData[i].MemberCode).replace(/"/g,'').toLowerCase())
             FullName.push(JSON.stringify(xlData[i].FullName).replace(/"/g,''))
+            Email.push(JSON.stringify(xlData[i].Email).replace(/"/g,''))
         }
     %>
   <% if (message.length > 0) { %>
@@ -55,11 +58,13 @@
     <input type="hidden" name="MemberCode" value="<%=MemberCode%>">
     <input type="hidden" name="FullName" value="<%=FullName%>">
     <input type="hidden" name="class_name" value="<%=class_name%>">
+    <input type="hidden" name="Email" value="<%=Email%>">
+
     <div class="row">
-      <div class="col-4">
+      <!-- <div class="col-4">
         <input type="text" class="form-control" id="password" name="password"
-          placeholder="Enter Password - Default: fpt@user">
-      </div>
+          placeholder="Enter Password - Default: 123456">
+      </div> -->
       <div class="col-4">
         <button type="submit" class="btn btn-green btn-sm"><i class="fa fa-check-circle fa-lg"></i> Create</button>
       </div>
@@ -72,6 +77,7 @@
           <th>Roll number</th>
           <th>MemberCode</th>
           <th>Name</th>
+          <th>Email</th>
         </tr>
       </thead>
       <tbody>
@@ -81,6 +87,7 @@
           <td><%= JSON.stringify(xlData[i].RollNumber).replace(/"/g,'') %></td>
           <td><%= JSON.stringify(xlData[i].MemberCode).replace(/"/g,'') %></td>
           <td><%= JSON.stringify(xlData[i].FullName).replace(/"/g,'') %></td>
+          <td><%= JSON.stringify(xlData[i].Email).replace(/"/g,'') %></td>
         </tr>
         <% } %>
       </tbody>
