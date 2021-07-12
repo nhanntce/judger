@@ -116,8 +116,10 @@ exports.create_student = function (req, res) {
     var classname = post.class
     var username = post.username
     var password = post.password
-    var sql = "INSERT INTO student_account(rollnumber, username, password, name, class) VALUES (?, ?, MD5(?), ?, ?)"
-    db.query(sql, [rollnumber, username, password, name, classname], function (err) {
+    
+    var email = post.email
+    var sql = "INSERT INTO student_account(rollnumber, email, name, class) VALUES (?, ?, ?, ?)"
+    db.query(sql, [rollnumber, email, name, classname], function (err) {
       if (err) { // if error => set req.session.sql_err = true
         req.session.sql_err = true
         res.redirect("/admin/student")
@@ -141,8 +143,9 @@ exports.edit_student = function (req, res) {
     var rollnumber = post.edit_rollnumber
     var name = post.edit_name
     var classname = post.edit_class
-    var username = post.edit_username
-    var password = post.edit_password
+    var email = post.edit_email
+    // var username = post.edit_username
+    // var password = post.edit_password
     var contest_id = post.edit_contestid
     var ip = post.edit_ip
     var timeout = post.edit_timeout
@@ -152,8 +155,8 @@ exports.edit_student = function (req, res) {
       return
     }
     var hash = crypto.createHash('md5').update(password).digest("hex")
-    var sql = "UPDATE student_account SET rollnumber=?,username=?,password=MD5(?),name=?,class=?,contest_id=?,ip=?,timeout='" + formatTime(timeout) + "',islogin=? WHERE userId=?"
-    db.query(sql, [rollnumber, username, password, name, classname, contest_id, ip, islogin, id], function (err) {
+    var sql = "UPDATE student_account SET rollnumber=?,email=?,name=?,class=?,contest_id=?,ip=?,timeout='" + formatTime(timeout) + "',islogin=? WHERE userId=?"
+    db.query(sql, [rollnumber, email, name, classname, contest_id, ip, islogin, id], function (err) {
       if (err) {
         res.redirect("/admin/student")
       } else {
@@ -235,9 +238,10 @@ exports.create_teacher = function (req, res) {
     var name = post.name
     var username = post.username
     var password = post.password
+    var email = post.email
     var role = post.role
-    var sql = "INSERT INTO teacher_account(rollnumber, username, password, name, role) VALUES (?,?,MD5(?),?,?)"
-    db.query(sql, [rollnumber, username, password, name, role], function (err) {
+    var sql = "INSERT INTO teacher_account(rollnumber, email, name, role) VALUES (?,?,?,?)"
+    db.query(sql, [rollnumber, email, name, role], function (err) {
       if (err) {
         req.session.sql_err = true
         res.redirect("/admin/teacher")

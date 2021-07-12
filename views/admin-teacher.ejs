@@ -16,7 +16,7 @@
   <script>toastr.error('<%=error%>')</script>
   <% } %>
   <button type="submit" class="btn btn-outline-blue waves-effect btn-sm" data-toggle="modal" data-target="#myModal"><i
-      class="fa fa-plus fa-lg"></i> Add a new user</button>
+      class="fa fa-plus fa-lg"></i> Add a new teacher</button>
   <div class="table-responsive">
     <table class="table table-hover table-bordered" id="dataTableTeacher" width="100%" cellspacing="0">
       <thead>
@@ -53,6 +53,11 @@
           </div>
           <div class="md-form mb-4">
             <i class="fas fa-lock prefix grey-text"></i>
+            <input type="text" id="email" name="email" class="form-control validate">
+            <label data-error="wrong" data-success="" for="orangeForm-pass">Email</label>
+          </div>
+          <!-- <div class="md-form mb-4">
+            <i class="fas fa-lock prefix grey-text"></i>
             <input type="text" id="username" name="username" class="form-control validate">
             <label data-error="wrong" data-success="" for="orangeForm-pass">Username</label>
           </div>
@@ -60,7 +65,7 @@
             <i class="fas fa-lock prefix grey-text"></i>
             <input type="password" id="password" name="password" class="form-control validate">
             <label data-error="wrong" data-success="" for="orangeForm-pass">Password</label>
-          </div>
+          </div> -->
           <div class="md-form mb-4">
             
             <select class="form-control" name="role">
