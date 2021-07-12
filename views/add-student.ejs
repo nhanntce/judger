@@ -17,22 +17,34 @@
       <h6 class="m-0 font-weight-bold">Add students
     </div>
     <div class="card-body">
-      <form action="/contest/load-student" method="GET">
-        <input type="hidden" name="contest_id" value="<%=contest_id%>">
-        <div class="form-inline">
-          <select class="form-control" name="class_name">
-            <%
-              for(var i = 0, len = list_class.length; i < len; i++) {
-            %>
-              <option><%=list_class[i]%></option>
-            <%
-              }
-            %>
-            
-          </select>
-          <button class="btn btn-primary btn-md" type="submit"><i class="fa fa-spinner"></i> Load</button>
-        </div>
-      </form>
+      <%
+        if(list_class.length) {
+      %>
+        <form action="/contest/load-student" method="GET">
+          <input type="hidden" name="contest_id" value="<%=contest_id%>">
+          <div class="form-inline">
+            <select class="form-control" name="class_name">
+              <%
+                for(var i = 0, len = list_class.length; i < len; i++) {
+              %>
+                <option><%=list_class[i]%></option>
+              <%
+                }
+              %>
+            </select>
+            <button class="btn btn-primary btn-md" type="submit"><i class="fa fa-spinner"></i> Load</button>
+          </div>
+        </form>
+      <%
+        }
+      %>
+      <%
+        if(!list_class.length) {
+      %>
+      <script>toastr.info('There is no available class!')</script>
+      <%
+        }
+      %>
       <% if (message.length > 0) { %>
       <script>toastr.success('<%=message%>')</script>
       <% } %>

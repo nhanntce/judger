@@ -71,6 +71,7 @@ exports.add_contest = function (req, res) {
     var check_plagiarism = post.check_plagiarism;
     var data_config = "time_limit=" + time_limit + "\nmemory_limit=" + memory_limit + "\ncheck_format=" + 
     (check_format? "true" : "false") + "\ncheck_comment=" + (check_comment ? "true" : "false");
+    
     if(check_comment) {
       data_config += "\ncheck_comment_mode=" + check_comment_mode + "\n" + percentage_accept + 
       "\n" + percentage_minus_point;
@@ -315,9 +316,13 @@ exports.contest_detail = function (req, res) {
     req.session.deleted = false
     message = "Succesfully! Students have been deleted."
   }
-  var sql = "SELECT student_account.userId, student_account.rollnumber, student_account.name, student_account.class, contest.contest_id, contest.contest_name,contest.time_begin,contest.time_end,contest.language FROM contest " +
-    "INNER JOIN student_account ON student_account.contest_id=contest.contest_id " +
-    "WHERE contest.contest_id=?"
+  // var sql = "SELECT student_account.userId, student_account.rollnumber, student_account.name, student_account.class, contest.contest_id, contest.contest_name,contest.time_begin,contest.time_end,contest.language FROM contest " +
+  //   "INNER JOIN student_account ON student_account.contest_id=contest.contest_id " +
+  //   "WHERE contest.contest_id=?"
+  var sql = "SELECT student_account.userId, student_account.rollnumber, student_account.name, " +
+    "student_account.class, contest.contest_id, contest.contest_name,contest.time_begin,contest.time_end, " +
+    "contest.language FROM contest, student_account, contest_student WHERE contest_student.student_id " +
+    "= student_account.id AND contest_student.contest_id = ? AND contest.contest_id = contest_student.contest_id";
   db.query(sql, [contest_id], function (err, results) {
     if (err) { logger.error(err); res.redirect("/error"); return }
     
@@ -596,8 +601,6 @@ exports.add_class = function (req, res) {
 
       var class_name = files.filetoupload.name
 
-      console.log(class_name);
-
       if (class_name == "") { // check if dont choose file
         res.render('add-class.ejs', { data: [], xlData: "", message: "", error: "Input must be not empty. Please choose a file!", class_name: class_name, role: req.session.role, user: req.session.user })
         return
@@ -610,10 +613,10 @@ exports.add_class = function (req, res) {
 
       // check class is exist
       var sql = "SELECT rollnumber FROM student_account WHERE class=? LIMIT 1"
-      db.query(sql, [class_name], function (err, results) {
+      db.query(sql, [class_name.split('.')[0]], function (err, results) {
         if (err) { logger.error(err); res.redirect("/error"); return }
-        if (results.length > 0) { // if class is exist, return error
-          res.render('add-class.ejs', { data: [], xlData: "", message: "", error: "Sorry, class " + class_name + " is exist!", class_name: class_name, role: req.session.role, user: req.session.user })
+        if (results.length == 1) { // if class is exist, return error
+          res.render('add-class.ejs', { data: [], xlData: "", message: "", error: "Sorry, class " + class_name.split('.')[0] + " is exist!", class_name: class_name, role: req.session.role, user: req.session.user })
           return
         }
         // get file upload and rewrite it 
@@ -664,7 +667,6 @@ exports.create_class = function (req, res) {
       sql += "('" + RollNumber[i] + "','" + MemberCode[i] + "', MD5('123456'),'" + FullName[i] + "','" + class_name.split('.')[0] + "','" + email[i] +  "'),";
     }
     sql = sql.slice(0, -1)
-    console.log(sql);
     db.query(sql, function (err) {
       if (err) {
         req.session.sql_err = true
