@@ -71,6 +71,7 @@ exports.add_contest = function (req, res) {
     var check_plagiarism = post.check_plagiarism;
     var data_config = "time_limit=" + time_limit + "\nmemory_limit=" + memory_limit + "\ncheck_format=" + 
     (check_format? "true" : "false") + "\ncheck_comment=" + (check_comment ? "true" : "false");
+    
     if(check_comment) {
       data_config += "\ncheck_comment_mode=" + check_comment_mode + "\n" + percentage_accept + 
       "\n" + percentage_minus_point;
@@ -596,8 +597,6 @@ exports.add_class = function (req, res) {
 
       var class_name = files.filetoupload.name
 
-      console.log(class_name);
-
       if (class_name == "") { // check if dont choose file
         res.render('add-class.ejs', { data: [], xlData: "", message: "", error: "Input must be not empty. Please choose a file!", class_name: class_name, role: req.session.role, user: req.session.user })
         return
@@ -610,10 +609,10 @@ exports.add_class = function (req, res) {
 
       // check class is exist
       var sql = "SELECT rollnumber FROM student_account WHERE class=? LIMIT 1"
-      db.query(sql, [class_name], function (err, results) {
+      db.query(sql, [class_name.split('.')[0]], function (err, results) {
         if (err) { logger.error(err); res.redirect("/error"); return }
-        if (results.length > 0) { // if class is exist, return error
-          res.render('add-class.ejs', { data: [], xlData: "", message: "", error: "Sorry, class " + class_name + " is exist!", class_name: class_name, role: req.session.role, user: req.session.user })
+        if (results.length == 1) { // if class is exist, return error
+          res.render('add-class.ejs', { data: [], xlData: "", message: "", error: "Sorry, class " + class_name.split('.')[0] + " is exist!", class_name: class_name, role: req.session.role, user: req.session.user })
           return
         }
         // get file upload and rewrite it 
@@ -664,7 +663,6 @@ exports.create_class = function (req, res) {
       sql += "('" + RollNumber[i] + "','" + MemberCode[i] + "', MD5('123456'),'" + FullName[i] + "','" + class_name.split('.')[0] + "','" + email[i] +  "'),";
     }
     sql = sql.slice(0, -1)
-    console.log(sql);
     db.query(sql, function (err) {
       if (err) {
         req.session.sql_err = true
