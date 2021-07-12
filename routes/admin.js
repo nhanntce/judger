@@ -87,9 +87,9 @@ exports.admin_teacher = function (req, res) {
 exports.admin_student_data = function (req, res) {
   const requestQuery = req.query;
   let columnsMap = [
-    { db: "null", dt: 0 }, { db: "userId", dt: 1 }, { db: "rollnumber", dt: 2 }, { db: "username", dt: 3 }, { db: "password", dt: 4 }, { db: "name", dt: 5 }, { db: "class", dt: 6 }, { db: "contest_id", dt: 7 }, { db: "ip", dt: 8 }, { db: "timeout", dt: 9 }, { db: "islogin", dt: 10 }
+    { db: "null", dt: 0 }, { db: "userId", dt: 1 }, { db: "rollnumber", dt: 2 }, { db: "email", dt: 3 }, { db: "name", dt: 4 }, { db: "class", dt: 5 }, { db: "contest_id", dt: 6 }, { db: "ip", dt: 7 }, { db: "timeout", dt: 8 }, { db: "islogin", dt: 9 }
   ];
-  const query = "SELECT userId, rollnumber, username, password, name, class, contest_id, ip, DATE_FORMAT(timeout, '%d-%m-%Y %H:%i:%s') AS timeout, islogin FROM student_account"
+  const query = "SELECT userId, rollnumber, email, name, class, contest_id, ip, DATE_FORMAT(timeout, '%d-%m-%Y %H:%i:%s') AS timeout, islogin FROM student_account"
   const primaryKey = "userId"
   const nodeTable = new NodeTable(requestQuery, db, query, primaryKey, columnsMap);
   nodeTable.output((err, data) => {
@@ -150,11 +150,11 @@ exports.edit_student = function (req, res) {
     var ip = post.edit_ip
     var timeout = post.edit_timeout
     var islogin = post.edit_islogin == "on" ? "1" : "0"
-    if (!/^[A-Za-z0-9\d=!\-@._*]*$/.test(password)) {
-      res.redirect("/admin/student")
-      return
-    }
-    var hash = crypto.createHash('md5').update(password).digest("hex")
+    // if (!/^[A-Za-z0-9\d=!\-@._*]*$/.test(password)) {
+    //   res.redirect("/admin/student")
+    //   return
+    // }
+    // var hash = crypto.createHash('md5').update(password).digest("hex")
     var sql = "UPDATE student_account SET rollnumber=?,email=?,name=?,class=?,contest_id=?,ip=?,timeout='" + formatTime(timeout) + "',islogin=? WHERE userId=?"
     db.query(sql, [rollnumber, email, name, classname, contest_id, ip, islogin, id], function (err) {
       if (err) {
@@ -217,9 +217,9 @@ exports.reset_student = function (req, res) {
 exports.admin_teacher_data = function (req, res) {
   const requestQuery = req.query;
   let columnsMap = [
-    { db: "userId", dt: 0 }, { db: "rollnumber", dt: 1 }, { db: "name", dt: 2 }
+    { db: "userId", dt: 0 }, { db: "rollnumber", dt: 1 }, { db: "name", dt: 2 }, { db: "email", dt: 3 }
   ];
-  const query = "SELECT  userId, rollnumber, name FROM teacher_account"
+  const query = "SELECT  userId, rollnumber, name, email FROM teacher_account"
   const primaryKey = "userId"
   const nodeTable = new NodeTable(requestQuery, db, query, primaryKey, columnsMap);
   nodeTable.output((err, data) => {
