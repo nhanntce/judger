@@ -16,6 +16,15 @@ exports.isLoggedIn = (req, res, next) => {
 }
 
 exports.LogOutGG = (req, res) => {
+  if (req.session.role == "Student") { // update record ip address and time out
+    var sql = "UPDATE student_account SET ip=?,timeout='" + new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000) + minutes * 60000).toISOString().substring(0, 19) + "', islogin=0 WHERE userId=?"
+    db.query(sql, [req.session.ipaddress, req.session.userId])
+  }
+  logger.info(req.session.role + " " + req.session.user + " has disconnected")
+  // req.session.destroy(function (err) {
+  //   req.logout();
+  //   res.redirect("/login")
+  // })
     req.session = null;
     req.logout();
     res.redirect('/login');
@@ -161,5 +170,6 @@ exports.session_destroy = function (req, res) {
     db.query(sql, [req.session.ipaddress, req.session.userId])
   }
   logger.info(req.session.role + " " + req.session.user + " has disconnected")
-  req.session.destroy();
+  // req.session.destroy();
+  req.session = null;
 }
