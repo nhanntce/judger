@@ -67,22 +67,27 @@
                     } else {
                         memoryLimit.push(logcontent.split('\n')[2].split(': ')[1] + 'MB')
                     }
-                    if(logcontent.split('\n')[3].split(': ')[1] == 'false') {
-                      format.push('No')
-                    } else if (logcontent.split('\n')[3].split(': ')[1] == 'true') {
-                      format.push('Yes')
-                    } else {
-                      format.push('NaN')
-                    }
-                    if(logcontent.split('\n')[4].split(': ')[1] >= 0) {
-                      comment.push(logcontent.split('\n')[4].split(': ')[1])
-                    } else {
-                      comment.push('NaN')
-                    }
 
                     if(logcontent.split('\n')[5].split(': ')[1] >= 0) {
                       plagiarism.push(logcontent.split('\n')[5].split(': ')[1])
                     } 
+                    if(logcontent.split('\n')[5].split(': ')[1] < 75) {
+                      if(logcontent.split('\n')[3].split(': ')[1] == 'false') {
+                        format.push('No')
+                        score[i] -=1
+                      } else if (logcontent.split('\n')[3].split(': ')[1] == 'true') {
+                        format.push('Yes')
+                      } else {
+                        format.push('NaN')
+                      }
+                      if(logcontent.split('\n')[4].split(': ')[1] >= 0) {
+                        comment.push(logcontent.split('\n')[4].split(': ')[1])
+                      } else {
+                        comment.push('NaN')
+                      }
+                    } 
+                    
+                    
 
                 }
             }
