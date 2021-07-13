@@ -11,7 +11,7 @@ exports.isLoggedIn = (req, res, next) => {
   if (req.user) {
       next();
   } else {
-    res.render('index.ejs')
+    res.render('index.ejs', {teacher_role: req.session.teacher_role})
   }
 }
 
@@ -40,7 +40,7 @@ exports.login = function (req, res) {
     req.session.user = post.user_name
     if (!/^[a-z0-9]+$/.test(user) || !/^[A-Za-z0-9\d=!\-@._*]*$/.test(pass)) { // check user or pass is valid
       message = 'Incorrect username or password'
-      res.render('index.ejs', { message: message, username: req.session.user })
+      res.render('index.ejs', { message: message, username: req.session.user, teacher_role: req.session.teacher_role })
       return;
     }
     var role = (post.role == "Student") ? "student_account" : "teacher_account" // select type account
@@ -71,7 +71,7 @@ exports.login = function (req, res) {
           res.redirect('/submission')
         } else {
           message = 'Incorrect username or password'
-          res.render('index.ejs', { message: message, username: req.session.user })
+          res.render('index.ejs', { message: message, username: req.session.user, teacher_role: req.session.teacher_role })
         }
       })
 
@@ -89,13 +89,13 @@ exports.login = function (req, res) {
           res.redirect('/contest')
         } else {
           message = 'Incorrect username or password'
-          res.render('index.ejs', { message: message, username: req.session.user })
+          res.render('index.ejs', { message: message, username: req.session.user, teacher_role: req.session.teacher_role })
         }
 
       })
     }
   } else {
-    res.render('index.ejs', { message: message, username: req.session.user })
+    res.render('index.ejs', { message: message, username: req.session.user, teacher_role: req.session.teacher_role })
   }
 
 }
@@ -114,7 +114,7 @@ exports.dashboard = function (req, res, next) {
     res.redirect("/login")
     return
   }
-  res.render('dashboard.ejs', { role: req.session.role, user: req.session.user })
+  res.render('dashboard.ejs', { role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role })
 }
 //------------------------------------logout functionality----------------------------------------------
 /**
@@ -151,7 +151,7 @@ exports.profile = function (req, res) {
   var sql = "SELECT name, rollnumber FROM " + role + " WHERE userId=?"
   db.query(sql, [userId], function (err, result) {
     if (err) { logger.error(err); res.redirect("/error"); return }
-    res.render('profile.ejs', { data: result, role: req.session.role, user: req.session.user })
+    res.render('profile.ejs', { data: result, role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role })
   })
 }
 //---------------------------------Destroy session when closing tab or browser----------------------------------
@@ -161,5 +161,5 @@ exports.session_destroy = function (req, res) {
     db.query(sql, [req.session.ipaddress, req.session.userId])
   }
   logger.info(req.session.role + " " + req.session.user + " has disconnected")
-  req.session.destroy()
+  req.session.destroy();
 }

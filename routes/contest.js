@@ -476,7 +476,7 @@ exports.load_student = function (req, res) {
           listClass.push(listClassDB[i].class);
          }
          res.render('add-student.ejs', { list_class: listClass, data: results, contest_id: contest_id, message: message, 
-          error: error, warning: warning, class_name: class_name, role: req.session.role, user: req.session.user });
+          error: error, warning: warning, class_name: class_name, role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role });
       })
       
     // }
@@ -572,13 +572,13 @@ exports.load_class = function (req, res) {
     var xlData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]])
 
     if (typeof xlData[0].RollNumber === "undefined" || typeof xlData[0].MemberCode === "undefined" || typeof xlData[0].FullName === "undefined") {
-      res.render('add-class.ejs', { data: [], xlData: "", message: "", error: "Invalid file excel", class_name: class_name, role: req.session.role, user: req.session.user })
+      res.render('add-class.ejs', { data: [], xlData: "", message: "", error: "Invalid file excel", class_name: class_name, role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role })
     } else {
       if (req.session.sql_err) {
         req.session.sql_err = false
-        res.render('add-class.ejs', { data: [], xlData: xlData, message: "", error: "Duplicate student roll number", class_name: class_name, role: req.session.role, user: req.session.user })
+        res.render('add-class.ejs', { data: [], xlData: xlData, message: "", error: "Duplicate student roll number", class_name: class_name, role: req.session.role, user: req.session.user,teacher_role: req.session.teacher_role })
       } else {
-        res.render('add-class.ejs', { data: [], xlData: xlData, message: "Load students successfully!", error: "", class_name: class_name, role: req.session.role, user: req.session.user })
+        res.render('add-class.ejs', { data: [], xlData: xlData, message: "Load students successfully!", error: "", class_name: class_name, role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role })
       }
     }
   } catch (error) {
@@ -603,12 +603,12 @@ exports.add_class = function (req, res) {
       var class_name = files.filetoupload.name
 
       if (class_name == "") { // check if dont choose file
-        res.render('add-class.ejs', { data: [], xlData: "", message: "", error: "Input must be not empty. Please choose a file!", class_name: class_name, role: req.session.role, user: req.session.user })
+        res.render('add-class.ejs', {teacher_role: req.session.teacher_role, data: [], xlData: "", message: "", error: "Input must be not empty. Please choose a file!", class_name: class_name, role: req.session.role, user: req.session.user })
         return
       }
 
       if (!/^(FA|SP|SU)\d{2}[_][A-Z]{3}\d{3}[_][A-Z]{2}\d{4}$/.test(class_name.split('.')[0])) {
-        res.render('add-class.ejs', { data: [], xlData: "", message: "", error: "File name is not in format", class_name: class_name, role: req.session.role, user: req.session.user })
+        res.render('add-class.ejs', {teacher_role: req.session.teacher_role, data: [], xlData: "", message: "", error: "File name is not in format", class_name: class_name, role: req.session.role, user: req.session.user })
         return
       }
 
@@ -617,7 +617,7 @@ exports.add_class = function (req, res) {
       db.query(sql, [class_name.split('.')[0]], function (err, results) {
         if (err) { logger.error(err); res.redirect("/error"); return }
         if (results.length == 1) { // if class is exist, return error
-          res.render('add-class.ejs', { data: [], xlData: "", message: "", error: "Sorry, class " + class_name.split('.')[0] + " is exist!", class_name: class_name, role: req.session.role, user: req.session.user })
+          res.render('add-class.ejs', {teacher_role: req.session.teacher_role, data: [], xlData: "", message: "", error: "Sorry, class " + class_name.split('.')[0] + " is exist!", class_name: class_name, role: req.session.role, user: req.session.user })
           return
         }
         // get file upload and rewrite it 
@@ -724,7 +724,7 @@ exports.add_problem = function (req, res) {
       db.query(sql, [contest_id], function (err, results) {
         if (err) { logger.error(err); res.redirect("/error"); return }
         contest_name = results[0].contest_name
-        res.render('add-problem.ejs', { problem_id: problem_id, path_problem: path_problem, path_testcase: path_testcase, testcase_size: testcase_size, limitSub: limitSub, contest_id: contest_id, contest_name: contest_name, error: error, message: message, role: req.session.role, user: req.session.user })
+        res.render('add-problem.ejs', {teacher_role: req.session.teacher_role, problem_id: problem_id, path_problem: path_problem, path_testcase: path_testcase, testcase_size: testcase_size, limitSub: limitSub, contest_id: contest_id, contest_name: contest_name, error: error, message: message, role: req.session.role, user: req.session.user })
       })
     } else {
       contest_name = results[0].contest_name
@@ -735,7 +735,7 @@ exports.add_problem = function (req, res) {
         testcase_size.push(getFolders(results[i].path_testcase).length) // testcase size
         limitSub.push(results[i].times)
       }
-      res.render('add-problem.ejs', { problem_id: problem_id, path_problem: path_problem, path_testcase: path_testcase, testcase_size: testcase_size, limitSub: limitSub, contest_id: contest_id, contest_name: contest_name, error: error, message: message, role: req.session.role, user: req.session.user })
+      res.render('add-problem.ejs', {teacher_role: req.session.teacher_role, problem_id: problem_id, path_problem: path_problem, path_testcase: path_testcase, testcase_size: testcase_size, limitSub: limitSub, contest_id: contest_id, contest_name: contest_name, error: error, message: message, role: req.session.role, user: req.session.user })
     }
   })
 }

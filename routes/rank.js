@@ -21,8 +21,8 @@ exports.rank_time = function (req, res) {
   }
   db.query(sql, function (err, results) {
     if (err) { logger.error(err); res.redirect("/error"); return }
-    if (results.length == 0) res.render('rank-time.ejs', { data: '', role: req.session.role, user: req.session.user })
-    else res.render('rank-time.ejs', { data: results, role: req.session.role, user: req.session.user })
+    if (results.length == 0) res.render('rank-time.ejs', { data: '', role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role })
+    else res.render('rank-time.ejs', { data: results, role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role })
   })
 }
 //---------------------------------data rank----------------------------------
@@ -45,7 +45,7 @@ exports.data_rank = function (req, res) {
     if (err) { logger.error(err); res.redirect("/error"); return }
     if (results.length == 0) { // if No student in contest
       message = "No student in contest"
-      res.render('data-rank.ejs', { data: [], problem_files: [], message: message, role: req.session.role, user: req.session.user })
+      res.render('data-rank.ejs', { data: [], problem_files: [], message: message, role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role })
     } else {
       sql = "SELECT contest.contest_name, contest.contest_id, contest.time_begin, contest.time_end, contest_detail.problem_id, contest_detail.path_problem FROM contest " +
         "INNER JOIN contest_detail ON contest.contest_id=contest_detail.contest_id " +
@@ -55,14 +55,14 @@ exports.data_rank = function (req, res) {
         if (results.length == 0) { // if contest donnt have any problem
           sql = "SELECT contest_name, contest_id, time_begin, time_end FROM contest WHERE contest_id=?"
           db.query(sql, [contest_id], function (err, results) {
-            res.render('data-rank.ejs', { data: results, problem_files: [], message: message, role: req.session.role, user: req.session.user })
+            res.render('data-rank.ejs', { data: results, problem_files: [], message: message, role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role })
           })
         } else {
           var problem_files = []
           for (let i = 0; i < results.length; ++i) {
             problem_files.push(results[i].problem_id)
           }
-          res.render('data-rank.ejs', { data: results, problem_files: problem_files, message: message, role: req.session.role, user: req.session.user })
+          res.render('data-rank.ejs', { data: results, problem_files: problem_files, message: message, role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role })
         }
       })
     }
@@ -264,7 +264,7 @@ exports.detail_rank = function (req, res) {
           }
         }
       }
-      res.render('rank-detail.ejs', { bailam: bailam, contest_name: contest_name, contest_id: contest_id, rollnumber: rollnumber, log_files: logs, testcase_size: testcase_size, message: "", role: req.session.role, user: req.session.user })
+      res.render('rank-detail.ejs', { bailam: bailam, contest_name: contest_name, contest_id: contest_id, rollnumber: rollnumber, log_files: logs, testcase_size: testcase_size, message: "", role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role })
     })
   })
 }

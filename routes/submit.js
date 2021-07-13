@@ -37,7 +37,7 @@ exports.submission = function (req, res) {
     if (err) { logger.error(err); res.redirect("/error"); return }
     if (results.length == 0) { // if student have no contests
       error = "You have no contest"
-      res.render('submit.ejs', { error: error, role: req.session.role, user: req.session.user })
+      res.render('submit.ejs', { error: error, role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role })
     } else {
       var contest_name = results[0].contest_name.replace(/ /g, '-')
       var time_begin = results[0].time_begin
@@ -117,7 +117,7 @@ exports.submission = function (req, res) {
         if (Object.keys(req.session.times).length === 0) {
           req.session.times = JSON.parse(JSON.stringify(clonetimes))
         }
-        res.render('submit.ejs', { error: "", contest_id: req.query.contest_id, language: results[0].language, name: results[0].name, rollnumber: results[0].rollnumber, contest_name: contest_name, time_begin: time_begin, time_end: time_end, debai: debai, bailam: bailam, log_files: logs, testcase_size: testcase_size, clonetimes: req.session.times, maxtimes: req.session.maxtimes, message: message, role: req.session.role, user: req.session.user })
+        res.render('submit.ejs', { error: "", contest_id: req.query.contest_id, language: results[0].language, name: results[0].name, rollnumber: results[0].rollnumber, contest_name: contest_name, time_begin: time_begin, time_end: time_end, debai: debai, bailam: bailam, log_files: logs, testcase_size: testcase_size, clonetimes: req.session.times, maxtimes: req.session.maxtimes, message: message, role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role })
       })
     }
   })

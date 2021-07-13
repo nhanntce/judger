@@ -7,5 +7,5 @@ exports.index = function (req, res) {
     return;
   }
   var message = '';
-  res.render('index', { message: message, username: req.session.user });
+  res.render('index', { message: message, username: req.session.user, teacher_role: req.session.teacher_role });
 };
