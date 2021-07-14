@@ -51,7 +51,7 @@
                     var mtime = fs.existsSync(bailam[i]) ? fs.statSync(bailam[i]).mtime : 0
                     var tenbai = bailam[i].split('][')[4].replace('].', '.')
                     var filedate = dayjs(mtime).format('DD-MM-YYYY, HH:mm:ss')
-                    var logcontent = fs.existsSync(storage.NOPBAI + 'Logs/' + contest_name + '/' + log_files[i]) ? fs.readFileSync(storage.NOPBAI + 'Logs/' + contest_name + '/' + log_files[i], 'utf8') : ""
+                    logcontent = fs.existsSync(storage.NOPBAI + 'Logs/' + contest_name + '/' + log_files[i]) ? fs.readFileSync(storage.NOPBAI + 'Logs/' + contest_name + '/' + log_files[i], 'utf8') : ""
                     var baicontent = fs.existsSync(bailam[i]) ? fs.readFileSync(bailam[i], 'utf8') : ""
                     var testcase = ''
                     var score = 0
@@ -60,7 +60,6 @@
                     var format = ''
                     var comment = ''
                     var plagiarism = ''
-
                     var plagiarismPercent = 0;
                     var detectedFile = ''
                     var n = 0
@@ -70,13 +69,12 @@
                     var origEndLine = []
                     var detectedStartLine = []
                     var detectedEndLine = []
-
                     if (logcontent.split('\n')[0].includes('Error') || logcontent.split('\n')[0] == "0.0") {
                         testcase = '0/' + testcase_size[i]
                         score = 0
                         format = 'NaN'
                         comment = 'NaN'
-                        plagiarism = '0%'
+                        plagiarism = '0'
                     } else {
                         testcase = parseInt(logcontent.split('\n')[0] * testcase_size[i] / 10) + '/' + testcase_size[i]
                         score = logcontent.split('\n')[0]
@@ -103,7 +101,6 @@
                         } else {
                           comment = 'NaN'
                         }
-
                         plagiarismPercent = logcontent.split('\n')[5].split(': ')[1]
                         plagiarism =  plagiarismPercent
                         if (plagiarismPercent > 0) {
@@ -117,7 +114,6 @@
                         		detectedStartLine.push(logcontent.split('\n')[k].split(' ')[0])
                         		detectedEndLine.push(logcontent.split('\n')[k++].split(' ')[1])
                         	}
-
                         }
                     }
             %>
@@ -151,7 +147,6 @@
           </td>
         <%    
           } else {
-
         %>
         <td>
         <i class="<%=format=='No'?'fas fa-times-circle text-danger':'fas fa-check-circle text-success'%>"></i>
@@ -188,7 +183,6 @@
               </td>
               <%    
                 } else {
-
               %>
               <td class="text-success font-weight-bold">
                 <%=plagiarism%>%
@@ -208,6 +202,7 @@
                     }
                   }
                 }
+                
               %>
         <td>
           <%=score%>
@@ -227,7 +222,7 @@
                   <div id="editorbai<%=i%>" style="height: 360px;"><%= baicontent %></div>
                 </div>
                 <%
-                	if (logcontent.split('\n')[5].split(': ')[1] > 0) {
+                	if (!logcontent.split('\n')[0].includes('Error') && logcontent.split('\n')[5].split(': ')[1] > 0 ) {
                 %>
                 <div class="col">
                   [<%=detectedFile.split('\\[')[1]%>

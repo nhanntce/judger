@@ -86,8 +86,9 @@ exports.load_rank = function (req, res) {
   db.query(sql, [contest_id], function (err, results) {
     if (err || results.length == 0) { logger.error(err); res.redirect("/error"); return }
     var contest_name = results[0].contest_name.replace(/ /g, '-')
+    var configContent = fs.readFileSync(storage.TESTCASE + contest_name + '/config.txt', 'utf8')
     var problem_files = []
-    var maxtimes = {}
+    maxtimes = {}
     var sql = "SELECT problem_id, times FROM contest_detail WHERE contest_id=?"
     db.query(sql, [contest_id], function (err, data) {
       if (err) { logger.error(err); res.redirect("/error"); return }
@@ -120,6 +121,7 @@ exports.load_rank = function (req, res) {
             }).map(function (v) {
               return v.name
             })
+
           } catch (err) { }
           var point = []
           var times = []
@@ -148,8 +150,45 @@ exports.load_rank = function (req, res) {
             prob = log_files[i].split('][')[4].split('].')[0]
             if (!check[rollnum][prob]) {
               var contents = fs.existsSync(storage.NOPBAI + 'Logs/' + results[0].contest_name.replace(/ /g, '-') + '/' + log_files[i]) ? fs.readFileSync(storage.NOPBAI + 'Logs/' + results[0].contest_name.replace(/ /g, '-') + '/' + log_files[i], 'utf8') : ""
+              
               if (!contents.split('\n')[0].includes('Error')) {
-                point[rollnum][prob] = parseFloat(contents.split('\n')[0])
+                // check plagiarism
+                if (contents.split('\n')[5].split(': ')[1] >= 75) {
+                  point[rollnum][prob] = 0
+                } else {
+                  var tmpScore = parseFloat(contents.split('\n')[0])
+                  var minusPoint = 0
+                  var minusPercent = 0
+                  var checkCmt = configContent.split('\n')[3].split('=')[1]
+                  var percentCmtAcp = parseFloat(configContent.split('\n')[5])
+                  var comment = parseFloat(contents.split('\n')[4].split(': ')[1])
+                  var format = contents.split('\n')[3].split(': ')[1]
+                  point[rollnum][prob] = parseFloat(contents.split('\n')[0])
+
+                  if (checkCmt == 'true') {
+                    checkCmtMode = configContent.split('\n')[4].split('=')[1]
+                    percentCmtAcp = parseFloat(configContent.split('\n')[5])
+                    if (checkCmtMode == 'Fixed') {
+                      minusPoint = configContent.split('\n')[6]
+                    } else {
+                      minusPercent = configContent.split('\n')[6]
+                    }
+                  }
+                  if (comment < percentCmtAcp) {
+                    if (checkCmtMode == 'Fixed') {
+                      tmpScore = tmpScore - minusPoint
+                    } else {
+                      tmpScore = tmpScore - (tmpScore * minusPoint  * 0.01)
+                    }
+                  }
+                  if(format == 'false') {
+                    tmpScore -=1
+                  }
+                  if(tmpScore < 0) {
+                    tmpScore = 0;
+                  }
+                }
+                point[rollnum][prob] = tmpScore
                 thoigian[rollnum][prob] = Math.max(parseInt(log_files[i].split('][')[1]), thoigian[rollnum][prob])
               } else {
                 point[rollnum][prob] = 0.0
@@ -264,7 +303,7 @@ exports.detail_rank = function (req, res) {
           }
         }
       }
-      res.render('rank-detail.ejs', { bailam: bailam, contest_name: contest_name, contest_id: contest_id, rollnumber: rollnumber, log_files: logs, testcase_size: testcase_size, message: "", role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role })
+      res.render('rank-detail.ejs', { bailam: bailam, contest_name: contest_name, contest_id: contest_id, rollnumber: rollnumber, log_files: logs, testcase_size: testcase_size, message: "", role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role, all_file_log: log_files })
     })
   })
 }

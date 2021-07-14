@@ -180,14 +180,22 @@ exports.submission_realtime = function (req, res) {
               score[tmp] = 0
             } else {
               var comment = parseFloat(logcontent.split('\n')[4].split(': ')[1])
+              var format = logcontent.split('\n')[3].split(': ')[1]
               score[tmp] = parseFloat(logcontent.split('\n')[0])
+              
               if (comment < percentCmtAcp) {
                 if (checkCmtMode == 'Fixed') {
                   score[tmp] = score[tmp] - minusPoint
                 } else {
-                  score[tmp] = score[tmp] - (score[tmp] * minusPercent / 100)
+                  score[tmp] = score[tmp] - (score[tmp] * minusPoint  * 0.01)
                 }
               }  
+              if(format == 'false') {
+                score[tmp] -=1
+              }
+              if(score[tmp] < 0) {
+                score[tmp] = 0;
+              }
             }
             
             result[tmp] = parseInt(parseFloat(logcontent.split('\n')[0]) * testcase_size / 10)
