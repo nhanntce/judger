@@ -30,9 +30,9 @@
     </thead>
     <tbody>
       <% 
-                var logcontent = ''
-                var baicontent = ''
-                var configContent = fs.readFileSync(storage.TESTCASE + contest_name + '/config.txt', 'utf8')
+            var logcontent = ''
+            var baicontent = ''
+            var configContent = fs.readFileSync(storage.TESTCASE + contest_name + '/config.txt', 'utf8')
 		        var checkCmt = configContent.split('\n')[3].split('=')[1]
 		        var checkCmtMode = ''
 		        var percentCmtAcp = 0
@@ -48,10 +48,10 @@
 		          }
 		        }
                 for (let i = 0; i < log_files.length; ++i) {
+                    var tmp_Rollnumber = bailam[i].split('][')[3]
                     var mtime = fs.existsSync(bailam[i]) ? fs.statSync(bailam[i]).mtime : 0
                     var tenbai = bailam[i].split('][')[4].replace('].', '.')
                     var filedate = dayjs(mtime).format('DD-MM-YYYY, HH:mm:ss')
-                    logcontent = fs.existsSync(storage.NOPBAI + 'Logs/' + contest_name + '/' + log_files[i]) ? fs.readFileSync(storage.NOPBAI + 'Logs/' + contest_name + '/' + log_files[i], 'utf8') : ""
                     var baicontent = fs.existsSync(bailam[i]) ? fs.readFileSync(bailam[i], 'utf8') : ""
                     var testcase = ''
                     var score = 0
@@ -69,6 +69,10 @@
                     var origEndLine = []
                     var detectedStartLine = []
                     var detectedEndLine = []
+
+                    logcontent = fs.existsSync(storage.NOPBAI + 'Logs/' + contest_name + '/' + log_files[i]) ? fs.readFileSync(storage.NOPBAI + 'Logs/' + contest_name + '/' + log_files[i], 'utf8') : ""
+                    if(tmp_Rollnumber == rollnumber) {
+
                     if (logcontent.split('\n')[0].includes('Error') || logcontent.split('\n')[0] == "0.0") {
                         testcase = '0/' + testcase_size[i]
                         score = 0
@@ -192,19 +196,49 @@
               %>
               <%
                 if (plagiarism >= 75) {
-                  score = 0
+                  score = 0;
                 } else {
+                  if(format == 'No'){
+                    score -=1;
+                  }
                   if (comment < percentCmtAcp) {
                     if (checkCmtMode == 'Fixed') {
                       score = score - minusPoint;
                     } else {
-                      score = score - (score * minusPercent / 100)
+                      score = score - (score * minusPercent / 100);
                     }
                   }
                 }
-                
+
               %>
         <td>
+          <%
+          var tmp = ''
+          var pen = []
+          var tmp_pen = {}
+          var tmp_maxtimes = []
+          
+          <!-- set default of tmp_pen -->
+          for (let i = 0, l = debai.length; i < l; ++i) { 
+            tmp_pen[debai[i]] = -1
+          }
+          for (let i = 0, l = log_files.length; i < l; ++i) {
+            tmp = log_files[i].split('][')[log_files[i].split('][').length - 1].split('].')[0] //get name of problem
+            tmp_pen[tmp]++;
+            tmp_maxtimes.push(maxtimes[tmp])
+          }
+          <!-- Because it read file order by time descrease, so the first have the most penaty value -->
+          for (let i = 0, l = log_files.length; i < l; ++i) {
+              tmp = log_files[i].split('][')[log_files[i].split('][').length - 1].split('].')[0] //get name of problem
+             
+                pen.push(tmp_pen[tmp]--)
+          }
+          <!-- caculate the score with penaty -->
+            score = score * (tmp_maxtimes[i] - pen[i]) / tmp_maxtimes[i]
+          if(score < 0){
+            score = 0;
+          }
+          %>
           <%=score%>
         </td>
       </tr>
@@ -269,7 +303,7 @@
           </div>
         </div>
       </div>
-      <% } %>
+      <% }} %>
     </tbody>
   </table>
 </div>

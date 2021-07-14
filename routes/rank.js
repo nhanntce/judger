@@ -41,28 +41,28 @@ exports.data_rank = function (req, res) {
   var message = ""
   var contest_id = req.query.contest_id
   var sql = "SELECT student_id FROM `contest_student` WHERE contest_id = ? LIMIT 1"
-  db.query(sql, [contest_id], function (err, results) {
+  db.query(sql, [contest_id], function (err, results1) {
     if (err) { logger.error(err); res.redirect("/error"); return }
-    if (results.length == 0) { // if No student in contest
+    if (results1.length == 0) { // if No student in contest
       message = "No student in contest"
       res.render('data-rank.ejs', { data: [], problem_files: [], message: message, role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role })
     } else {
       sql = "SELECT contest.contest_name, contest.contest_id, contest.time_begin, contest.time_end, contest_detail.problem_id, contest_detail.path_problem FROM contest " +
         "INNER JOIN contest_detail ON contest.contest_id=contest_detail.contest_id " +
         "WHERE contest.contest_id=?"
-      db.query(sql, [contest_id], function (err, results) {
+      db.query(sql, [contest_id], function (err, results2) {
         if (err) { logger.error(err); res.redirect("/error"); return }
-        if (results.length == 0) { // if contest donnt have any problem
+        if (results2.length == 0) { // if contest donnt have any problem
           sql = "SELECT contest_name, contest_id, time_begin, time_end FROM contest WHERE contest_id=?"
-          db.query(sql, [contest_id], function (err, results) {
-            res.render('data-rank.ejs', { data: results, problem_files: [], message: message, role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role })
+          db.query(sql, [contest_id], function (err, results3) {
+            res.render('data-rank.ejs', { data: results3, problem_files: [], message: message, role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role })
           })
         } else {
           var problem_files = []
-          for (let i = 0; i < results.length; ++i) {
-            problem_files.push(results[i].problem_id)
+          for (let i = 0; i < results2.length; ++i) {
+            problem_files.push(results2[i].problem_id)
           }
-          res.render('data-rank.ejs', { data: results, problem_files: problem_files, message: message, role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role })
+          res.render('data-rank.ejs', { data: results2, problem_files: problem_files, message: message, role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role })
         }
       })
     }
@@ -262,11 +262,22 @@ exports.detail_rank = function (req, res) {
     return
   }
   var rollnumber = req.query.rollnumber
-  var sql = "SELECT contest.contest_name, contest.contest_id FROM contest INNER JOIN student_account ON student_account.contest_id=contest.contest_id WHERE student_account.rollnumber=?"
+  // var sql = "SELECT contest.contest_name, contest.contest_id, contest_detail.times, contest_detail.problem_id FROM contest, contest_detail INNER JOIN student_account ON student_account.contest_id=contest.contest_id WHERE student_account.rollnumber=?"
+  var sql ="SELECT contest.contest_name, contest.contest_id, contest_detail.path_problem, contest_detail.times, contest_detail.problem_id FROM contest INNER JOIN student_account ON student_account.contest_id=contest.contest_id INNER JOIN contest_detail ON contest_detail.contest_id=contest.contest_id WHERE student_account.rollnumber=?"
   db.query(sql, [rollnumber], function (err, results) {
     if (err || results.length == 0) { logger.error(err); res.redirect("/error"); return }
     var contest_name = results[0].contest_name.replace(/ /g, '-')
     var contest_id = results[0].contest_id
+    req.session.maxtimes = {}
+    req.session.debai = []
+    req.session.problem_id = []
+    for (let i = 0; i < results.length; ++i) {
+      req.session.maxtimes[results[i].problem_id] = results[i].times
+      req.session.debai.push(path.basename(results[i].path_problem))
+      req.session.problem_id.push(results[i].problem_id)
+    }
+    var debai = JSON.parse(JSON.stringify(req.session.problem_id))
+    // console.log("server " +req.session.maxtimes)
     // get all judged Logs in folder './public/nopbai/Logs/contest_name
     fs.readdir(storage.NOPBAI + 'Logs/' + contest_name, function (err, files) {
       if (err) { logger.error(err); res.redirect("/error"); return }
@@ -303,7 +314,7 @@ exports.detail_rank = function (req, res) {
           }
         }
       }
-      res.render('rank-detail.ejs', { bailam: bailam, contest_name: contest_name, contest_id: contest_id, rollnumber: rollnumber, log_files: logs, testcase_size: testcase_size, message: "", role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role, all_file_log: log_files })
+      res.render('rank-detail.ejs', {debai: debai, bailam: bailam, contest_name: contest_name, contest_id: contest_id, rollnumber: rollnumber, log_files: logs, testcase_size: testcase_size, message: "", role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role, all_file_log: log_files, maxtimes: req.session.maxtimes })
     })
   })
 }
