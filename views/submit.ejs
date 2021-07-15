@@ -296,7 +296,7 @@
               </td>
               <td>
                 <%=rescheck[i]%>
-              </td>
+              </td> 
               <td class="<%=pen[i]==0?'text-success':'text-danger'%> font-weight-bold">
                 <%=pen[i]==0 ? 'OK' : '-'+ (pen[i] / tmp_maxtimes[i]*100).toFixed(0) +'%'%>
               </td>
@@ -375,6 +375,15 @@
                   for (let i = 0, l = log_files.length; i < l; ++i) {
                     score[i] = score[i] * (tmp_maxtimes[i] - pen[i]) / tmp_maxtimes[i]
                   }
+                  console.log("log_file")
+                  console.log(log_files)
+                  console.log("tmp_maxtimes")
+                  console.log(tmp_maxtimes)
+                  console.log("pen")
+                  console.log(pen)
+                  console.log("bailam")
+                  console.log(bailam)
+
                   if(score[i] < 0) {
                     score[i] = 0;
                   }

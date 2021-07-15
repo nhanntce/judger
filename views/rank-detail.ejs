@@ -30,92 +30,93 @@
     </thead>
     <tbody>
       <% 
-                var logcontent = ''
-                var baicontent = ''
-                var configContent = fs.readFileSync(storage.TESTCASE + contest_name + '/config.txt', 'utf8')
-		        var checkCmt = configContent.split('\n')[3].split('=')[1]
-		        var checkCmtMode = ''
-		        var percentCmtAcp = 0
-		        var minusPoint = 0
-		        var minusPercent = 0
-		        if (checkCmt == 'true') {
-		          checkCmtMode = configContent.split('\n')[4].split('=')[1]
-		          percentCmtAcp = parseInt(configContent.split('\n')[5])
-		          if (checkCmtMode == 'Fixed') {
-		            minusPoint = configContent.split('\n')[6]
-		          } else {
-		            minusPercent = configContent.split('\n')[6]
-		          }
-		        }
-                for (let i = 0; i < log_files.length; ++i) {
-                    var mtime = fs.existsSync(bailam[i]) ? fs.statSync(bailam[i]).mtime : 0
-                    var tenbai = bailam[i].split('][')[4].replace('].', '.')
-                    var filedate = dayjs(mtime).format('DD-MM-YYYY, HH:mm:ss')
-                    logcontent = fs.existsSync(storage.NOPBAI + 'Logs/' + contest_name + '/' + log_files[i]) ? fs.readFileSync(storage.NOPBAI + 'Logs/' + contest_name + '/' + log_files[i], 'utf8') : ""
-                    var baicontent = fs.existsSync(bailam[i]) ? fs.readFileSync(bailam[i], 'utf8') : ""
-                    var testcase = ''
-                    var score = 0
-                    var timeLimit = '0s'
-                    var memoryLimit = '0MB'
-                    var format = ''
-                    var comment = ''
-                    var plagiarism = ''
-                    var plagiarismPercent = 0;
-                    var detectedFile = ''
-                    var n = 0
-                  	var d = 0
-                  	
-                    var origStartLine = []
-                    var origEndLine = []
-                    var detectedStartLine = []
-                    var detectedEndLine = []
-                    if (logcontent.split('\n')[0].includes('Error') || logcontent.split('\n')[0] == "0.0") {
-                        testcase = '0/' + testcase_size[i]
-                        score = 0
-                        format = 'NaN'
-                        comment = 'NaN'
-                        plagiarism = '0'
+            var configContent = fs.readFileSync(storage.TESTCASE + contest_name + '/config.txt', 'utf8')
+            var logcontent = ''
+            var baicontent = ''
+            <!-- declare variables for config file -->
+		        var checkFormat = configContent.split('\n')[2].split('=')[1]
+            var minusFormat = configContent.split('\n')[3]
+		        var checkCmt = configContent.split('\n')[4].split('=')[1]
+		        var checkCmtMode = configContent.split('\n')[5].split('=')[1]
+		        var percentCmtAcp = configContent.split('\n')[6]
+		        var minusPoint = configContent.split('\n')[7]
+		        var minusPercent = configContent.split('\n')[7]
+            var checkPlagiarism = configContent.split('\n')[8].split('=')[1]
+            var plagiarismAcp = configContent.split('\n')[9]
+            
+            for (let i = 0; i < log_files.length; ++i) {
+                var tmp_Rollnumber = bailam[i].split('][')[3]
+                var mtime = fs.existsSync(bailam[i]) ? fs.statSync(bailam[i]).mtime : 0
+                var tenbai = bailam[i].split('][')[4].replace('].', '.')
+                var filedate = dayjs(mtime).format('DD-MM-YYYY, HH:mm:ss')
+                var baicontent = fs.existsSync(bailam[i]) ? fs.readFileSync(bailam[i], 'utf8') : ""
+                var testcase = ''
+                var score = 0
+                var timeLimit = '0s'
+                var memoryLimit = '0MB'
+                var format = ''
+                var comment = ''
+                var plagiarism = ''
+                var plagiarismPercent = 0;
+                var detectedFile = ''
+                var n = 0
+                var d = 0
+                
+                var origStartLine = []
+                var origEndLine = []
+                var detectedStartLine = []
+                var detectedEndLine = []
+
+                logcontent = fs.existsSync(storage.NOPBAI + 'Logs/' + contest_name + '/' + log_files[i]) ? fs.readFileSync(storage.NOPBAI + 'Logs/' + contest_name + '/' + log_files[i], 'utf8') : ""
+                if(tmp_Rollnumber == rollnumber) {
+
+                if (logcontent.split('\n')[0].includes('Error') || logcontent.split('\n')[0] == "0.0") {
+                    testcase = '0/' + testcase_size[i]
+                    score = 0
+                    format = 'NaN'
+                    comment = 'NaN'
+                    plagiarism = '0'
+                } else {
+                    testcase = parseInt(logcontent.split('\n')[0] * testcase_size[i] / 10) + '/' + testcase_size[i]
+                    score = logcontent.split('\n')[0]
+                    if (logcontent.split('\n')[1].split(': ')[1] > 1000) {
+                        timeLimit = '> 1s'
                     } else {
-                        testcase = parseInt(logcontent.split('\n')[0] * testcase_size[i] / 10) + '/' + testcase_size[i]
-                        score = logcontent.split('\n')[0]
-                        if (logcontent.split('\n')[1].split(': ')[1] > 1000) {
-                            timeLimit = '> 1s'
-                        } else {
-                            timeLimit = (logcontent.split('\n')[1].split(': ')[1] / 1000).toFixed(2) + 's'
-                        }
-                        if (logcontent.split('\n')[2].split(': ')[1] > 1000) {
-                            memoryLimit = '> 1000MB'
-                        } else {
-                            memoryLimit = logcontent.split('\n')[2].split(': ')[1] + 'MB'
-                        }
-                        
-                        if(logcontent.split('\n')[3].split(': ')[1] == 'false') {
-                          format = 'No'
-                        } else if (logcontent.split('\n')[3].split(': ')[1] == 'true') {
-                          format = 'Yes'
-                        } else {
-                          format = 'NaN'
-                        }
-                        if(logcontent.split('\n')[4].split(': ')[1] >= 0) {
-                          comment = logcontent.split('\n')[4].split(': ')[1]
-                        } else {
-                          comment = 'NaN'
-                        }
-                        plagiarismPercent = logcontent.split('\n')[5].split(': ')[1]
-                        plagiarism =  plagiarismPercent
-                        if (plagiarismPercent > 0) {
-                        	detectedFile = logcontent.split('\n')[6]
-                        	var detectedFileContent = fs.existsSync(detectedFile) ? fs.readFileSync(detectedFile, 'utf8') : ""
-                        	n = logcontent.split('\n')[7]
-                        	var k = 8
-                        	for (let j = 0; j < n; j++) {
-                        		origStartLine.push(logcontent.split('\n')[k].split(' ')[0])
-                        		origEndLine.push(logcontent.split('\n')[k++].split(' ')[1])
-                        		detectedStartLine.push(logcontent.split('\n')[k].split(' ')[0])
-                        		detectedEndLine.push(logcontent.split('\n')[k++].split(' ')[1])
-                        	}
-                        }
+                        timeLimit = (logcontent.split('\n')[1].split(': ')[1] / 1000).toFixed(2) + 's'
                     }
+                    if (logcontent.split('\n')[2].split(': ')[1] > 1000) {
+                        memoryLimit = '> 1000MB'
+                    } else {
+                        memoryLimit = logcontent.split('\n')[2].split(': ')[1] + 'MB'
+                    }
+                    
+                    if(logcontent.split('\n')[3].split(': ')[1] == 'false') {
+                      format = 'No'
+                    } else if (logcontent.split('\n')[3].split(': ')[1] == 'true') {
+                      format = 'Yes'
+                    } else {
+                      format = 'NaN'
+                    }
+                    if(logcontent.split('\n')[4].split(': ')[1] >= 0) {
+                      comment = logcontent.split('\n')[4].split(': ')[1]
+                    } else {
+                      comment = 'NaN'
+                    }
+                    plagiarismPercent = logcontent.split('\n')[5].split(': ')[1]
+                    plagiarism =  plagiarismPercent
+                    if (plagiarismPercent > 0) {
+                      detectedFile = logcontent.split('\n')[6]
+                      var detectedFileContent = fs.existsSync(detectedFile) ? fs.readFileSync(detectedFile, 'utf8') : ""
+                      n = logcontent.split('\n')[7]
+                      var k = 8
+                      for (let j = 0; j < n; j++) {
+                        origStartLine.push(logcontent.split('\n')[k].split(' ')[0])
+                        origEndLine.push(logcontent.split('\n')[k++].split(' ')[1])
+                        detectedStartLine.push(logcontent.split('\n')[k].split(' ')[0])
+                        detectedEndLine.push(logcontent.split('\n')[k++].split(' ')[1])
+                      }
+                    }
+                }
             %>
       <tr href="#" data-toggle="modal" data-target="#myModal<%=i%>">
         <td>
@@ -176,7 +177,7 @@
             }
               %>
               <%
-                if (plagiarism >= 75) {
+                if (parseFloat(plagiarism) >= parseFloat(plagiarismAcp)) {
               %>
               <td class="text-danger font-weight-bold">
                 <%=plagiarism%>%
@@ -191,20 +192,50 @@
                 }
               %>
               <%
-                if (plagiarism >= 75) {
-                  score = 0
+                if (parseFloat(plagiarism) >= parseFloat(plagiarismAcp)) {
+                  score = 0;
                 } else {
+                  if(format == 'No'){
+                    score -=minusFormat;
+                  }
                   if (comment < percentCmtAcp) {
                     if (checkCmtMode == 'Fixed') {
                       score = score - minusPoint;
                     } else {
-                      score = score - (score * minusPercent / 100)
+                      score = score - (score * minusPercent * 0.01);
                     }
                   }
                 }
-                
+
               %>
         <td>
+          <%
+          var tmp = ''
+          var pen = []
+          var tmp_pen = {}
+          var tmp_maxtimes = []
+          
+          <!-- set default of tmp_pen -->
+          for (let i = 0, l = debai.length; i < l; ++i) { 
+            tmp_pen[debai[i]] = -1
+          }
+          for (let i = 0, l = log_files.length; i < l; ++i) {
+            tmp = log_files[i].split('][')[log_files[i].split('][').length - 1].split('].')[0] //get name of problem
+            tmp_pen[tmp]++;
+            tmp_maxtimes.push(maxtimes[tmp])
+          }
+          <!-- Because it read file order by time descrease, so the first have the most penaty value -->
+          for (let i = 0, l = log_files.length; i < l; ++i) {
+              tmp = log_files[i].split('][')[log_files[i].split('][').length - 1].split('].')[0] //get name of problem
+             
+                pen.push(tmp_pen[tmp]--)
+          }
+          <!-- caculate the score with penaty -->
+            score = score * (tmp_maxtimes[i] - pen[i]) / tmp_maxtimes[i]
+          if(score < 0){
+            score = 0;
+          }
+          %>
           <%=score%>
         </td>
       </tr>
@@ -269,7 +300,7 @@
           </div>
         </div>
       </div>
-      <% } %>
+      <% }} %>
     </tbody>
   </table>
 </div>
