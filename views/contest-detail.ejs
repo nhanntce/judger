@@ -123,15 +123,27 @@
             <% 
               if(data[0].check_format === 'true') {
             %>
-            <input type="checkbox" style="pointer-events: auto; width:4rem; z-index: 10; cursor:pointer;"  class="form-check-input" name="check_format" checked>
+            <input type="checkbox" style="pointer-events: auto; width:4rem; z-index: 10; cursor:pointer;"  class="form-check-input" id="check_format" name="check_format" checked onclick="checkFormat()">
             <%
               } else {
             %>
-            <input type="checkbox" style="pointer-events: auto; width:4rem; z-index: 10; cursor:pointer;"  class="form-check-input" name="check_format">
+            <input type="checkbox" style="pointer-events: auto; width:4rem; z-index: 10; cursor:pointer;"  class="form-check-input" id="check_format" name="check_format" onclick="checkFormat()">
             <%
               }
             %>
             <label class="font-weight-bold" style="cursor:default;">Formatted Checking</label>
+          </div>
+          <div id="has_check_format" class="row" style="display: none;">
+            <div class="form col-6">
+              <label class="font-weight-bold">Minus point (point)</label>
+              <div class="form">
+                <div class="row">
+                    <div class="col-10">
+                      <input type="number" id="format_minus_point" name="format_minus_point" class="form-control" value="<%=data[0].format_minus_point%>">
+                    </div>
+                </div>
+              </div>              
+            </div>
           </div>
 <!--start Comment checking-->
           <div class="row">
@@ -189,21 +201,30 @@
             </div>
 <!-- end Comment checking -->                        
 <!-- start Plagiarism Checking-->
-          <div class="form mb-3">
-            <input type="checkbox" style="pointer-events: auto; width:4rem; z-index: 10; cursor:pointer;"  class="form-check-input" id="check_plagiarism" name="check_plagiarism">
-            <label class="font-weight-bold" style="cursor:default;">Plagiarism Checking</label>
-          </div>
-
+          <%
+            if(data[0].check_plagiarism === "true") {
+          %>
+            <div class="form mb-3">
+              <input type="checkbox" style="pointer-events: auto; width:4rem; z-index: 10; cursor:pointer;"  class="form-check-input" id="check_plagiarism" name="check_plagiarism" checked onclick="checkPlagiarism()">
+              <label class="font-weight-bold" style="cursor:default;">Plagiarism Checking</label>
+            </div>
+          <%
+            } else {
+          %>
+            <div class="form mb-3">
+              <input type="checkbox" style="pointer-events: auto; width:4rem; z-index: 10; cursor:pointer;"  class="form-check-input" id="check_plagiarism" name="check_plagiarism" onclick="checkPlagiarism()">
+              <label class="font-weight-bold" style="cursor:default;">Plagiarism Checking</label>
+            </div>
+          <%
+            }
+          %>
           <div id="has_check_plagiarism" class="row" style="display: none;">
-            <div class="form mb-3 col-6">
-              <label class="font-weight-bold">Percentage Allow</label>
-              <div class="form mb-3">
+            <div class="form col-6">
+              <label class="font-weight-bold">Percentage Allow (%)</label>
+              <div class="form">
                 <div class="row">
                     <div class="col-10">
-                      <input type="number" id="percentage_allow" name="percentage_allow" class="form-control">
-                    </div>
-                    <div class="col-2">
-                      <scan class="font-weight-bold" style="vertical-align: middle; margin-top: 5px;">%</scan>
+                      <input type="number" id="percentage_allow" name="percentage_allow" class="form-control" value="<%=data[0].percentage_allow%>">
                     </div>
                 </div>
               </div>              
@@ -221,20 +242,26 @@
           </select>
         </div>
         <script>
+            //variable for comment
+            var check_comment = document.getElementById('check_comment');
             var check_comment_mode_div = document.getElementById('check_comment_mode_div');
             var check_comment_mode_ = document.getElementById('check_comment_mode');
             var has_check_comment = document.getElementById('has_check_comment');
             var lb_minus_point = document.getElementById('lb_minus_point');
+            
+            //variable for plagiarism
             var has_check_plagiarism = document.getElementById('has_check_plagiarism');
-            var check_comment = document.getElementById('check_comment');
             var check_plagiarism = document.getElementById('check_plagiarism');
-            console.log(check_comment.checked);
+            
+            //variable for format
+            var has_check_format = document.getElementById('has_check_format');
+            var check_format = document.getElementById('check_format');
             function checkComment() {
               if(check_comment.checked == true) {
                 check_comment.classList.remove("mb-3");
                 check_comment_mode_div.classList.remove("mb-3");
-                check_comment_mode_div.style.display = "inline";
-                has_check_comment.style.display = "inline";
+                check_comment_mode_div.style.display = "flex";
+                has_check_comment.style.display = "flex";
                 console.log("block");
               } else {
                 check_comment_mode_div.style.display = "none";
@@ -250,11 +277,30 @@
                 lb_minus_point.innerHTML = "Minus Points (%)";
               }
             }
+
+
+            function checkFormat() {
+              if(check_format.checked == true) {
+                has_check_format.style.display = "flex";
+              } else {
+                has_check_format.style.display = "none";
+              }
+            }
+
+            function checkPlagiarism() {
+              if(check_plagiarism.checked == true) {
+                has_check_plagiarism.style.display = "flex";
+              } else {
+                has_check_plagiarism.style.display = "none";
+              }
+            }
             //add event
             check_comment_mode.addEventListener('change', checkCommentMode); 
             //call init
             checkComment();
             checkCommentMode();
+            checkFormat();
+            checkPlagiarism();
         </script>
         <script>
           $('#time_begin, #time_end').datetimepicker({
