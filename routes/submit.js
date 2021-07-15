@@ -131,21 +131,25 @@ exports.submission_realtime = function (req, res) {
   }
   var contest_name = req.session.contest_name
   var rollnumber = req.session.rollnumber
+  // declare variables for config file
   var configContent = fs.readFileSync(storage.TESTCASE + contest_name + '/config.txt', 'utf8')
-  var checkCmt = configContent.split('\n')[3].split('=')[1]
-  var checkCmtMode = ''
-  var percentCmtAcp = 0
   var minusPoint = 0
   var minusPercent = 0
-  if (checkCmt == 'true') {
-    checkCmtMode = configContent.split('\n')[4].split('=')[1]
-    percentCmtAcp = parseFloat(configContent.split('\n')[5])
-    if (checkCmtMode == 'Fixed') {
-      minusPoint = configContent.split('\n')[6]
-    } else {
-      minusPercent = configContent.split('\n')[6]
-    }
-  }
+  var checkFormat = configContent.split('\n')[2].split('=')[1]
+  var minusFormat = configContent.split('\n')[3]
+  var checkCmt = configContent.split('\n')[4].split('=')[1]
+  var checkCmtMode = configContent.split('\n')[5].split('=')[1]
+  var percentCmtAcp = configContent.split('\n')[6]
+  var minusPoint = configContent.split('\n')[7]
+  var minusPercent = configContent.split('\n')[7]
+  var checkPlagiarism = configContent.split('\n')[8].split('=')[1]
+  var plagiarismAcp = configContent.split('\n')[9]
+  
+  // declare variables for logs file
+  var format =''
+  var comment = ''
+  var plagiarism = ''
+
   // get all judged Logs in folder './public/nopbai/Logs/' + contest_name
   fs.readdir(storage.NOPBAI + 'Logs/' + contest_name, function (err, log_files) {
     if (err) { res.redirect("/error"); return }
@@ -174,16 +178,22 @@ exports.submission_realtime = function (req, res) {
         testcase_size = getFolders(storage.TESTCASE + contest_name + '/' + tmp).length
         var logcontent = fs.existsSync(storage.NOPBAI + 'Logs/' + contest_name + '/' + log_files[i]) ?
          fs.readFileSync(storage.NOPBAI + 'Logs/' + contest_name + '/' + log_files[i], 'utf8') : "";
+         
+
         if (logcontent) {
           if (!logcontent.split('\n')[0].includes('Error')) {
-            if (logcontent.split('\n')[5].split(': ')[1] >= 75) {
+                // declare variables for logs file
+            format = logcontent.split('\n')[3].split(': ')[1]
+            comment = logcontent.split('\n')[4].split(': ')[1]
+            plagiarism = logcontent.split('\n')[5].split(': ')[1]
+            if (parseFloat(plagiarism) >= parseFloat(plagiarismAcp)) {
               score[tmp] = 0
             } else {
-              var comment = parseFloat(logcontent.split('\n')[4].split(': ')[1])
-              var format = logcontent.split('\n')[3].split(': ')[1]
+              // var comment = parseFloat(logcontent.split('\n')[4].split(': ')[1])
+              // var format = logcontent.split('\n')[3].split(': ')[1]
               score[tmp] = parseFloat(logcontent.split('\n')[0])
               
-              if (comment < percentCmtAcp) {
+              if (parseFloat(comment) < parseFloat(percentCmtAcp)) {
                 if (checkCmtMode == 'Fixed') {
                   score[tmp] = score[tmp] - minusPoint
                 } else {
@@ -191,7 +201,7 @@ exports.submission_realtime = function (req, res) {
                 }
               }  
               if(format == 'false') {
-                score[tmp] -=1
+                score[tmp] = score[tmp] - minusFormat
               }
               if(score[tmp] < 0) {
                 score[tmp] = 0;

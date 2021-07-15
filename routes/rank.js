@@ -179,7 +179,7 @@ exports.load_rank = function (req, res) {
                   if(format == 'false') {
                     tmpScore -= minusFormat;
                   }
-                  if (comment < percentCmtAcp) {
+                  if (parseFloat(comment) < parseFloat(percentCmtAcp)) {
                     if (checkCmtMode == 'Fixed') {
                       tmpScore = tmpScore - minusPoint
                     } else {

@@ -11,18 +11,26 @@
   <% 
         var rescheck = []
         var configContent = fs.readFileSync(storage.TESTCASE + contest_name + '/config.txt', 'utf8')
-        var checkCmt = configContent.split('\n')[3].split('=')[1]
-        var checkCmtMode = ''
-        var percentCmtAcp = 0
-        var minusPoint = 0
-        var minusPercent = 0
+        
+        <!-- declare variables for config file -->
+        var checkFormat = configContent.split('\n')[2].split('=')[1]
+        var minusFormat = configContent.split('\n')[3]
+        var checkCmt = configContent.split('\n')[4].split('=')[1]
+        var checkCmtMode = configContent.split('\n')[5].split('=')[1]
+        var percentCmtAcp = configContent.split('\n')[6]
+        var minusPoint = configContent.split('\n')[7]
+        var minusPercent = configContent.split('\n')[7]
+        var checkPlagiarism = configContent.split('\n')[8].split('=')[1]
+        var plagiarismAcp = configContent.split('\n')[9]
+
+
         if (checkCmt == 'true') {
-          checkCmtMode = configContent.split('\n')[4].split('=')[1]
-          percentCmtAcp = parseFloat(configContent.split('\n')[5])
+          checkCmtMode = configContent.split('\n')[5].split('=')[1]
+          percentCmtAcp = parseFloat(configContent.split('\n')[6])
           if (checkCmtMode == 'Fixed') {
-            minusPoint = configContent.split('\n')[6]
+            minusPoint = configContent.split('\n')[7]
           } else {
-            minusPercent = configContent.split('\n')[6]
+            minusPercent = configContent.split('\n')[7]
           }
         }
         
@@ -40,20 +48,22 @@
         for (let i = 0, l = debai.length; i < l; ++i) { 
           tmp_pen[debai[i]] = 0
         }
+        
         for (let i = 0, l = log_files.length; i < l; ++i) {
             tmp = log_files[i].split('][')[log_files[i].split('][').length - 1].split('].')[0] //get name of problem
             logcontent = fs.existsSync(storage.NOPBAI + 'Logs/' + contest_name.replace(/ /g, '-') + '/' + log_files[i]) ? fs.readFileSync(storage.NOPBAI + 'Logs/' + contest_name.replace(/ /g, '-') + '/' + log_files[i], 'utf8') : ""
             if (logcontent) {
                 pen.push(tmp_pen[tmp]++)
                 tmp_maxtimes.push(maxtimes[tmp])
+                <!-- check log file include 'Error' -->
                 if (logcontent.split('\n')[0].includes('Error')) {
                     rescheck.push('0/' + testcase_size[i])
                     score.push(0)
                     timeLimit.push('0s')
                     memoryLimit.push('0MB')
-                    format.push('NaN')
-                    comment.push('NaN')
-                    plagiarism.push('NaN')
+                    format.push('Compile Error')
+                    comment.push('Compile Error')
+                    plagiarism.push('Compile Error')
                 } else {
                     rescheck.push(parseInt(parseFloat(logcontent.split('\n')[0]) * testcase_size[i] / 10) + '/' + testcase_size[i])
                     score.push(parseFloat(logcontent.split('\n')[0]))
@@ -69,22 +79,22 @@
                     }
 
                     if(logcontent.split('\n')[5].split(': ')[1] >= 0) {
-                      plagiarism.push(logcontent.split('\n')[5].split(': ')[1])
+                      plagiarism.push(logcontent.split('\n')[5].split(': ')[1] + "%")
                     } 
-                    if(logcontent.split('\n')[5].split(': ')[1] < 75) {
+                    <!-- if(logcontent.split('\n')[5].split(': ')[1] < parseFloat(plagiarismAcp)) { -->
                       if(logcontent.split('\n')[3].split(': ')[1] == 'false') {
                         format.push('No')
                       } else if (logcontent.split('\n')[3].split(': ')[1] == 'true') {
                         format.push('Yes')
                       } else {
-                        format.push('NaN')
+                        format.push('No Tick')
                       }
                       if(logcontent.split('\n')[4].split(': ')[1] >= 0) {
-                        comment.push(logcontent.split('\n')[4].split(': ')[1])
+                        comment.push(logcontent.split('\n')[4].split(': ')[1] + "%")
                       } else {
-                        comment.push('NaN')
+                        comment.push('No Tick')
                       }
-                    } 
+                    <!-- }  -->
                 }
             }
         }
@@ -301,7 +311,7 @@
                 <%=pen[i]==0 ? 'OK' : '-'+ (pen[i] / tmp_maxtimes[i]*100).toFixed(0) +'%'%>
               </td>
               <%
-                if (format[i] == 'NaN') {
+                if (format[i] == 'Compile Error') {
               %>
               <td class="text-danger font-weight-bold">
                 <%=format[i]%>
@@ -321,10 +331,10 @@
                 if (comment[i] >= percentCmtAcp) {
               %>
               <td class="text-success font-weight-bold">
-                <%=comment[i]%>%
+                <%=comment[i]%>
               </td>
               <%
-                } else if (comment[i] == 'NaN') {
+                } else if (comment[i] == 'No Tick') {
               %>
               <td class="text-danger font-weight-bold">
                 <%=comment[i]%>
@@ -333,32 +343,32 @@
                 } else {
               %>
               <td class="text-danger font-weight-bold">
-                <%=comment[i]%>%
+                <%=comment[i]%>
               </td>
               <%
             }
               %>
               <%
-                if (plagiarism[i] >= 75) {
+                if (parseFloat(plagiarism[i]) >= parseFloat(plagiarismAcp)) {
               %>
               <td class="text-danger font-weight-bold">
-                <%=plagiarism[i]%>%
+                <%=plagiarism[i]%>
               </td>
               <%    
                 } else {
 
               %>
               <td class="text-success font-weight-bold">
-                <%=plagiarism[i]%>%
+                <%=plagiarism[i]%>
               </td>
               <%
                 }
               %>
               <%
-                if (plagiarism[i] >= 75) {
+                if (parseFloat(plagiarism[i]) >= parseFloat(plagiarismAcp)) {
                   score[i] = 0
                 } else {
-                  if (comment[i] < percentCmtAcp) {
+                  if (parseFloat(comment[i]) < parseFloat(percentCmtAcp)) {
                     if (checkCmtMode == 'Fixed') {
                       score[i] = score[i] - minusPoint;
                     } else {
@@ -366,24 +376,15 @@
                     }
                   }
                   if(format[i] == 'No'){
-                    score[i] = score[i] - 1
+                    score[i] = score[i] - minusFormat
                   }
                 }
               %>
               <td>
                 <%
-                  for (let i = 0, l = log_files.length; i < l; ++i) {
+                  <!-- for (let i = 0, l = log_files.length; i < l; ++i) { -->
                     score[i] = score[i] * (tmp_maxtimes[i] - pen[i]) / tmp_maxtimes[i]
-                  }
-                  console.log("log_file")
-                  console.log(log_files)
-                  console.log("tmp_maxtimes")
-                  console.log(tmp_maxtimes)
-                  console.log("pen")
-                  console.log(pen)
-                  console.log("bailam")
-                  console.log(bailam)
-
+                  <!-- } -->
                   if(score[i] < 0) {
                     score[i] = 0;
                   }

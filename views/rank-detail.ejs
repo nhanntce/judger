@@ -73,9 +73,9 @@
                 if (logcontent.split('\n')[0].includes('Error') || logcontent.split('\n')[0] == "0.0") {
                     testcase = '0/' + testcase_size[i]
                     score = 0
-                    format = 'NaN'
-                    comment = 'NaN'
-                    plagiarism = '0'
+                    format = 'Compile Error'
+                    comment = 'Compile Error'
+                    plagiarism = 'Compile Error'
                 } else {
                     testcase = parseInt(logcontent.split('\n')[0] * testcase_size[i] / 10) + '/' + testcase_size[i]
                     score = logcontent.split('\n')[0]
@@ -141,7 +141,7 @@
           <%=testcase%>
         </td>
         <%
-          if (format == 'NaN') {
+          if (format == 'Compile Error') {
         %>
         <td class="text-danger font-weight-bold">
           <%=format%>
@@ -156,16 +156,16 @@
           }
         %>
         <%
-                if (comment >= percentCmtAcp) {
-              %>
-              <td class="text-success font-weight-bold">
-                <%=comment%>%
-              </td>
-              <%
-                } else if (comment == 'NaN') {
+                if (comment == 'Compile Error') {
               %>
               <td class="text-danger font-weight-bold">
                 <%=comment%>
+              </td>
+              <%
+                } else if (comment >= percentCmtAcp) {
+              %>
+              <td class="text-danger font-weight-bold">
+                <%=comment%>%
               </td>
               <%
                 } else {
@@ -183,10 +183,23 @@
                 <%=plagiarism%>%
               </td>
               <%    
-                } else {
+                } else if(parseFloat(plagiarism) < parseFloat(plagiarismAcp)) {
+              %>
+              <td class="text-danger font-weight-bold">
+                <%=plagiarism%>%
+              </td>
+              <%
+                } else if(plagiarism == 'Compile Error') {
+              %>
+              <td class="text-danger font-weight-bold">
+                <%=plagiarism%>
+              </td>
+              <%
+                }
+                 else {
               %>
               <td class="text-success font-weight-bold">
-                <%=plagiarism%>%
+                <%=plagiarism%>
               </td>
               <%
                 }
