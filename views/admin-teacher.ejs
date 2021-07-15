@@ -14,9 +14,12 @@
   <% } %>
   <% if (error.length > 0) { %>
   <script>toastr.error('<%=error%>')</script>
+  <% 
+    } 
+    if(teacher_role == 0) {
+  %>
+  <button type="submit" class="btn btn-outline-blue waves-effect btn-sm" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus fa-lg"></i> Add a new teacher</button>
   <% } %>
-  <button type="submit" class="btn btn-outline-blue waves-effect btn-sm" data-toggle="modal" data-target="#myModal"><i
-      class="fa fa-plus fa-lg"></i> Add a new teacher</button>
   <div class="table-responsive">
     <table class="table table-hover table-bordered" id="dataTableTeacher" width="100%" cellspacing="0">
       <thead>
