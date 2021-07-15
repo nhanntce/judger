@@ -95,16 +95,16 @@
                     } else if (logcontent.split('\n')[3].split(': ')[1] == 'true') {
                       format = 'Yes'
                     } else {
-                      format = 'NaN'
+                      format = 'No Tick'
                     }
-                    if(logcontent.split('\n')[4].split(': ')[1] >= 0) {
+                    if(logcontent.split('\n')[4].split(': ')[1] != 'null') {
                       comment = logcontent.split('\n')[4].split(': ')[1]
                     } else {
-                      comment = 'NaN'
+                      comment = 'No Tick'
                     }
                     plagiarismPercent = logcontent.split('\n')[5].split(': ')[1]
                     plagiarism =  plagiarismPercent
-                    if (plagiarismPercent > 0) {
+                    if (plagiarismPercent >= 0) {
                       detectedFile = logcontent.split('\n')[6]
                       var detectedFileContent = fs.existsSync(detectedFile) ? fs.readFileSync(detectedFile, 'utf8') : ""
                       n = logcontent.split('\n')[7]
@@ -115,6 +115,8 @@
                         detectedStartLine.push(logcontent.split('\n')[k].split(' ')[0])
                         detectedEndLine.push(logcontent.split('\n')[k++].split(' ')[1])
                       }
+                    } else {
+                      plagiarism = 'No Tick'
                     }
                 }
             %>
@@ -144,10 +146,18 @@
           if (format == 'Compile Error') {
         %>
         <td class="text-danger font-weight-bold">
-          <%=format%>
-          </td>
+        <%=format%>
+        </td>
         <%    
-          } else {
+          } else if(format == 'No Tick') {
+            
+        %>
+        <td class="text-warning font-weight-bold">
+          <%=format%>
+        </td>
+        <%
+          }
+          else {
         %>
         <td>
         <i class="<%=format=='No'?'fas fa-times-circle text-danger':'fas fa-check-circle text-success'%>"></i>
@@ -162,13 +172,20 @@
                 <%=comment%>
               </td>
               <%
-                } else if (comment >= percentCmtAcp) {
+                } else if (parseFloat(comment) >= parseFloat(percentCmtAcp)) {
               %>
-              <td class="text-danger font-weight-bold">
+              <td class="text-success font-weight-bold">
                 <%=comment%>%
               </td>
+              <%    
+                } else if(comment == 'No Tick') {
+              %>
+              <td class="text-warning font-weight-bold">
+                <%=comment%>
+              </td>
               <%
-                } else {
+                } 
+                else {
               %>
               <td class="text-danger font-weight-bold">
                 <%=comment%>%
@@ -182,24 +199,24 @@
               <td class="text-danger font-weight-bold">
                 <%=plagiarism%>%
               </td>
-              <%    
-                } else if(parseFloat(plagiarism) < parseFloat(plagiarismAcp)) {
-              %>
-              <td class="text-danger font-weight-bold">
-                <%=plagiarism%>%
-              </td>
-              <%
+              <%   
                 } else if(plagiarism == 'Compile Error') {
               %>
               <td class="text-danger font-weight-bold">
                 <%=plagiarism%>
               </td>
+              <%    
+                } else if(plagiarism == 'No Tick') {
+              %>
+              <td class="text-warning font-weight-bold">
+                <%=plagiarism%>
+              </td>
               <%
-                }
-                 else {
+                } 
+                else {
               %>
               <td class="text-success font-weight-bold">
-                <%=plagiarism%>
+                <%=plagiarism%>%
               </td>
               <%
                 }
