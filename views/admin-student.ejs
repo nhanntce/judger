@@ -23,7 +23,6 @@
         selector: "td:first-child"
       }
     });
-
     e.on("select deselect draw", function () {
       var t = e.rows({
         search: "applied"
@@ -39,14 +38,13 @@
         $("#btnedit").prop('disabled', false);
         document.getElementById("edit_id").value = l[0][1]
         document.getElementById("edit_rollnumber").value = l[0][2]
-        // document.getElementById("edit_username").value = l[0][3]
-        // document.getElementById("edit_password").value = ""
-        document.getElementById("edit_name").value = l[0][5]
-        document.getElementById("edit_class").value = l[0][6]
-        document.getElementById("edit_contestid").value = l[0][7]
-        document.getElementById("edit_ip").value = l[0][8]
-        document.getElementById("edit_timeout").value = l[0][9]
-        if (l[0][10]) {
+        document.getElementById("edit_email").value = l[0][3]
+        document.getElementById("edit_name").value = l[0][4]
+        document.getElementById("edit_class").value = l[0][5]
+        document.getElementById("edit_contestid").value = l[0][6]
+        document.getElementById("edit_ip").value = l[0][7]
+        document.getElementById("edit_timeout").value = l[0][8]
+        if (l[0][9]) {
           $("#edit_islogin").prop("checked", true);
         } else {
           $("#edit_islogin").prop("checked", false);
@@ -62,6 +60,9 @@
       } else {
         $('#btnreset').prop('disabled', false);
         document.getElementById("list_id").value = a
+      }
+      if (l.length < 1 || l.length > 1) {
+        $("#btnedit").prop('disabled', true);
       }
     }), $("#MyTableCheckAllButton").click(function () {
       var t = e.rows({

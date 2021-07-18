@@ -217,15 +217,22 @@ exports.reset_student = function (req, res) {
 exports.admin_teacher_data = function (req, res) {
   const requestQuery = req.query;
   let columnsMap = [
-    { db: "userId", dt: 0 }, { db: "rollnumber", dt: 1 }, { db: "name", dt: 2 }, { db: "email", dt: 3 }
+    { db: "null", dt: 0 }, { db: "userId", dt: 1 }, { db: "rollnumber", dt: 2 }, { db: "name", dt: 3 }, { db: "email", dt: 4 }, { db: "status", dt: 5 }
   ];
-  const query = "SELECT  userId, rollnumber, name, email FROM teacher_account"
+  const query = "SELECT userId, rollnumber, name, email, status FROM teacher_account"
   const primaryKey = "userId"
   const nodeTable = new NodeTable(requestQuery, db, query, primaryKey, columnsMap);
   nodeTable.output((err, data) => {
     if (err) {
       console.log(err);
       return;
+    }
+    for (var i = 0 ; i < data.data.length  ; i++){  
+      if(data.data[i][5]){
+          data.data[i][5] = '<i class="far fa-check-circle" style="color:green ; font-size: 120%"></i>'
+      } else {
+        data.data[i][5] = '<i class="far fa-times-circle" style="color:red ; font-size: 120%"></i>'
+      }
     }
     res.send(data)
   })
@@ -235,13 +242,20 @@ exports.create_teacher = function (req, res) {
   if (req.method == "POST") {
     var post = req.body
     var rollnumber = post.rollnumber
-    var name = post.name
-    var username = post.username
-    var password = post.password
+    var name;
     var email = post.email
     var role = post.role
-    var sql = "INSERT INTO teacher_account(rollnumber, email, name, role) VALUES (?,?,?,?)"
-    db.query(sql, [rollnumber, email, name, role], function (err) {
+     if(role == "0"){
+      name = "IT"
+    }
+     if(role == "1"){
+      name = "Giáo Vụ"
+    }
+     if(role == "2"){
+      name = "Giảng Viên"
+    }
+    var sql = "INSERT INTO teacher_account(rollnumber, email, name, role, status) VALUES (?,?,?,?,?)"
+    db.query(sql, [rollnumber, email, name, role, 1], function (err) {
       if (err) {
         req.session.sql_err = true
         res.redirect("/admin/teacher")
@@ -262,4 +276,37 @@ function formatTime(s) {
   m = s.split('-')[1]
   y = s.split('-')[2].split(' ')[0]
   return y + '-' + m + '-' + d + s.substring(10) + '+00:00'
+}
+exports.edit_teacher = function (req, res) {
+  if (req.method == "POST") {
+    var post = req.body
+    var id = post.edit_id
+    var rollnumber = post.edit_rollnumber
+    var name = post.edit_name
+    var email = post.edit_email
+    var isDisable = post.edit_disable == "on" ? "1" : "0"
+    var role = post.editrole
+    if(role == "0"){
+      name = "IT"
+    }
+     if(role == "1"){
+      name = "Giáo Vụ"
+    }
+     if(role == "2"){
+      name = "Giảng Viên"
+    }
+    var sql = "UPDATE teacher_account SET rollnumber=?,email=?,name=?,role=?,status=? WHERE userId=?"
+    db.query(sql, [rollnumber, email, name, role, isDisable, id], function (err) {
+      if (err) {
+        res.redirect("/admin/teacher")
+      } else {
+        logger.info(sql)
+        res.redirect('/admin/teacher')
+      }
+    })
+
+  } else {
+    res.redirect("/error")
+    return
+  }
 }
