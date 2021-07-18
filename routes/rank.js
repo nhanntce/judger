@@ -153,37 +153,40 @@ exports.load_rank = function (req, res) {
               
               if (!contents.split('\n')[0].includes('Error')) {
                 // check plagiarism
-                if (contents.split('\n')[5].split(': ')[1] >= 75) {
-                  point[rollnum][prob] = 0
-                } else {
                   var tmpScore = parseFloat(contents.split('\n')[0])
                   var minusPoint = 0
                   var minusPercent = 0
-                  var checkCmt = configContent.split('\n')[3].split('=')[1]
-                  var percentCmtAcp = parseFloat(configContent.split('\n')[5])
-                  var comment = parseFloat(contents.split('\n')[4].split(': ')[1])
+                  // declare variables for config file
+                  var checkFormat = configContent.split('\n')[2].split('=')[1]
+                  var minusFormat = configContent.split('\n')[3]
+                  var checkCmt = configContent.split('\n')[4].split('=')[1]
+                  var checkCmtMode = configContent.split('\n')[5].split('=')[1]
+                  var percentCmtAcp = configContent.split('\n')[6]
+                  var minusPoint = configContent.split('\n')[7]
+                  var minusPercent = configContent.split('\n')[7]
+                  var checkPlagiarism = configContent.split('\n')[8].split('=')[1]
+                  var plagiarismAcp = configContent.split('\n')[9]
+                  // declare variables for logs file
                   var format = contents.split('\n')[3].split(': ')[1]
+                  var comment = contents.split('\n')[4].split(': ')[1]
+                  var plagiarism = contents.split('\n')[5].split(': ')[1]
                   point[rollnum][prob] = parseFloat(contents.split('\n')[0])
 
-                  if (checkCmt == 'true') {
-                    checkCmtMode = configContent.split('\n')[4].split('=')[1]
-                    percentCmtAcp = parseFloat(configContent.split('\n')[5])
-                    if (checkCmtMode == 'Fixed') {
-                      minusPoint = configContent.split('\n')[6]
-                    } else {
-                      minusPercent = configContent.split('\n')[6]
-                    }
+                if (parseFloat(plagiarism) >= parseFloat(plagiarismAcp)) {
+                  // point[rollnum][prob] = 0
+                  tmpScore = 0
+                } else {
+                  if(format == 'false') {
+                    tmpScore -= minusFormat;
                   }
-                  if (comment < percentCmtAcp) {
+                  if (parseFloat(comment) < parseFloat(percentCmtAcp)) {
                     if (checkCmtMode == 'Fixed') {
                       tmpScore = tmpScore - minusPoint
                     } else {
                       tmpScore = tmpScore - (tmpScore * minusPoint  * 0.01)
                     }
                   }
-                  if(format == 'false') {
-                    tmpScore -=1
-                  }
+                  
                   if(tmpScore < 0) {
                     tmpScore = 0;
                   }

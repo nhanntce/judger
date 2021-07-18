@@ -93,11 +93,15 @@
   <% } %>
   <% if (error.length > 0) { %>
   <script>toastr.error('<%=error%>')</script>
-  <% } %>
-  <button type="submit" class="btn btn-outline-blue waves-effect btn-sm" data-toggle="modal" data-target="#myModal"><i
-      class="fa fa-plus fa-lg"></i> Add a new teacher</button>
-      <button type="button" id="btnedit" class="btn btn-outline-blue waves-effect btn-sm" data-toggle="modal"
+ <% 
+    } 
+    if(teacher_role == 0) {
+  %>
+  <button type="submit" class="btn btn-outline-blue waves-effect btn-sm" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus fa-lg"></i> Add a new teacher</button>
+  <button type="button" id="btnedit" class="btn btn-outline-blue waves-effect btn-sm" data-toggle="modal"
     data-target="#myModalEdit"><i class="fa fa-edit fa-lg"></i> Edit</button>
+  <% } %>
+      
   <div class="table-responsive">
     <table class="table table-hover table-bordered" id="dataTableTeacher" width="100%" cellspacing="0">
       <thead>

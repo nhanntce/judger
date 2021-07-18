@@ -48,7 +48,7 @@ exports.admin_student = function (req, res) {
     req.session.added = false
     message = "Succesfully! Students have been added."
   }
-  res.render('admin-student.ejs', { message: message, error: error })
+  res.render('admin-student.ejs', { message: message, error: error})
 }
 
 /**
@@ -76,7 +76,7 @@ exports.admin_teacher = function (req, res) {
     req.session.added = false
     message = "Succesfully! Teacher have been added."
   }
-  res.render('admin-teacher.ejs', { message: message, error: error });
+  res.render('admin-teacher.ejs', { message: message, error: error, teacher_role: req.session.teacher_role });
 }
 //-----------------------------------------------Load data student account------------------------------------------------------
 /**

@@ -69,14 +69,15 @@ exports.add_contest = function (req, res) {
     var percentage_accept = post.percentage_accept;
     var percentage_minus_point = post.percentage_minus_point;
     var check_plagiarism = post.check_plagiarism;
+
+    var format_minus_point = post.format_minus_point;
+    var percentage_allow = post.percentage_allow;
+
     var data_config = "time_limit=" + time_limit + "\nmemory_limit=" + memory_limit + "\ncheck_format=" + 
-    (check_format? "true" : "false") + "\ncheck_comment=" + (check_comment ? "true" : "false");
+    (check_format? "true" : "false") + "\n" + format_minus_point + "\ncheck_comment=" + (check_comment ? "true" : "false") +
+    "\ncheck_comment_mode=" + check_comment_mode + "\n" + percentage_accept + "\n" + percentage_minus_point +
+    "\ncheck_plagiarism=" + (check_plagiarism ? "true" : "false") + "\n" + percentage_allow;
     
-    if(check_comment) {
-      data_config += "\ncheck_comment_mode=" + check_comment_mode + "\n" + percentage_accept + 
-      "\n" + percentage_minus_point;
-    }
-    data_config += "\ncheck_plagiarism=" + (check_plagiarism ? "true" : "false");
 
     if (contest_name !== "" && ValidateDate(time_begin) && ValidateDate(time_end) && formatTimeBegin < formatTimeEnd) {
       // create 4 folder when add new contest
@@ -208,13 +209,14 @@ exports.edit_contest = function (req, res) {
     var percentage_minus_point = post.percentage_minus_point;
     var check_plagiarism = post.check_plagiarism;
 
+    var format_minus_point = post.format_minus_point;
+    var percentage_allow = post.percentage_allow;
+
     var data_config = "time_limit=" + time_limit + "\nmemory_limit=" + memory_limit + "\ncheck_format=" + 
-    (check_format? "true" : "false") + "\ncheck_comment=" + (check_comment ? "true" : "false");
-    if(check_comment) {
-      data_config += "\ncheck_comment_mode=" + check_comment_mode + "\n" + percentage_accept + 
-      "\n" + percentage_minus_point;
-    }
-    data_config += "\ncheck_plagiarism=" + (check_plagiarism ? "true" : "false");
+    (check_format? "true" : "false") + "\n" + format_minus_point + "\ncheck_comment=" + (check_comment ? "true" : "false") +
+    "\ncheck_comment_mode=" + check_comment_mode + "\n" + percentage_accept + "\n" + percentage_minus_point +
+    "\ncheck_plagiarism=" + (check_plagiarism ? "true" : "false") + "\n" + percentage_allow;
+
     if (contest_name_new !== "" && ValidateDate(time_begin) && ValidateDate(time_end) && formatTimeBegin < formatTimeEnd) {
       // update contest_name, time_begin, time_end
       var sql = "UPDATE contest SET contest_name=?, time_begin=?, time_end=?, language=? WHERE contest_id=?"
@@ -336,15 +338,13 @@ exports.contest_detail = function (req, res) {
         results[0].time_limit = data_config_inline[0].split('=')[1];
         results[0].memory_limit = data_config_inline[1].split('=')[1];
         results[0].check_format = data_config_inline[2].split('=')[1];
-        results[0].check_comment = data_config_inline[3].split('=')[1];
-        if(results[0].check_comment === 'true') {
-          results[0].check_comment_mode = data_config_inline[4].split('=')[1];
-          results[0].percentage_accept = data_config_inline[5];
-          results[0].percentage_minus_point = data_config_inline[6];
-          results[0].check_plagiarism = data_config_inline[7].split('=')[1]
-        } else {
-          results[0].check_plagiarism = data_config_inline[4].split('=')[1]
-        }
+        results[0].format_minus_point = data_config_inline[3];
+        results[0].check_comment = data_config_inline[4].split('=')[1];
+        results[0].check_comment_mode = data_config_inline[5].split('=')[1];
+        results[0].percentage_accept = data_config_inline[6];
+        results[0].percentage_minus_point = data_config_inline[7];
+        results[0].check_plagiarism = data_config_inline[8].split('=')[1];
+        results[0].percentage_allow = data_config_inline[9];
         res.render('contest-detail.ejs', { data: results, totalStudent: 0, message: message, teacher_role: req.session.teacher_role, role: req.session.role, user: req.session.user })
       })
     } else { // at least 1 student
@@ -353,15 +353,13 @@ exports.contest_detail = function (req, res) {
       results[0].time_limit = data_config_inline[0].split('=')[1];
       results[0].memory_limit = data_config_inline[1].split('=')[1];
       results[0].check_format = data_config_inline[2].split('=')[1];
-      results[0].check_comment = data_config_inline[3].split('=')[1];
-      if(results[0].check_comment === 'true') {
-        results[0].check_comment_mode = data_config_inline[4].split('=')[1];
-        results[0].percentage_accept = data_config_inline[5];
-        results[0].percentage_minus_point = data_config_inline[6];
-        results[0].check_plagiarism = data_config_inline[7].split('=')[1]
-      } else {
-        results[0].check_plagiarism = data_config_inline[4].split('=')[1]
-      }
+      results[0].format_minus_point = data_config_inline[3];
+      results[0].check_comment = data_config_inline[4].split('=')[1];
+      results[0].check_comment_mode = data_config_inline[5].split('=')[1];
+      results[0].percentage_accept = data_config_inline[6];
+      results[0].percentage_minus_point = data_config_inline[7];
+      results[0].check_plagiarism = data_config_inline[8].split('=')[1];
+      results[0].percentage_allow = data_config_inline[9];
       res.render('contest-detail.ejs', { data: results, totalStudent: results.length, message: message, teacher_role: req.session.teacher_role, role: req.session.role, user: req.session.user })
     }
 
