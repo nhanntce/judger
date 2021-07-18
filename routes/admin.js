@@ -219,7 +219,7 @@ exports.admin_teacher_data = function (req, res) {
   let columnsMap = [
     { db: "null", dt: 0 }, { db: "userId", dt: 1 }, { db: "rollnumber", dt: 2 }, { db: "name", dt: 3 }, { db: "email", dt: 4 }, { db: "status", dt: 5 }
   ];
-  const query = "SELECT  userId, rollnumber, name, email, status FROM teacher_account"
+  const query = "SELECT userId, rollnumber, name, email, status FROM teacher_account"
   const primaryKey = "userId"
   const nodeTable = new NodeTable(requestQuery, db, query, primaryKey, columnsMap);
   nodeTable.output((err, data) => {
@@ -234,7 +234,6 @@ exports.admin_teacher_data = function (req, res) {
         data.data[i][5] = '<i class="far fa-times-circle" style="color:red ; font-size: 120%"></i>'
       }
     }
-     // console.log(data.typeof data)
     res.send(data)
   })
 }

@@ -34,7 +34,7 @@ exports.success = function(req, res) {
         logger.info(req.session.role + " " + req.session.user + " has connected")
         res.redirect('/submission')
       } else {
-        sql = "SELECT userId, rollnumber, role FROM teacher_account WHERE email=?"
+        sql = "SELECT userId, rollnumber, role FROM teacher_account WHERE email=? and status=1"
         db.query(sql, [email], function (error, data) {
           if (error) { logger.error(error); res.redirect("/error"); return }
           if (data.length) {
@@ -46,7 +46,7 @@ exports.success = function(req, res) {
             logger.info(req.session.role + " " + req.session.user + " has connected")
             res.redirect('/contest')
           } else {
-            message = 'Email is not exist'
+            message = 'Your email is not exist or available'
             res.render('index.ejs', { message: message, username: req.session.user })
           }
 
