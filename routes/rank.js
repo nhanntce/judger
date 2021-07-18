@@ -172,13 +172,19 @@ exports.load_rank = function (req, res) {
                   var plagiarism = contents.split('\n')[5].split(': ')[1]
                   point[rollnum][prob] = parseFloat(contents.split('\n')[0])
 
-                if (parseFloat(plagiarism) >= parseFloat(plagiarismAcp)) {
-                  // point[rollnum][prob] = 0
-                  tmpScore = 0
-                } else {
+                if(checkPlagiarism == 'true') {
+                  if (parseFloat(plagiarism) >= parseFloat(plagiarismAcp)) {
+                    // point[rollnum][prob] = 0
+                    tmpScore = 0
+                  }
+                }
+                if(checkFormat == 'true') {
                   if(format == 'false') {
                     tmpScore -= minusFormat;
                   }
+                }
+
+                if(checkCmt == 'true') {
                   if (parseFloat(comment) < parseFloat(percentCmtAcp)) {
                     if (checkCmtMode == 'Fixed') {
                       tmpScore = tmpScore - minusPoint
@@ -186,10 +192,10 @@ exports.load_rank = function (req, res) {
                       tmpScore = tmpScore - (tmpScore * minusPoint  * 0.01)
                     }
                   }
-                  
-                  if(tmpScore < 0) {
-                    tmpScore = 0;
-                  }
+                }
+                
+                if(tmpScore < 0) {
+                  tmpScore = 0;
                 }
                 point[rollnum][prob] = tmpScore
                 thoigian[rollnum][prob] = Math.max(parseInt(log_files[i].split('][')[1]), thoigian[rollnum][prob])

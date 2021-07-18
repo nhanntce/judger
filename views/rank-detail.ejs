@@ -89,33 +89,43 @@
                     } else {
                         memoryLimit = logcontent.split('\n')[2].split(': ')[1] + 'MB'
                     }
-                    
-                    if(logcontent.split('\n')[3].split(': ')[1] == 'false') {
-                      format = 'No'
-                    } else if (logcontent.split('\n')[3].split(': ')[1] == 'true') {
-                      format = 'Yes'
-                    } else {
+                   <!-- check format -->
+                    if(checkFormat == 'true') {
+                      if(logcontent.split('\n')[3].split(': ')[1] == 'false') {
+                        format = 'No'
+                      } else if (logcontent.split('\n')[3].split(': ')[1] == 'true') {
+                        format = 'Yes'
+                      }
+                    }
+                     else {
                       format = 'No Tick'
                     }
-                    if(logcontent.split('\n')[4].split(': ')[1] != 'null') {
-                      comment = logcontent.split('\n')[4].split(': ')[1]
-                    } else {
+                    <!-- check comment -->
+                    if(checkCmt == 'true') {
+                      if(logcontent.split('\n')[4].split(': ')[1] >= 0) {
+                        comment = logcontent.split('\n')[4].split(': ')[1]
+                      }
+                    }
+                     else {
                       comment = 'No Tick'
                     }
-                    plagiarismPercent = logcontent.split('\n')[5].split(': ')[1]
-                    plagiarism =  plagiarismPercent
-                    if (plagiarismPercent >= 0) {
-                      detectedFile = logcontent.split('\n')[6]
-                      var detectedFileContent = fs.existsSync(detectedFile) ? fs.readFileSync(detectedFile, 'utf8') : ""
-                      n = logcontent.split('\n')[7]
-                      var k = 8
-                      for (let j = 0; j < n; j++) {
-                        origStartLine.push(logcontent.split('\n')[k].split(' ')[0])
-                        origEndLine.push(logcontent.split('\n')[k++].split(' ')[1])
-                        detectedStartLine.push(logcontent.split('\n')[k].split(' ')[0])
-                        detectedEndLine.push(logcontent.split('\n')[k++].split(' ')[1])
+                    if(checkPlagiarism == 'true') {
+                      plagiarismPercent = logcontent.split('\n')[5].split(': ')[1]
+                      plagiarism =  plagiarismPercent
+                      if (plagiarismPercent > 0) {
+                        detectedFile = logcontent.split('\n')[6]
+                        var detectedFileContent = fs.existsSync(detectedFile) ? fs.readFileSync(detectedFile, 'utf8') : ""
+                        n = logcontent.split('\n')[7]
+                        var k = 8
+                        for (let j = 0; j < n; j++) {
+                          origStartLine.push(logcontent.split('\n')[k].split(' ')[0])
+                          origEndLine.push(logcontent.split('\n')[k++].split(' ')[1])
+                          detectedStartLine.push(logcontent.split('\n')[k].split(' ')[0])
+                          detectedEndLine.push(logcontent.split('\n')[k++].split(' ')[1])
+                        }
                       }
-                    } else {
+                    }
+                     else {
                       plagiarism = 'No Tick'
                     }
                 }
@@ -228,13 +238,16 @@
                   if(format == 'No'){
                     score -=minusFormat;
                   }
-                  if (comment < percentCmtAcp) {
-                    if (checkCmtMode == 'Fixed') {
-                      score = score - minusPoint;
-                    } else {
-                      score = score - (score * minusPercent * 0.01);
+                  if(checkCmt == 'true') {
+                    if (comment < percentCmtAcp) {
+                      if (checkCmtMode == 'Fixed') {
+                        score = score - minusPoint;
+                      } else {
+                        score = score - (score * minusPercent * 0.01);
+                      }
                     }
                   }
+                  
                 }
 
               %>
