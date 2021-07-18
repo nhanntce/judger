@@ -1,10 +1,89 @@
 <%- include ("partials/header-admin" ) %>
 <script>
   $(document).ready(function () {
-    $("#dataTableTeacher").DataTable({
+   let e = $("#dataTableTeacher").DataTable({
       processing: true,
       serverSide: true,
-      ajax: '/admin/teacher-data'
+      ajax: '/admin/teacher-data',
+      columnDefs: [{
+        searchable: !1,
+        orderable: !1,
+        className: "select-checkbox",
+        defaultContent: "",
+        targets: 0
+      }, {
+        targets: 4,
+        mRender: function (data, type, row, meta) {
+          console.log(data)
+          return data.toLocaleString("it-IT")
+
+        }
+      }
+      ],
+      select: {
+        style: "multi",
+        selector: "td:first-child"
+      }
+    });
+    // var status = e.rows().data().toArray()
+    //   st = status[0][6]
+    //   if(st == 0) {
+    //     status[0][6] == "active"
+    //   }
+    //   if(st == 1) {
+    //     status[0][6] == "Not active"
+    //   }
+    e.on("select deselect draw", function () {
+      var t = e.rows({
+        search: "applied"
+      }).count();
+      e.rows({
+        selected: !0,
+        search: "applied"
+      }).count() < t ? $("#MyTableCheckAllButton i").attr("class", "far fa-square") : $("#MyTableCheckAllButton i").attr("class", "far fa-check-square");
+      var l = e.rows({
+        selected: !0
+      }).data().toArray()
+      if (l.length == 1) {
+        $("#btnedit").prop('disabled', false);
+        var role;
+        document.getElementById("edit_id").value = l[0][1]
+        document.getElementById("edit_rollnumber").value = l[0][2]
+        document.getElementById("edit_name").value = l[0][3]
+        var name = document.getElementById("edit_name").value
+        if(name == "IT") {
+          $("div.role select").val("0").change();
+        }
+        if(name == "Giáo Vụ") {
+          $("div.role select").val("1").change();
+        }
+        if(name == "Giảng Viên") {
+          $("div.role select").val("2").change();
+        }
+        document.getElementById("edit_email").value = l[0][4]
+        if (l[0][5].includes('green')) {
+          $("#edit_disable").prop("checked", true);
+        } else {
+          $("#edit_disable").prop("checked", false);
+        }
+      }
+      if (l.length < 1 || l.length > 1) {
+        $("#btnedit").prop('disabled', true);
+      }
+    }), $("#MyTableCheckAllButton").click(function () {
+      var t = e.rows({
+        search: "applied"
+      }).count();
+      e.rows({
+        selected: !0,
+        search: "applied"
+      }).count() < t ? (e.rows({
+        search: "applied"
+      }).deselect(), e.rows({
+        search: "applied"
+      }).select()) : e.rows({
+        search: "applied"
+      }).deselect()
     })
   })
 </script>
@@ -17,14 +96,21 @@
   <% } %>
   <button type="submit" class="btn btn-outline-blue waves-effect btn-sm" data-toggle="modal" data-target="#myModal"><i
       class="fa fa-plus fa-lg"></i> Add a new teacher</button>
+      <button type="button" id="btnedit" class="btn btn-outline-blue waves-effect btn-sm" data-toggle="modal"
+    data-target="#myModalEdit"><i class="fa fa-edit fa-lg"></i> Edit</button>
   <div class="table-responsive">
     <table class="table table-hover table-bordered" id="dataTableTeacher" width="100%" cellspacing="0">
       <thead>
         <tr>
+          <th class="text-center" width="5%">
+            <!--<button type="button" style="border: none; background: transparent; font-size: 14px;"
+              id="MyTableCheckAllButton"><i class="far fa-square"></i></button> -->
+          </th>
           <th>ID</th>
           <th>Roll number</th>
-          <th>Name</th>
+          <th>Role</th>
           <th>Email</th>
+          <th>Status</th>
         </tr>
       </thead>
     </table>
@@ -44,41 +130,83 @@
         <div class="modal-body mx-3">
           <div class="md-form mb-5">
             <i class="fas fa-user prefix grey-text"></i>
-            <input type="text" id="rollnumber" name="rollnumber" class="form-control validate">
+            <input type="text" id="rollnumber" name="rollnumber" class="form-control validate" required>
             <label data-error="wrong" data-success="" for="orangeForm-name">Roll Number</label>
           </div>
-          <div class="md-form mb-5">
-            <i class="fas fa-envelope prefix grey-text"></i>
-            <input type="text" id="name" name="name" class="form-control validate">
-            <label data-error="wrong" data-success="" for="orangeForm-email">Name</label>
+          <div class="md-form mb-5" type="hidden">
+            <input type="hidden" id="name" name="name" class="form-control validate">
           </div>
           <div class="md-form mb-4">
             <i class="fas fa-lock prefix grey-text"></i>
-            <input type="text" id="email" name="email" class="form-control validate">
+            <input type="email" id="email" name="email" class="form-control validate" required>
             <label data-error="wrong" data-success="" for="orangeForm-pass">Email</label>
           </div>
-          <!-- <div class="md-form mb-4">
-            <i class="fas fa-lock prefix grey-text"></i>
-            <input type="text" id="username" name="username" class="form-control validate">
-            <label data-error="wrong" data-success="" for="orangeForm-pass">Username</label>
-          </div>
           <div class="md-form mb-4">
-            <i class="fas fa-lock prefix grey-text"></i>
-            <input type="password" id="password" name="password" class="form-control validate">
-            <label data-error="wrong" data-success="" for="orangeForm-pass">Password</label>
-          </div> -->
-          <div class="md-form mb-4">
-            
-            <select class="form-control" name="role">
+            <select class="form-control" name="role" id="role">
               <option value="2">Giảng viên</option>
-              <option value="1">giáo vụ</option>
+              <option value="1">Giáo vụ</option>
               <option value="0">IT</option>
             </select>
           </div>
         </div>
         <div class="modal-footer d-flex justify-content-center">
-          <button class="btn btn-deep-orange">Add</button>
+          <button class="btn btn-deep-orange" id="rollNumber">Add</button>
         </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- The Modal edit a teacher-->
+<div class="modal fade" id="myModalEdit" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Edit a teacher</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="/admin/edit-teacher" method="POST">
+         <div class="modal-body mx-3">
+         <div class="md-form">
+            <input type="hidden" id="edit_id" name="edit_id" class="form-control validate">
+          </div>
+         <p>Roll name</p>
+          <div class="md-form">
+            <input type="text" id="edit_rollnumber" name="edit_rollnumber" class="form-control validate" required>
+          </div>
+          <div class="md-form">
+            <input type="hidden" id="edit_name" name="edit_name" class="form-control validate">
+          </div>
+           <div class="md-form">
+            <input type="hidden" id="edit_role" name="edit_role" class="form-control validate">
+          </div>
+          <p>Email</p>
+          <div class="md-form">
+            <input type="email" id="edit_email" name="edit_email" class="form-control validate" required>
+          </div>
+              <p>Name</p>
+         <div class="md-form mb-4 role">
+            <select class="form-control " name="editrole" id="editrole">
+              <option value="2">Giảng viên</option>
+              <option value="1">Giáo vụ</option>
+              <option value="0">IT</option>
+            </select>
+          </div>
+          Diabale
+              <div class="switch">
+                <label>
+                  No
+                  <input id="edit_disable" name="edit_disable" type="checkbox">
+                  <span class="lever"></span> Yes
+                </label>
+              </div>
+         </div>
+          <div class="modal-footer d-flex justify-content-center">
+          <button class="btn btn-deep-orange">Update</button>
+        </div>
+        </div>
+       
       </form>
     </div>
   </div>

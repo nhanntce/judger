@@ -238,6 +238,7 @@ app.post('/admin/reset-student', admin.reset_student)
 app.get('/admin/teacher', admin.admin_teacher)
 app.get('/admin/teacher-data', admin.admin_teacher_data)
 app.post('/admin/add-teacher', admin.create_teacher)
+app.post('/admin/edit-teacher', admin.edit_teacher)
 app.get('/error', (req, res) => {
   res.render('404.ejs')
 })
