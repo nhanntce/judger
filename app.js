@@ -171,7 +171,7 @@ app.get('/contest/add-student', (req, res) => {
       listClass.push(results[i].class);
      }
      res.render('add-student.ejs', { list_class: listClass, data: [], contest_id: contest_id, message: "", 
-      error: "", warning: "", role: req.session.role, user: req.session.user })
+      error: "", warning: "", role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role })
   })
 })
 app.post('/contest/add-student', contest.add_student)
@@ -210,7 +210,7 @@ app.get('/rank', (req, res) => {
     res.redirect("/login")
     return
   }
-  res.render('rank.ejs', { role: req.session.role, user: req.session.user })
+  res.render('rank.ejs', { role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role })
 })
 // rank
 app.get('/rank-time', rank.rank_time)
