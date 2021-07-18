@@ -383,10 +383,17 @@
                 <%=plagiarism[i]%>
               </td>
               <%
-                } 
-                else {
+                } else if(plagiarism[i] == 'Compile Error') {
+
               %>
               <td class="text-danger font-weight-bold">
+                <%=plagiarism[i]%>
+              </td>
+              <%
+                }
+                else {
+              %>
+              <td class="text-success font-weight-bold">
                 <%=plagiarism[i]%>
               </td>
               <%
