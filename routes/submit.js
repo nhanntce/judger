@@ -186,13 +186,18 @@ exports.submission_realtime = function (req, res) {
             format = logcontent.split('\n')[3].split(': ')[1]
             comment = logcontent.split('\n')[4].split(': ')[1]
             plagiarism = logcontent.split('\n')[5].split(': ')[1]
-            if (parseFloat(plagiarism) >= parseFloat(plagiarismAcp)) {
-              score[tmp] = 0
-            } else {
+
+            score[tmp] = parseFloat(logcontent.split('\n')[0])
+            
+            if(checkPlagiarism == 'true') {
+              if (parseFloat(plagiarism) >= parseFloat(plagiarismAcp)) {
+                score[tmp] = 0
+              } 
+            }
               // var comment = parseFloat(logcontent.split('\n')[4].split(': ')[1])
               // var format = logcontent.split('\n')[3].split(': ')[1]
-              score[tmp] = parseFloat(logcontent.split('\n')[0])
-              
+            
+            if(checkCmt == 'true') {
               if (parseFloat(comment) < parseFloat(percentCmtAcp)) {
                 if (checkCmtMode == 'Fixed') {
                   score[tmp] = score[tmp] - minusPoint
@@ -200,13 +205,16 @@ exports.submission_realtime = function (req, res) {
                   score[tmp] = score[tmp] - (score[tmp] * minusPoint  * 0.01)
                 }
               }  
+            }
+            if(checkFormat == 'true'){
               if(format == 'false') {
                 score[tmp] = score[tmp] - minusFormat
               }
-              if(score[tmp] < 0) {
-                score[tmp] = 0;
-              }
             }
+            if(score[tmp] < 0) {
+              score[tmp] = 0;
+            }
+              
             
             result[tmp] = parseInt(parseFloat(logcontent.split('\n')[0]) * testcase_size / 10)
             if (result[tmp] < testcase_size) {
@@ -406,7 +414,7 @@ function traverseDir(dir) {
         results = results.concat(traverseDir(file))
       } else {
         /* Is a file */
-        if (/^(c|cpp|py|sql)$/.test(file.split('.').pop())) {
+        if (/^(c|cpp|py|sql|java)$/.test(file.split('.').pop())) {
           results.push(file)
         }
       }
