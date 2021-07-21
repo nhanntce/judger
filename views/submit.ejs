@@ -350,7 +350,7 @@
                 }
               %>
               <%
-                if (parseFloat(comment[i]) >= parseFloat(percentCmtAcp)) {
+                if (parseFloat(logcontent.split('\n')[4].split(': ')[1]) >= parseFloat(percentCmtAcp)) {
               %>
               <td class="text-success font-weight-bold">
                 <%=comment[i]%>
@@ -403,7 +403,7 @@
                 if (parseFloat(plagiarism[i]) >= parseFloat(plagiarismAcp)) {
                   score[i] = 0
                 } else {
-                  if (parseFloat(comment[i]) < parseFloat(percentCmtAcp)) {
+                  if (parseFloat(logcontent.split('\n')[4].split(': ')[1]) < parseFloat(percentCmtAcp)) {
                     if (checkCmtMode == 'Fixed') {
                       score[i] = score[i] - minusPoint;
                     } else {
@@ -420,6 +420,11 @@
                   <!-- for (let i = 0, l = log_files.length; i < l; ++i) { -->
                     score[i] = score[i] * (tmp_maxtimes[i] - pen[i]) / tmp_maxtimes[i]
                   <!-- } -->
+                  console.log("pen")
+                  console.log(pen[i])
+                  console.log("comment")
+                  console.log(comment[i])
+                  console.log(logcontent.split('\n')[4].split(': ')[1])
                   if(score[i] < 0) {
                     score[i] = 0;
                   }
