@@ -4,8 +4,14 @@
 
   <% if (message.length > 0) { %>
   <div class="alert alert-danger col-sm-12"><%= message %></div>
-  <% } else { %>
+  <% } else { 
+    var configContent = fs.readFileSync(storage.TESTCASE + data[0].contest_name + '/config.txt', 'utf8')
+    var checkFormat = configContent.split('\n')[2].split('=')[1]
+    var checkCmt = configContent.split('\n')[4].split('=')[1]
+    var checkPlagiarism = configContent.split('\n')[8].split('=')[1]
+  %>
   <script>
+
     $(document).ready(function () {
       jQuery.fn.dataTableExt.oSort["ranks-desc"] = function (x, y) {
         x = getRank(x);
@@ -40,6 +46,185 @@
         }
       }, 100);
       var lastIndex = $("#dataTableRank").find('tr')[0].cells.length + $("#dataTableRank").find('tr')[1].cells.length - 2;
+      var range = []
+      range.push(lastIndex)
+      for (var i = 1; i <= $("#dataTableRank").find('tr')[0].cells.length - 8; i++) {
+        range.push(lastIndex - i)
+      }
+      function getHeaderNames(table, exportClass) {
+    // Gets header names.
+    //params:
+    //  table: table ID.
+    //Returns:
+    //  Array of column header names.
+    
+    var header = $(table).DataTable().columns(exportClass).header().toArray();
+
+    var names = [];
+    header.forEach(function(th) {
+     names.push($(th).html());
+    });
+        
+    return names;
+  }
+  
+  function buildCols(data) {
+    // Builds cols XML.
+    //To do: deifne widths for each column.
+    //Params:
+    //  data: row data.
+    //Returns:
+    //  String of XML formatted column widths.
+    
+    var cols = '<cols>';
+    
+    for (i=0; i<data.length; i++) {
+      colNum = i + 1;
+      cols += '<col min="' + colNum + '" max="' + colNum + '" width="20" customWidth="1"/>';
+    }
+    
+    cols += '</cols>';
+    
+    return cols;
+  }
+  
+  function buildRow(data, rowNum, styleNum) {
+    // Builds row XML.
+    //Params:
+    //  data: Row data.
+    //  rowNum: Excel row number.
+    //  styleNum: style number or empty string for no style.
+    //Returns:
+    //  String of XML formatted row.
+    
+    var style = styleNum ? ' s="' + styleNum + '"' : '';
+    
+    var row = '<row r="' + rowNum + '">';
+
+    for (i=0; i<data.length; i++) {
+      colNum = (i + 10).toString(36).toUpperCase();  // Convert to alpha
+      
+      var cr = colNum + rowNum;
+      
+      row += '<c t="inlineStr" r="' + cr + '"' + style + '>' +
+              '<is>' +
+                '<t>' + data[i] + '</t>' +
+              '</is>' +
+            '</c>';
+    }
+      
+    row += '</row>';
+        
+    return row;
+  }
+  
+  function getTableData(table, title, exportClass) {
+    // Processes Datatable row data to build sheet.
+    //Params:
+    //  table: table ID.
+    //  title: Title displayed at top of SS or empty str for no title.
+    //Returns:
+    //  String of XML formatted worksheet.
+    
+    var header = getHeaderNames(table, exportClass);
+    var table = $(table).DataTable();
+    var rowNum = 1;
+    var mergeCells = '';
+    var ws = '';
+    
+    ws += buildCols(header);
+    ws += '<sheetData>';
+    
+    if (title.length > 0) {
+      ws += buildRow([title], rowNum, 51);
+      rowNum++;
+      
+      mergeCol = ((header.length - 1) + 10).toString(36).toUpperCase();
+      
+      mergeCells = '<mergeCells count="1">'+
+        '<mergeCell ref="A1:' + mergeCol + '1"/>' +
+                   '</mergeCells>';
+    }
+                      
+    ws += buildRow(header, rowNum, 2);
+    rowNum++;
+    
+    // Loop through each row to append to sheet.    
+    table.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
+      var data = table.cells(rowIdx, exportClass).data();
+      data[3] = data[3].split('>')[1].split('<')[0];
+      data[4] = data[4].split('>')[1].split('<')[0];
+      // If data is object based then it needs to be converted 
+      // to an array before sending to buildRow()
+      ws += buildRow(data, rowNum, '');
+      
+      rowNum++;
+    } );
+    
+    ws += '</sheetData>' + mergeCells;
+        
+    return ws;
+
+  }
+  
+  function setSheetName(xlsx, name) {
+    // Changes tab title for sheet.
+    //Params:
+    //  xlsx: xlxs worksheet object.
+    //  name: name for sheet.
+    
+    if (name.length > 0) {
+      var source = xlsx.xl['workbook.xml'].getElementsByTagName('sheet')[0];
+      source.setAttribute('name', name);
+    }
+  }
+  
+  function addSheet(xlsx, table, title, name, sheetId, exportClass) {
+    //Clones sheet from Sheet1 to build new sheet.
+    //Params:
+    //  xlsx: xlsx object.
+    //  table: table ID.
+    //  title: Title for top row or blank if no title.
+    //  name: Name of new sheet.
+    //  sheetId: string containing sheetId for new sheet.
+    //Returns:
+    //  Updated sheet object.
+    
+    //Add sheet2 to [Content_Types].xml => <Types>
+    //============================================
+    var source = xlsx['[Content_Types].xml'].getElementsByTagName('Override')[1];
+    var clone = source.cloneNode(true);
+    clone.setAttribute('PartName','/xl/worksheets/sheet' + sheetId + '.xml');
+    xlsx['[Content_Types].xml'].getElementsByTagName('Types')[0].appendChild(clone);
+    
+    //Add sheet relationship to xl/_rels/workbook.xml.rels => Relationships
+    //=====================================================================
+    var source = xlsx.xl._rels['workbook.xml.rels'].getElementsByTagName('Relationship')[0];
+    var clone = source.cloneNode(true);
+    clone.setAttribute('Id','rId' + (sheetId + 1));
+    clone.setAttribute('Target','worksheets/sheet' + sheetId +'.xml');
+    xlsx.xl._rels['workbook.xml.rels'].getElementsByTagName('Relationships')[0].appendChild(clone);
+    
+    //Add second sheet to xl/workbook.xml => <workbook><sheets>
+    //=========================================================
+    var source = xlsx.xl['workbook.xml'].getElementsByTagName('sheet')[0];
+    var clone = source.cloneNode(true);
+    clone.setAttribute('name', name);
+    clone.setAttribute('sheetId', sheetId);
+    clone.setAttribute('r:id','rId' + (sheetId + 1));
+    xlsx.xl['workbook.xml'].getElementsByTagName('sheets')[0].appendChild(clone);
+    
+    //Add sheet2.xml to xl/worksheets
+    //===============================
+    var newSheet = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+      '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac" mc:Ignorable="x14ac">'+
+      getTableData(table, title, exportClass) +
+      
+      '</worksheet>';
+
+    xlsx.xl.worksheets['sheet' + sheetId + '.xml'] = $.parseXML(newSheet);
+    
+  }
       var dataTableRank = $('#dataTableRank').DataTable({
         ajax: {
           url: "/load-rank?contest_id=<%=data[0].contest_id%>",
@@ -65,7 +250,7 @@
               return minutes;
             }
           },
-          { visible: false, targets: lastIndex }
+          { visible: false, targets: range }
         ],
         lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
         dom: "<'row'l>" +
@@ -80,18 +265,27 @@
           download: 'open',
           orientation: 'landscape',
           exportOptions: {
-            columns: ":not(:eq(0)):not(:eq(3))",
+            columns: ['.export'],
             format: {
-              body: function (data, row, column, node) {
-                if (column != lastIndex - 2)
-                data = data.replace('<center>', '').replace('</center>', '').split('<br>(')[0]
-                if (column == 2 || column == lastIndex - 2 || column == lastIndex - 3) {
-                  return data == 'Not submit' ? 0 : data
+              body: function ( data, row, column, node ) {
+                if (data.includes('<a')) {
+                  return data.split('>')[1].split('<')[0]
+                } else if (data.includes('<center')) {
+                  return data.split('>')[1].split('<')[0]
                 } else {
-                  return data == 'Not submit' ? 0 : data.split('>')[1].split('<')[0]
+                  return data
                 }
               }
             }
+          },
+          customize: function( xlsx ) {
+            setSheetName(xlsx, 'Points');
+            if (<%=checkFormat%>)
+              addSheet(xlsx, '#dataTableRank', '', 'Formats', '2', '.exportFormat');
+            if (<%=checkCmt%>)
+            addSheet(xlsx, '#dataTableRank', '', 'Comments', '3', '.exportComment');
+            if (<%=checkPlagiarism%>)
+            addSheet(xlsx, '#dataTableRank', '', 'Plagiarisms', '4', '.exportPlagiarism');
           }
         }, {
           text: '<li class="fa fa-download"></li> Download',
@@ -153,27 +347,51 @@
           <thead>
             <tr>
               <th rowspan="2" class="align-middle font-weight-bold" width="5%">Rank</th>
-              <th rowspan="2" class="align-middle font-weight-bold" width="15%">Roll number</th>
-              <th rowspan="2" class="align-middle font-weight-bold">Name</th>
-              <th rowspan="2" class="align-middle font-weight-bold" width="5%">Class</th>
+              <th rowspan="2" class="align-middle font-weight-bold export exportFormat exportComment exportPlagiarism" width="15%">Roll number</th>
+              <th rowspan="2" class="align-middle font-weight-bold export exportFormat exportComment exportPlagiarism">Name</th>
+              <th rowspan="2" class="align-middle font-weight-bold export exportFormat exportComment exportPlagiarism" width="5%">Class</th>
               <th rowspan="2" class="align-middle font-weight-bold" width="5%">Time</th>
               <% if (problem_files.length > 0) { %>
-              <th colspan="<%=problem_files.length%>" class="text-center align-middle font-weight-bold">Problem</th>
+              <th colspan="<%=problem_files.length%>" class="text-center align-middle font-weight-bold export">Problem</th>
               <% } else { %>
-              <th colspan="1" class="text-center align-middle font-weight-bold">Problem</th>
+              <th colspan="1" class="text-center align-middle font-weight-bold export">Problem</th>
               <% } %>
-              <th rowspan="2" class="text-center align-middle font-weight-bold" width="8%">Total</th>
-              <th rowspan="2" class="text-center align-middle font-weight-bold">Final</th>
+              <th rowspan="2" class="text-center align-middle font-weight-bold export" width="8%">Total</th>
+              <th rowspan="2" class="text-center align-middle font-weight-bold export">Final</th>
+              <% if (problem_files.length > 0) { %>
+              <% for (let i = 0, l = problem_files.length; i < l; ++i) { %>
+              <th rowspan="2" class="text-center exportFormat" width="8%">
+                <%=data[i].problem_id%></a>
+              </th>
+              <% }} else { %>
+              <th rowspan="2" class="text-center exportFormat" width="8%">None</th>
+              <% } %>
+              <% if (problem_files.length > 0) { %>
+              <% for (let i = 0, l = problem_files.length; i < l; ++i) { %>
+              <th rowspan="2" class="text-center exportComment" width="8%">
+                <%=data[i].problem_id%></a>
+              </th>
+              <% }} else { %>
+              <th rowspan="2" class="text-center exportComment" width="8%">None</th>
+              <% } %>
+              <% if (problem_files.length > 0) { %>
+              <% for (let i = 0, l = problem_files.length; i < l; ++i) { %>
+              <th rowspan="2" class="text-center exportPlagiarism" width="8%">
+                <%=data[i].problem_id%></a>
+              </th>
+              <% }} else { %>
+              <th rowspan="2" class="text-center exportPlagiarism" width="8%">None</th>
+              <% } %>
             </tr>
             <tr>
               <% if (problem_files.length > 0) { %>
               <% for (let i = 0, l = problem_files.length; i < l; ++i) { %>
-              <th class="text-center" width="8%">
+              <th class="text-center export" width="8%">
                 <a href="<%=data[i].path_problem.replace('/public', '.')%>" target="_blank" data-toggle="tooltip"
                   data-placement="bottom" title="<%=path.basename(data[i].path_problem)%>"><%=data[i].problem_id%></a>
               </th>
               <% }} else { %>
-              <th class="text-center" width="8%">None</th>
+              <th class="text-center export" width="8%">None</th>
               <% } %>
             </tr>
           </thead>

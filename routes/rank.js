@@ -127,18 +127,27 @@ exports.load_rank = function (req, res) {
           var times = []
           var thoigian = []
           var check = []
+          var format = []
+          var comment = []
+          var plagiarism = []
           var validRollnum = []
           for (let i = 0, l = results.length; i < l; ++i) {
             point[results[i].rollnumber] = new Array()
             times[results[i].rollnumber] = new Array()
             thoigian[results[i].rollnumber] = new Array()
             check[results[i].rollnumber] = new Array()
+            format[results[i].rollnumber] = new Array()
+            comment[results[i].rollnumber] = new Array()
+            plagiarism[results[i].rollnumber] = new Array()
             validRollnum.push(results[i].rollnumber)
             for (let j = 0; j < problem_files.length; ++j) {
               point[results[i].rollnumber][problem_files[j]] = "Not submit"
               times[results[i].rollnumber][problem_files[j]] = 0
               thoigian[results[i].rollnumber][problem_files[j]] = 0
               check[results[i].rollnumber][problem_files[j]] = 0
+              format[results[i].rollnumber][problem_files[j]] = "Not submit"
+              comment[results[i].rollnumber][problem_files[j]] = "Not submit"
+              plagiarism[results[i].rollnumber][problem_files[j]] = "Not submit"
             }
           }
           for (let i = 0, l = log_files.length; i < l; ++i) {
@@ -167,25 +176,22 @@ exports.load_rank = function (req, res) {
                   var checkPlagiarism = configContent.split('\n')[8].split('=')[1]
                   var plagiarismAcp = configContent.split('\n')[9]
                   // declare variables for logs file
-                  var format = contents.split('\n')[3].split(': ')[1]
-                  var comment = contents.split('\n')[4].split(': ')[1]
-                  var plagiarism = contents.split('\n')[5].split(': ')[1]
+                  var tmpFormat = contents.split('\n')[3].split(': ')[1]
+                  format[rollnum][prob] = tmpFormat
+                  var tmpComment = contents.split('\n')[4].split(': ')[1]
+                  comment[rollnum][prob] = tmpComment
+                  var tmpPlagiarism = contents.split('\n')[5].split(': ')[1]
+                  plagiarism[rollnum][prob] = tmpPlagiarism
                   point[rollnum][prob] = parseFloat(contents.split('\n')[0])
 
-                if(checkPlagiarism == 'true') {
-                  if (parseFloat(plagiarism) >= parseFloat(plagiarismAcp)) {
-                    // point[rollnum][prob] = 0
-                    tmpScore = 0
-                  }
-                }
-                if(checkFormat == 'true') {
-                  if(format == 'false') {
+                if (parseFloat(tmpPlagiarism) >= parseFloat(plagiarismAcp)) {
+                  // point[rollnum][prob] = 0
+                  tmpScore = 0
+                } else {
+                  if(tmpFormat == 'false') {
                     tmpScore -= minusFormat;
                   }
-                }
-
-                if(checkCmt == 'true') {
-                  if (parseFloat(comment) < parseFloat(percentCmtAcp)) {
+                  if (parseFloat(tmpComment) < parseFloat(percentCmtAcp)) {
                     if (checkCmtMode == 'Fixed') {
                       tmpScore = tmpScore - minusPoint
                     } else {
@@ -242,12 +248,40 @@ exports.load_rank = function (req, res) {
                 tb.push("<center>" + point[results[i].rollnumber][problem_files[j]] + '<br>(' + times[results[i].rollnumber][problem_files[j]] + ')</center>')
               }
             }
+            
             if (totaltimes[results[i].rollnumber] == 0) {
               tb.push('<center>Not submit<br>(0)</center>')
             } else {
               tb.push('<center>' + totalpoint[results[i].rollnumber].toFixed(1) + '<br>(' + totaltimes[results[i].rollnumber] + ')</center>')
             }
             tb.push((totalpoint[results[i].rollnumber] / problem_files.length).toFixed(1))
+            for (let j = 0, l = problem_files.length; j < l; ++j) {
+              if (point[results[i].rollnumber][problem_files[j]] > 0) {
+                tb.push("<center class='solved'>" + format[results[i].rollnumber][problem_files[j]] + '<br>(' + times[results[i].rollnumber][problem_files[j]] + ')</center>')
+              } else if (point[results[i].rollnumber][problem_files[j]] == 0) {
+                tb.push("<center class='attempted'>" + format[results[i].rollnumber][problem_files[j]] + '<br>(' + times[results[i].rollnumber][problem_files[j]] + ')</center>')
+              } else {
+                tb.push("<center>" + format[results[i].rollnumber][problem_files[j]] + '<br>(' + times[results[i].rollnumber][problem_files[j]] + ')</center>')
+              }
+            }
+            for (let j = 0, l = problem_files.length; j < l; ++j) {
+              if (point[results[i].rollnumber][problem_files[j]] > 0) {
+                tb.push("<center class='solved'>" + comment[results[i].rollnumber][problem_files[j]] + '<br>(' + times[results[i].rollnumber][problem_files[j]] + ')</center>')
+              } else if (point[results[i].rollnumber][problem_files[j]] == 0) {
+                tb.push("<center class='attempted'>" + comment[results[i].rollnumber][problem_files[j]] + '<br>(' + times[results[i].rollnumber][problem_files[j]] + ')</center>')
+              } else {
+                tb.push("<center>" + comment[results[i].rollnumber][problem_files[j]] + '<br>(' + times[results[i].rollnumber][problem_files[j]] + ')</center>')
+              }
+            }
+            for (let j = 0, l = problem_files.length; j < l; ++j) {
+              if (point[results[i].rollnumber][problem_files[j]] > 0) {
+                tb.push("<center class='solved'>" + plagiarism[results[i].rollnumber][problem_files[j]] + '<br>(' + times[results[i].rollnumber][problem_files[j]] + ')</center>')
+              } else if (point[results[i].rollnumber][problem_files[j]] == 0) {
+                tb.push("<center class='attempted'>" + plagiarism[results[i].rollnumber][problem_files[j]] + '<br>(' + times[results[i].rollnumber][problem_files[j]] + ')</center>')
+              } else {
+                tb.push("<center>" + plagiarism[results[i].rollnumber][problem_files[j]] + '<br>(' + times[results[i].rollnumber][problem_files[j]] + ')</center>')
+              }
+            }
             obj.data.push(tb)
           }
           res.send(obj)
