@@ -80,7 +80,7 @@
                     <!-- check plagiarism -->
                     if(checkPlagiarism == 'true') {
                       if(logcontent.split('\n')[5].split(': ')[1] >= 0) {
-                        plagiarism.push(logcontent.split('\n')[5].split(': ')[1] + "%")
+                        plagiarism.push(logcontent.split('\n')[5].split(': ')[1])
                       }
                     }
                      else {
@@ -102,7 +102,7 @@
                     <!-- check format -->
                     if(checkCmt == 'true') {
                       if(logcontent.split('\n')[4].split(': ')[1] >= 0) {
-                        comment.push(logcontent.split('\n')[4].split(': ')[1] + "%")
+                        comment.push(logcontent.split('\n')[4].split(': ')[1])
                       }
                     }
                     else {
@@ -350,10 +350,10 @@
                 }
               %>
               <%
-                if (parseFloat(logcontent.split('\n')[4].split(': ')[1]) >= parseFloat(percentCmtAcp)) {
+                if (parseFloat(comment[i]) >= parseFloat(percentCmtAcp)) {
               %>
               <td class="text-success font-weight-bold">
-                <%=comment[i]%>
+                <%=comment[i]%>%
               </td>
               <%
                 } else if (comment[i] == 'No Tick') {
@@ -362,10 +362,16 @@
                 <%=comment[i]%>
               </td>
               <%
-                } else {
+                } else if(comment[i] == 'Compile Error') {
               %>
               <td class="text-danger font-weight-bold">
                 <%=comment[i]%>
+              </td>
+              <%
+                } else {
+              %>
+              <td class="text-danger font-weight-bold">
+                <%=comment[i]%>%
               </td>
               <%
             }
@@ -374,7 +380,7 @@
                 if (parseFloat(plagiarism[i]) >= parseFloat(plagiarismAcp)) {
               %>
               <td class="text-danger font-weight-bold">
-                <%=plagiarism[i]%>
+                <%=plagiarism[i]%>%
               </td>
               <%    
                 } else if(plagiarism[i] == 'No Tick') {
@@ -394,7 +400,7 @@
                 else {
               %>
               <td class="text-success font-weight-bold">
-                <%=plagiarism[i]%>
+                <%=plagiarism[i]%>%
               </td>
               <%
                 }
@@ -403,7 +409,7 @@
                 if (parseFloat(plagiarism[i]) >= parseFloat(plagiarismAcp)) {
                   score[i] = 0
                 } else {
-                  if (parseFloat(logcontent.split('\n')[4].split(': ')[1]) < parseFloat(percentCmtAcp)) {
+                  if (parseFloat(comment[i]) < parseFloat(percentCmtAcp)) {
                     if (checkCmtMode == 'Fixed') {
                       score[i] = score[i] - minusPoint;
                     } else {
@@ -424,7 +430,6 @@
                   console.log(pen[i])
                   console.log("comment")
                   console.log(comment[i])
-                  console.log(logcontent.split('\n')[4].split(': ')[1])
                   if(score[i] < 0) {
                     score[i] = 0;
                   }
