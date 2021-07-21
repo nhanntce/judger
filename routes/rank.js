@@ -340,7 +340,7 @@ function traverseDir(dir) {
         results = results.concat(traverseDir(file))
       } else {
         /* Is a file */
-        if (/^(c|cpp|py|sql)$/.test(file.split('.').pop())) {
+        if (/^(c|cpp|py|sql|java)$/.test(file.split('.').pop())) {
           results.push(file)
         }
       }
