@@ -131,7 +131,7 @@
             <%
               }
             %>
-            <label class="font-weight-bold" style="cursor:default;">Formatted Checking</label>
+            <label class="font-weight-bold" for="check_format">Formatted Checking</label>
           </div>
           <div id="has_check_format" class="row" style="display: none;">
             <div class="form col-6">
@@ -147,7 +147,7 @@
           </div>
 <!--start Comment checking-->
           <div class="row">
-            <div class="form mb-3 col-7">
+            <div class="form col-7">
               <% 
                 if(data[0].check_comment === 'true') {
               %>
@@ -159,7 +159,7 @@
               <%
                 }
               %>
-              <label class="font-weight-bold" style="cursor:default;">Commentted Checking</label>
+              <label class="font-weight-bold" for="check_comment">Commentted Checking</label>
             </div>
             <div id="check_comment_mode_div" class="form mb-3 col-5" style="display: none;">
               <select class="mdb-select" name="check_comment_mode" id="check_comment_mode">
@@ -206,14 +206,14 @@
           %>
             <div class="form mb-3">
               <input type="checkbox" style="pointer-events: auto; width:4rem; z-index: 10; cursor:pointer;"  class="form-check-input" id="check_plagiarism" name="check_plagiarism" checked onclick="checkPlagiarism()">
-              <label class="font-weight-bold" style="cursor:default;">Plagiarism Checking</label>
+              <label class="font-weight-bold" for="check_plagiarism">Plagiarism Checking</label>
             </div>
           <%
             } else {
           %>
             <div class="form mb-3">
               <input type="checkbox" style="pointer-events: auto; width:4rem; z-index: 10; cursor:pointer;"  class="form-check-input" id="check_plagiarism" name="check_plagiarism" onclick="checkPlagiarism()">
-              <label class="font-weight-bold" style="cursor:default;">Plagiarism Checking</label>
+              <label class="font-weight-bold" for="check_plagiarism">Plagiarism Checking</label>
             </div>
           <%
             }
