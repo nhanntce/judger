@@ -134,7 +134,7 @@ app.get('/home/tutorial', (req, res) => {
     res.redirect("/login")
     return
   }
-  res.render('tutorial.ejs', { role: req.session.role, user: req.session.user })
+  res.render('tutorial.ejs', { role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role })
 })
 app.get('/home/logout', user.logout)//call for logout
 app.get('/home/profile', user.profile)//to render users profile
