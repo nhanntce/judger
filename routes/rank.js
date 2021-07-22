@@ -184,19 +184,27 @@ exports.load_rank = function (req, res) {
                   plagiarism[rollnum][prob] = tmpPlagiarism
                   point[rollnum][prob] = parseFloat(contents.split('\n')[0])
 
-                if (parseFloat(tmpPlagiarism) >= parseFloat(plagiarismAcp)) {
-                  // point[rollnum][prob] = 0
-                  tmpScore = 0
-                } else {
-                  if(tmpFormat == 'false') {
-                    tmpScore -= minusFormat;
+                  // check tick check plagiarism
+                if(checkPlagiarism == 'true') {
+                  if (parseFloat(tmpPlagiarism) >= parseFloat(plagiarismAcp)) {
+                    // point[rollnum][prob] = 0
+                    tmpScore = 0
                   }
+                }
+                // check tick check comment
+                if(checkCmt == 'true') {
                   if (parseFloat(tmpComment) < parseFloat(percentCmtAcp)) {
                     if (checkCmtMode == 'Fixed') {
                       tmpScore = tmpScore - minusPoint
                     } else {
                       tmpScore = tmpScore - (tmpScore * minusPoint  * 0.01)
                     }
+                  }
+                }
+                // check tick check format
+                if(checkFormat == 'true') {
+                  if(tmpFormat == 'false') {
+                    tmpScore -= minusFormat;
                   }
                 }
                 
