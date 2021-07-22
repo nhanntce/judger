@@ -73,6 +73,11 @@ exports.add_contest = function (req, res) {
     var format_minus_point = post.format_minus_point;
     var percentage_allow = post.percentage_allow;
 
+    format_minus_point = format_minus_point === '' ? 0 : format_minus_point;
+    percentage_accept = percentage_accept === '' ? 0 : percentage_accept;
+    percentage_minus_point = percentage_minus_point === '' ? 0 : percentage_minus_point;
+    percentage_allow = percentage_allow === '' ? 0 : percentage_allow;
+
     var data_config = "time_limit=" + time_limit + "\nmemory_limit=" + memory_limit + "\ncheck_format=" + 
     (check_format? "true" : "false") + "\n" + format_minus_point + "\ncheck_comment=" + (check_comment ? "true" : "false") +
     "\ncheck_comment_mode=" + check_comment_mode + "\n" + percentage_accept + "\n" + percentage_minus_point +
@@ -211,7 +216,10 @@ exports.edit_contest = function (req, res) {
 
     var format_minus_point = post.format_minus_point;
     var percentage_allow = post.percentage_allow;
-
+    format_minus_point = format_minus_point === '' ? 0 : format_minus_point;
+    percentage_accept = percentage_accept === '' ? 0 : percentage_accept;
+    percentage_minus_point = percentage_minus_point === '' ? 0 : percentage_minus_point;
+    percentage_allow = percentage_allow === '' ? 0 : percentage_allow;
     var data_config = "time_limit=" + time_limit + "\nmemory_limit=" + memory_limit + "\ncheck_format=" + 
     (check_format? "true" : "false") + "\n" + format_minus_point + "\ncheck_comment=" + (check_comment ? "true" : "false") +
     "\ncheck_comment_mode=" + check_comment_mode + "\n" + percentage_accept + "\n" + percentage_minus_point +
