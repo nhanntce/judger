@@ -73,6 +73,9 @@ exports.add_contest = function (req, res) {
     var format_minus_point = post.format_minus_point;
     var percentage_allow = post.percentage_allow;
 
+    var penalty_mode = post.penalty_mode;
+    var limit_submission = post.limit_submission;
+
     format_minus_point = format_minus_point === '' ? 0 : format_minus_point;
     percentage_accept = percentage_accept === '' ? 0 : percentage_accept;
     percentage_minus_point = percentage_minus_point === '' ? 0 : percentage_minus_point;
@@ -81,7 +84,8 @@ exports.add_contest = function (req, res) {
     var data_config = "time_limit=" + time_limit + "\nmemory_limit=" + memory_limit + "\ncheck_format=" + 
     (check_format? "true" : "false") + "\n" + format_minus_point + "\ncheck_comment=" + (check_comment ? "true" : "false") +
     "\ncheck_comment_mode=" + check_comment_mode + "\n" + percentage_accept + "\n" + percentage_minus_point +
-    "\ncheck_plagiarism=" + (check_plagiarism ? "true" : "false") + "\n" + percentage_allow;
+    "\ncheck_plagiarism=" + (check_plagiarism ? "true" : "false") + "\n" + percentage_allow +
+    "\npenalty_mode=" + penalty_mode + "\n" + limit_submission;
     
 
     if (contest_name !== "" && ValidateDate(time_begin) && ValidateDate(time_end) && formatTimeBegin < formatTimeEnd) {
@@ -216,6 +220,10 @@ exports.edit_contest = function (req, res) {
 
     var format_minus_point = post.format_minus_point;
     var percentage_allow = post.percentage_allow;
+
+    var penalty_mode = post.penalty_mode;
+    var limit_submission = post.limit_submission;
+
     format_minus_point = format_minus_point === '' ? 0 : format_minus_point;
     percentage_accept = percentage_accept === '' ? 0 : percentage_accept;
     percentage_minus_point = percentage_minus_point === '' ? 0 : percentage_minus_point;
@@ -223,7 +231,8 @@ exports.edit_contest = function (req, res) {
     var data_config = "time_limit=" + time_limit + "\nmemory_limit=" + memory_limit + "\ncheck_format=" + 
     (check_format? "true" : "false") + "\n" + format_minus_point + "\ncheck_comment=" + (check_comment ? "true" : "false") +
     "\ncheck_comment_mode=" + check_comment_mode + "\n" + percentage_accept + "\n" + percentage_minus_point +
-    "\ncheck_plagiarism=" + (check_plagiarism ? "true" : "false") + "\n" + percentage_allow;
+    "\ncheck_plagiarism=" + (check_plagiarism ? "true" : "false") + "\n" + percentage_allow +
+    "\npenalty_mode=" + penalty_mode + "\n" + limit_submission;
 
     if (contest_name_new !== "" && ValidateDate(time_begin) && ValidateDate(time_end) && formatTimeBegin < formatTimeEnd) {
       // update contest_name, time_begin, time_end
@@ -353,6 +362,8 @@ exports.contest_detail = function (req, res) {
         results[0].percentage_minus_point = data_config_inline[7];
         results[0].check_plagiarism = data_config_inline[8].split('=')[1];
         results[0].percentage_allow = data_config_inline[9];
+        results[0].penalty_mode = data_config_inline[10].split('=')[1];
+        results[0].limit_submission = data_config_inline[11];
         res.render('contest-detail.ejs', { data: results, totalStudent: 0, message: message, teacher_role: req.session.teacher_role, role: req.session.role, user: req.session.user })
       })
     } else { // at least 1 student
@@ -368,6 +379,8 @@ exports.contest_detail = function (req, res) {
       results[0].percentage_minus_point = data_config_inline[7];
       results[0].check_plagiarism = data_config_inline[8].split('=')[1];
       results[0].percentage_allow = data_config_inline[9];
+      results[0].penalty_mode = data_config_inline[10].split('=')[1];
+      results[0].limit_submission = data_config_inline[11];
       res.render('contest-detail.ejs', { data: results, totalStudent: results.length, message: message, teacher_role: req.session.teacher_role, role: req.session.role, user: req.session.user })
     }
 

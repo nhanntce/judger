@@ -102,11 +102,11 @@
           </div>
           <label class="font-weight-bold">Enter start time</label>
           <div class="form mb-3">
-            <input type="text" id="time_begin" name="time_begin" class="form-control" required>
+            <input type="text" id="time_begin" name="time_begin" class="form-control" required autocomplete="off">
           </div>
           <label class="font-weight-bold">Enter end time</label>
           <div class="form mb-3">
-            <input type="text" id="time_end" name="time_end" class="form-control" required>
+            <input type="text" id="time_end" name="time_end" class="form-control" required autocomplete="off">
           </div>
           <div class="row">
             <div class="col-6">
@@ -131,11 +131,7 @@
             <div class="form col-6">
               <label class="font-weight-bold">Minus point (point)</label>
               <div class="form">
-                <div class="row">
-                    <div class="col-10">
-                      <input type="number" id="format_minus_point" name="format_minus_point" class="form-control">
-                    </div>
-                </div>
+                <input type="number" id="format_minus_point" name="format_minus_point" class="form-control">
               </div>              
             </div>
           </div>
@@ -146,7 +142,7 @@
               <input type="checkbox" style="pointer-events: auto; width:4rem; z-index: 10; cursor:pointer;"  class="form-check-input" id="check_comment" onclick="checkComment()" name="check_comment">
               <label class="font-weight-bold" for="check_comment">Commentted Checking</label>
             </div>
-            <div id="check_comment_mode_div" class="form mb-3 col-5" style="display: none;">
+            <div id="check_comment_mode_div" class="col-5" style="display: none;">
               <select class="mdb-select" name="check_comment_mode" id="check_comment_mode">
                 <option value="Fixed">Fixed</option>
                 <option value="By Percentage">By Percentage</option>
@@ -158,23 +154,13 @@
               <div class="col-6">
                 <label class="font-weight-bold">Percentage Accept</label>
                 <div class="form mb-3">
-                  <div class="row">
-                      <div class="col-10"> 
-                        <input type="number" id="percentage_accept" min="1" name="percentage_accept" class="form-control" require>
-                      </div>
-                      <div class="col-2">
-                      </div>
-                  </div>
+                  <input type="number" id="percentage_accept" min="1" name="percentage_accept" class="form-control" require>
                 </div>              
               </div>
               <div class="col-6">
                 <label class="font-weight-bold" id="lb_minus_point">Minus Points (point)</label>
                 <div class="form mb-3">
-                  <div class="row">
-                      <div class="col-10">
-                        <input type="number" id="percentage_minus_point" min="1" name="percentage_minus_point" class="form-control" require>
-                      </div>
-                  </div>
+                  <input type="number" id="percentage_minus_point" min="1" name="percentage_minus_point" class="form-control" require>
                 </div>              
               </div>
             </div>
@@ -190,15 +176,28 @@
             <div class="form col-6">
               <label class="font-weight-bold">Percentage Allow (%)</label>
               <div class="form">
-                <div class="row">
-                    <div class="col-10">
-                      <input type="number" id="percentage_allow" name="percentage_allow" class="form-control">
-                    </div>
-                </div>
+                <input type="number" id="percentage_allow" name="percentage_allow" class="form-control">
               </div>              
             </div>
           </div>
 <!-- end Plagiarism Checking-->
+<!-- start Penalty Mode-->
+          <label class="font-weight-bold">Penalty Mode</label>
+          <div class="row">
+            <div class="col-6" >
+              <select class="mdb-select" name="penalty_mode" id="penalty_mode">
+                <option value="Easy">Easy</option>
+                <option value="Hard">Hard</option>
+              </select>
+            </div>
+            <div class="form col-6">
+              <label class="font-weight-bold">Limit Submission</label>
+              <div class="form">
+                <input type="number" id="limit_submission" name="limit_submission" class="form-control" value="10">
+              </div>  
+            </div>
+          </div>
+<!-- end Penalty Mode-->
           <label class="font-weight-bold">Language</label>
           <select class="mdb-select md-form" name="language" multiple required>
             <option disabled>Choose language</option>
@@ -224,6 +223,12 @@
             //variable for format
             var has_check_format = document.getElementById('has_check_format');
             var check_format = document.getElementById('check_format');
+
+            //var for penalty mode
+            var penalty_mode = document.getElementById('penalty_mode');
+            var limit_submission = document.getElementById('limit_submission');
+            var limit_submission_value = 10;
+
             function checkComment() {
               if(check_comment.checked == true) {
                 check_comment.classList.remove("mb-3");
@@ -262,8 +267,22 @@
                 has_check_plagiarism.style.display = "none";
               }
             }
+
+            function penaltyMode() {
+              let p_mode = penalty_mode.value;
+              if(p_mode === 'Hard') {
+                limit_submission.readOnly = true;
+                if(limit_submission.value != 10)
+                  limit_submission_value = limit_submission.value;
+                limit_submission.value = 10;
+              } else {
+                limit_submission.value = limit_submission_value;
+                limit_submission.readOnly = false;
+              }
+            }
             //add event
-            check_comment_mode.addEventListener('change', checkCommentMode); 
+            check_comment_mode.addEventListener('change', checkCommentMode);
+            penalty_mode.addEventListener('change', penaltyMode); 
         </script>
         <script>
         console.log("block");
