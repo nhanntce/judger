@@ -25,13 +25,13 @@ exports.submission = function (req, res) {
       "INNER JOIN contest_detail ON student_account.contest_id=contest_detail.contest_id " +
       "INNER JOIN contest ON student_account.contest_id=contest.contest_id " +
       "WHERE student_account.userId=?"
-      listsql = [userId]
+    listsql = [userId]
   } else {
     sql = "SELECT contest.time_begin, contest.time_end, contest.contest_name, employee_account.name, employee_account.rollnumber, contest_detail.problem_id, contest_detail.path_problem,contest_detail.times,contest.language FROM employee_account " +
       "INNER JOIN contest ON contest.teacher_id=employee_account.userId " +
       "INNER JOIN contest_detail ON contest.contest_id=contest_detail.contest_id " +
       "WHERE contest.contest_id=?"
-      listsql = [req.query.contest_id]
+    listsql = [req.query.contest_id]
   }
   db.query(sql, listsql, function (err, results) {
     if (err) { logger.error(err); res.redirect("/error"); return }
@@ -144,9 +144,11 @@ exports.submission_realtime = function (req, res) {
   var minusPercent = configContent.split('\n')[7]
   var checkPlagiarism = configContent.split('\n')[8].split('=')[1]
   var plagiarismAcp = configContent.split('\n')[9]
-  
+  var penaltyMode = configContent.split('\n')[10].split('=')[1]
+  var penaltyLimited = configContent.split('\n')[11]
+
   // declare variables for logs file
-  var format =''
+  var format = ''
   var comment = ''
   var plagiarism = ''
 
@@ -172,50 +174,62 @@ exports.submission_realtime = function (req, res) {
     var score = {}
     var testcase_size = 0
     var total = 0
+    var penalty = {}
     for (let i = 0, l = log_files.length; i < l; ++i) {
       var tmp = log_files[i].split('][')[log_files[i].split('][').length - 1].split('].')[0]
       if (log_files[i].includes(rollnumber) && !check[tmp]) {
         testcase_size = getFolders(storage.TESTCASE + contest_name + '/' + tmp).length
         var logcontent = fs.existsSync(storage.NOPBAI + 'Logs/' + contest_name + '/' + log_files[i]) ?
-         fs.readFileSync(storage.NOPBAI + 'Logs/' + contest_name + '/' + log_files[i], 'utf8') : "";
-         
+          fs.readFileSync(storage.NOPBAI + 'Logs/' + contest_name + '/' + log_files[i], 'utf8') : "";
+
 
         if (logcontent) {
           if (!logcontent.split('\n')[0].includes('Error')) {
-                // declare variables for logs file
+
+            // assign value for logs file
             format = logcontent.split('\n')[3].split(': ')[1]
             comment = logcontent.split('\n')[4].split(': ')[1]
             plagiarism = logcontent.split('\n')[5].split(': ')[1]
 
             score[tmp] = parseFloat(logcontent.split('\n')[0])
-            
-            if(checkPlagiarism == 'true') {
-              if (parseFloat(plagiarism) >= parseFloat(plagiarismAcp)) {
-                score[tmp] = 0
-              } 
-            }
+
+            // check the file log is not include the python file
+            if (!log_files[i].includes('py')) {
+              // check penalty mode is easy 
+              
+              if (checkPlagiarism == 'true') {
+                if (parseFloat(plagiarism) >= parseFloat(plagiarismAcp)) {
+                  score[tmp] = 0
+                }
+              }
               // var comment = parseFloat(logcontent.split('\n')[4].split(': ')[1])
               // var format = logcontent.split('\n')[3].split(': ')[1]
-            
-            if(checkCmt == 'true') {
-              if (parseFloat(comment) < parseFloat(percentCmtAcp)) {
-                if (checkCmtMode == 'Fixed') {
-                  score[tmp] = score[tmp] - minusPoint
-                } else {
-                  score[tmp] = score[tmp] - (score[tmp] * minusPoint  * 0.01)
+
+              if (checkCmt == 'true') {
+                if (parseFloat(comment) < parseFloat(percentCmtAcp)) {
+                  if (checkCmtMode == 'Fixed') {
+                    score[tmp] = score[tmp] - minusPoint
+                  } else {
+                    score[tmp] = score[tmp] - (score[tmp] * minusPoint * 0.01)
+                  }
                 }
-              }  
-            }
-            if(checkFormat == 'true'){
-              if(format == 'false') {
-                score[tmp] = score[tmp] - minusFormat
+              }
+
+              if (checkFormat == 'true') {
+                if (format == 'false') {
+                  score[tmp] = score[tmp] - minusFormat
+                }
               }
             }
-            if(score[tmp] < 0) {
+
+            if (penaltyMode == 'Hard' && score[tmp] < 10) {
+              score[tmp] = 0
+            }
+
+            if (score[tmp] < 0) {
               score[tmp] = 0;
             }
-              
-            
+
             result[tmp] = parseInt(parseFloat(logcontent.split('\n')[0]) * testcase_size / 10)
             if (result[tmp] < testcase_size) {
               if (logcontent.includes('Time Limit Exceeded')) {
@@ -242,7 +256,7 @@ exports.submission_realtime = function (req, res) {
       var tmp = req.session.problem_id[i]
       tb = new Array()
       tb.push(tmp, "<a href='/problem/" + contest_name + "/" + req.session.debai[i] + "' target='_blank'>"
-       + req.session.debai[i].split('.')[0] + "</a>")
+        + req.session.debai[i].split('.')[0] + "</a>")
       if (fs.readdirSync(storage.NOPBAI).some(v => v.includes('[' + contest_name + '][' + req.session.rollnumber + '][' + tmp + ']'))) {
         data += "<i class='fa fa-hourglass fa-spin'></i> In queue"
         tb.push(data + "</div>")
@@ -284,10 +298,17 @@ exports.submission_realtime = function (req, res) {
       } else {
         tb.push("<div class='font-weight-bold text-danger'>" + reserr[tmp] + "</div>")
       }
-      // Calculate penalty: for more than 1 submit, subtract 10%
+      // Calculate penalty: for more than 1 submit
       var pen = req.session.times[tmp]
-      tb.push("<div class='text-right'>" + RoundAndFix(score[tmp] * (pen + 1) / req.session.maxtimes[tmp], 1).toFixed(1) + "</div>")
+      // check mode of penalty 
+      if(penaltyMode == 'Easy') {
+        tb.push("<div class='text-right'>" + RoundAndFix(score[tmp] * (pen + 1) / req.session.maxtimes[tmp], 1).toFixed(1) + "</div>")
+      } else { 
+        tb.push("<div class='text-right'>" + RoundAndFix(score[tmp], 1).toFixed(1) + "</div>")
+      }
+
       if (!score[tmp]) score[tmp] = 0
+      
       total += RoundAndFix(score[tmp] * (pen + 1) / req.session.maxtimes[tmp], 1)
       obj.data.push(tb)
     }

@@ -80,9 +80,9 @@ exports.load_rank = function (req, res) {
   //   "INNER JOIN student_account ON student_account.contest_id=contest.contest_id " +
   //   "WHERE contest.contest_id=?";
   var sql = "SELECT student_account.userId, student_account.rollnumber, student_account.name, " +
-  "student_account.class, contest.contest_id, contest.contest_name,contest.time_begin,contest.time_end " +
-  " FROM contest, student_account, contest_student WHERE contest_student.student_id = student_account.id " +
-  " AND contest_student.contest_id = ? AND contest.contest_id = contest_student.contest_id AND contest_student.status = 1";
+    "student_account.class, contest.contest_id, contest.contest_name,contest.time_begin,contest.time_end " +
+    " FROM contest, student_account, contest_student WHERE contest_student.student_id = student_account.id " +
+    " AND contest_student.contest_id = ? AND contest.contest_id = contest_student.contest_id AND contest_student.status = 1";
   db.query(sql, [contest_id], function (err, results) {
     if (err || results.length == 0) { logger.error(err); res.redirect("/error"); return }
     var contest_name = results[0].contest_name.replace(/ /g, '-')
@@ -159,56 +159,67 @@ exports.load_rank = function (req, res) {
             prob = log_files[i].split('][')[4].split('].')[0]
             if (!check[rollnum][prob]) {
               var contents = fs.existsSync(storage.NOPBAI + 'Logs/' + results[0].contest_name.replace(/ /g, '-') + '/' + log_files[i]) ? fs.readFileSync(storage.NOPBAI + 'Logs/' + results[0].contest_name.replace(/ /g, '-') + '/' + log_files[i], 'utf8') : ""
-              
+
               if (!contents.split('\n')[0].includes('Error')) {
                 // check plagiarism
-                  var tmpScore = parseFloat(contents.split('\n')[0])
-                  var minusPoint = 0
-                  var minusPercent = 0
-                  // declare variables for config file
-                  var checkFormat = configContent.split('\n')[2].split('=')[1]
-                  var minusFormat = configContent.split('\n')[3]
-                  var checkCmt = configContent.split('\n')[4].split('=')[1]
-                  var checkCmtMode = configContent.split('\n')[5].split('=')[1]
-                  var percentCmtAcp = configContent.split('\n')[6]
-                  var minusPoint = configContent.split('\n')[7]
-                  var minusPercent = configContent.split('\n')[7]
-                  var checkPlagiarism = configContent.split('\n')[8].split('=')[1]
-                  var plagiarismAcp = configContent.split('\n')[9]
-                  // declare variables for logs file
-                  var tmpFormat = contents.split('\n')[3].split(': ')[1]
-                  format[rollnum][prob] = tmpFormat
-                  var tmpComment = contents.split('\n')[4].split(': ')[1]
-                  comment[rollnum][prob] = tmpComment
-                  var tmpPlagiarism = contents.split('\n')[5].split(': ')[1]
-                  plagiarism[rollnum][prob] = tmpPlagiarism
-                  point[rollnum][prob] = parseFloat(contents.split('\n')[0])
+                var tmpScore = parseFloat(contents.split('\n')[0])
+                var minusPoint = 0
+                var minusPercent = 0
+                // declare variables for config file
+                var checkFormat = configContent.split('\n')[2].split('=')[1]
+                var minusFormat = configContent.split('\n')[3]
+                var checkCmt = configContent.split('\n')[4].split('=')[1]
+                var checkCmtMode = configContent.split('\n')[5].split('=')[1]
+                var percentCmtAcp = configContent.split('\n')[6]
+                var minusPoint = configContent.split('\n')[7]
+                var minusPercent = configContent.split('\n')[7]
+                var checkPlagiarism = configContent.split('\n')[8].split('=')[1]
+                var plagiarismAcp = configContent.split('\n')[9]
+                var penaltyMode = configContent.split('\n')[10].split('=')[1]
+                var penaltyLimited = configContent.split('\n')[11]
 
+                // declare variables for logs file
+                var tmpFormat = contents.split('\n')[3].split(': ')[1]
+                format[rollnum][prob] = tmpFormat
+                var tmpComment = contents.split('\n')[4].split(': ')[1]
+                comment[rollnum][prob] = tmpComment
+                var tmpPlagiarism = contents.split('\n')[5].split(': ')[1]
+                plagiarism[rollnum][prob] = tmpPlagiarism
+                point[rollnum][prob] = parseFloat(contents.split('\n')[0])
+
+
+                // check the file log is not include the python file
+                if (!log_files[i].includes('py')) {
                   // check tick check plagiarism
-                if(checkPlagiarism == 'true') {
-                  if (parseFloat(tmpPlagiarism) >= parseFloat(plagiarismAcp)) {
-                    // point[rollnum][prob] = 0
-                    tmpScore = 0
+                  if (checkPlagiarism == 'true') {
+                    if (parseFloat(tmpPlagiarism) >= parseFloat(plagiarismAcp)) {
+                      // point[rollnum][prob] = 0
+                      tmpScore = 0
+                    }
                   }
-                }
-                // check tick check comment
-                if(checkCmt == 'true') {
-                  if (parseFloat(tmpComment) < parseFloat(percentCmtAcp)) {
-                    if (checkCmtMode == 'Fixed') {
-                      tmpScore = tmpScore - minusPoint
-                    } else {
-                      tmpScore = tmpScore - (tmpScore * minusPoint  * 0.01)
+                  // check tick check comment
+                  if (checkCmt == 'true') {
+                    if (parseFloat(tmpComment) < parseFloat(percentCmtAcp)) {
+                      if (checkCmtMode == 'Fixed') {
+                        tmpScore = tmpScore - minusPoint
+                      } else {
+                        tmpScore = tmpScore - (tmpScore * minusPoint * 0.01)
+                      }
+                    }
+                  }
+                  // check tick check format
+                  if (checkFormat == 'true') {
+                    if (tmpFormat == 'false') {
+                      tmpScore -= minusFormat;
                     }
                   }
                 }
-                // check tick check format
-                if(checkFormat == 'true') {
-                  if(tmpFormat == 'false') {
-                    tmpScore -= minusFormat;
-                  }
+
+                if (penaltyMode == 'Hard' && tmpScore < 10) {
+                  tmpScore = 0
                 }
-                
-                if(tmpScore < 0) {
+
+                if (tmpScore < 0) {
                   tmpScore = 0;
                 }
                 point[rollnum][prob] = tmpScore
@@ -230,8 +241,13 @@ exports.load_rank = function (req, res) {
             for (let j = 0, l = problem_files.length; j < l; ++j) {
               totaltimes[results[i].rollnumber] += times[results[i].rollnumber][problem_files[j]]
               if (isNaN(point[results[i].rollnumber][problem_files[j]]) == false && point[results[i].rollnumber][problem_files[j]] > 0) {
-                // Calculate penalty: for more than 1 submit, subtract 10%
-                point[results[i].rollnumber][problem_files[j]] = RoundAndFix(point[results[i].rollnumber][problem_files[j]] * (maxtimes[problem_files[j]] - times[results[i].rollnumber][problem_files[j]] + 1) / maxtimes[problem_files[j]], 1)
+                // Calculate penalty: for more than 1 submit
+                if (penaltyMode == 'Easy') {
+                  point[results[i].rollnumber][problem_files[j]] = RoundAndFix(point[results[i].rollnumber][problem_files[j]] * (maxtimes[problem_files[j]] - times[results[i].rollnumber][problem_files[j]] + 1) / maxtimes[problem_files[j]], 1)
+                } else {
+                  point[results[i].rollnumber][problem_files[j]] = RoundAndFix(point[results[i].rollnumber][problem_files[j]], 1)
+                }
+
                 totalpoint[results[i].rollnumber] += point[results[i].rollnumber][problem_files[j]]
                 totalthoigian[results[i].rollnumber] = Math.max(thoigian[results[i].rollnumber][problem_files[j]], totalthoigian[results[i].rollnumber])
               } else {
@@ -249,6 +265,8 @@ exports.load_rank = function (req, res) {
 
             for (let j = 0, l = problem_files.length; j < l; ++j) {
               if (point[results[i].rollnumber][problem_files[j]] > 0) {
+                console.log(point[results[i].rollnumber][problem_files[j]].toFixed(1))
+                console.log(times[results[i].rollnumber][problem_files[j]])
                 tb.push("<center class='solved'>" + point[results[i].rollnumber][problem_files[j]].toFixed(1) + '<br>(' + times[results[i].rollnumber][problem_files[j]] + ')</center>')
               } else if (point[results[i].rollnumber][problem_files[j]] == 0) {
                 tb.push("<center class='attempted'>" + point[results[i].rollnumber][problem_files[j]] + '<br>(' + times[results[i].rollnumber][problem_files[j]] + ')</center>')
@@ -256,7 +274,7 @@ exports.load_rank = function (req, res) {
                 tb.push("<center>" + point[results[i].rollnumber][problem_files[j]] + '<br>(' + times[results[i].rollnumber][problem_files[j]] + ')</center>')
               }
             }
-            
+
             if (totaltimes[results[i].rollnumber] == 0) {
               tb.push('<center>Not submit<br>(0)</center>')
             } else {
@@ -314,7 +332,7 @@ exports.detail_rank = function (req, res) {
   }
   var rollnumber = req.query.rollnumber
   // var sql = "SELECT contest.contest_name, contest.contest_id, contest_detail.times, contest_detail.problem_id FROM contest, contest_detail INNER JOIN student_account ON student_account.contest_id=contest.contest_id WHERE student_account.rollnumber=?"
-  var sql ="SELECT contest.contest_name, contest.contest_id, contest_detail.path_problem, contest_detail.times, contest_detail.problem_id FROM contest INNER JOIN student_account ON student_account.contest_id=contest.contest_id INNER JOIN contest_detail ON contest_detail.contest_id=contest.contest_id WHERE student_account.rollnumber=?"
+  var sql = "SELECT contest.contest_name, contest.contest_id, contest_detail.path_problem, contest_detail.times, contest_detail.problem_id FROM contest INNER JOIN student_account ON student_account.contest_id=contest.contest_id INNER JOIN contest_detail ON contest_detail.contest_id=contest.contest_id WHERE student_account.rollnumber=?"
   db.query(sql, [rollnumber], function (err, results) {
     if (err || results.length == 0) { logger.error(err); res.redirect("/error"); return }
     var contest_name = results[0].contest_name.replace(/ /g, '-')
@@ -365,7 +383,7 @@ exports.detail_rank = function (req, res) {
           }
         }
       }
-      res.render('rank-detail.ejs', {debai: debai, bailam: bailam, contest_name: contest_name, contest_id: contest_id, rollnumber: rollnumber, log_files: logs, testcase_size: testcase_size, message: "", role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role, all_file_log: log_files, maxtimes: req.session.maxtimes })
+      res.render('rank-detail.ejs', { debai: debai, bailam: bailam, contest_name: contest_name, contest_id: contest_id, rollnumber: rollnumber, log_files: logs, testcase_size: testcase_size, message: "", role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role, all_file_log: log_files, maxtimes: req.session.maxtimes })
     })
   })
 }
