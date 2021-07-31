@@ -195,10 +195,10 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `teacher_account`
+-- Cấu trúc bảng cho bảng `employee_account`
 --
 
-CREATE TABLE `teacher_account` (
+CREATE TABLE `employee_account` (
   `id` int(11) NOT NULL,
   `userId` varchar(20) DEFAULT NULL,
   `rollnumber` varchar(10) NOT NULL,
@@ -209,19 +209,19 @@ CREATE TABLE `teacher_account` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Đang đổ dữ liệu cho bảng `teacher_account`
+-- Đang đổ dữ liệu cho bảng `employee_account`
 --
 
-INSERT INTO `teacher_account` (`id`, `userId`, `rollnumber`, `name`, `role_id`, `email`, `status`) VALUES
+INSERT INTO `employee_account` (`id`, `userId`, `rollnumber`, `name`, `role_id`, `email`, `status`) VALUES
 (1, 'TC-000001', 'abc123', 'Nguyen Minh Thao', 0, 'minhthao3620@gmail.com', 1),
 (2, 'TC-000002', 'GV123', 'Nguyen Chi Linh', 1, 'thaonmce130353@fpt.edu.vn', 1),
 (3, 'TC-000003', 'GV456', 'Nguyen Thanh Nhan', 2, 'nguyenminhthaobt1@gmail.com', 1);
 
 --
--- Bẫy `teacher_account`
+-- Bẫy `employee_account`
 --
 DELIMITER $$
-CREATE TRIGGER `teacher_account_bi` BEFORE INSERT ON `teacher_account` FOR EACH ROW BEGIN
+CREATE TRIGGER `employee_account_bi` BEFORE INSERT ON `employee_account` FOR EACH ROW BEGIN
    SET NEW.userId = getNextCustomSeq("userId1","TC");
 END
 $$
@@ -286,9 +286,9 @@ ALTER TABLE `student_account`
   ADD UNIQUE KEY `userId` (`userId`);
 
 --
--- Chỉ mục cho bảng `teacher_account`
+-- Chỉ mục cho bảng `employee_account`
 --
-ALTER TABLE `teacher_account`
+ALTER TABLE `employee_account`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `uni_rollnumber_teacher` (`rollnumber`),
   ADD UNIQUE KEY `userId` (`userId`),
@@ -323,9 +323,9 @@ ALTER TABLE `student_account`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=137;
 
 --
--- AUTO_INCREMENT cho bảng `teacher_account`
+-- AUTO_INCREMENT cho bảng `employee_account`
 --
-ALTER TABLE `teacher_account`
+ALTER TABLE `employee_account`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
@@ -340,10 +340,10 @@ ALTER TABLE `contest_student`
   ADD CONSTRAINT `contest_student_ibfk_2` FOREIGN KEY (`contest_id`) REFERENCES `contest` (`contest_id`);
 
 --
--- Các ràng buộc cho bảng `teacher_account`
+-- Các ràng buộc cho bảng `employee_account`
 --
-ALTER TABLE `teacher_account`
-  ADD CONSTRAINT `teacher_account_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `role` (`role_id`);
+ALTER TABLE `employee_account`
+  ADD CONSTRAINT `employee_account_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `role` (`role_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
