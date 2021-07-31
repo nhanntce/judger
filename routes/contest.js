@@ -31,9 +31,9 @@ exports.contest = function (req, res) {
 
   var sql = ""
   if (req.session.teacher_role <= 1) {
-    sql = "SELECT contest.contest_id, teacher_account.rollnumber, contest.contest_name, contest.time_begin, contest.time_end FROM contest INNER JOIN teacher_account ON contest.teacher_id=teacher_account.userId WHERE deleted=0 ORDER BY contest.contest_id"
+    sql = "SELECT contest.contest_id, employee_account.rollnumber, contest.contest_name, contest.time_begin, contest.time_end FROM contest INNER JOIN employee_account ON contest.teacher_id=employee_account.userId WHERE deleted=0 ORDER BY contest.contest_id"
   } else {
-    sql = "SELECT contest.contest_id, teacher_account.rollnumber, contest.contest_name, contest.time_begin, contest.time_end FROM contest INNER JOIN teacher_account ON contest.teacher_id=teacher_account.userId WHERE contest.teacher_id='" + userId + "' AND deleted=0 ORDER BY contest.contest_id"
+    sql = "SELECT contest.contest_id, employee_account.rollnumber, contest.contest_name, contest.time_begin, contest.time_end FROM contest INNER JOIN employee_account ON contest.teacher_id=employee_account.userId WHERE contest.teacher_id='" + userId + "' AND deleted=0 ORDER BY contest.contest_id"
   }
   db.query(sql, function (err, results) {
     if (err) { logger.error(err); res.redirect("/error"); return }

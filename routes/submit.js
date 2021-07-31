@@ -27,8 +27,8 @@ exports.submission = function (req, res) {
       "WHERE student_account.userId=?"
       listsql = [userId]
   } else {
-    sql = "SELECT contest.time_begin, contest.time_end, contest.contest_name, teacher_account.name, teacher_account.rollnumber, contest_detail.problem_id, contest_detail.path_problem,contest_detail.times,contest.language FROM teacher_account " +
-      "INNER JOIN contest ON contest.teacher_id=teacher_account.userId " +
+    sql = "SELECT contest.time_begin, contest.time_end, contest.contest_name, employee_account.name, employee_account.rollnumber, contest_detail.problem_id, contest_detail.path_problem,contest_detail.times,contest.language FROM employee_account " +
+      "INNER JOIN contest ON contest.teacher_id=employee_account.userId " +
       "INNER JOIN contest_detail ON contest.contest_id=contest_detail.contest_id " +
       "WHERE contest.contest_id=?"
       listsql = [req.query.contest_id]
