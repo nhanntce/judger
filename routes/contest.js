@@ -31,9 +31,9 @@ exports.contest = function (req, res) {
 
   var sql = ""
   if (req.session.teacher_role <= 1) {
-    sql = "SELECT contest.contest_id, teacher_account.rollnumber, contest.contest_name, contest.time_begin, contest.time_end FROM contest INNER JOIN teacher_account ON contest.teacher_id=teacher_account.userId WHERE deleted=0 ORDER BY contest.contest_id"
+    sql = "SELECT contest.contest_id, employee_account.rollnumber, contest.contest_name, contest.time_begin, contest.time_end FROM contest INNER JOIN employee_account ON contest.teacher_id=employee_account.userId WHERE deleted=0 ORDER BY contest.contest_id"
   } else {
-    sql = "SELECT contest.contest_id, teacher_account.rollnumber, contest.contest_name, contest.time_begin, contest.time_end FROM contest INNER JOIN teacher_account ON contest.teacher_id=teacher_account.userId WHERE contest.teacher_id='" + userId + "' AND deleted=0 ORDER BY contest.contest_id"
+    sql = "SELECT contest.contest_id, employee_account.rollnumber, contest.contest_name, contest.time_begin, contest.time_end FROM contest INNER JOIN employee_account ON contest.teacher_id=employee_account.userId WHERE contest.teacher_id='" + userId + "' AND deleted=0 ORDER BY contest.contest_id"
   }
   db.query(sql, function (err, results) {
     if (err) { logger.error(err); res.redirect("/error"); return }
@@ -73,6 +73,9 @@ exports.add_contest = function (req, res) {
     var format_minus_point = post.format_minus_point;
     var percentage_allow = post.percentage_allow;
 
+    var penalty_mode = post.penalty_mode;
+    var limit_submission = post.limit_submission;
+
     format_minus_point = format_minus_point === '' ? 0 : format_minus_point;
     percentage_accept = percentage_accept === '' ? 0 : percentage_accept;
     percentage_minus_point = percentage_minus_point === '' ? 0 : percentage_minus_point;
@@ -81,7 +84,8 @@ exports.add_contest = function (req, res) {
     var data_config = "time_limit=" + time_limit + "\nmemory_limit=" + memory_limit + "\ncheck_format=" + 
     (check_format? "true" : "false") + "\n" + format_minus_point + "\ncheck_comment=" + (check_comment ? "true" : "false") +
     "\ncheck_comment_mode=" + check_comment_mode + "\n" + percentage_accept + "\n" + percentage_minus_point +
-    "\ncheck_plagiarism=" + (check_plagiarism ? "true" : "false") + "\n" + percentage_allow;
+    "\ncheck_plagiarism=" + (check_plagiarism ? "true" : "false") + "\n" + percentage_allow +
+    "\npenalty_mode=" + penalty_mode + "\n" + limit_submission;
     
 
     if (contest_name !== "" && ValidateDate(time_begin) && ValidateDate(time_end) && formatTimeBegin < formatTimeEnd) {
@@ -216,6 +220,10 @@ exports.edit_contest = function (req, res) {
 
     var format_minus_point = post.format_minus_point;
     var percentage_allow = post.percentage_allow;
+
+    var penalty_mode = post.penalty_mode;
+    var limit_submission = post.limit_submission;
+
     format_minus_point = format_minus_point === '' ? 0 : format_minus_point;
     percentage_accept = percentage_accept === '' ? 0 : percentage_accept;
     percentage_minus_point = percentage_minus_point === '' ? 0 : percentage_minus_point;
@@ -223,7 +231,8 @@ exports.edit_contest = function (req, res) {
     var data_config = "time_limit=" + time_limit + "\nmemory_limit=" + memory_limit + "\ncheck_format=" + 
     (check_format? "true" : "false") + "\n" + format_minus_point + "\ncheck_comment=" + (check_comment ? "true" : "false") +
     "\ncheck_comment_mode=" + check_comment_mode + "\n" + percentage_accept + "\n" + percentage_minus_point +
-    "\ncheck_plagiarism=" + (check_plagiarism ? "true" : "false") + "\n" + percentage_allow;
+    "\ncheck_plagiarism=" + (check_plagiarism ? "true" : "false") + "\n" + percentage_allow +
+    "\npenalty_mode=" + penalty_mode + "\n" + limit_submission;
 
     if (contest_name_new !== "" && ValidateDate(time_begin) && ValidateDate(time_end) && formatTimeBegin < formatTimeEnd) {
       // update contest_name, time_begin, time_end
@@ -340,7 +349,7 @@ exports.contest_detail = function (req, res) {
     if (results.length == 0) { // if no student in contest
       sql = "SELECT contest_name, contest_id, time_begin, time_end, language FROM contest WHERE contest_id=?"
       db.query(sql, [contest_id], function (err, results) {
-        if (err) { logger.error(err); res.redirect("/error"); return }
+        if (err || results.length == 0) { logger.error(err); res.redirect("/error"); return }
         var data_config =  fs.readFileSync(storage.TESTCASE + results[0].contest_name + "/config.txt", {encoding:'utf8', flag:'r'});
         var data_config_inline = data_config.split('\n');
         results[0].time_limit = data_config_inline[0].split('=')[1];
@@ -353,6 +362,8 @@ exports.contest_detail = function (req, res) {
         results[0].percentage_minus_point = data_config_inline[7];
         results[0].check_plagiarism = data_config_inline[8].split('=')[1];
         results[0].percentage_allow = data_config_inline[9];
+        results[0].penalty_mode = data_config_inline[10].split('=')[1];
+        results[0].limit_submission = data_config_inline[11];
         res.render('contest-detail.ejs', { data: results, totalStudent: 0, message: message, teacher_role: req.session.teacher_role, role: req.session.role, user: req.session.user })
       })
     } else { // at least 1 student
@@ -368,6 +379,8 @@ exports.contest_detail = function (req, res) {
       results[0].percentage_minus_point = data_config_inline[7];
       results[0].check_plagiarism = data_config_inline[8].split('=')[1];
       results[0].percentage_allow = data_config_inline[9];
+      results[0].penalty_mode = data_config_inline[10].split('=')[1];
+      results[0].limit_submission = data_config_inline[11];
       res.render('contest-detail.ejs', { data: results, totalStudent: results.length, message: message, teacher_role: req.session.teacher_role, role: req.session.role, user: req.session.user })
     }
 
@@ -723,14 +736,35 @@ exports.add_problem = function (req, res) {
   var limitSub = []
   var contest_name = ''
   var sql = "SELECT contest_name, problem_id, path_problem, path_testcase, times FROM contest_detail INNER JOIN contest ON contest_detail.contest_id = contest.contest_id WHERE contest_detail.contest_id=?"
+  var pathToContestConfigSetting;
+  var data_config;
+  var data_limitSub;
+
   db.query(sql, [contest_id], function (err, results) {
     if (err) { logger.error(err); res.redirect("/error"); return }
     if (results.length == 0) {
       sql = "SELECT contest_name FROM contest WHERE contest_id=?"
       db.query(sql, [contest_id], function (err, results) {
-        if (err) { logger.error(err); res.redirect("/error"); return }
-        contest_name = results[0].contest_name
-        res.render('add-problem.ejs', {teacher_role: req.session.teacher_role, problem_id: problem_id, path_problem: path_problem, path_testcase: path_testcase, testcase_size: testcase_size, limitSub: limitSub, contest_id: contest_id, contest_name: contest_name, error: error, message: message, role: req.session.role, user: req.session.user })
+        if (err || results.length == 0) { logger.error(err); res.redirect("/error"); return }
+        contest_name = results[0].contest_name 
+        pathToContestConfigSetting = storage.TESTCASE + contest_name + "/config.txt";
+        data_config =  fs.readFileSync(pathToContestConfigSetting, {encoding:'utf8', flag:'r'});
+        var data_config_inline = data_config.split('\n');
+        data_limitSub = data_config_inline[11];
+
+        res.render('add-problem.ejs', {
+          teacher_role: req.session.teacher_role, 
+          problem_id: problem_id, 
+          path_problem: path_problem, 
+          path_testcase: path_testcase, 
+          testcase_size: testcase_size, 
+          limitSub: limitSub, 
+          contest_id: contest_id, 
+          contest_name: contest_name, 
+          error: error, message: message, 
+          role: req.session.role, user: req.session.user,
+          data_limitSub: data_limitSub 
+        })
       })
     } else {
       contest_name = results[0].contest_name
@@ -741,7 +775,26 @@ exports.add_problem = function (req, res) {
         testcase_size.push(getFolders(results[i].path_testcase).length) // testcase size
         limitSub.push(results[i].times)
       }
-      res.render('add-problem.ejs', {teacher_role: req.session.teacher_role, problem_id: problem_id, path_problem: path_problem, path_testcase: path_testcase, testcase_size: testcase_size, limitSub: limitSub, contest_id: contest_id, contest_name: contest_name, error: error, message: message, role: req.session.role, user: req.session.user })
+
+      pathToContestConfigSetting = storage.TESTCASE + contest_name + "/config.txt";
+      data_config =  fs.readFileSync(pathToContestConfigSetting, {encoding:'utf8', flag:'r'});
+      var data_config_inline = data_config.split('\n');
+      data_limitSub = data_config_inline[11];
+
+      res.render('add-problem.ejs', {
+        teacher_role: req.session.teacher_role, 
+        problem_id: problem_id, 
+        path_problem: path_problem, 
+        path_testcase: path_testcase, 
+        testcase_size: testcase_size, 
+        limitSub: limitSub, contest_id: contest_id, 
+        contest_name: contest_name, 
+        error: error, 
+        message: message, 
+        role: req.session.role, 
+        user: req.session.user,
+        data_limitSub: data_limitSub  
+      })
     }
   })
 }

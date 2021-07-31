@@ -34,14 +34,14 @@ exports.success = function(req, res) {
         logger.info(req.session.role + " " + req.session.user + " has connected")
         res.redirect('/submission')
       } else {
-        sql = "SELECT userId, rollnumber, role FROM teacher_account WHERE email=? and status=1"
+        sql = "SELECT userId, rollnumber, role_id FROM employee_account WHERE email=? and status=1"
         db.query(sql, [email], function (error, data) {
           if (error) { logger.error(error); res.redirect("/error"); return }
           if (data.length) {
             req.session.userId = data[0].userId
             req.session.role = "Teacher"
             req.session.user = data[0].rollnumber
-            req.session.teacher_role = data[0].role
+            req.session.teacher_role = data[0].role_id
             req.session.ipaddress = ipaddress
             logger.info(req.session.role + " " + req.session.user + " has connected")
             res.redirect('/contest')

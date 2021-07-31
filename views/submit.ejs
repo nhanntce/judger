@@ -22,6 +22,8 @@
         var minusPercent = configContent.split('\n')[7]
         var checkPlagiarism = configContent.split('\n')[8].split('=')[1]
         var plagiarismAcp = configContent.split('\n')[9]
+        var penaltyMode = configContent.split('\n')[10].split('=')[1]
+        var penaltyLimited = configContent.split('\n')[11]
 
 
         if (checkCmt == 'true') {
@@ -45,25 +47,34 @@
         var format = []
         var comment = []
         var plagiarism = []
+        var penalty = []
+
         for (let i = 0, l = debai.length; i < l; ++i) { 
           tmp_pen[debai[i]] = 0
         }
         
         for (let i = 0, l = log_files.length; i < l; ++i) {
-            tmp = log_files[i].split('][')[log_files[i].split('][').length - 1].split('].')[0] //get name of problem
+            tmp = log_files[i].split('][')[log_files[i].split('][').length - 1].split('].')[0] //get name of problem        
             logcontent = fs.existsSync(storage.NOPBAI + 'Logs/' + contest_name.replace(/ /g, '-') + '/' + log_files[i]) ? fs.readFileSync(storage.NOPBAI + 'Logs/' + contest_name.replace(/ /g, '-') + '/' + log_files[i], 'utf8') : ""
+
             if (logcontent) {
                 pen.push(tmp_pen[tmp]++)
-                tmp_maxtimes.push(maxtimes[tmp])
+                <!-- get max times by problem name -->
+                tmp_maxtimes.push(maxtimes[tmp]) 
                 <!-- check log file include 'Error' -->
                 if (logcontent.split('\n')[0].includes('Error')) {
                     rescheck.push('0/' + testcase_size[i])
                     score.push(0)
                     timeLimit.push('0s')
                     memoryLimit.push('0MB')
-                    format.push('Compile Error')
-                    comment.push('Compile Error')
-                    plagiarism.push('Compile Error')
+
+                    <!-- check log file not includes python file -->
+                    if(!log_files[i].includes('py')) {
+                      format.push('Compile Error')
+                      comment.push('Compile Error')
+                      plagiarism.push('Compile Error')          
+                    }
+                    
                 } else {
                     rescheck.push(parseInt(parseFloat(logcontent.split('\n')[0]) * testcase_size[i] / 10) + '/' + testcase_size[i])
                     score.push(parseFloat(logcontent.split('\n')[0]))
@@ -77,38 +88,48 @@
                     } else {
                         memoryLimit.push(logcontent.split('\n')[2].split(': ')[1] + 'MB')
                     }
-                    <!-- check plagiarism -->
-                    if(checkPlagiarism == 'true') {
-                      if(logcontent.split('\n')[5].split(': ')[1] >= 0) {
-                        plagiarism.push(logcontent.split('\n')[5].split(': ')[1])
+
+                    <!-- check log file not includes python file -->
+                    if(!log_files[i].includes('py')) {
+                      <!-- check plagiarism -->
+                      if(checkPlagiarism == 'true') {
+                        if(logcontent.split('\n')[5].split(': ')[1] >= 0) {
+                          plagiarism.push(logcontent.split('\n')[5].split(': ')[1])
+                        }
+                      }
+                      else {
+                        plagiarism.push("No Tick")
+                      }
+                      <!-- check format -->
+                      <!-- if(logcontent.split('\n')[5].split(': ')[1] < parseFloat(plagiarismAcp)) { -->
+                      if(checkFormat == 'true') {
+                        if(logcontent.split('\n')[3].split(': ')[1] == 'false') {
+                          format.push('No')
+                        } else if (logcontent.split('\n')[3].split(': ')[1] == 'true') {
+                          format.push('Yes')
+                        }
+                      }
+                      else  { 
+                        <!-- else means the log file include format: null. this means not tick to check format-->
+                        format.push('No Tick')
+                      }
+                      <!-- check format -->
+                      if(checkCmt == 'true') {
+                        if(logcontent.split('\n')[4].split(': ')[1] >= 0) {
+                          comment.push(logcontent.split('\n')[4].split(': ')[1])
+                        }
+                      }
+                      else {
+                        <!-- else means the log file include comment: null. this means not tick to check comment-->
+                        comment.push('No Tick')
+                      }
+
+                      <!-- check penalty mode is easy -->
+                      if(penaltyMode == 'Easy') {
+                        penalty.push(penaltyLimited)
                       }
                     }
-                     else {
-                      plagiarism.push("No Tick")
-                    }
-                    <!-- check format -->
-                    <!-- if(logcontent.split('\n')[5].split(': ')[1] < parseFloat(plagiarismAcp)) { -->
-                    if(checkFormat == 'true') {
-                      if(logcontent.split('\n')[3].split(': ')[1] == 'false') {
-                        format.push('No')
-                      } else if (logcontent.split('\n')[3].split(': ')[1] == 'true') {
-                        format.push('Yes')
-                      }
-                    }
-                    else  { 
-                      <!-- else means the log file include format: null. this means not tick to check format-->
-                      format.push('No Tick')
-                    }
-                    <!-- check format -->
-                    if(checkCmt == 'true') {
-                      if(logcontent.split('\n')[4].split(': ')[1] >= 0) {
-                        comment.push(logcontent.split('\n')[4].split(': ')[1])
-                      }
-                    }
-                    else {
-                      <!-- else means the log file include comment: null. this means not tick to check comment-->
-                      comment.push('No Tick')
-                    }
+                    
                     <!-- }  -->
                 }
             }
@@ -406,9 +427,13 @@
                 }
               %>
               <%
-                if (parseFloat(plagiarism[i]) >= parseFloat(plagiarismAcp)) {
+                if(penaltyMode == 'Hard' && score[i] < 10) {
+                  score[i] = 0
+                }
+                else if (parseFloat(plagiarism[i]) >= parseFloat(plagiarismAcp) ) {
                   score[i] = 0
                 } else {
+
                   if (parseFloat(comment[i]) < parseFloat(percentCmtAcp)) {
                     if (checkCmtMode == 'Fixed') {
                       score[i] = score[i] - minusPoint;
@@ -419,17 +444,15 @@
                   if(format[i] == 'No'){
                     score[i] = score[i] - minusFormat
                   }
+                  score[i] = score[i] * (tmp_maxtimes[i] - pen[i]) / tmp_maxtimes[i]
                 }
               %>
               <td>
                 <%
                   <!-- for (let i = 0, l = log_files.length; i < l; ++i) { -->
-                    score[i] = score[i] * (tmp_maxtimes[i] - pen[i]) / tmp_maxtimes[i]
+                    <!-- score[i] = score[i] * (tmp_maxtimes[i] - pen[i]) / tmp_maxtimes[i] -->
                   <!-- } -->
-                  console.log("pen")
-                  console.log(pen[i])
-                  console.log("comment")
-                  console.log(comment[i])
+                  
                   if(score[i] < 0) {
                     score[i] = 0;
                   }
