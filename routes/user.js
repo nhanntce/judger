@@ -48,7 +48,7 @@ exports.login = function (req, res) {
       res.render('index.ejs', { message: message, username: req.session.user, teacher_role: req.session.teacher_role })
       return;
     }
-    var role = (post.role == "Student") ? "student_account" : "teacher_account" // select type account
+    var role = (post.role == "Student") ? "student_account" : "employee_account" // select type account
     var ipaddress = (req.headers['x-forwarded-for'] || // get ip address
       req.connection.remoteAddress ||
       req.socket.remoteAddress ||
@@ -148,7 +148,7 @@ exports.logout = function (req, res) {
  */
 exports.profile = function (req, res) {
   var userId = req.session.userId,
-    role = (req.session.role == "Student") ? "student_account" : "teacher_account"
+    role = (req.session.role == "Student") ? "student_account" : "employee_account"
   if (userId == null) {
     res.redirect("/login")
     return

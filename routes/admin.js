@@ -219,7 +219,7 @@ exports.admin_teacher_data = function (req, res) {
   let columnsMap = [
     { db: "null", dt: 0 }, { db: "userId", dt: 1 }, { db: "rollnumber", dt: 2 }, { db: "name", dt: 3 }, { db: "email", dt: 4 }, { db: "status", dt: 5 }
   ];
-  const query = "SELECT userId, rollnumber, name, email, status FROM teacher_account"
+  const query = "SELECT userId, rollnumber, name, email, status FROM employee_account"
   const primaryKey = "userId"
   const nodeTable = new NodeTable(requestQuery, db, query, primaryKey, columnsMap);
   nodeTable.output((err, data) => {
@@ -254,14 +254,14 @@ exports.create_teacher = function (req, res) {
      if(role == "2"){
       name = "Giảng Viên"
     }
-    var sql = "INSERT INTO teacher_account(rollnumber, email, name, role, status) VALUES (?,?,?,?,?)"
+    var sql = "INSERT INTO employee_account(rollnumber, email, name, role_id, status) VALUES (?,?,?,?,?)"
     db.query(sql, [rollnumber, email, name, role, 1], function (err) {
       if (err) {
         req.session.sql_err = true
         res.redirect("/admin/teacher")
       } else {
         req.session.added = true
-        logger.info("Create teacher_account rollnumber=" + rollnumber + " name=" + name)
+        logger.info("Create employee_account rollnumber=" + rollnumber + " name=" + name)
         res.redirect('/admin/teacher')
       }
     })
@@ -287,15 +287,15 @@ exports.edit_teacher = function (req, res) {
     var isDisable = post.edit_disable == "on" ? "1" : "0"
     var role = post.editrole
     if(role == "0"){
-      name = "IT"
+      name = "Admin"
     }
      if(role == "1"){
-      name = "Giáo Vụ"
+      name = "Academic"
     }
      if(role == "2"){
-      name = "Giảng Viên"
+      name = "Teacher"
     }
-    var sql = "UPDATE teacher_account SET rollnumber=?,email=?,name=?,role=?,status=? WHERE userId=?"
+    var sql = "UPDATE employee_account SET rollnumber=?,email=?,name=?,role_id=?,status=? WHERE userId=?"
     db.query(sql, [rollnumber, email, name, role, isDisable, id], function (err) {
       if (err) {
         res.redirect("/admin/teacher")

@@ -98,12 +98,12 @@
           <label class="font-weight-bold">Enter start time</label>
           <div class="form mb-3">
             <input type="text" class="form-control" id="time_begin" name="time_begin"
-              value="<%=dayjs(data[0].time_begin).format('DD-MM-YYYY HH:mm')%>" required>
+              value="<%=dayjs(data[0].time_begin).format('DD-MM-YYYY HH:mm')%>" autocomplete="off" required>
           </div>
           <label class="font-weight-bold">Enter end time</label>
           <div class="form mb-3">
             <input type="text" class="form-control" id="time_end" name="time_end"
-              value="<%=dayjs(data[0].time_end).format('DD-MM-YYYY HH:mm')%>" required>
+              value="<%=dayjs(data[0].time_end).format('DD-MM-YYYY HH:mm')%>" autocomplete="off" required>
           </div>
           <div class="row">
             <div class="col-6">
@@ -231,6 +231,34 @@
             </div>
           </div>
 <!-- end Plagiarism Checking-->
+<!-- start Penalty Mode-->
+          <label class="font-weight-bold">Penalty Mode</label>
+          <div class="row">
+            <div class="col-6" >
+              <select class="mdb-select" name="penalty_mode" id="penalty_mode">
+                <%
+                  if(data[0].penalty_mode === 'Hard') {
+                %>
+                <option value="Hard">Hard</option>
+                <option value="Easy">Easy</option>
+                <%
+                  } else {
+                %>
+                <option value="Easy">Easy</option>
+                <option value="Hard">Hard</option>
+                <%
+                  }
+                %>
+              </select>
+            </div>
+            <div class="form col-6">
+              <label class="font-weight-bold">Limit Submission</label>
+              <div class="form">
+                <input type="number" id="limit_submission" name="limit_submission" value="<%=data[0].limit_submission%>" class="form-control" >
+              </div>  
+            </div>
+          </div>
+<!-- end Penalty Mode-->
           <label class="font-weight-bold">Language</label>
           <select class="mdb-select md-form" id="language" name="language" multiple required>
             <option disabled>Choose language</option>
@@ -256,6 +284,12 @@
             //variable for format
             var has_check_format = document.getElementById('has_check_format');
             var check_format = document.getElementById('check_format');
+
+            //var for penalty mode
+            var penalty_mode = document.getElementById('penalty_mode');
+            var limit_submission = document.getElementById('limit_submission');
+            var limit_submission_value = 10;
+
             function checkComment() {
               if(check_comment.checked == true) {
                 check_comment.classList.remove("mb-3");
@@ -294,13 +328,28 @@
                 has_check_plagiarism.style.display = "none";
               }
             }
+
+            function penaltyMode() {
+              let p_mode = penalty_mode.value;
+              if(p_mode === 'Hard') {
+                limit_submission.readOnly  = true;
+                if(limit_submission.value != 10)
+                  limit_submission_value = limit_submission.value;
+                limit_submission.value = 10;
+              } else {
+                limit_submission.value = limit_submission_value;
+                limit_submission.readOnly  = false;
+              }
+            }
             //add event
-            check_comment_mode.addEventListener('change', checkCommentMode); 
+            check_comment_mode.addEventListener('change', checkCommentMode);
+            penalty_mode.addEventListener('change', penaltyMode);  
             //call init
             checkComment();
             checkCommentMode();
             checkFormat();
             checkPlagiarism();
+            penaltyMode();
         </script>
         <script>
           $('#time_begin, #time_end').datetimepicker({
