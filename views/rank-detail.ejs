@@ -99,8 +99,6 @@
                     }
 
                      <!-- check log file not includes python file -->
-                     console.log('teacher')
-                     console.log(log_files[i].includes('py'))
                      if(log_files[i].includes('py') == false) {
                       <!-- check format -->
                       if(checkFormat == 'true') {
@@ -145,6 +143,11 @@
                       if(penaltyMode == 'Easy') {
                         penalty=penaltyLimited
                       }
+                    }
+                    else {
+                      format=''
+                      comment=''
+                      plagiarism=''
                     }
                     
                 }
