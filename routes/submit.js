@@ -51,8 +51,11 @@ exports.submission = function (req, res) {
       req.session.debai = []
       req.session.problem_id = []
       var clonetimes = {}
+      var configContent = fs.readFileSync(storage.TESTCASE + contest_name + '/config.txt', 'utf8')
       for (let i = 0; i < results.length; ++i) {
-        clonetimes[results[i].problem_id] = results[i].times
+        clonetimes[results[i].problem_id] = configContent.split('\n')[11]
+        console.log(clonetimes)
+        // clonetimes[results[i].problem_id] = results[i].times
         req.session.maxtimes[results[i].problem_id] = results[i].times
         req.session.debai.push(path.basename(results[i].path_problem))
         req.session.problem_id.push(results[i].problem_id)
