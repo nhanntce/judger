@@ -217,12 +217,13 @@ exports.reset_student = function (req, res) {
 exports.admin_teacher_data = function (req, res) {
   const requestQuery = req.query;
   let columnsMap = [
-    { db: "null", dt: 0 }, { db: "userId", dt: 1 }, { db: "rollnumber", dt: 2 }, { db: "name", dt: 3 }, { db: "email", dt: 4 }, { db: "status", dt: 5 }
+    { db: "null", dt: 0 }, { db: "userId", dt: 1 }, { db: "rollnumber", dt: 2 }, { db: "name", dt: 3 }, { db: "email", dt: 4 }, { db: "status", dt: 5 }, { db: "role_name", dt: 6 }
   ];
-  const query = "SELECT userId, rollnumber, name, email, status FROM employee_account"
+  const query = "SELECT employee_account.userId, employee_account.rollnumber, employee_account.name, employee_account.email, employee_account.status, role.role_name FROM employee_account, role WHERE role.role_id = employee_account.role_id"
   const primaryKey = "userId"
   const nodeTable = new NodeTable(requestQuery, db, query, primaryKey, columnsMap);
   nodeTable.output((err, data) => {
+    //  
     if (err) {
       console.log(err);
       return;
@@ -242,18 +243,18 @@ exports.create_teacher = function (req, res) {
   if (req.method == "POST") {
     var post = req.body
     var rollnumber = post.rollnumber
-    var name;
+    var name = post.name;
     var email = post.email
     var role = post.role
-     if(role == "0"){
-      name = "IT"
-    }
-     if(role == "1"){
-      name = "Giáo Vụ"
-    }
-     if(role == "2"){
-      name = "Giảng Viên"
-    }
+    //  if(role == "0"){
+    //   name = "IT"
+    // }
+    //  if(role == "1"){
+    //   name = "Giáo Vụ"
+    // }
+    //  if(role == "2"){
+    //   name = "Giảng Viên"
+    // }
     var sql = "INSERT INTO employee_account(rollnumber, email, name, role_id, status) VALUES (?,?,?,?,?)"
     db.query(sql, [rollnumber, email, name, role, 1], function (err) {
       if (err) {
@@ -286,15 +287,15 @@ exports.edit_teacher = function (req, res) {
     var email = post.edit_email
     var isDisable = post.edit_disable == "on" ? "1" : "0"
     var role = post.editrole
-    if(role == "0"){
-      name = "Admin"
-    }
-     if(role == "1"){
-      name = "Academic"
-    }
-     if(role == "2"){
-      name = "Teacher"
-    }
+    // if(role == "0"){
+    //   name = "Admin"
+    // }
+    //  if(role == "1"){
+    //   name = "Academic"
+    // }
+    //  if(role == "2"){
+    //   name = "Teacher"
+    // }
     var sql = "UPDATE employee_account SET rollnumber=?,email=?,name=?,role_id=?,status=? WHERE userId=?"
     db.query(sql, [rollnumber, email, name, role, isDisable, id], function (err) {
       if (err) {
