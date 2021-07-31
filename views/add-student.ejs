@@ -27,7 +27,7 @@
               <%
                 for(var i = 0, len = list_class.length; i < len; i++) {
               %>
-                <option><%=list_class[i]%></option>
+                <option id="<%=list_class[i]%>"><%=list_class[i]%></option>
               <%
                 }
               %>
@@ -38,6 +38,11 @@
       <%
         }
       %>
+      <script>
+        var selected = '<%=class_name%>';
+        var reSelect = document.getElementById(selected);
+        reSelect.setAttribute("selected", "selected");
+      </script>
       <%
         if(!list_class.length) {
       %>
