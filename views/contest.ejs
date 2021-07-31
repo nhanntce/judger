@@ -98,7 +98,7 @@
         <div class="modal-body mx-3">
           <label class="font-weight-bold">Name</label>
           <div class="form mb-3">
-            <input type="text" id="contest_name" name="contest_name" class="form-control" required>
+            <input type="text" id="contest_name" name="contest_name" class="form-control" required autocomplete="off">
           </div>
           <label class="font-weight-bold">Enter start time</label>
           <div class="form mb-3">
@@ -131,7 +131,12 @@
             <div class="form col-6">
               <label class="font-weight-bold">Minus point (point)</label>
               <div class="form">
-                <input type="number" id="format_minus_point" name="format_minus_point" class="form-control">
+
+                <div class="row">
+                    <div class="col-10">
+                      <input type="number" id="format_minus_point" name="format_minus_point" class="form-control" min="1" require>
+                    </div>
+                </div>
               </div>              
             </div>
           </div>
@@ -160,7 +165,12 @@
               <div class="col-6">
                 <label class="font-weight-bold" id="lb_minus_point">Minus Points (point)</label>
                 <div class="form mb-3">
-                  <input type="number" id="percentage_minus_point" min="1" name="percentage_minus_point" class="form-control" require>
+
+                  <div class="row">
+                      <div class="cz`ol-10">
+                        <input type="number" id="percentage_minus_point" min="1" name="percentage_minus_point" class="form-control" require>
+                      </div>
+                  </div>
                 </div>              
               </div>
             </div>
@@ -176,7 +186,12 @@
             <div class="form col-6">
               <label class="font-weight-bold">Percentage Allow (%)</label>
               <div class="form">
-                <input type="number" id="percentage_allow" name="percentage_allow" class="form-control">
+
+                <div class="row">
+                    <div class="col-10">
+                      <input type="number" id="percentage_allow" name="percentage_allow" class="form-control" min="1" require>
+                    </div>
+                </div>
               </div>              
             </div>
           </div>
@@ -305,41 +320,43 @@
         <script>
          $(document).ready(function() {
         $('#form_contest').submit(function(e) {
-    var time_limit = $('#time_limit').val();
-    var memory_limit = $('#memory_limit').val();
     $(".error").remove();
-    if (time_limit < 0) {
-      
-      $('#time_limit').after('<span class="error">Time limit must be greater than 0 !</span>');
-      e.preventDefault();
-    }
-    if (memory_limit < 0) {
-      $('#memory_limit').after('<span class="error">Memory limit must be greater than 0 !</span>');
-      e.preventDefault();
-    }
+    var contestName = $('#contest_name').val();
+    var regex = new RegExp('^[a-zA-Z0-9_]+$');
+            if ( !regex.test(contestName) ) {
+                $('#contest_name').after('<span class="error">Only enter number, character and _ (Ex: Demo_1) !</span>');
+                e.preventDefault();
+            }
     var begin = $('#time_begin').val();
     var end = $('#time_end').val();
-    if(begin > end ){
+    var y1, m1, d1, h1, mi1;
+    var y2, m2, d2, h2, mi2;
+    y1 = begin.split(' ')[0].split('-')[2];
+    m1 = begin.split(' ')[0].split('-')[1];
+    d1 = begin.split(' ')[0].split('-')[0];
+    h1 = begin.split(' ')[1].split(':')[0];
+    mi1 = begin.split(' ')[1].split(':')[1];
+    var timeBegin = new Date(y1, m1 - 1, d1, h1, mi1,'00')
+    y2 = end.split(' ')[0].split('-')[2];
+    m2 = end.split(' ')[0].split('-')[1];
+    d2 = end.split(' ')[0].split('-')[0];
+    h2 = end.split(' ')[1].split(':')[0];
+    mi2 = end.split(' ')[1].split(':')[1];
+    var timeEnd = new Date(y2, m2 - 1, d2, h2, mi2,'00')
+    var currentTime = new Date()
+    // console.log(timeBegin)
+    // console.log(timeEnd)
+    // console.log(currentTime)
+    if(timeBegin > timeEnd){
       $('#time_end').after('<span class="error">End time must be greater than Start time !</span>');
       e.preventDefault();
     }
-    var dt = new Date();
-    var dateTime = 
-    (`${dt.getDate().toString().padStart(2, '0')}-${
-    (dt.getMonth()+1).toString().padStart(2, '0')}-${
-    dt.getFullYear().toString().padStart(4, '0')} ${
-    dt.getHours().toString().padStart(2, '0')}:${
-    dt.getMinutes().toString().padStart(2, '0')}`
-);
-    console.log(dateTime)
-      console.log("aaaaaaaaaaa")
-    if(dateTime > begin){
+    if(currentTime > timeBegin ){
       $('#time_begin').after('<span class="error">The start time must be in the future !</span>');
       e.preventDefault();
-    }
+    } 
   });
         });
-    
         </script>
         <!-- check if it is having any error, then show it TuPTA -->
         <% if (error.length > 0) { %>
