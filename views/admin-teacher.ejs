@@ -12,7 +12,7 @@
         defaultContent: "",
         targets: 0
       }, {
-        targets: 4,
+        targets: 5,
         mRender: function (data, type, row, meta) {
           console.log(data)
           return data.toLocaleString("it-IT")
@@ -49,21 +49,22 @@
         document.getElementById("edit_id").value = l[0][1]
         document.getElementById("edit_rollnumber").value = l[0][2]
         document.getElementById("edit_name").value = l[0][3]
-        var name = document.getElementById("edit_name").value
-        if(name == "IT") {
-          $("div.role select").val("0").change();
-        }
-        if(name == "Giáo Vụ") {
-          $("div.role select").val("1").change();
-        }
-        if(name == "Giảng Viên") {
-          $("div.role select").val("2").change();
-        }
         document.getElementById("edit_email").value = l[0][4]
         if (l[0][5].includes('green')) {
           $("#edit_disable").prop("checked", true);
         } else {
           $("#edit_disable").prop("checked", false);
+        }
+        document.getElementById("edit_role").value = l[0][6]
+        var name = document.getElementById("edit_role").value
+        if(name == "Admin") {
+          $("div.role select").val("0").change();
+        }
+        if(name == "Academic") {
+          $("div.role select").val("1").change();
+        }
+        if(name == "Teacher") {
+          $("div.role select").val("2").change();
         }
       }
       if (l.length < 1 || l.length > 1) {
@@ -110,9 +111,10 @@
           </th>
           <th>ID</th>
           <th>Roll number</th>
-          <th>Role</th>
+          <th>Name</th>
           <th>Email</th>
           <th>Status</th>
+          <th>Role</th>
         </tr>
       </thead>
     </table>
@@ -131,12 +133,14 @@
       <form action="/admin/add-teacher" method="POST">
         <div class="modal-body mx-3">
           <div class="md-form mb-5">
-            <i class="fas fa-user prefix grey-text"></i>
+            <i class="fas fa-id-card prefix grey-text"></i>
             <input type="text" id="rollnumber" name="rollnumber" class="form-control validate" required>
             <label data-error="wrong" data-success="" for="orangeForm-name">Roll Number</label>
           </div>
-          <div class="md-form mb-5" type="hidden">
-            <input type="hidden" id="name" name="name" class="form-control validate">
+          <div class="md-form">
+            <i class="fas fa-user-alt prefix grey-text"></i>
+            <input type="text" id="name" name="name" class="form-control validate">
+            <label data-error="wrong" data-success="" for="orangeForm-email">Name</label>
           </div>
           <div class="md-form mb-4">
             <i class="fas fa-lock prefix grey-text"></i>
@@ -145,9 +149,9 @@
           </div>
           <div class="md-form mb-4">
             <select class="form-control" name="role" id="role">
-              <option value="2">Giảng viên</option>
-              <option value="1">Giáo vụ</option>
-              <option value="0">IT</option>
+              <option value="2">Teacher</option>
+              <option value="1">Academic</option>
+              <option value="0">Admin</option>
             </select>
           </div>
         </div>
@@ -177,8 +181,9 @@
           <div class="md-form">
             <input type="text" id="edit_rollnumber" name="edit_rollnumber" class="form-control validate" required>
           </div>
-          <div class="md-form">
-            <input type="hidden" id="edit_name" name="edit_name" class="form-control validate">
+           <p>Name</p>
+         <div class="md-form">
+            <input type="text" id="edit_name" name="edit_name" class="form-control validate">
           </div>
            <div class="md-form">
             <input type="hidden" id="edit_role" name="edit_role" class="form-control validate">
@@ -187,12 +192,12 @@
           <div class="md-form">
             <input type="email" id="edit_email" name="edit_email" class="form-control validate" required>
           </div>
-              <p>Name</p>
+              <p>Role</p>
          <div class="md-form mb-4 role">
             <select class="form-control " name="editrole" id="editrole">
-              <option value="2">Giảng viên</option>
-              <option value="1">Giáo vụ</option>
-              <option value="0">IT</option>
+              <option value="2">Teacher</option>
+              <option value="1">Academic</option>
+              <option value="0">Admin</option>
             </select>
           </div>
           Diabale
