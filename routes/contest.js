@@ -349,7 +349,7 @@ exports.contest_detail = function (req, res) {
     if (results.length == 0) { // if no student in contest
       sql = "SELECT contest_name, contest_id, time_begin, time_end, language FROM contest WHERE contest_id=?"
       db.query(sql, [contest_id], function (err, results) {
-        if (err) { logger.error(err); res.redirect("/error"); return }
+        if (err || results.length == 0) { logger.error(err); res.redirect("/error"); return }
         var data_config =  fs.readFileSync(storage.TESTCASE + results[0].contest_name + "/config.txt", {encoding:'utf8', flag:'r'});
         var data_config_inline = data_config.split('\n');
         results[0].time_limit = data_config_inline[0].split('=')[1];
@@ -736,14 +736,35 @@ exports.add_problem = function (req, res) {
   var limitSub = []
   var contest_name = ''
   var sql = "SELECT contest_name, problem_id, path_problem, path_testcase, times FROM contest_detail INNER JOIN contest ON contest_detail.contest_id = contest.contest_id WHERE contest_detail.contest_id=?"
+  var pathToContestConfigSetting;
+  var data_config;
+  var data_limitSub;
+
   db.query(sql, [contest_id], function (err, results) {
     if (err) { logger.error(err); res.redirect("/error"); return }
     if (results.length == 0) {
       sql = "SELECT contest_name FROM contest WHERE contest_id=?"
       db.query(sql, [contest_id], function (err, results) {
-        if (err) { logger.error(err); res.redirect("/error"); return }
-        contest_name = results[0].contest_name
-        res.render('add-problem.ejs', {teacher_role: req.session.teacher_role, problem_id: problem_id, path_problem: path_problem, path_testcase: path_testcase, testcase_size: testcase_size, limitSub: limitSub, contest_id: contest_id, contest_name: contest_name, error: error, message: message, role: req.session.role, user: req.session.user })
+        if (err || results.length == 0) { logger.error(err); res.redirect("/error"); return }
+        contest_name = results[0].contest_name 
+        pathToContestConfigSetting = storage.TESTCASE + contest_name + "/config.txt";
+        data_config =  fs.readFileSync(pathToContestConfigSetting, {encoding:'utf8', flag:'r'});
+        var data_config_inline = data_config.split('\n');
+        data_limitSub = data_config_inline[11];
+
+        res.render('add-problem.ejs', {
+          teacher_role: req.session.teacher_role, 
+          problem_id: problem_id, 
+          path_problem: path_problem, 
+          path_testcase: path_testcase, 
+          testcase_size: testcase_size, 
+          limitSub: limitSub, 
+          contest_id: contest_id, 
+          contest_name: contest_name, 
+          error: error, message: message, 
+          role: req.session.role, user: req.session.user,
+          data_limitSub: data_limitSub 
+        })
       })
     } else {
       contest_name = results[0].contest_name
@@ -754,7 +775,26 @@ exports.add_problem = function (req, res) {
         testcase_size.push(getFolders(results[i].path_testcase).length) // testcase size
         limitSub.push(results[i].times)
       }
-      res.render('add-problem.ejs', {teacher_role: req.session.teacher_role, problem_id: problem_id, path_problem: path_problem, path_testcase: path_testcase, testcase_size: testcase_size, limitSub: limitSub, contest_id: contest_id, contest_name: contest_name, error: error, message: message, role: req.session.role, user: req.session.user })
+
+      pathToContestConfigSetting = storage.TESTCASE + contest_name + "/config.txt";
+      data_config =  fs.readFileSync(pathToContestConfigSetting, {encoding:'utf8', flag:'r'});
+      var data_config_inline = data_config.split('\n');
+      data_limitSub = data_config_inline[11];
+
+      res.render('add-problem.ejs', {
+        teacher_role: req.session.teacher_role, 
+        problem_id: problem_id, 
+        path_problem: path_problem, 
+        path_testcase: path_testcase, 
+        testcase_size: testcase_size, 
+        limitSub: limitSub, contest_id: contest_id, 
+        contest_name: contest_name, 
+        error: error, 
+        message: message, 
+        role: req.session.role, 
+        user: req.session.user,
+        data_limitSub: data_limitSub  
+      })
     }
   })
 }
