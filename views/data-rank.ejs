@@ -259,7 +259,7 @@
           "<'row'<'col-sm-5'i><'col-sm-7'p>>",
         buttons: [{
           extend: 'excelHtml5',
-          text: '<li class="fa fa-file-excel"></li> Export to Excel',
+          text: '<li class="fa fa-file-excel"></li> Export result into Excel',
           filename: '<%=data[0].contest_name.replace(/ /g, ' - ')%>',
           title: '',
           download: 'open',
@@ -288,7 +288,7 @@
             addSheet(xlsx, '#dataTableRank', '', 'Plagiarisms', '4', '.exportPlagiarism');
           }
         }, {
-          text: '<li class="fa fa-download"></li> Download',
+          text: '<li class="fa fa-download"></li> Download source code',
           className: 'ml-1',
           action: function (e, dt, node, config) {
             window.location = '/contest/download?contest_id=<%=data[0].contest_id%>';
