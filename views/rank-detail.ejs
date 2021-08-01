@@ -294,7 +294,8 @@
           for (let i = 0, l = log_files.length; i < l; ++i) {
             tmp = log_files[i].split('][')[log_files[i].split('][').length - 1].split('].')[0] //get name of problem
             tmp_pen[tmp]++;
-            tmp_maxtimes.push(maxtimes[tmp])
+            <!-- tmp_maxtimes.push(maxtimes[tmp]) -->
+            tmp_maxtimes.push(penaltyLimited)
           }
           <!-- Because it read file order by time descrease, so the first have the most penaty value -->
           for (let i = 0, l = log_files.length; i < l; ++i) {
@@ -304,6 +305,12 @@
           }
           <!-- caculate the score with penaty -->
             if(penaltyMode == 'Easy') {
+              console.log('scoreee')
+              console.log(score)
+              console.log('tmp_maxtimes[i]')
+              console.log(tmp_maxtimes[i])
+              console.log('pen[i]')
+              console.log(pen[i])
               score = score * (tmp_maxtimes[i] - pen[i]) / tmp_maxtimes[i]
             } else if (penaltyMode == 'Hard' && score < 10) {
               score = 0
@@ -313,7 +320,7 @@
             score = 0;
           }
           %>
-          <%=score%>
+          <%=score.toFixed(1)%>
         </td>
       </tr>
       <div class="modal fade" id="myModal<%=i%>">

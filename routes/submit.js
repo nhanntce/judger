@@ -54,9 +54,9 @@ exports.submission = function (req, res) {
       var configContent = fs.readFileSync(storage.TESTCASE + contest_name + '/config.txt', 'utf8')
       for (let i = 0; i < results.length; ++i) {
         clonetimes[results[i].problem_id] = configContent.split('\n')[11]
-        console.log(clonetimes)
         // clonetimes[results[i].problem_id] = results[i].times
-        req.session.maxtimes[results[i].problem_id] = results[i].times
+        // req.session.maxtimes[results[i].problem_id] = results[i].times
+        req.session.maxtimes[results[i].problem_id] = configContent.split('\n')[11]
         req.session.debai.push(path.basename(results[i].path_problem))
         req.session.problem_id.push(results[i].problem_id)
       }
@@ -302,17 +302,22 @@ exports.submission_realtime = function (req, res) {
         tb.push("<div class='font-weight-bold text-danger'>" + reserr[tmp] + "</div>")
       }
       // Calculate penalty: for more than 1 submit
+      // var pen = req.session.times[tmp]
       var pen = req.session.times[tmp]
+      
       // check mode of penalty 
       if(penaltyMode == 'Easy') {
-        tb.push("<div class='text-right'>" + RoundAndFix(score[tmp] * (pen + 1) / req.session.maxtimes[tmp], 1).toFixed(1) + "</div>")
+      
+        // tb.push("<div class='text-right'>" + RoundAndFix(score[tmp] * (pen + 1) / req.session.maxtimes[tmp], 1).toFixed(1) + "</div>")
+        tb.push("<div class='text-right'>" + RoundAndFix(score[tmp] * (pen + 1) / penaltyLimited, 1).toFixed(1) + "</div>")
       } else { 
         tb.push("<div class='text-right'>" + RoundAndFix(score[tmp], 1).toFixed(1) + "</div>")
       }
 
       if (!score[tmp]) score[tmp] = 0
       
-      total += RoundAndFix(score[tmp] * (pen + 1) / req.session.maxtimes[tmp], 1)
+      // total += RoundAndFix(score[tmp] * (pen + 1) / req.session.maxtimes[tmp], 1)
+      total += RoundAndFix(score[tmp] * (pen + 1) / penaltyLimited, 1)
       obj.data.push(tb)
     }
     tb = new Array()
