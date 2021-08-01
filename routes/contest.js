@@ -494,8 +494,17 @@ exports.load_student = function (req, res) {
          for(var i = 0, len = listClassDB.length; i < len; i++) {
           listClass.push(listClassDB[i].class);
          }
-         res.render('add-student.ejs', { list_class: listClass, data: results, contest_id: contest_id, message: message, 
-          error: error, warning: warning, class_name: class_name, role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role });
+         res.render('add-student.ejs', { 
+           list_class: listClass, 
+           data: results, 
+           contest_id: contest_id, 
+           message: message, 
+           error: error, warning: warning, 
+           class_name: class_name, 
+           role: req.session.role, 
+           user: req.session.user, 
+           teacher_role: req.session.teacher_role 
+         });
       })
       
     // }
@@ -532,6 +541,17 @@ exports.add_student = function (req, res) {
         var sql = "UPDATE student_account SET contest_id=? WHERE "
         var student_name = "";
         var sql_contest_student = '';
+        var data_student_name = "";
+        var path_to_student_name_file = storage.TESTCASE + contest_name + "/student.txt";
+        
+        fs.exists(path_to_student_name_file, function (exists) {
+          if (!exists) {
+            fs.writeFileSync(storage.TESTCASE + contest_name + "/student.txt", data_student_name);
+          } else {
+            data_student_name =  fs.readFileSync(path_to_student_name_file, {encoding:'utf8', flag:'r'});
+          }
+        });
+
         for (let i = 0, l = list.length; i < l; ++i) {
           // create a new folder contains submission files of student
           if (!fs.existsSync(storage.BAILAM + contest_name + '/' + list[i])) {
@@ -539,16 +559,20 @@ exports.add_student = function (req, res) {
             student_name += "\n" + list[i];
           }
           //select id of student by rollnumber NhanNT
-          sql_contest_student = "SELECT `id` FROM `student_account` WHERE rollnumber = ?";
+          sql_contest_student = "SELECT `id`, `name` FROM `student_account` WHERE rollnumber = ?";
           db.query(sql_contest_student, [list[i]], (errSelect, resSelect) => {
             if (errSelect) { logger.error(errSelect); res.redirect("/error"); return; }
-              //insert student id and contest id into contest_student NhanNT
-              sql_contest_student = 'INSERT INTO `contest_student`( `student_id`, `contest_id`, `status`) VALUES (?,?,?)';
-              db.query(sql_contest_student, [resSelect[0].id, contest_id, 1], (errInsert, resInsert) => {
-                if (errInsert) { logger.error(errInsert); res.redirect("/error"); return; }
-              });
+            //write students name by roll number student to student.txt 
+            data_student_name += list[i] + "=" + resSelect[0].name + "\n";
+            fs.exists(path_to_student_name_file, function (exists) {
+              fs.writeFileSync(storage.TESTCASE + contest_name + "/student.txt", data_student_name);
+            });
+            //insert student id and contest id into contest_student NhanNT
+            sql_contest_student = 'INSERT INTO `contest_student`( `student_id`, `contest_id`, `status`) VALUES (?,?,?)';
+            db.query(sql_contest_student, [resSelect[0].id, contest_id, 1], (errInsert, resInsert) => {
+              if (errInsert) { logger.error(errInsert); res.redirect("/error"); return; }
+            });
           });
-          
           //update contest_id in student_account
           sql += "rollnumber='" + list[i] + "' OR "
         }
