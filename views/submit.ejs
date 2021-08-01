@@ -60,6 +60,7 @@
             if (logcontent) {
                 pen.push(tmp_pen[tmp]++)
                 <!-- get max times by problem name -->
+                
                 tmp_maxtimes.push(maxtimes[tmp]) 
                 <!-- check log file include 'Error' -->
                 if (logcontent.split('\n')[0].includes('Error')) {
@@ -258,7 +259,6 @@
         });
         var times = JSON.parse('<%-JSON.stringify(clonetimes)%>');
         $('#tenbai').change(function () {
-          // if (times[$('#tenbai').val()] <= 0) {
           if (times[$('#tenbai').val()] <= 0) {
             $('#submit').prop('disabled', true);
           } else {
@@ -451,6 +451,7 @@
                   if(format[i] == 'No'){
                     score[i] = score[i] - minusFormat
                   }
+                  
                   score[i] = score[i] * (tmp_maxtimes[i] - pen[i]) / tmp_maxtimes[i]
                 }
               %>

@@ -87,6 +87,7 @@ exports.load_rank = function (req, res) {
     if (err || results.length == 0) { logger.error(err); res.redirect("/error"); return }
     var contest_name = results[0].contest_name.replace(/ /g, '-')
     var configContent = fs.readFileSync(storage.TESTCASE + contest_name + '/config.txt', 'utf8')
+    var penaltyLimited = configContent.split('\n')[11]
     var problem_files = []
     maxtimes = {}
     var sql = "SELECT problem_id, times FROM contest_detail WHERE contest_id=?"
@@ -105,7 +106,8 @@ exports.load_rank = function (req, res) {
       } else {
         for (let i = 0; i < data.length; ++i) {
           problem_files.push(data[i].problem_id)
-          maxtimes[data[i].problem_id] = data[i].times
+          // maxtimes[data[i].problem_id] = data[i].times
+          maxtimes[data[i].problem_id] = penaltyLimited
         }
         // get all judged Logs in folder './public/nopbai/Logs/' + contest_name
         fs.readdir(storage.NOPBAI + 'Logs/' + contest_name, function (err, log_files) {
@@ -243,6 +245,9 @@ exports.load_rank = function (req, res) {
               if (isNaN(point[results[i].rollnumber][problem_files[j]]) == false && point[results[i].rollnumber][problem_files[j]] > 0) {
                 // Calculate penalty: for more than 1 submit
                 if (penaltyMode == 'Easy') {
+                  
+                  // maxtimes[problem_files[j]] = penaltyLimited
+                  
                   point[results[i].rollnumber][problem_files[j]] = RoundAndFix(point[results[i].rollnumber][problem_files[j]] * (maxtimes[problem_files[j]] - times[results[i].rollnumber][problem_files[j]] + 1) / maxtimes[problem_files[j]], 1)
                 } else {
                   point[results[i].rollnumber][problem_files[j]] = RoundAndFix(point[results[i].rollnumber][problem_files[j]], 1)
@@ -265,8 +270,8 @@ exports.load_rank = function (req, res) {
 
             for (let j = 0, l = problem_files.length; j < l; ++j) {
               if (point[results[i].rollnumber][problem_files[j]] > 0) {
-                console.log(point[results[i].rollnumber][problem_files[j]].toFixed(1))
-                console.log(times[results[i].rollnumber][problem_files[j]])
+                // console.log(point[results[i].rollnumber][problem_files[j]].toFixed(1))
+                // console.log(times[results[i].rollnumber][problem_files[j]])
                 tb.push("<center class='solved'>" + point[results[i].rollnumber][problem_files[j]].toFixed(1) + '<br>(' + times[results[i].rollnumber][problem_files[j]] + ')</center>')
               } else if (point[results[i].rollnumber][problem_files[j]] == 0) {
                 tb.push("<center class='attempted'>" + point[results[i].rollnumber][problem_files[j]] + '<br>(' + times[results[i].rollnumber][problem_files[j]] + ')</center>')
