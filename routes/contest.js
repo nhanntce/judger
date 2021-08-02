@@ -614,12 +614,12 @@ exports.load_class = function (req, res) {
     var sheet_name_list = workbook.SheetNames
     var xlData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]])
 
-    if (typeof xlData[0].RollNumber === "undefined" || typeof xlData[0].MemberCode === "undefined" || typeof xlData[0].FullName === "undefined") {
+    if (typeof xlData[0].RollNumber === "undefined" || typeof xlData[0].Class === "undefined" || typeof xlData[0].FullName === "undefined" || typeof xlData[0].Email === "undefined") {
       res.render('add-class.ejs', { data: [], xlData: "", message: "", error: "Invalid file excel", class_name: class_name, role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role })
     } else {
       if (req.session.sql_err) {
         req.session.sql_err = false
-        res.render('add-class.ejs', { data: [], xlData: xlData, message: "", error: "Duplicate student roll number", class_name: class_name, role: req.session.role, user: req.session.user,teacher_role: req.session.teacher_role })
+        res.render('add-class.ejs', { data: [], xlData: xlData, message: "", error: "Duplicate student roll number or email", class_name: class_name, role: req.session.role, user: req.session.user,teacher_role: req.session.teacher_role })
       } else {
         res.render('add-class.ejs', { data: [], xlData: xlData, message: "Load students successfully!", error: "", class_name: class_name, role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role })
       }
@@ -650,8 +650,8 @@ exports.add_class = function (req, res) {
         return
       }
 
-      if (!/^(FA|SP|SU)\d{2}[_][A-Z]{3}\d{3}[_][A-Z]{2}\d{4}$/.test(class_name.split('.')[0])) {
-        res.render('add-class.ejs', {teacher_role: req.session.teacher_role, data: [], xlData: "", message: "", error: "File name is not in format", class_name: class_name, role: req.session.role, user: req.session.user })
+      if (!/^(FA|SP|SU)\d{2}[_][A-Z]{3}\d{3}[_][A-Z]{2}\d{4}[.](xls|xlsx)$/.test(class_name)) {
+        res.render('add-class.ejs', {teacher_role: req.session.teacher_role, data: [], xlData: "", message: "", error: "File name is not follow format (Ex:SU21_PRO201_SE1302.xls)", class_name: class_name, role: req.session.role, user: req.session.user })
         return
       }
 
@@ -700,15 +700,14 @@ exports.create_class = function (req, res) {
   if (req.method == "POST") {
     var post = req.body
     var RollNumber = post.RollNumber.split(',')
-    var MemberCode = post.MemberCode.split(',')
     var FullName = post.FullName.split(',')
     var class_name = post.class_name
     var email = post.Email.split(',')
     // var password = post.password
 
-    var sql = "INSERT INTO student_account(rollnumber, username, password, name, class, email) VALUES ";
+    var sql = "INSERT INTO student_account(rollnumber, name, class, email) VALUES ";
     for (let i = 0; i < RollNumber.length; i++) {
-      sql += "('" + RollNumber[i] + "','" + MemberCode[i] + "', MD5('123456'),'" + FullName[i] + "','" + class_name.split('.')[0] + "','" + email[i] +  "'),";
+      sql += "('" + RollNumber[i] + "','" + FullName[i] + "','" + class_name.split('.')[0] + "','" + email[i] +  "'),";
     }
     sql = sql.slice(0, -1)
     db.query(sql, function (err) {

@@ -36,13 +36,13 @@
   <% } else { %>
   <%
         var RollNumber = []
-        var MemberCode = []
+        var Class = []
         var FullName = []
         var Email = []
 
         for (let i = 0, l = xlData.length; i < l; ++i) {
             RollNumber.push(JSON.stringify(xlData[i].RollNumber).replace(/"/g,'').toUpperCase())
-            MemberCode.push(JSON.stringify(xlData[i].MemberCode).replace(/"/g,'').toLowerCase())
+            Class.push(JSON.stringify(xlData[i].Class).replace(/"/g,''))
             FullName.push(JSON.stringify(xlData[i].FullName).replace(/"/g,''))
             Email.push(JSON.stringify(xlData[i].Email).replace(/"/g,''))
         }
@@ -55,7 +55,6 @@
   <% } %>
   <form action="/contest/add-class/create" method="POST">
     <input type="hidden" name="RollNumber" value="<%=RollNumber%>">
-    <input type="hidden" name="MemberCode" value="<%=MemberCode%>">
     <input type="hidden" name="FullName" value="<%=FullName%>">
     <input type="hidden" name="class_name" value="<%=class_name%>">
     <input type="hidden" name="Email" value="<%=Email%>">
@@ -75,18 +74,17 @@
       <thead>
         <tr>
           <th>Roll number</th>
-          <th>MemberCode</th>
           <th>Name</th>
+          <th>Class</th>
           <th>Email</th>
         </tr>
       </thead>
       <tbody>
-
         <% for (let i = 0, l = xlData.length; i < l; ++i) { %>
         <tr>
           <td><%= JSON.stringify(xlData[i].RollNumber).replace(/"/g,'') %></td>
-          <td><%= JSON.stringify(xlData[i].MemberCode).replace(/"/g,'') %></td>
           <td><%= JSON.stringify(xlData[i].FullName).replace(/"/g,'') %></td>
+          <td><%=class_name.split('.')[0]%></td>
           <td><%= JSON.stringify(xlData[i].Email).replace(/"/g,'') %></td>
         </tr>
         <% } %>
