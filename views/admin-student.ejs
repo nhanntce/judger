@@ -189,7 +189,7 @@
             <div class="col-6">
               <div class="md-form">
                 ID
-                <input placeholder="Placeholder" type="text" id="edit_id" name="edit_id" class="form-control validate">
+                <input placeholder="Placeholder" type="text" id="edit_id" name="edit_id" class="form-control validate" readonly="">
               </div>
               <div class="md-form">
                 Roll Number
@@ -253,7 +253,7 @@
   <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title w-100" id="myModalLabel">Select contest</h4>
+        <h4 class="modal-title w-100" id="myModalLabel">Reset Students</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -261,8 +261,12 @@
       <div class="modal-body">
         <form action="/admin/reset-student" method="POST">
           <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="defaultChecked2" name="contest_id" checked="" disabled="disabled">
+            <label class="custom-control-label" for="defaultChecked2">Students IP</label>
+          </div>
+          <div class="custom-control custom-checkbox">
             <input type="checkbox" class="custom-control-input" id="defaultChecked1" name="contest_id">
-            <label class="custom-control-label" for="defaultChecked1">Contest ID</label>
+            <label class="custom-control-label" for="defaultChecked1">Students Contest ID</label>
           </div>
           <input type="hidden" id="list_id" name="list_id">
           <button type="submit" class="btn btn-success btn-sm float-right"><i class="fa fa-check"></i> OK</button>
