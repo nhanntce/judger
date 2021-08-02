@@ -650,8 +650,8 @@ exports.add_class = function (req, res) {
         return
       }
 
-      if (!/^(FA|SP|SU)\d{2}[_][A-Z]{3}\d{3}[_][A-Z]{2}\d{4}$/.test(class_name.split('.')[0])) {
-        res.render('add-class.ejs', {teacher_role: req.session.teacher_role, data: [], xlData: "", message: "", error: "File name is not in format", class_name: class_name, role: req.session.role, user: req.session.user })
+      if (!/^(FA|SP|SU)\d{2}[_][A-Z]{3}\d{3}[_][A-Z]{2}\d{4}[.](xls|xlsx)$/.test(class_name)) {
+        res.render('add-class.ejs', {teacher_role: req.session.teacher_role, data: [], xlData: "", message: "", error: "File name is not follow format (Ex:SU21_PRO201_SE1302.xls)", class_name: class_name, role: req.session.role, user: req.session.user })
         return
       }
 
