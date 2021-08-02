@@ -139,7 +139,7 @@
         <div class="modal-body mx-3">
           <label>Name</label>
           <div class="form mb-3">
-            <input type="text" name="nameProb" class="form-control" required>
+            <input type="text" id="nameProb" name="nameProb" class="form-control" required>
           </div>
           <label>Problem</label>
           <div class="custom-file mb-3">
@@ -148,7 +148,7 @@
           </div>
           <label>Test case</label>
           <div class="custom-file mb-3">
-            <input type="file" class="custom-file-input" name="filetouploadTestcase" accept=".zip" required>
+            <input type="file" class="custom-file-input" id="filetouploadTestcase" name="filetouploadTestcase" accept=".zip" required>
             <label class="custom-file-label" for="customFile">Choose file</label>
           </div>
           <label>Limit Submission</label>
@@ -172,13 +172,11 @@
       <script>
          $(document).ready(function() {
         $('#addProblemForm').submit(function(e) {
-    var limitSud = $('#limitSud').val();
-    $(".error").remove();
-    if (limitSud < 0) {
-      
-      $('#limitSud').after('<span class="error">Limit Submission must be greater than 0 !</span>');
-      e.preventDefault();
-    }
+    var nameProblem = $('#nameProb').val();
+    var testCase = $('#filetouploadTestcase').val();
+    console.log("nameProblem");
+    console.log(nameProblem);
+    console.log(testCase);
     });
         });
     
@@ -217,20 +215,18 @@
           <button class="btn btn-deep-orange">Edit</button>
         </div>
       </form>
-      <script>
-         $(document).ready(function() {
-        $('#editSudForm').submit(function(e) {
-    var limitSudEdit = $('#limitSubEdit').val();
-    $(".error").remove();
-    if (limitSudEdit < 0) {
-      
-      $('#limitSubEdit').after('<span class="error">Limit Submission must be greater than 0 !</span>');
-      e.preventDefault();
-    }
-    });
-        });
+    //   <script>
+    //      $(document).ready(function() {
+    //     $('#editSudForm').submit(function(e) {
+    // vvar nameProblem = $('#nameProb').val();
+    // var testCase = $('#filetouploadTestcase').val();
+    // console.log("nameProblem");
+    // console.log(nameProblem);
+    // console.log(testCase);
+    // });
+    //     });
     
-        </script>
+    //     </script>
     </div>
   </div>
 </div> -->
