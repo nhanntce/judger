@@ -706,9 +706,9 @@ exports.create_class = function (req, res) {
     var email = post.Email.split(',')
     // var password = post.password
 
-    var sql = "INSERT INTO student_account(rollnumber, username, password, name, class, email) VALUES ";
+    var sql = "INSERT INTO student_account(rollnumber, name, class, email) VALUES ";
     for (let i = 0; i < RollNumber.length; i++) {
-      sql += "('" + RollNumber[i] + "','" + MemberCode[i] + "', MD5('123456'),'" + FullName[i] + "','" + class_name.split('.')[0] + "','" + email[i] +  "'),";
+      sql += "('" + RollNumber[i] + "','" + FullName[i] + "','" + class_name.split('.')[0] + "','" + email[i] +  "'),";
     }
     sql = sql.slice(0, -1)
     db.query(sql, function (err) {
