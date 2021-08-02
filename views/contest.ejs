@@ -208,7 +208,7 @@
             <div class="form col-6">
               <label class="font-weight-bold">Limit Submission</label>
               <div class="form">
-                <input type="number" id="limit_submission" name="limit_submission" class="form-control" value="10">
+                <input type="number" id="limit_submission" name="limit_submission" class="form-control" value="10" min="1">
               </div>  
             </div>
           </div>
@@ -255,8 +255,7 @@
                 check_comment_mode_div.style.display = "none";
                 has_check_comment.style.display = "none";
               }
-            }
-            
+            }            
             function checkCommentMode() {
               var v = check_comment_mode.value;
               if(v === "Fixed") {
@@ -298,6 +297,8 @@
             //add event
             check_comment_mode.addEventListener('change', checkCommentMode);
             penalty_mode.addEventListener('change', penaltyMode); 
+            
+
         </script>
         <script>
         console.log("block");
@@ -318,13 +319,27 @@
         <% } %>
          <!-- check validation form add contest -->
         <script>
+        document.addEventListener("DOMContentLoaded", function() {
+    var elements = document.getElementsByTagName("INPUT");
+    for (var i = 0; i < elements.length; i++) {
+        elements[i].oninvalid = function(e) {
+            e.target.setCustomValidity("");
+            if (!e.target.validity.valid) {
+                e.target.setCustomValidity("This field cannot be left blank");
+            }
+        };
+        elements[i].oninput = function(e) {
+            e.target.setCustomValidity("");
+        };
+    }
+})
          $(document).ready(function() {
         $('#form_contest').submit(function(e) {
     $(".error").remove();
     var contestName = $('#contest_name').val();
-    var regex = new RegExp('^[a-zA-Z0-9_]+$');
-            if ( !regex.test(contestName) ) {
-                $('#contest_name').after('<span class="error">Only enter number, character and _ (Ex: Demo_1) !</span>');
+    // var regex = new RegExp('^(FA|SP|SU)\d{2}[_][A-Z]{3}\d{3}[_][A-Z]{2}\d{4}$');
+            if ( !/^(FA|SP|SU)\d{2}[_][A-Z]{3}\d{3}[_][A-Z]{2}\d{4}[_][a-zA-Z0-9]$/.test(contestName) ) {
+                $('#contest_name').after('<span class="error">Contest name must be follow format (Ex: SU21_CPP201_SE1302_1) !</span>');
                 e.preventDefault();
             }
     var begin = $('#time_begin').val();

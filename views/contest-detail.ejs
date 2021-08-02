@@ -254,7 +254,7 @@
             <div class="form col-6">
               <label class="font-weight-bold">Limit Submission</label>
               <div class="form">
-                <input type="number" id="limit_submission" name="limit_submission" value="<%=data[0].limit_submission%>" class="form-control" >
+                <input type="number" id="limit_submission" name="limit_submission" value="<%=data[0].limit_submission%>" class="form-control" min="1">
               </div>  
             </div>
           </div>
@@ -302,7 +302,18 @@
                 has_check_comment.style.display = "none";
               }
             }
-            
+            function checkNulloption() {
+              if(check_comment.checked == false){
+                document.getElementById('percentage_accept').value = "";
+                document.getElementById('percentage_minus_point').value = "";
+              }
+              if(check_format.checked == false){
+                document.getElementById('format_minus_point').value = "";
+              }
+              if(check_plagiarism.checked == false){
+                document.getElementById('percentage_allow').value = "";
+              }
+            }
             function checkCommentMode() {
               var v = check_comment_mode.value;
               if(v === "Fixed") {
@@ -350,6 +361,7 @@
             checkFormat();
             checkPlagiarism();
             penaltyMode();
+            checkNulloption();
         </script>
         <script>
           $('#time_begin, #time_end').datetimepicker({
@@ -366,13 +378,27 @@
         </div>
       </form>
       <script>
+        document.addEventListener("DOMContentLoaded", function() {
+    var elements = document.getElementsByTagName("INPUT");
+    for (var i = 0; i < elements.length; i++) {
+        elements[i].oninvalid = function(e) {
+            e.target.setCustomValidity("");
+            if (!e.target.validity.valid) {
+                e.target.setCustomValidity("This field cannot be left blank");
+            }
+        };
+        elements[i].oninput = function(e) {
+            e.target.setCustomValidity("");
+        };
+    }
+})
          $(document).ready(function() {
         $('#editContestForm').submit(function(e) {
     $(".error").remove();
     var contestName = $('#contest_name').val();
-    var regex = new RegExp('^[a-zA-Z0-9_]+$');
-            if ( !regex.test(contestName) ) {
-                $('#contest_name').after('<span class="error">Only enter number, character and _ (Ex: Demo_1) !</span>');
+    // var regex = new RegExp('^[a-zA-Z0-9_]+$');
+            if ( !/^(FA|SP|SU)\d{2}[_][A-Z]{3}\d{3}[_][A-Z]{2}\d{4}[_][a-zA-Z0-9]$/.test(contestName) ) {
+                $('#contest_name').after('<span class="error">Contest name must be follow format (SU21_CPP201_SE1302) !</span>');
                 e.preventDefault();
             }
     var begin = $('#time_begin').val();
