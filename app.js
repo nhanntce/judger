@@ -191,7 +191,7 @@ app.get('/contest/add-class', (req, res) => {
     req.session.added = false
     message = "Add successfully!"
   }
-  res.render('add-class.ejs', { data: [], xlData: "", message: message, error: "", class_name: "", role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role })
+  res.render('add-class.ejs', { data: [], xlData: "", message: message, error: "", class_name: "", role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role, detail: true})
 })
 // Add class
 app.post('/contest/add-class/create', contest.create_class)
