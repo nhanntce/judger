@@ -258,7 +258,9 @@
                   <!-- score = 0 -->
                 <!-- } -->
                 <!-- check log file not includes python file -->
-                
+                if (penaltyMode == 'Hard' && score < 10) {
+                  score = 0
+                }
                 if(log_files[i].includes('py') == false) {
                   if (parseFloat(plagiarism) >= parseFloat(plagiarismAcp)) {
                     score = 0;
@@ -301,20 +303,12 @@
           for (let i = 0, l = log_files.length; i < l; ++i) {
               tmp = log_files[i].split('][')[log_files[i].split('][').length - 1].split('].')[0] //get name of problem
              
-                pen.push(tmp_pen[tmp]--)
+              pen.push(tmp_pen[tmp]--)
           }
           <!-- caculate the score with penaty -->
             if(penaltyMode == 'Easy') {
-              console.log('scoreee')
-              console.log(score)
-              console.log('tmp_maxtimes[i]')
-              console.log(tmp_maxtimes[i])
-              console.log('pen[i]')
-              console.log(pen[i])
               score = score * (tmp_maxtimes[i] - pen[i]) / tmp_maxtimes[i]
-            } else if (penaltyMode == 'Hard' && score < 10) {
-              score = 0
-            }
+            } 
             
           if(score < 0){
             score = 0;
@@ -323,7 +317,7 @@
           <%=score.toFixed(1)%>
         </td>
       </tr>
-      <div class="modal fade" id="myModal<%=i%>">
+      <div class="modal fade" id="myModal<%=i%>"> 
         <div class="modal-dialog modal-xl">
           <div class="modal-content">
             <div class="modal-header">

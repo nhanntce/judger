@@ -189,7 +189,9 @@ exports.load_rank = function (req, res) {
                 plagiarism[rollnum][prob] = tmpPlagiarism
                 point[rollnum][prob] = parseFloat(contents.split('\n')[0])
 
-
+                if (penaltyMode == 'Hard' && tmpScore < 10) {
+                  tmpScore = 0
+                }
                 // check the file log is not include the python file
                 if (!log_files[i].includes('py')) {
                   // check tick check plagiarism
@@ -215,10 +217,6 @@ exports.load_rank = function (req, res) {
                       tmpScore -= minusFormat;
                     }
                   }
-                }
-
-                if (penaltyMode == 'Hard' && tmpScore < 10) {
-                  tmpScore = 0
                 }
 
                 if (tmpScore < 0) {
@@ -247,7 +245,6 @@ exports.load_rank = function (req, res) {
                 if (penaltyMode == 'Easy') {
                   
                   // maxtimes[problem_files[j]] = penaltyLimited
-                  
                   point[results[i].rollnumber][problem_files[j]] = RoundAndFix(point[results[i].rollnumber][problem_files[j]] * (maxtimes[problem_files[j]] - times[results[i].rollnumber][problem_files[j]] + 1) / maxtimes[problem_files[j]], 1)
                 } else {
                   point[results[i].rollnumber][problem_files[j]] = RoundAndFix(point[results[i].rollnumber][problem_files[j]], 1)
