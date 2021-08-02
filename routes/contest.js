@@ -614,12 +614,12 @@ exports.load_class = function (req, res) {
     var sheet_name_list = workbook.SheetNames
     var xlData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]])
 
-    if (typeof xlData[0].RollNumber === "undefined" || typeof xlData[0].MemberCode === "undefined" || typeof xlData[0].FullName === "undefined") {
+    if (typeof xlData[0].RollNumber === "undefined" || typeof xlData[0].Class === "undefined" || typeof xlData[0].FullName === "undefined" || typeof xlData[0].Email === "undefined") {
       res.render('add-class.ejs', { data: [], xlData: "", message: "", error: "Invalid file excel", class_name: class_name, role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role })
     } else {
       if (req.session.sql_err) {
         req.session.sql_err = false
-        res.render('add-class.ejs', { data: [], xlData: xlData, message: "", error: "Duplicate student roll number", class_name: class_name, role: req.session.role, user: req.session.user,teacher_role: req.session.teacher_role })
+        res.render('add-class.ejs', { data: [], xlData: xlData, message: "", error: "Duplicate student roll number or email", class_name: class_name, role: req.session.role, user: req.session.user,teacher_role: req.session.teacher_role })
       } else {
         res.render('add-class.ejs', { data: [], xlData: xlData, message: "Load students successfully!", error: "", class_name: class_name, role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role })
       }
@@ -700,7 +700,6 @@ exports.create_class = function (req, res) {
   if (req.method == "POST") {
     var post = req.body
     var RollNumber = post.RollNumber.split(',')
-    var MemberCode = post.MemberCode.split(',')
     var FullName = post.FullName.split(',')
     var class_name = post.class_name
     var email = post.Email.split(',')
