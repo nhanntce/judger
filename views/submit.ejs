@@ -350,10 +350,20 @@
               <td>
                 <%=rescheck[i]%>
               </td> 
+              <%
+                if(penaltyMode == "Hard") {
+              %>
+              <td class="text-success font-weight-bold">
+                OK
+              </td>
+              <%
+                } else {
+              %>
               <td class="<%=pen[i]==0?'text-success':'text-danger'%> font-weight-bold">
                 <%=pen[i]==0 ? 'OK' : '-'+ (pen[i] / tmp_maxtimes[i]*100).toFixed(0) +'%'%>
               </td>
               <%
+                }
                 if (format[i] == 'Compile Error') {
               %>
               <td class="text-danger font-weight-bold">
@@ -434,10 +444,13 @@
                 }
               %>
               <%
-                if(penaltyMode == 'Hard' && score[i] < 10) {
+                var hardScore = parseFloat(logcontent.split('\n')[0])
+                
+                if(penaltyMode == 'Hard' && hardScore < 10) {
                   score[i] = 0
+                  console.log(score[i])
                 }
-                else if (parseFloat(plagiarism[i]) >= parseFloat(plagiarismAcp) ) {
+                if (parseFloat(plagiarism[i]) >= parseFloat(plagiarismAcp) ) {
                   score[i] = 0
                 } else {
 
@@ -451,8 +464,10 @@
                   if(format[i] == 'No'){
                     score[i] = score[i] - minusFormat
                   }
+                  if(penaltyMode == 'Easy') {
+                    score[i] = score[i] * (tmp_maxtimes[i] - pen[i]) / tmp_maxtimes[i]
+                  } 
                   
-                  score[i] = score[i] * (tmp_maxtimes[i] - pen[i]) / tmp_maxtimes[i]
                 }
               %>
               <td>
@@ -547,6 +562,7 @@
       }
       if (check) {
         datatableSubmission.ajax.reload();
+        location.reload();
       } else {
         $('#tenbai').change();
         return clearInterval(x)

@@ -199,7 +199,10 @@ exports.submission_realtime = function (req, res) {
             // check the file log is not include the python file
             if (!log_files[i].includes('py')) {
               // check penalty mode is easy 
-              
+
+              if (penaltyMode == 'Hard' && score[tmp] < 10) {
+                score[tmp] = 0
+              }
               if (checkPlagiarism == 'true') {
                 if (parseFloat(plagiarism) >= parseFloat(plagiarismAcp)) {
                   score[tmp] = 0
@@ -225,9 +228,6 @@ exports.submission_realtime = function (req, res) {
               }
             }
 
-            if (penaltyMode == 'Hard' && score[tmp] < 10) {
-              score[tmp] = 0
-            }
 
             if (score[tmp] < 0) {
               score[tmp] = 0;
@@ -304,20 +304,25 @@ exports.submission_realtime = function (req, res) {
       // Calculate penalty: for more than 1 submit
       // var pen = req.session.times[tmp]
       var pen = req.session.times[tmp]
-      
+
       // check mode of penalty 
-      if(penaltyMode == 'Easy') {
-      
+      if (penaltyMode == 'Easy') {
+
         // tb.push("<div class='text-right'>" + RoundAndFix(score[tmp] * (pen + 1) / req.session.maxtimes[tmp], 1).toFixed(1) + "</div>")
         tb.push("<div class='text-right'>" + RoundAndFix(score[tmp] * (pen + 1) / penaltyLimited, 1).toFixed(1) + "</div>")
-      } else { 
+      } else {
         tb.push("<div class='text-right'>" + RoundAndFix(score[tmp], 1).toFixed(1) + "</div>")
       }
 
       if (!score[tmp]) score[tmp] = 0
-      
+
       // total += RoundAndFix(score[tmp] * (pen + 1) / req.session.maxtimes[tmp], 1)
-      total += RoundAndFix(score[tmp] * (pen + 1) / penaltyLimited, 1)
+      // check mode of penalty 
+      if (penaltyMode == 'Easy') {
+        total += RoundAndFix(score[tmp] * (pen + 1) / penaltyLimited, 1)
+      } else {
+        total += RoundAndFix(score[tmp], 1)
+      }
       obj.data.push(tb)
     }
     tb = new Array()
