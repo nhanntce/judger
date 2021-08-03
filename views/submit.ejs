@@ -315,7 +315,14 @@
               <th class="font-weight-bold">Time</th>
               <th class="font-weight-bold">Memory</th>
               <th class="font-weight-bold">TestCase</th>
+              <%
+              if(penaltyMode == "Easy") {
+              %>
               <th class="font-weight-bold">Penalty</th>
+              <%
+              }
+              %>
+              
               <th class="font-weight-bold">Format</th>
               <th class="font-weight-bold">Comment</th>
               <th class="font-weight-bold">Plagiarism</th>
@@ -351,19 +358,23 @@
                 <%=rescheck[i]%>
               </td> 
               <%
-                if(penaltyMode == "Hard") {
+                if(penaltyMode == "Easy") {
               %>
-              <td class="text-success font-weight-bold">
+              <!-- <td class="text-success font-weight-bold">
                 OK
-              </td>
-              <%
-                } else {
-              %>
+              </td> -->
               <td class="<%=pen[i]==0?'text-success':'text-danger'%> font-weight-bold">
                 <%=pen[i]==0 ? 'OK' : '-'+ (pen[i] / tmp_maxtimes[i]*100).toFixed(0) +'%'%>
               </td>
               <%
-                }
+                } 
+                <!-- else { -->
+              %>
+              <!-- <td class="<%=pen[i]==0?'text-success':'text-danger'%> font-weight-bold">
+                <%=pen[i]==0 ? 'OK' : '-'+ (pen[i] / tmp_maxtimes[i]*100).toFixed(0) +'%'%>
+              </td> -->
+              <%
+                <!-- } -->
                 if (format[i] == 'Compile Error') {
               %>
               <td class="text-danger font-weight-bold">
@@ -562,9 +573,10 @@
       }
       if (check) {
         datatableSubmission.ajax.reload();
-        location.reload();
+        
       } else {
         $('#tenbai').change();
+        // location.reload();
         return clearInterval(x)
       }
     }, 2000);
