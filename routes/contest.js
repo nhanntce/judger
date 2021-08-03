@@ -615,13 +615,13 @@ exports.load_class = function (req, res) {
     var xlData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]])
 
     if (typeof xlData[0].RollNumber === "undefined" || typeof xlData[0].Class === "undefined" || typeof xlData[0].FullName === "undefined" || typeof xlData[0].Email === "undefined") {
-      res.render('add-class.ejs', { data: [], xlData: "", message: "", error: "Invalid file excel", class_name: class_name, role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role })
+      res.render('add-class.ejs', { data: [], xlData: "", message: "", error: "Invalid file excel", class_name: class_name, role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role, detail: true })
     } else {
       if (req.session.sql_err) {
         req.session.sql_err = false
-        res.render('add-class.ejs', { data: [], xlData: xlData, message: "", error: "Duplicate student roll number or email", class_name: class_name, role: req.session.role, user: req.session.user,teacher_role: req.session.teacher_role })
+        res.render('add-class.ejs', { data: [], xlData: xlData, message: "", error: "Duplicate student roll number or email", class_name: class_name, role: req.session.role, user: req.session.user,teacher_role: req.session.teacher_role, detail: false })
       } else {
-        res.render('add-class.ejs', { data: [], xlData: xlData, message: "Load students successfully!", error: "", class_name: class_name, role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role })
+        res.render('add-class.ejs', { data: [], xlData: xlData, message: "Load students successfully!", error: "", class_name: class_name, role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role, detail: false })
       }
     }
   } catch (error) {
@@ -646,12 +646,12 @@ exports.add_class = function (req, res) {
       var class_name = files.filetoupload.name
 
       if (class_name == "") { // check if dont choose file
-        res.render('add-class.ejs', {teacher_role: req.session.teacher_role, data: [], xlData: "", message: "", error: "Input must be not empty. Please choose a file!", class_name: class_name, role: req.session.role, user: req.session.user })
+         res.render('add-class.ejs', {teacher_role: req.session.teacher_role, data: [], xlData: "", message: "", error: "Input must be not empty. Please choose a file!", class_name: class_name, role: req.session.role, user: req.session.user, detail: true })
         return
       }
 
       if (!/^(FA|SP|SU)\d{2}[_][A-Z]{3}\d{3}[_][A-Z]{2}\d{4}[.](xls|xlsx)$/.test(class_name)) {
-        res.render('add-class.ejs', {teacher_role: req.session.teacher_role, data: [], xlData: "", message: "", error: "File name is not follow format (Ex:SU21_PRO201_SE1302.xls)", class_name: class_name, role: req.session.role, user: req.session.user })
+        res.render('add-class.ejs', {teacher_role: req.session.teacher_role, data: [], xlData: "", message: "", error: "File name is not follow format (Ex:SU21_PRO201_SE1302.xls)", class_name: class_name, role: req.session.role, user: req.session.user, detail: true })
         return
       }
 
@@ -660,7 +660,7 @@ exports.add_class = function (req, res) {
       db.query(sql, [class_name.split('.')[0]], function (err, results) {
         if (err) { logger.error(err); res.redirect("/error"); return }
         if (results.length == 1) { // if class is exist, return error
-          res.render('add-class.ejs', {teacher_role: req.session.teacher_role, data: [], xlData: "", message: "", error: "Sorry, class " + class_name.split('.')[0] + " is exist!", class_name: class_name, role: req.session.role, user: req.session.user })
+          res.render('add-class.ejs', {teacher_role: req.session.teacher_role, data: [], xlData: "", message: "", error: "Sorry, class " + class_name.split('.')[0] + " is exist!", class_name: class_name, role: req.session.role, user: req.session.user, detail: true })
           return
         }
         // get file upload and rewrite it 
@@ -717,7 +717,7 @@ exports.create_class = function (req, res) {
       } else {
         logger.info(RollNumber.length + " students has added to database: " + RollNumber)
         req.session.added = true
-        res.redirect('/contest/add-class')
+        res.redirect('/admin/student');
       }
     })
 

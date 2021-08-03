@@ -17,7 +17,7 @@ exports.rank_time = function (req, res) {
   if (req.session.teacher_role <= 1) {
     sql = "SELECT contest_id, contest_name, time_begin, time_end FROM contest WHERE deleted=0"
   } else {
-    sql = "SELECT contest.contest_id, contest.contest_name, contest.time_begin, contest.time_end FROM contest INNER JOIN contest_owner ON contest.contest_id=contest_owner.contest_id WHERE contest_owner.teacher_id='" + userId + "' AND deleted=0"
+    sql = "SELECT contest_id, contest_name, time_begin, time_end FROM contest WHERE teacher_id='"+ userId +"' AND deleted=0"
   }
   db.query(sql, function (err, results) {
     if (err) { logger.error(err); res.redirect("/error"); return }
