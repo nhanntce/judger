@@ -1,5 +1,6 @@
 const ValidateDate = require('./tool').ValidateDate
 const formatTime = require('./tool').formatTime
+const formatDate = require('./tool').formatDate
 const getFolders = require('./tool').getFolders
 const extract = require('extract-zip')
 const XLSX = require('xlsx')
@@ -340,7 +341,7 @@ exports.contest_detail = function (req, res) {
   //   "INNER JOIN student_account ON student_account.contest_id=contest.contest_id " +
   //   "WHERE contest.contest_id=?"
   var sql = "SELECT student_account.userId, student_account.rollnumber, student_account.name, " +
-    "student_account.class, contest.contest_id, contest.contest_name,contest.time_begin,contest.time_end, " +
+    " contest.contest_id, contest.contest_name,contest.time_begin,contest.time_end, " +
     "contest.language FROM contest, student_account, contest_student WHERE contest_student.student_id " +
     "= student_account.id AND contest_student.contest_id = ? AND contest.contest_id = contest_student.contest_id AND contest_student.status = 1";
   db.query(sql, [contest_id], function (err, results) {
@@ -407,10 +408,8 @@ exports.delete_student = function (req, res) {
     var contest_name = post.contest_name.replace(/ /g, '-')
     if (list_rollnumber != "") { // // if has student in deleted list
       var list = list_rollnumber.split(",")
-      var sql = "UPDATE student_account SET contest_id=0 WHERE "
       // update contest_id=0 in student_account
       for (let i = 0, l = list.length; i < l; ++i) {
-        sql += "rollnumber='" + list[i] + "' OR "
         fs.rename(storage.BAILAM + contest_name + '/' + list[i], storage.BAILAM + contest_name + '/$' + list[i], function (err) {
           if (err) { 
             logger.error(err); res.redirect("/error"); return }
@@ -419,30 +418,26 @@ exports.delete_student = function (req, res) {
           sql_contest_student = "SELECT `id` FROM `student_account` WHERE rollnumber = ?";
           db.query(sql_contest_student, [list[i]], (errSelect, resSelect) => {
             if (errSelect) { logger.error(errSelect); res.redirect("/error"); return; }
-              //insert student id and contest id into contest_student NhanNT
+              //update student id and contest id into contest_student NhanNT
               sql_contest_student = 'UPDATE `contest_student` SET `status`= 0 WHERE student_id = ? AND contest_id = ?';
               db.query(sql_contest_student, [resSelect[0].id, contest_id], (errInsert, resInsert) => {
                 if (errInsert) { logger.error(errInsert); res.redirect("/error"); return; }
               });
           });
       }
-      sql = sql.slice(0, -4)
-      db.query(sql, function (err) {
-        if (err) { logger.error(err); res.redirect("/error"); return }
         req.session.deleted = true
         logger.info(list.length + " students in contest " + contest_id + " has deleted: " + list)
         sleep(500).then(() => {
           fs.writeFileSync(storage.EVENT + 'workspaceEvent/workspaceEvent.txt', Math.random(1000) + "changed");
           res.redirect("/contest/detail?contest_id=" + contest_id)
         })
-      })
-
     }
   } else {
     res.redirect("/error")
     return
   }
 }
+
 //---------------------------------load student----------------------------------
 /**
  * Load student have not entered class yet (load all student have contest_id = 0 of a class identiied)
@@ -465,49 +460,107 @@ exports.load_student = function (req, res) {
     req.session.added = false
     message = "Succesfully! Students have been added."
   }
-  var class_name = req.query.class_name
-  var contest_id = req.query.contest_id
-  var sql = "SELECT rollnumber, name, class FROM student_account WHERE class=? and contest_id=0"
-  db.query(sql, [class_name], function (err, results) {
-    if (err) { logger.error(err); res.redirect("/error"); return }
-    // if (results.length == 0) { // if query empty
-    //   sql = "SELECT rollnumber FROM student_account WHERE class=? LIMIT 1"
-    //   db.query(sql, [class_name], function (err, results) {
-    //     if (err) { logger.error(err); res.redirect("/error"); return }
-    //     if (results.length == 0) {
-
-    //       error = "Sorry, the system cannot find class " + class_name
-    //       res.render('add-student.ejs', { list_class : [], data: results, contest_id: contest_id, message: message, error: error, warning: warning, class_name: class_name, role: req.session.role, user: req.session.user })
-    //       return
-    //     } else {
-    //       warning = "All student are in contest"
-    //       res.render('add-student.ejs', { list_class:[], data: [], contest_id: contest_id, message: message, error: error, warning: warning, class_name: class_name, role: req.session.role, user: req.session.user })
-    //       return
-    //     }
-    //   })
-    // } else {
+  var class_id = req.query.class_name;
+  var class_name;
+  var contest_id = req.query.contest_id;
+  var time_begin = req.query.time_begin;
+  var time_end = req.query.time_end;
+  var time_begin_format =  formatDate(time_begin);
+  var time_end_format =  formatDate(time_end);
+  console.log(class_id);
+  // var sql = "SELECT rollnumber, name, class FROM student_account WHERE class=? and contest_id=0"
+  var sql = "SELECT student_account.id, student_account.rollnumber, student_account.name, class.class_name" + 
+  " FROM student_account, class, class_student WHERE class.id =? and class.id = class_student.class_id and student_account.id = class_student.student_id";
+  db.query(sql, [class_id], function (err, results) {
+    var resultsFinal = [];
+    if (err) { logger.error(err); 
+      res.redirect("/error"); return }
+    if(results.length == 0) {
       // List all class
-      var sql = "SELECT DISTINCT class FROM `student_account` WHERE contest_id = 0"
+      var sql = "SELECT `id`, `class_name` FROM `class`";
       var listClass = [];
       db.query(sql, function (err, listClassDB) {
         if (err) { logger.error(err); res.redirect("/error"); return; }
          for(var i = 0, len = listClassDB.length; i < len; i++) {
-          listClass.push(listClassDB[i].class);
+          if(listClassDB[i].id == class_id)
+            class_name = listClassDB[i].class_name;
+          listClass.push({
+            class_name: listClassDB[i].class_name,
+            class_id: listClassDB[i].id 
+          });
          }
          res.render('add-student.ejs', { 
            list_class: listClass, 
-           data: results, 
+           data: resultsFinal, 
+           contest_id: contest_id, 
+           message: message, 
+           error: error, 
+           warning: "There is no student in class", 
+           class_name: class_name,
+           class_id: class_id,
+           role: req.session.role, 
+           user: req.session.user, 
+           teacher_role: req.session.teacher_role,
+           time_begin: time_begin,
+           time_end: time_end 
+         });
+      })
+      return;
+    }
+      var sqlContest = "SELECT contest_student.student_id, contest.`contest_id`, contest.`contest_name`, " + 
+        " contest.`time_begin`, contest.`time_end` FROM `contest`, contest_student WHERE " +
+        " contest.deleted = 0 AND contest_student.status = 1 AND (contest_student.student_id = " + results[0].id;
+      for(let i = 1, len = results.length; i < len; i++) {
+        sqlContest += " OR contest_student.student_id = " + results[i].id;
+      }
+      sqlContest += ")";
+     db.query(sqlContest, function(errContest, resultContests){
+        for(let i = 0, len = results.length; i < len; i++) {
+          var isValidStudent = true;
+          for(let j = 0, len1 = resultContests.length; j < len1; j++){
+            if(results[i].id === resultContests[j].student_id){
+              var time_begin_db = formatDate(dayjs(resultContests[j].time_begin).format('DD-MM-YYYY HH:mm'));
+              var time_end_db = formatDate(dayjs(resultContests[j].time_end).format('DD-MM-YYYY HH:mm'));
+              if(time_end_format < time_begin_db && time_begin_format > time_end_db) {
+              } else {
+                isValidStudent = false;
+              }
+            }
+          }
+          if(isValidStudent) {
+            resultsFinal.push(results[i]);
+          }
+        }
+        
+        // List all class
+      var sql = "SELECT `id`, `class_name` FROM `class`";
+      var listClass = [];
+      db.query(sql, function (err, listClassDB) {
+        if (err) { logger.error(err); res.redirect("/error"); return; }
+         for(var i = 0, len = listClassDB.length; i < len; i++) {
+          if(listClassDB[i].id == class_id)
+            class_name = listClassDB[i].class_name;
+          listClass.push({
+            class_name: listClassDB[i].class_name,
+            class_id: listClassDB[i].id 
+          });
+         }
+         res.render('add-student.ejs', { 
+           list_class: listClass, 
+           data: resultsFinal, 
            contest_id: contest_id, 
            message: message, 
            error: error, warning: warning, 
-           class_name: class_name, 
+           class_name: class_name,
+           class_id: class_id,
            role: req.session.role, 
            user: req.session.user, 
-           teacher_role: req.session.teacher_role 
+           teacher_role: req.session.teacher_role,
+           time_begin: time_begin,
+           time_end: time_end 
          });
       })
-      
-    // }
+     });
   })
 
 }
@@ -530,15 +583,17 @@ exports.add_student = function (req, res) {
     var post = req.body
     var list_rollnumber = post.list_rollnumber
     var contest_id = post.contest_id
-    var class_name = post.class_name
-
+    var class_name = post.class_id
+    var time_begin = post.time_begin;
+    var time_end = post.time_end;
+    console.log(time_begin);
+    console.log(time_end);
     if (list_rollnumber != "") { // if has student in added list
       var sql = "SELECT contest_name FROM contest WHERE contest_id=?"
       db.query(sql, [contest_id], function (err, results) {
         if (err || results.length == 0) { logger.error(err); res.redirect("/error"); return }
         var contest_name = results[0].contest_name.replace(/ /g, '-')
         var list = list_rollnumber.split(",")
-        var sql = "UPDATE student_account SET contest_id=? WHERE "
         var student_name = "";
         var sql_contest_student = '';
         var data_student_name = "";
@@ -574,16 +629,14 @@ exports.add_student = function (req, res) {
             });
           });
           //update contest_id in student_account
-          sql += "rollnumber='" + list[i] + "' OR "
         }
         sql = sql.slice(0, -4)
-        db.query(sql, [contest_id], function (err) {
-          if (err) { logger.error(err); res.redirect("/error"); return }
-          logger.info(list.length + " students in contest " + contest_id + " has added: " + list)
-          sleep(500).then(() => {
-            fs.writeFileSync(storage.EVENT + 'workspaceEvent/workspaceEvent.txt', results[0].contest_name + student_name);
-            res.redirect("/contest/load-student?class_name=" + class_name + "&contest_id=" + contest_id)
-          })
+        if (err) { logger.error(err); res.redirect("/error"); return }
+        logger.info(list.length + " students in contest " + contest_id + " has added: " + list)
+        sleep(500).then(() => {
+          fs.writeFileSync(storage.EVENT + 'workspaceEvent/workspaceEvent.txt', results[0].contest_name + student_name);
+          res.redirect("/contest/load-student?class_name=" + class_name +
+           "&contest_id=" + contest_id + "&time_begin=" + time_begin + "&time_end=" + time_end)
         })
       })
       req.session.added = true
@@ -619,7 +672,7 @@ exports.load_class = function (req, res) {
     } else {
       if (req.session.sql_err) {
         req.session.sql_err = false
-        res.render('add-class.ejs', { data: [], xlData: xlData, message: "", error: "Duplicate student roll number or email", class_name: class_name, role: req.session.role, user: req.session.user,teacher_role: req.session.teacher_role, detail: false })
+        res.render('add-class.ejs', { data: [], xlData: xlData, message: "", error: "Duplicate student roll number or email", class_name: class_name, role: req.session.role, user: req.session.user,teacher_role: req.session.teacher_role, detail: true })
       } else {
         res.render('add-class.ejs', { data: [], xlData: xlData, message: "Load students successfully!", error: "", class_name: class_name, role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role, detail: false })
       }

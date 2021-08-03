@@ -65,3 +65,13 @@ exports.RoundAndFix = function(n, d) {
   var m = Math.pow(10, d);
   return Math.round(n * m) / m;
 }
+
+exports.formatDate = function(date) {
+  var y, m, d, h, mi;
+  y = date.split(' ')[0].split('-')[2];
+  m = date.split(' ')[0].split('-')[1];
+  d = date.split(' ')[0].split('-')[0];
+  h = date.split(' ')[1].split(':')[0];
+  mi = date.split(' ')[1].split(':')[1];
+  return new Date(y, m - 1, d, h, mi, '00');
+}
