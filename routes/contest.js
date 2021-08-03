@@ -985,3 +985,11 @@ function checkTestcase(dir, req) {
     req.session.upload_err = true
   }
 }
+exports.contestAll = function (req, res) {
+  var sql = ""
+    sql = "SELECT `contest_name`FROM `contest`"
+  db.query(sql, function (err, results) {
+    if (err) { logger.error(err); res.redirect("/error"); return }
+    res.send({ data: results })
+  })
+}
