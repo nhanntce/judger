@@ -609,6 +609,10 @@ exports.load_class = function (req, res) {
   try {
     //read file excel
     var class_name = req.query.class_name
+    var other_class_name = req.query.other_class_name
+    if (other_class_name != "") {
+      class_name = other_class_name;
+    }
     var workbook = XLSX.readFile(storage.EXCEL + class_name)
     // var workbook = XLSX.readFile(storage.EXCEL + class_name + '.xls')
     var sheet_name_list = workbook.SheetNames
@@ -656,15 +660,27 @@ exports.add_class = function (req, res) {
       }
 
       // check class is exist
-      var sql = "SELECT rollnumber FROM student_account WHERE class=? LIMIT 1"
-      db.query(sql, [class_name.split('.')[0]], function (err, results) {
+      var splitClassname = class_name.split('.')[0].split('_');
+      var semester = splitClassname[0]
+      var subject = splitClassname[1]
+      var className = splitClassname[2]
+      var sql = " SELECT semester, subject, class_name FROM class WHERE semester=? and subject=? and class_name=? "
+      var newfile = "";
+
+      db.query(sql, [semester, subject, className], (err, results) => {
         if (err) { logger.error(err); res.redirect("/error"); return }
-        if (results.length == 1) { // if class is exist, return error
-          res.render('add-class.ejs', {teacher_role: req.session.teacher_role, data: [], xlData: "", message: "", error: "Sorry, class " + class_name.split('.')[0] + " is exist!", class_name: class_name, role: req.session.role, user: req.session.user, detail: true })
-          return
+        if (results.length == 0) { // if class is not exist
+          // res.render('add-class.ejs', {teacher_role: req.session.teacher_role, data: [], xlData: "", message: "", error: "Sorry, class " + class_name.split('.')[0] + " is exist!", class_name: class_name, role: req.session.role, user: req.session.user, detail: true })
+          // return
+          var sqlCreateClass = " INSERT INTO `class`(`semester`, `subject`, `class_name`) VALUES (?,?,?) ";
+          db.query(sqlCreateClass, [semester, subject, className], (err) => {
+            if (err) { logger.error(err); res.redirect("/error"); return }
+          });
+          newfile = class_name;
+        } else {
+          newfile = class_name.split('.')[0] + "_" + Math.random() + "." + class_name.split('.')[1];
         }
         // get file upload and rewrite it 
-        var newfile = class_name
         var oldpath = files.filetoupload.path
         var newpath = storage.EXCEL + newfile
         fs.readFile(oldpath, function (err, data) {
@@ -679,10 +695,10 @@ exports.add_class = function (req, res) {
           })
           sleep(500).then(() => {
             logger.info("Load file excel " + path.basename(newpath))
-            res.redirect("/contest/load-class?class_name=" + class_name)
+            res.redirect("/contest/load-class?class_name=" + class_name + "&other_class_name=" + newfile)
           })
-        })
-      })
+        });
+      });
     })
   } else {
     res.redirect("/error")
@@ -703,24 +719,42 @@ exports.create_class = function (req, res) {
     var FullName = post.FullName.split(',')
     var class_name = post.class_name
     var email = post.Email.split(',')
-    // var password = post.password
 
-    var sql = "INSERT INTO student_account(rollnumber, name, class, email) VALUES ";
+    var sql = "INSERT INTO student_account(rollnumber, name, email) VALUES ";
+
     for (let i = 0; i < RollNumber.length; i++) {
-      sql += "('" + RollNumber[i] + "','" + FullName[i] + "','" + class_name.split('.')[0] + "','" + email[i] +  "'),";
+      sql += "('" + RollNumber[i] + "','" + FullName[i] + "','" + email[i] +  "'),";
     }
-    sql = sql.slice(0, -1)
+    sql = sql.slice(0, -1);
+    sql += " ON DUPLICATE KEY UPDATE rollnumber = VALUES(rollnumber)";
+
     db.query(sql, function (err) {
       if (err) {
         req.session.sql_err = true
         res.redirect("/contest/load-class?class_name=" + class_name)
       } else {
-        logger.info(RollNumber.length + " students has added to database: " + RollNumber)
-        req.session.added = true
-        res.redirect('/admin/student');
+        var splitClassname = class_name.split('_');
+        var semester = splitClassname[0]
+        var subject = splitClassname[1]
+        var className = splitClassname[2].split('.')[0]
+        var ClassID = 0;
+
+        var tmpSql2 = "SELECT `id` FROM `class` WHERE semester=? and subject=? and class_name=?";
+        db.query(tmpSql2, [semester, subject, className], (err, resSelectClassId)=> {
+          if(err) { logger.error(err); res.redirect("/error"); return }
+          ClassID = resSelectClassId[0].id;
+          var callProcedure = "";
+          for (let i = 0; i < RollNumber.length; i++) {
+            callProcedure = "CALL AddClassStudent('" + RollNumber[i] + "'," +  ClassID + ")";
+            db.query(callProcedure, (err) => {
+              if(err) { logger.error(err); res.redirect("/error"); return }
+            }); 
+          }
+          req.session.added = true
+          res.redirect('/admin/student');
+        })
       }
     })
-
   } else {
     res.redirect("/error")
     return
