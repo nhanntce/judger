@@ -420,14 +420,11 @@
     d2 = end.split(' ')[0].split('-')[0];
     h2 = end.split(' ')[1].split(':')[0];
     mi2 = end.split(' ')[1].split(':')[1];
-    var timeEnd = new Date(y2, m2 - 1, d2, h2, mi2,'00')
-    // console.log(timeBegin)
-    // console.log(timeEnd)
+    var timeEnd = new Date(y2, m2 - 1, d2, h2, mi2,'00')    
     if(timeBegin > timeEnd){
       $('#time_end').after('<span class="error">End time must be greater than Start time !</span>');
       e.preventDefault();
     }
-   
   });
         });
     

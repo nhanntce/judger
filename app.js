@@ -221,6 +221,8 @@ app.post('/contest/add-problem/add', contest.add_problem_testcase)
 app.post('/contest/add-problem/edit', contest.edit_problem_testcase)
 // delete problem and testcase
 app.post('/contest/add-problem/delete', contest.delete_problem_testcase)
+//get All contest
+app.get('/contest/contest-all', contest.contestAll)
 // rank
 app.get('/rank', (req, res) => {
   var userId = req.session.userId
