@@ -148,13 +148,21 @@ exports.create_student = function (req, res) {
   }
 }
 //-----------------------------------------------Edit a student account------------------------------------------------------
+/**
+ * Edit by DangVTH
+ * Edit a student 
+ * Then, redirect to admin/student 
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+*/
 exports.edit_student = function (req, res) {
   if (req.method == "POST") {
     var post = req.body
     var id = post.edit_id
     var rollnumber = post.edit_rollnumber
     var name = post.edit_name
-    var classname = post.edit_class
+    var classID = post.edit_class
     var email = post.edit_email
     // var username = post.edit_username
     // var password = post.edit_password
@@ -167,13 +175,24 @@ exports.edit_student = function (req, res) {
     //   return
     // }
     // var hash = crypto.createHash('md5').update(password).digest("hex")
-    var sql = "UPDATE student_account SET rollnumber=?,email=?,name=?,class=?,contest_id=?,ip=?,timeout='" + formatTime(timeout) + "',islogin=? WHERE userId=?"
-    db.query(sql, [rollnumber, email, name, classname, contest_id, ip, islogin, id], function (err) {
+    var sql = "UPDATE student_account SET rollnumber=?,email=?,name=?,contest_id=?,ip=?,timeout='" + formatTime(timeout) + "',islogin=? WHERE userId=?"
+    db.query(sql, [rollnumber, email, name, contest_id, ip, islogin, id], function (err) {
       if (err) {
+      	req.session.sql_err = true
         res.redirect("/admin/student")
       } else {
         logger.info(sql)
-        res.redirect('/admin/student')
+        var sql = "UPDATE class_student SET class_id=? WHERE student_id=?" 
+        db.query(sql, [classID, id], function (err) {
+        	if (err) {
+		      	req.session.sql_err = true
+		        res.redirect("/admin/student")
+		    } else {
+	        	req.session.updated = true
+	        	res.redirect('/admin/student')
+       		}
+        })
+        
       }
     })
 
