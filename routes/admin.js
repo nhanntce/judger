@@ -48,7 +48,7 @@ exports.admin_student = function (req, res) {
     req.session.added = false
     message = "Succesfully! Students have been added."
   }
-  res.render('admin-student.ejs', { message: message, error: error})
+  res.render('admin-student.ejs', { message: message, error: error, teacher_role: req.session.teacher_role})
 }
 
 /**
@@ -172,7 +172,7 @@ exports.edit_student = function (req, res) {
 }
 //-----------------------------------------------reset student ip, timeout------------------------------------------------------
 /**
- * If checkbox Contest ID is checked => Reset student ip, timeout, and contest id 
+ * Reset student ip, timeout
  * @param {*} req 
  * @param {*} res 
  * @returns 
@@ -182,11 +182,11 @@ exports.reset_student = function (req, res) {
     var post = req.body
     var list_id = post.list_id.split(",")
     var sql = ""
-    if (post.contest_id == "on") {
-      sql = "UPDATE student_account SET contest_id='0',ip='1',timeout='" + new Date().toJSON().slice(0, 10) + "',islogin='0' WHERE "
-    } else {
-      sql = "UPDATE student_account SET ip='1',timeout='" + new Date().toJSON().slice(0, 10) + "',islogin='0' WHERE "
-    }
+    // if (post.contest_id == "on") {
+    //   sql = "UPDATE student_account SET contest_id='0',ip='1',timeout='" + new Date().toJSON().slice(0, 10) + "',islogin='0' WHERE "
+    // } else {
+    sql = "UPDATE student_account SET ip='1',timeout='" + new Date().toJSON().slice(0, 10) + "',islogin='0' WHERE "
+    // }
     for (let i = 0; i < list_id.length; ++i) {
       sql += "userId='" + list_id[i] + "' OR "
     }
