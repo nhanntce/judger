@@ -330,18 +330,30 @@
         };
         elements[i].oninput = function(e) {
             e.target.setCustomValidity("");
-        };
-    }
-})
-         $(document).ready(function() {
-        $('#form_contest').submit(function(e) {
-    $(".error").remove();
+            };
+          }
+      });      
+  $(document).ready(function() {
+  $.get("contest/contest-all", function(data, status){
+  $('#form_contest').submit(function(e) {
+  $(".error").remove();
     var contestName = $('#contest_name').val();
-    // var regex = new RegExp('^(FA|SP|SU)\d{2}[_][A-Z]{3}\d{3}[_][A-Z]{2}\d{4}$');
-            if ( !/^(FA|SP|SU)\d{2}[_][A-Z]{3}\d{3}[_][A-Z]{2}\d{4}[_][a-zA-Z0-9]$/.test(contestName) ) {
-                $('#contest_name').after('<span class="error">Contest name must be follow format (Ex: SU21_CPP201_SE1302_1) !</span>');
-                e.preventDefault();
-            }
+        if ( !/^(FA|SP|SU)\d{2}[_][A-Z]{3}\d{3}[_][A-Z]{2}\d{4}[_][a-zA-Z0-9]$/.test(contestName) ) {
+          $('#contest_name').after('<span class="error">Contest name must be follow format (Ex: SU21_CPP201_SE1302_1) !</span>');
+          e.preventDefault();
+        }
+        let isDuplicate = false    
+    var allContest = [];
+    var contestName1 = $('#contest_name').val();
+        for (let i = 0, l = data.data.length; i < l; ++i){
+            if(contestName1 === data.data[i].contest_name){
+              $('#contest_name').after('<span class="error">Contest name already !</span>');
+              isDuplicate = true
+          }        
+        }
+    if (isDuplicate){
+    e.preventDefault();
+      }
     var begin = $('#time_begin').val();
     var end = $('#time_end').val();
     var y1, m1, d1, h1, mi1;
@@ -359,9 +371,6 @@
     mi2 = end.split(' ')[1].split(':')[1];
     var timeEnd = new Date(y2, m2 - 1, d2, h2, mi2,'00')
     var currentTime = new Date()
-    // console.log(timeBegin)
-    // console.log(timeEnd)
-    // console.log(currentTime)
     if(timeBegin > timeEnd){
       $('#time_end').after('<span class="error">End time must be greater than Start time !</span>');
       e.preventDefault();
@@ -369,8 +378,9 @@
     if(currentTime > timeBegin ){
       $('#time_begin').after('<span class="error">The start time must be in the future !</span>');
       e.preventDefault();
-    } 
-  });
+      } 
+        });
+        });
         });
         </script>
         <!-- check if it is having any error, then show it TuPTA -->
