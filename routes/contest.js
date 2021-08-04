@@ -490,7 +490,7 @@ exports.load_student = function (req, res) {
   var time_end = req.query.time_end;
   var time_begin_format =  formatDate(time_begin);
   var time_end_format =  formatDate(time_end);
-  console.log(class_id);
+
   // var sql = "SELECT rollnumber, name, class FROM student_account WHERE class=? and contest_id=0"
   var sql = "SELECT student_account.id, student_account.rollnumber, student_account.name, class.class_name" + 
   " FROM student_account, class, class_student WHERE class.id =? and class.id = class_student.class_id and student_account.id = class_student.student_id";
@@ -687,9 +687,11 @@ exports.load_class = function (req, res) {
     var class_name = req.query.class_name
     var other_class_name = req.query.other_class_name
     if (other_class_name != "") {
-      class_name = other_class_name;
+      var workbook = XLSX.readFile(storage.EXCEL + other_class_name)
+    } else {
+      var workbook = XLSX.readFile(storage.EXCEL + class_name)
     }
-    var workbook = XLSX.readFile(storage.EXCEL + class_name)
+    
     // var workbook = XLSX.readFile(storage.EXCEL + class_name + '.xls')
     var sheet_name_list = workbook.SheetNames
     var xlData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]])
@@ -746,8 +748,6 @@ exports.add_class = function (req, res) {
       db.query(sql, [semester, subject, className], (err, results) => {
         if (err) { logger.error(err); res.redirect("/error"); return }
         if (results.length == 0) { // if class is not exist
-          // res.render('add-class.ejs', {teacher_role: req.session.teacher_role, data: [], xlData: "", message: "", error: "Sorry, class " + class_name.split('.')[0] + " is exist!", class_name: class_name, role: req.session.role, user: req.session.user, detail: true })
-          // return
           var sqlCreateClass = " INSERT INTO `class`(`semester`, `subject`, `class_name`) VALUES (?,?,?) ";
           db.query(sqlCreateClass, [semester, subject, className], (err) => {
             if (err) { logger.error(err); res.redirect("/error"); return }
@@ -781,6 +781,19 @@ exports.add_class = function (req, res) {
     return
   }
 }
+
+function getResult(sql){
+  return new Promise(function(resolve, reject){
+    db.query(sql, function(err, result){
+      if(err){
+        reject("message error")
+      }else{
+        resolve(result)
+      }
+    })
+  })
+}
+
 //-----------------------------------------------Create Class------------------------------------------------------
 /**
  * Create a new Class
@@ -788,7 +801,7 @@ exports.add_class = function (req, res) {
  * @param {*} res 
  * @returns 
  */
-exports.create_class = function (req, res) {
+exports.create_class = async function (req, res) {
   if (req.method == "POST") {
     var post = req.body
     var RollNumber = post.RollNumber.split(',')
@@ -797,40 +810,39 @@ exports.create_class = function (req, res) {
     var email = post.Email.split(',')
 
     var sql = "INSERT INTO student_account(rollnumber, name, email) VALUES ";
-
     for (let i = 0; i < RollNumber.length; i++) {
       sql += "('" + RollNumber[i] + "','" + FullName[i] + "','" + email[i] +  "'),";
     }
     sql = sql.slice(0, -1);
-    sql += " ON DUPLICATE KEY UPDATE rollnumber = VALUES(rollnumber)";
+    sql += " ON DUPLICATE KEY UPDATE rollnumber = rollnumber";
+    var resInsert = await getResult(sql);
 
-    db.query(sql, function (err) {
-      if (err) {
-        req.session.sql_err = true
-        res.redirect("/contest/load-class?class_name=" + class_name)
-      } else {
-        var splitClassname = class_name.split('_');
-        var semester = splitClassname[0]
-        var subject = splitClassname[1]
-        var className = splitClassname[2].split('.')[0]
-        var ClassID = 0;
+    var splitClassname = class_name.split('_');
+    var semester = splitClassname[0]
+    var subject = splitClassname[1]
+    var className = splitClassname[2].split('.')[0]
 
-        var tmpSql2 = "SELECT `id` FROM `class` WHERE semester=? and subject=? and class_name=?";
-        db.query(tmpSql2, [semester, subject, className], (err, resSelectClassId)=> {
-          if(err) { logger.error(err); res.redirect("/error"); return }
-          ClassID = resSelectClassId[0].id;
-          var callProcedure = "";
-          for (let i = 0; i < RollNumber.length; i++) {
-            callProcedure = "CALL AddClassStudent('" + RollNumber[i] + "'," +  ClassID + ")";
-            db.query(callProcedure, (err) => {
-              if(err) { logger.error(err); res.redirect("/error"); return }
-            }); 
-          }
-          req.session.added = true
-          res.redirect('/admin/student');
-        })
+    var tmpSql2 = "SELECT `id` FROM `class` WHERE semester='"+ semester + "' and subject='"+ subject + "' and class_name='"+ className + "';";
+    var selectClassID = await getResult(tmpSql2);
+    var ClassID = selectClassID[0].id;
+
+    var tmpSql3 = "";
+    var tmpSql4 = "";
+    for (let i = 0; i < RollNumber.length; i++) {
+      tmpSql3 = "SELECT `id` FROM `student_account` WHERE rollnumber='" + RollNumber[i] + "';";
+      var selectStuID = await getResult(tmpSql3);
+      if (selectStuID.length != 0) {
+        var StuID = selectStuID[0].id;
+        tmpSql4 = "SELECT `student_id`, `class_id` FROM `class_student` WHERE student_id=" +StuID + " AND class_id=" + ClassID;
+        var checkExistStuClass = await getResult(tmpSql4);
+        if (checkExistStuClass.length == 0) {
+          tmpSql3 = "INSERT INTO `class_student`(`student_id`, `class_id`) VALUES (" + StuID + ", " + ClassID + ")";
+          var AddClassStudent = await getResult(tmpSql3);
+        }
       }
-    })
+    }
+    req.session.added = true
+    res.redirect('/admin/student');
   } else {
     res.redirect("/error")
     return
