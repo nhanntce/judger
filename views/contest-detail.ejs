@@ -236,9 +236,11 @@
           </div>
 <!-- end Plagiarism Checking-->
 <!-- start Penalty Mode-->
-          <label class="font-weight-bold">Penalty Mode</label>
           <div class="row">
-            <div class="col-6" >
+              <div class="col-6"> 
+                <label class="font-weight-bold">Penalty Mode</label>
+              </div>
+             <div class="col-6" >
               <select class="mdb-select" name="penalty_mode" id="penalty_mode">
                 <%
                   if(data[0].penalty_mode === 'Hard') {
@@ -255,6 +257,8 @@
                 %>
               </select>
             </div>
+          </div>
+          <div class="row">
             <div class="form col-6">
               <label class="font-weight-bold">Limit Submission</label>
               <div class="form">
