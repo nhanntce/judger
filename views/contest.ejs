@@ -12,10 +12,10 @@
     <%= data.length %> contests
     <button type="submit" class="btn btn-blue waves-effect btn-sm" data-toggle="modal" data-target="#myModal"><i
         class="fa fa-plus"></i> Add a new contest</button>
-    <% if (teacher_role <= 1) { %>
-    <button type="submit" class="btn btn-blue waves-effect btn-sm" onclick="window.location='/contest/add-class';"><i
-        class="fa fa-plus"></i> Add a new class</button>
-    <% } %>
+    <!-- <% if (teacher_role <= 1) { %> -->
+    <!-- <button type="submit" class="btn btn-blue waves-effect btn-sm" onclick="window.location='/contest/add-class';"><i -->
+        <!-- class="fa fa-plus"></i> Add a new class</button> -->
+    <!-- <% } %> -->
   </h2>
   <div class="accordion md-accordion accordion-1" id="accordionEx1" role="tablist" aria-multiselectable="true">
     <% for (let i = 0, l = data.length; i < l; ++i) {%>
