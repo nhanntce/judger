@@ -79,10 +79,14 @@ exports.load_rank = function (req, res) {
   // var sql = "SELECT student_account.userId, student_account.rollnumber, student_account.name, student_account.class, contest.contest_id, contest.contest_name, contest.time_begin, contest.time_end FROM contest " +
   //   "INNER JOIN student_account ON student_account.contest_id=contest.contest_id " +
   //   "WHERE contest.contest_id=?";
+  // var sql = "SELECT student_account.userId, student_account.rollnumber, student_account.name, " +
+  //   "student_account.class, contest.contest_id, contest.contest_name,contest.time_begin,contest.time_end " +
+  //   " FROM contest, student_account, contest_student WHERE contest_student.student_id = student_account.id " +
+  //   " AND contest_student.contest_id = ? AND contest.contest_id = contest_student.contest_id AND contest_student.status = 1";
   var sql = "SELECT student_account.userId, student_account.rollnumber, student_account.name, " +
-    "student_account.class, contest.contest_id, contest.contest_name,contest.time_begin,contest.time_end " +
-    " FROM contest, student_account, contest_student WHERE contest_student.student_id = student_account.id " +
-    " AND contest_student.contest_id = ? AND contest.contest_id = contest_student.contest_id AND contest_student.status = 1";
+  "class.class_name, contest.contest_id, contest.contest_name,contest.time_begin,contest.time_end " +
+  "FROM contest, student_account, contest_student, class, class_student WHERE student_account.id=class_student.student_id AND class.id=class_student.class_id AND contest_student.student_id = student_account.id " +
+  " AND contest_student.contest_id = 2 AND contest.contest_id = contest_student.contest_id AND contest_student.status = 1"
   db.query(sql, [contest_id], function (err, results) {
     if (err || results.length == 0) { logger.error(err); res.redirect("/error"); return }
     var contest_name = results[0].contest_name.replace(/ /g, '-')
@@ -99,7 +103,7 @@ exports.load_rank = function (req, res) {
         };
         for (let i = 0, l = results.length; i < l; ++i) {
           tb = new Array()
-          tb.push('', results[i].rollnumber, results[i].name, results[i].class, 0, '<center>' + 0 + '</center>', '<center>' + 0 + '</center>');
+          tb.push('', results[i].rollnumber, results[i].name, results[i].class_name, 0, '<center>' + 0 + '</center>', '<center>' + 0 + '</center>');
           obj.data.push(tb)
         }
         res.send(obj)
@@ -263,7 +267,7 @@ exports.load_rank = function (req, res) {
           };
           for (let i = 0, l = results.length; i < l; ++i) {
             tb = new Array()
-            tb.push('', results[i].rollnumber, results[i].name, results[i].class, totalthoigian[results[i].rollnumber])
+            tb.push('', results[i].rollnumber, results[i].name, results[i].class_name, totalthoigian[results[i].rollnumber])
 
             for (let j = 0, l = problem_files.length; j < l; ++j) {
               if (point[results[i].rollnumber][problem_files[j]] > 0) {

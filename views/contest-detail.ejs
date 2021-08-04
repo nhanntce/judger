@@ -15,10 +15,14 @@
   <h2>Total
     <%= totalStudent %> student in contest
     <%= data[0].contest_name %>
-    <button type="button" class="btn btn-blue waves-effect btn-sm"
-      onclick="window.location='/contest/add-student?contest_id=<%=data[0].contest_id%>';">
-      <i class="fa fa-plus"></i> Add student
-    </button>
+    <form method="GET" action="/contest/add-student" style="display: inline;">
+      <input type="hidden" name="contest_id" value="<%=data[0].contest_id%>"/>
+      <input type="hidden" name="time_begin" value="<%=dayjs(data[0].time_begin).format('DD-MM-YYYY HH:mm')%>"/>
+      <input type="hidden" name="time_end" value="<%=dayjs(data[0].time_end).format('DD-MM-YYYY HH:mm')%>"/>
+      <button type="submit" class="btn btn-blue waves-effect btn-sm">
+        <i class="fa fa-plus"></i> Add student
+      </button>
+    </form>
     <button type="button" class="btn btn-blue waves-effect btn-sm"
       onclick="window.location='/contest/add-problem?contest_id=<%=data[0].contest_id%>';">
       <i class="fa fa-plus"></i> Add problem and testcase
@@ -232,9 +236,11 @@
           </div>
 <!-- end Plagiarism Checking-->
 <!-- start Penalty Mode-->
-          <label class="font-weight-bold">Penalty Mode</label>
           <div class="row">
-            <div class="col-6" >
+              <div class="col-6"> 
+                <label class="font-weight-bold">Penalty Mode</label>
+              </div>
+             <div class="col-6" >
               <select class="mdb-select" name="penalty_mode" id="penalty_mode">
                 <%
                   if(data[0].penalty_mode === 'Hard') {
@@ -251,6 +257,8 @@
                 %>
               </select>
             </div>
+          </div>
+          <div class="row">
             <div class="form col-6">
               <label class="font-weight-bold">Limit Submission</label>
               <div class="form">
