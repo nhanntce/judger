@@ -409,28 +409,51 @@ exports.delete_student = function (req, res) {
     if (list_rollnumber != "") { // // if has student in deleted list
       var list = list_rollnumber.split(",")
       // update contest_id=0 in student_account
+      var sql_contest_student = "SELECT `id` FROM `student_account` WHERE ";
       for (let i = 0, l = list.length; i < l; ++i) {
-        fs.rename(storage.BAILAM + contest_name + '/' + list[i], storage.BAILAM + contest_name + '/$' + list[i], function (err) {
-          if (err) { 
-            logger.error(err); res.redirect("/error"); return }
-        });
-        //select id of student by rollnumber NhanNT
-          sql_contest_student = "SELECT `id` FROM `student_account` WHERE rollnumber = ?";
-          db.query(sql_contest_student, [list[i]], (errSelect, resSelect) => {
-            if (errSelect) { logger.error(errSelect); res.redirect("/error"); return; }
-              //update student id and contest id into contest_student NhanNT
-              sql_contest_student = 'UPDATE `contest_student` SET `status`= 0 WHERE student_id = ? AND contest_id = ?';
-              db.query(sql_contest_student, [resSelect[0].id, contest_id], (errInsert, resInsert) => {
-                if (errInsert) { logger.error(errInsert); res.redirect("/error"); return; }
+
+        fs.exists(storage.BAILAM + contest_name + '/$' + list[i], function (exists) {
+          if (exists) {
+            fs.rmdir(storage.BAILAM + contest_name + '/$' + list[i], (err) => {
+              if (err) { 
+              logger.error(err); res.redirect("/error"); return }
+              fs.rename(storage.BAILAM + contest_name + '/' + list[i], storage.BAILAM + contest_name + '/$' + list[i], function (err) {
+              if (err) { 
+                  logger.error(err); res.redirect("/error"); return }
               });
+            })            
+          } else {
+            fs.rename(storage.BAILAM + contest_name + '/' + list[i], storage.BAILAM + contest_name + '/$' + list[i], function (err) {
+              if (err) { 
+                logger.error(err); res.redirect("/error"); return }
+            });
+          }
+        });
+
+        
+        sql_contest_student += " rollnumber = ? OR ";
+        //select id of student by rollnumber NhanNT
+      }  
+      sql_contest_student = sql_contest_student.slice(0, -4);
+
+      db.query(sql_contest_student, list, (errSelect, resSelect) => {
+        if (errSelect) { logger.error(errSelect); res.redirect("/error"); return; }
+          sql_contest_student = 'UPDATE `contest_student` SET `status`= 0 WHERE ';
+          for(let i = 0, len = resSelect.length; i < len; i++) {
+            sql_contest_student += " (student_id = " + resSelect[i].id +
+             " AND contest_id = " + contest_id + ") OR "
+          }
+          sql_contest_student = sql_contest_student.slice(0, -4);
+          //update student id and contest id into contest_student NhanNT
+          db.query(sql_contest_student, (errInsert, resInsert) => {
+            if (errInsert) { logger.error(errInsert); res.redirect("/error"); return; }
+            req.session.deleted = true
+            logger.info(list.length + " students in contest " + contest_id + " has deleted: " + list)
+            
+            fs.writeFileSync(storage.EVENT + 'workspaceEvent/workspaceEvent.txt', Math.random(1000) + "changed");
+            res.redirect("/contest/detail?contest_id=" + contest_id)
           });
-      }
-        req.session.deleted = true
-        logger.info(list.length + " students in contest " + contest_id + " has deleted: " + list)
-        sleep(500).then(() => {
-          fs.writeFileSync(storage.EVENT + 'workspaceEvent/workspaceEvent.txt', Math.random(1000) + "changed");
-          res.redirect("/contest/detail?contest_id=" + contest_id)
-        })
+      });
     }
   } else {
     res.redirect("/error")
