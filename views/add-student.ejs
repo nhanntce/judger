@@ -22,8 +22,8 @@
       %>
         <form action="/contest/load-student" method="GET">
           <input type="hidden" name="contest_id" value="<%=contest_id%>">
-          <input type="hidden" name="time_begin" value="<%=dayjs(time_begin).format('DD-MM-YYYY HH:mm')%>">
-          <input type="hidden" name="time_end" value="<%=dayjs(time_end).format('DD-MM-YYYY HH:mm')%>">
+          <input type="hidden" name="time_begin" value="<%=time_begin%>">
+          <input type="hidden" name="time_end" value="<%=time_end%>">
           <%
             if(locals.class_name) {
           %>
@@ -121,8 +121,8 @@
             </div>
             <div class="modal-footer flex-center">
               <form action="/contest/add-student" method="POST">
-                <input type="hidden" name="time_begin" value="<%=dayjs(time_begin).format('DD-MM-YYYY HH:mm')%>">
-                <input type="hidden" name="time_end" value="<%=dayjs(time_end).format('DD-MM-YYYY HH:mm')%>">
+                <input type="hidden" name="time_begin" value="<%=time_begin%>">
+                <input type="hidden" name="time_end" value="<%=time_end%>">
                 <input type="hidden" id="list_rollnumber" name="list_rollnumber" value="">
                 <input type="hidden" name="contest_id" value="<%=contest_id%>">
                 <%
