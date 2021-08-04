@@ -56,7 +56,7 @@ exports.submission = function (req, res) {
           break;
         }
         
-        if(new Date() - new Date(results[i].time_begin) > 0 && new Date(results[i].time_begin) - new Date(results[time_tmp].time_begin) < 0 ){
+        if(new Date() - new Date(results[i].time_begin) < 0 && new Date(results[i].time_begin) - new Date(results[time_tmp].time_begin) < 0 ){
           time_tmp = i
         }
       }
