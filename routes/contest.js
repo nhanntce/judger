@@ -828,6 +828,7 @@ exports.create_class = async function (req, res) {
 
     var tmpSql3 = "";
     var tmpSql4 = "";
+    var count = 0;
     for (let i = 0; i < RollNumber.length; i++) {
       tmpSql3 = "SELECT `id` FROM `student_account` WHERE rollnumber='" + RollNumber[i] + "';";
       var selectStuID = await getResult(tmpSql3);
@@ -838,9 +839,12 @@ exports.create_class = async function (req, res) {
         if (checkExistStuClass.length == 0) {
           tmpSql3 = "INSERT INTO `class_student`(`student_id`, `class_id`) VALUES (" + StuID + ", " + ClassID + ")";
           var AddClassStudent = await getResult(tmpSql3);
+          count += 1;
         }
       }
     }
+    req.session.stuAddClass = count;
+    req.session.classAdded = class_name.split('.')[0];
     req.session.added = true
     res.redirect('/admin/student');
   } else {

@@ -46,7 +46,10 @@ exports.admin_student = function (req, res) {
   }
   if (req.session.added) {
     req.session.added = false
-    message = "Succesfully! Students have been added."
+    if (req.session.stuAddClass && req.session.classAdded) 
+      message = "Succesfully! " + req.session.stuAddClass + " Students have been added to '" + req.session.classAdded + "' class.";
+    else
+      message = "Succesfully! Students have been added to class."
   }
   res.render('admin-student.ejs', { message: message, error: error, teacher_role: req.session.teacher_role})
 }
@@ -136,7 +139,7 @@ exports.create_student = function (req, res) {
 		        res.redirect("/admin/student")
 		    } else { // if added => set req.session.added = true
 		    	req.session.added = true
-        		res.redirect('/admin/student')
+        	res.redirect('/admin/student')
 		    }
         })
       }
