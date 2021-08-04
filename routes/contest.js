@@ -827,13 +827,18 @@ exports.create_class = async function (req, res) {
     var ClassID = selectClassID[0].id;
 
     var tmpSql3 = "";
+    var tmpSql4 = "";
     for (let i = 0; i < RollNumber.length; i++) {
       tmpSql3 = "SELECT `id` FROM `student_account` WHERE rollnumber='" + RollNumber[i] + "';";
       var selectStuID = await getResult(tmpSql3);
       if (selectStuID.length != 0) {
         var StuID = selectStuID[0].id;
-        tmpSql3 = "INSERT INTO `class_student`(`student_id`, `class_id`) VALUES (" + StuID + ", " + ClassID + ")";
-        var AddClassStudent = await getResult(tmpSql3);
+        tmpSql4 = "SELECT `student_id`, `class_id` FROM `class_student` WHERE student_id=" +StuID + " AND class_id=" + ClassID;
+        var checkExistStuClass = await getResult(tmpSql4);
+        if (checkExistStuClass.length == 0) {
+          tmpSql3 = "INSERT INTO `class_student`(`student_id`, `class_id`) VALUES (" + StuID + ", " + ClassID + ")";
+          var AddClassStudent = await getResult(tmpSql3);
+        }
       }
     }
     req.session.added = true
