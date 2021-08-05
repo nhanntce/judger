@@ -49,7 +49,7 @@ exports.admin_student = function (req, res) {
     if (req.session.stuAddClass && req.session.classAdded) 
       message = "Succesfully! " + req.session.stuAddClass + " Students have been added to '" + req.session.classAdded + "' class.";
     else
-      message = "Succesfully! Students have been added to class."
+      error = "All Students have been added already."
   }
   res.render('admin-student.ejs', { message: message, error: error, teacher_role: req.session.teacher_role})
 }
