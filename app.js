@@ -263,6 +263,7 @@ app.get('/admin/class', admin.admin_class)
 app.get('/admin/class-data', admin.admin_class_data)
 app.post('/admin/add-class', admin.create_class)
 app.post('/admin/edit-class', admin.edit_class)
+app.post('/admin/delete-class', admin.delete_class)
 app.get('/error', (req, res) => {
   res.render('404.ejs')
 })

@@ -47,6 +47,16 @@
       if (l.length < 1 || l.length > 1) {
         $("#btnedit").prop('disabled', true);
       }
+      var a = [];
+      for (let e = 0; e < l.length; e++){
+        a.push(l[e][4]);
+      }
+      if (a.length == 0) {
+        $("#btndelete").prop('disabled', true);
+      } else {
+        $('#btndelete').prop('disabled', false);
+        document.getElementById("list_id").value = a
+      }
     }), $("#MyTableCheckAllButton").click(function () {
       var t = e.rows({
         search: "applied"
@@ -66,10 +76,10 @@
 </script>
 <div class="container-fluid mt-4">
   <% if (message.length > 0) { %>
-  <script>toastr.success('<%=message%>')</script>
+  <script>toastr.success("Delete class succesful")</script>
   <% } %>
   <% if (error.length > 0) { %>
-  <script>toastr.error('<%=error%>')</script>
+  <script>toastr.error("Delete class fail")</script>
  <% 
     } 
     if(teacher_role == 0) {
@@ -77,14 +87,15 @@
   <button type="submit" class="btn btn-outline-blue waves-effect btn-sm" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus fa-lg"></i> Add a new class</button>
   <button type="button" id="btnedit" class="btn btn-outline-blue waves-effect btn-sm" data-toggle="modal"
     data-target="#myModalEdit"><i class="fa fa-edit fa-lg"></i> Edit</button>
-    <button type="button" id="btnedit" class="btn btn-outline-blue waves-effect btn-sm" data-toggle="modal"
-    data-target="#myModalEdit"><i class="fa fa-edit fa-lg"></i> Delete</button>
+    <button type="button" id="btndelete" class="btn btn-outline-blue waves-effect btn-sm" data-toggle="modal" data-target="#myModalDelete"><i class="fa fa-edit fa-lg"></i> Delete</button>
   <% } %>
   <div class="table-responsive">
     <table class="table table-hover table-bordered" id="dataTableClass" width="100%" cellspacing="0">
       <thead>
         <tr>
           <th class="text-center" width="5%">
+            <button type="button" style="border: none; background: transparent; font-size: 14px;"
+              id="MyTableCheckAllButton"><i class="far fa-square"></i></button>
           </th>
           <th>Semester</th>
           <th>Subject</th>
@@ -167,7 +178,7 @@
     $(".error").remove();
       var semester = $('#semester').val();
       var subject = $('#subject').val();   
-      var edit_class_name = $('#edit_class_name').val();
+      var class_name = $('#class_name').val();
       if (!/^[A-Z]{2}[0-9]{2}$/.test(semester)){
          $('#semester').after('<span class="error">Semester must be follow format (Ex: SU21) !</span>');
           e.preventDefault();
@@ -203,6 +214,26 @@
   });
         });
       </script>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="myModalDelete" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold"> Delete class</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="/admin/delete-class" method="POST" id="form_deleteClass">
+         <div class="modal-body mx-3">
+         <div class="md-form">
+            <input type="hidden" id="list_id" name="list_id" class="form-control validate">
+          </div>
+          <button type="submit"class="btn btn-deep-orange" style="margin-left: 160px">OK</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
