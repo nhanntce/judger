@@ -20,7 +20,9 @@ exports.success = function(req, res) {
       ipaddress = ipaddress.replace(/\./g, '-')
     }
 
-    var sql = "SELECT userId, rollnumber FROM student_account WHERE (email=? and ip=?) or (email=? and " + new Date().getTime() + " >= ROUND(UNIX_TIMESTAMP(timeout) * 1000) and islogin=0)"
+    var sql = "SELECT userId, rollnumber FROM student_account WHERE " +
+     " (email=? and ip=?) or (email=? and " + new Date().getTime() +
+    " >= ROUND(UNIX_TIMESTAMP(timeout) * 1000) and islogin=0 AND status=1)"
     db.query(sql, [email, ipaddress, email],function (err, results) {
       if (err) { logger.error(err); res.redirect("/error"); return }
       if (results.length) {

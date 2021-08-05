@@ -91,9 +91,9 @@ exports.admin_teacher = function (req, res) {
 exports.admin_student_data = function (req, res) {
   const requestQuery = req.query;
   let columnsMap = [
-    { db: "null", dt: 0 }, { db: "userId", dt: 1 }, { db: "rollnumber", dt: 2 }, { db: "email", dt: 3 }, { db: "name", dt: 4 }, { db: "class_name", dt: 5 }, { db: "contest_id", dt: 6 }, { db: "ip", dt: 7 }, { db: "timeout", dt: 8 }, { db: "islogin", dt: 9 }
+    { db: "null", dt: 0 }, { db: "userId", dt: 1 }, { db: "rollnumber", dt: 2 }, { db: "email", dt: 3 }, { db: "name", dt: 4 }, { db: "class_name", dt: 5 }, { db: "ip", dt: 7 }, { db: "timeout", dt: 8 }, { db: "islogin", dt: 9 }
   ];
-  const query = "SELECT userId, rollnumber, email, name, class_name, contest_id, ip, DATE_FORMAT(timeout, '%d-%m-%Y %H:%i:%s') AS timeout, islogin " + 
+  const query = "SELECT userId, rollnumber, email, name, class_name, ip, DATE_FORMAT(timeout, '%d-%m-%Y %H:%i:%s') AS timeout, islogin " + 
   				"FROM student_account, class_student, class " +
   				"WHERE student_account.id = class_student.student_id AND class_student.class_id = class.id"
   const primaryKey = "userId"
@@ -178,8 +178,8 @@ exports.edit_student = function (req, res) {
     //   return
     // }
     // var hash = crypto.createHash('md5').update(password).digest("hex")
-    var sql = "UPDATE student_account SET rollnumber=?,email=?,name=?,contest_id=?,ip=?,timeout='" + formatTime(timeout) + "',islogin=? WHERE userId=?"
-    db.query(sql, [rollnumber, email, name, contest_id, ip, islogin, id], function (err) {
+    var sql = "UPDATE student_account SET rollnumber=?,email=?,name=?,ip=?,timeout='" + formatTime(timeout) + "',islogin=? WHERE userId=?"
+    db.query(sql, [rollnumber, email, name, ip, islogin, id], function (err) {
       if (err) {
       	req.session.sql_err = true
         res.redirect("/admin/student")
