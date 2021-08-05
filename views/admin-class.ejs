@@ -1,0 +1,209 @@
+<%- include ("partials/header-admin" ) %>
+<script>
+  $(document).ready(function () {
+   let e = $("#dataTableClass").DataTable({
+      processing: true,
+      serverSide: true,
+      ajax: '/admin/class-data',
+      columnDefs: [{
+        searchable: !1,
+        orderable: !1,
+        className: "select-checkbox",
+        defaultContent: "",
+        targets: 0
+      }, {
+        targets: 2,
+        mRender: function (data, type, row, meta) {
+          console.log(data)
+          return data.toLocaleString("it-IT")
+        }
+      }
+      ],
+      select: {
+        style: "multi",
+        selector: "td:first-child"
+      }
+    });
+    e.on("select deselect draw", function () {
+      var t = e.rows({
+        search: "applied"
+      }).count();
+      e.rows({
+        selected: !0,
+        search: "applied"
+      }).count() < t ? $("#MyTableCheckAllButton i").attr("class", "far fa-square") : $("#MyTableCheckAllButton i").attr("class", "far fa-check-square");
+      var l = e.rows({
+        selected: !0
+      }).data().toArray()
+      if (l.length == 1) {
+        $("#btnedit").prop('disabled', false);
+        var role;
+        document.getElementById("edit_id").value = l[0][4]
+        document.getElementById("edit_semester").value = l[0][1]
+        document.getElementById("edit_subject").value = l[0][2]
+        document.getElementById("edit_class_name").value = l[0][3]
+        
+      }
+      if (l.length < 1 || l.length > 1) {
+        $("#btnedit").prop('disabled', true);
+      }
+    }), $("#MyTableCheckAllButton").click(function () {
+      var t = e.rows({
+        search: "applied"
+      }).count();
+      e.rows({
+        selected: !0,
+        search: "applied"
+      }).count() < t ? (e.rows({
+        search: "applied"
+      }).deselect(), e.rows({
+        search: "applied"
+      }).select()) : e.rows({
+        search: "applied"
+      }).deselect()
+    })
+  })
+</script>
+<div class="container-fluid mt-4">
+  <% if (message.length > 0) { %>
+  <script>toastr.success('<%=message%>')</script>
+  <% } %>
+  <% if (error.length > 0) { %>
+  <script>toastr.error('<%=error%>')</script>
+ <% 
+    } 
+    if(teacher_role == 0) {
+  %>
+  <button type="submit" class="btn btn-outline-blue waves-effect btn-sm" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus fa-lg"></i> Add a new class</button>
+  <button type="button" id="btnedit" class="btn btn-outline-blue waves-effect btn-sm" data-toggle="modal"
+    data-target="#myModalEdit"><i class="fa fa-edit fa-lg"></i> Edit</button>
+    <button type="button" id="btnedit" class="btn btn-outline-blue waves-effect btn-sm" data-toggle="modal"
+    data-target="#myModalEdit"><i class="fa fa-edit fa-lg"></i> Delete</button>
+  <% } %>
+  <div class="table-responsive">
+    <table class="table table-hover table-bordered" id="dataTableClass" width="100%" cellspacing="0">
+      <thead>
+        <tr>
+          <th class="text-center" width="5%">
+          </th>
+          <th>Semester</th>
+          <th>Subject</th>
+          <th>Class name</th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+</div>
+<!-- The Modal add a Class-->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Add a new class</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="/admin/add-class" method="POST" id="form_addClass">
+        <div class="modal-body mx-3">
+          <div class="md-form mb-5">
+            <input type="text" id="semester" name="semester" class="form-control validate" required>
+            <label data-error="wrong" data-success="" for="orangeForm-name">Semester  <i>(Example: SU21)</i></label>
+          </div>
+          <div class="md-form">
+            <input type="text" id="subject" name="subject" class="form-control validate">
+            <label data-error="wrong" data-success="" for="orangeForm-email">Subject  <i>(Example: CPP201)</i></label>
+          </div>
+          <div class="md-form mb-4">
+            <input type="text" id="class_name" name="class_name" class="form-control validate">
+            <label data-error="wrong" data-success="" for="orangeForm-pass">Class name  <i>(Example: SE1302)</i></label>
+          </div>
+        </div>
+        <div class="modal-footer d-flex justify-content-center">
+          <button class="btn btn-deep-orange" id="rollNumber">Add</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- The Modal edit a teacher-->
+<div class="modal fade" id="myModalEdit" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Edit a teacher</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="/admin/edit-class" method="POST" id="form_editClass">
+         <div class="modal-body mx-3">
+         <div class="md-form">
+            <input type="hidden" id="edit_id" name="edit_id" class="form-control validate">
+          </div>
+         <p>Semester</p>
+          <div class="md-form">
+            <input type="text" id="edit_semester" name="edit_semester" class="form-control validate" required>
+          </div>
+           <p>Suject</p>
+         <div class="md-form">
+            <input type="text" id="edit_subject" name="edit_subject" class="form-control validate">
+          </div>
+          <p>Class name</p>
+          <div class="md-form">
+            <input type="text" id="edit_class_name" name="edit_class_name" class="form-control validate" required>
+          </div>
+         </div>
+          <div class="modal-footer d-flex justify-content-center">
+          <button class="btn btn-deep-orange">Update</button>
+        </div>
+        </div>
+       
+      </form>
+      <script>
+        
+        $(document).ready(function() {
+        $('#form_addClass').submit(function(e) {
+    $(".error").remove();
+      var semester = $('#semester').val();
+      var subject = $('#subject').val();   
+      var edit_class_name = $('#edit_class_name').val();
+      if (!/^[A-Z]{2}[0-9]{2}$/.test(semester)){
+         $('#semester').after('<span class="error">Semester must be follow format (Ex: SU21) !</span>');
+          e.preventDefault();
+      }
+      if (!/^[A-Z]{3}[0-9]{3}$/.test(subject)){
+         $('#subject').after('<span class="error">Subject must be follow format (Ex: CPP201) !</span>');
+          e.preventDefault();
+      }
+      if (!/^[A-Z]{2}[0-9]{4}$/.test(class_name)){
+         $('#class_name').after('<span class="error">Class name must be follow format (Ex: SU21) !</span>');
+          e.preventDefault();
+      }
+  });
+        });
+        $(document).ready(function() {
+        $('#form_editClass').submit(function(e) {
+    $(".error").remove();
+      var edit_semester = $('#edit_semester').val();
+      var edit_subject = $('#edit_subject').val();
+      var edit_class_name = $('#edit_class_name').val();
+      if (!/^[A-Z]{2}[0-9]{2}$/.test(edit_semester)){
+         $('#edit_semester').after('<span class="error">Semester must be follow format (Ex: SU21) !</span>');
+          e.preventDefault();
+      }
+      if (!/^[A-Z]{3}[0-9]{3}$/.test(edit_subject)){
+         $('#edit_subject').after('<span class="error">Subject must be follow format (Ex: CPP201) !</span>');
+          e.preventDefault();
+      }
+      if (!/^[A-Z]{2}[0-9]{4}$/.test(edit_class_name)){
+         $('#edit_class_name').after('<span class="error">Class name must be follow format (Ex: SU21) !</span>');
+          e.preventDefault();
+      }
+  });
+        });
+      </script>
+    </div>
+  </div>
+</div>
+<%- include ("partials/footer-admin" ) %>

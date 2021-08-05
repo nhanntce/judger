@@ -280,15 +280,6 @@ exports.create_teacher = function (req, res) {
     var name = post.name;
     var email = post.email
     var role = post.role
-    //  if(role == "0"){
-    //   name = "IT"
-    // }
-    //  if(role == "1"){
-    //   name = "Giáo Vụ"
-    // }
-    //  if(role == "2"){
-    //   name = "Giảng Viên"
-    // }
     var sql = "INSERT INTO employee_account(rollnumber, email, name, role_id, status) VALUES (?,?,?,?,?)"
     db.query(sql, [rollnumber, email, name, role, 1], function (err) {
       if (err) {
@@ -321,15 +312,6 @@ exports.edit_teacher = function (req, res) {
     var email = post.edit_email
     var isDisable = post.edit_disable == "on" ? "1" : "0"
     var role = post.editrole
-    // if(role == "0"){
-    //   name = "Admin"
-    // }
-    //  if(role == "1"){
-    //   name = "Academic"
-    // }
-    //  if(role == "2"){
-    //   name = "Teacher"
-    // }
     var sql = "UPDATE employee_account SET rollnumber=?,email=?,name=?,role_id=?,status=? WHERE userId=?"
     db.query(sql, [rollnumber, email, name, role, isDisable, id], function (err) {
       if (err) {
@@ -337,6 +319,86 @@ exports.edit_teacher = function (req, res) {
       } else {
         logger.info(sql)
         res.redirect('/admin/teacher')
+      }
+    })
+
+  } else {
+    res.redirect("/error")
+    return
+  }
+}
+exports.admin_class = function (req, res) {
+  var userId = req.session.userId
+  if (userId == null) {
+    res.redirect("/login")
+    return
+  }
+  var error = ""
+  var message = ""
+  if (req.session.sql_err) {
+    req.session.sql_err = false
+    error = "Teacher acocunt has exist!"
+  }
+  if (req.session.added) {
+    req.session.added = false
+    message = "Succesfully! Teacher have been added."
+  }
+  res.render('admin-class.ejs', { message: message, error: error, teacher_role: req.session.teacher_role });
+}
+
+exports.admin_class_data = function (req, res) {
+  const requestQuery = req.query;
+  let columnsMap = [
+    { db: "null", dt: 0 }, { db: "semester", dt: 1 }, { db: "subject", dt: 2 }, { db: "class_name", dt: 3 }, { db: "id", dt: 4 }
+  ];
+
+  const query = "SELECT id, semester, subject, class_name FROM class"
+  const primaryKey = "id"
+  const nodeTable = new NodeTable(requestQuery, db, query, primaryKey, columnsMap);
+  nodeTable.output((err, data) => {  
+    if (err) {
+      console.log(err);
+      return;
+    }
+    res.send(data)
+  })
+}
+exports.create_class = function (req, res) {
+  if (req.method == "POST") {
+    var post = req.body
+    var semester = post.semester
+    var subject = post.subject;
+    var class_name = post.class_name
+    var sql = "INSERT INTO class(semester, subject, class_name) VALUES (?,?,?)"
+    db.query(sql, [semester, subject, class_name], function (err) {
+      if (err) {
+        req.session.sql_err = true
+        res.redirect("/admin/class")
+      } else {
+        req.session.added = true
+        res.redirect('/admin/class')
+      }
+    })
+
+  } else {
+    res.redirect("/error")
+    return
+  }
+}
+exports.edit_class = function (req, res) {
+  if (req.method == "POST") {
+    var post = req.body
+    var id = post.edit_id
+    var semester = post.edit_semester
+    var subject = post.edit_subject
+    var class_name = post.edit_class_name
+    var sql = "UPDATE class SET semester=?,subject=?,class_name=? WHERE id=?"
+    db.query(sql, [semester, subject, class_name, id], function (err) {
+      if (err) {
+        res.redirect("/admin/class")
+      } else {
+        logger.info(sql)
+        res.redirect('/admin/class')
       }
     })
 
