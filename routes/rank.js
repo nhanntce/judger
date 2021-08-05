@@ -353,13 +353,16 @@ exports.detail_rank = function (req, res) {
   "WHERE student_account.rollnumber=?"
   db.query(sql, [rollnumber], function (err, results) {
     if (err || results.length == 0) { logger.error(err); res.redirect("/error"); return }
+    var configContent = fs.readFileSync(storage.TESTCASE + contest_name + '/config.txt', 'utf8')
+    var penaltyLimited = configContent.split('\n')[11]
     var contest_name = results[0].contest_name.replace(/ /g, '-')
     var contest_id = results[0].contest_id
     req.session.maxtimes = {}
     req.session.debai = []
     req.session.problem_id = []
     for (let i = 0; i < results.length; ++i) {
-      req.session.maxtimes[results[i].problem_id] = results[i].times
+      // req.session.maxtimes[results[i].problem_id] = results[i].times
+      req.session.maxtimes[results[i].problem_id] = penaltyLimited
       req.session.debai.push(path.basename(results[i].path_problem))
       req.session.problem_id.push(results[i].problem_id)
     }
