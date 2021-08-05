@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th8 03, 2021 lúc 04:12 AM
+-- Thời gian đã tạo: Th8 05, 2021 lúc 04:35 AM
 -- Phiên bản máy phục vụ: 10.4.19-MariaDB
 -- Phiên bản PHP: 8.0.6
 
@@ -73,8 +73,16 @@ CREATE TABLE `class` (
   `id` int(11) NOT NULL,
   `semester` varchar(20) NOT NULL,
   `subject` varchar(20) NOT NULL,
-  `class_name` varchar(20) NOT NULL
+  `class_name` varchar(20) NOT NULL,
+  `status` int(1) NOT NULL DEFAULT 1 COMMENT '1 is active, 0 is unactive'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Đang đổ dữ liệu cho bảng `class`
+--
+
+INSERT INTO `class` (`id`, `semester`, `subject`, `class_name`, `status`) VALUES
+(1, 'SU21', 'JFE201', 'SE1301', 1);
 
 -- --------------------------------------------------------
 
@@ -84,8 +92,20 @@ CREATE TABLE `class` (
 
 CREATE TABLE `class_student` (
   `student_id` int(11) NOT NULL,
-  `class_id` int(11) NOT NULL
+  `class_id` int(11) NOT NULL,
+  `status` int(1) NOT NULL DEFAULT 1 COMMENT '1 is active, 0 is unactive'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Đang đổ dữ liệu cho bảng `class_student`
+--
+
+INSERT INTO `class_student` (`student_id`, `class_id`, `status`) VALUES
+(1, 1, 1),
+(2, 1, 1),
+(3, 1, 1),
+(4, 1, 1),
+(5, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -100,7 +120,7 @@ CREATE TABLE `contest` (
   `time_begin` datetime NOT NULL,
   `time_end` datetime NOT NULL,
   `language` varchar(30) NOT NULL,
-  `deleted` int(1) NOT NULL DEFAULT 0
+  `status` int(1) NOT NULL DEFAULT 1 COMMENT '1 is active, 0 is unactive'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -127,7 +147,7 @@ CREATE TABLE `contest_student` (
   `id` int(11) NOT NULL,
   `student_id` int(11) DEFAULT NULL,
   `contest_id` int(11) DEFAULT NULL,
-  `status` int(11) NOT NULL COMMENT '1 is exists, 0 is deleted'
+  `status` int(1) NOT NULL DEFAULT 1 COMMENT '1 is exists, 0 is deleted'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -143,7 +163,7 @@ CREATE TABLE `employee_account` (
   `name` varchar(100) NOT NULL,
   `role_id` int(11) NOT NULL,
   `email` varchar(100) DEFAULT NULL,
-  `status` int(11) NOT NULL COMMENT '1 is active, 0 is not active'
+  `status` int(1) NOT NULL DEFAULT 1 COMMENT '1 is active, 0 is not active'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -196,23 +216,23 @@ CREATE TABLE `student_account` (
   `userId` varchar(20) DEFAULT NULL,
   `rollnumber` varchar(10) NOT NULL,
   `name` varchar(100) NOT NULL,
-  `contest_id` int(11) NOT NULL DEFAULT 0,
   `ip` varchar(20) NOT NULL DEFAULT '1',
   `timeout` datetime NOT NULL DEFAULT current_timestamp(),
   `islogin` int(1) NOT NULL DEFAULT 0,
-  `email` varchar(100) DEFAULT NULL
+  `email` varchar(100) DEFAULT NULL,
+  `status` int(1) NOT NULL DEFAULT 1 COMMENT '1 is active, 0 is unactive'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Đang đổ dữ liệu cho bảng `student_account`
 --
 
-INSERT INTO `student_account` (`id`, `userId`, `rollnumber`, `name`, `contest_id`, `ip`, `timeout`, `islogin`, `email`) VALUES
-(1, 'SD-000001', 'CE130353', 'Nguyễn Minh Thảo', 0, '1', '2021-08-02 18:46:43', 0, 'minhthao3260@gmail.com'),
-(2, 'SD-000002', 'CE130021', 'Võ Trương Hải Đăng', 0, '1', '2021-08-02 16:49:51', 0, 'minhthao3221@gmail.com'),
-(3, 'SD-000003', 'CE130252', 'Nguyễn Chí Linh', 0, '1', '2021-08-02 16:49:51', 0, 'minhthao3140@gmail.com'),
-(4, 'SD-000004', 'CE133213', 'Nguyễn Thành Nhân', 0, '1', '2021-08-02 16:49:51', 0, 'minhthao3256@gmail.com'),
-(5, 'SD-000005', 'CE130077', 'Phạm Trương Anh Tú', 0, '1', '2021-08-02 16:49:51', 0, 'minhthao1260@gmail.com');
+INSERT INTO `student_account` (`id`, `userId`, `rollnumber`, `name`, `ip`, `timeout`, `islogin`, `email`, `status`) VALUES
+(1, 'SD-000001', 'CE130353', 'Nguyễn Minh Thảo', '1', '2021-08-05 09:34:50', 0, 'minhthao3260@gmail.com', 1),
+(2, 'SD-000002', 'CE130252', 'Nguyễn Chí Linh', '1', '2021-08-05 09:34:50', 0, 'minhthao3140@gmail.com', 1),
+(3, 'SD-000003', 'CE133213', 'Nguyễn Thành Nhân', '1', '2021-08-05 09:34:50', 0, 'minhthao3256@gmail.com', 1),
+(4, 'SD-000004', 'CE130077', 'Phạm Trương Anh Tú', '1', '2021-08-05 09:34:50', 0, 'minhthao1260@gmail.com', 1),
+(5, 'SD-000005', 'CE137481', 'Vo Truong Hai Dang', '1', '2021-08-05 09:34:50', 0, 'minhthao17456@gmail.com', 1);
 
 --
 -- Bẫy `student_account`
@@ -320,7 +340,7 @@ ALTER TABLE `_sequence`
 -- AUTO_INCREMENT cho bảng `class`
 --
 ALTER TABLE `class`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT cho bảng `contest`
@@ -338,7 +358,7 @@ ALTER TABLE `contest_student`
 -- AUTO_INCREMENT cho bảng `employee_account`
 --
 ALTER TABLE `employee_account`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT cho bảng `student_account`
