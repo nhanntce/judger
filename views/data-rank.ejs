@@ -3,7 +3,7 @@
 <div class="container">
 
   <% if (message.length > 0) { %>
-  <div class="alert alert-danger col-sm-12"><%= message %></div>
+  <div class="alert alert-danger col-sm-12"><%=message %></div>
   <% } else { 
     var configContent = fs.readFileSync(storage.TESTCASE + data[0].contest_name + '/config.txt', 'utf8')
     var checkFormat = configContent.split('\n')[2].split('=')[1]
