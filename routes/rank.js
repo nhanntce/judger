@@ -105,7 +105,7 @@ exports.load_rank = function (req, res) {
         };
         for (let i = 0, l = results.length; i < l; ++i) {
           tb = new Array()
-          tb.push('', results[i].rollnumber, results[i].name, results[i].class_name, 0, '<center>' + 0 + '</center>', '<center>' + 0 + '</center>');
+          tb.push('', results[i].rollnumber, results[i].name, results[i].class_name, 0, '<center>' + 0 + '</center>', '<center>' + 0 + '</center>',0,0,0,0);
           obj.data.push(tb)
         }
         res.send(obj)
@@ -340,19 +340,29 @@ exports.detail_rank = function (req, res) {
   }
   var rollnumber = req.query.rollnumber
   // var sql = "SELECT contest.contest_name, contest.contest_id, contest_detail.times, contest_detail.problem_id FROM contest, contest_detail INNER JOIN student_account ON student_account.contest_id=contest.contest_id WHERE student_account.rollnumber=?"
+  // var sql = "SELECT contest.contest_name, contest.contest_id, contest_detail.path_problem, " +
+  // " contest_detail.times, contest_detail.problem_id FROM contest INNER JOIN student_account " +
+  // " ON student_account.contest_id=contest.contest_id INNER JOIN contest_detail ON " +
+  // " contest_detail.contest_id=contest.contest_id WHERE student_account.rollnumber=?"
   var sql = "SELECT contest.contest_name, contest.contest_id, contest_detail.path_problem, " +
-  " contest_detail.times, contest_detail.problem_id FROM contest INNER JOIN student_account " +
-  " ON student_account.contest_id=contest.contest_id INNER JOIN contest_detail ON " +
-  " contest_detail.contest_id=contest.contest_id WHERE student_account.rollnumber=?"
+  "contest_detail.times, contest_detail.problem_id FROM contest "+
+  "INNER JOIN contest_detail ON contest_detail.contest_id=contest.contest_id " +
+  "INNER JOIN contest_student ON contest_student.contest_id=contest.contest_id " +
+  "INNER JOIN student_account ON contest_student.student_id=student_account.id " +
+  
+  "WHERE student_account.rollnumber=?"
   db.query(sql, [rollnumber], function (err, results) {
     if (err || results.length == 0) { logger.error(err); res.redirect("/error"); return }
     var contest_name = results[0].contest_name.replace(/ /g, '-')
+    var configContent = fs.readFileSync(storage.TESTCASE + contest_name + '/config.txt', 'utf8')
+    var penaltyLimited = configContent.split('\n')[11]
     var contest_id = results[0].contest_id
     req.session.maxtimes = {}
     req.session.debai = []
     req.session.problem_id = []
     for (let i = 0; i < results.length; ++i) {
-      req.session.maxtimes[results[i].problem_id] = results[i].times
+      // req.session.maxtimes[results[i].problem_id] = results[i].times
+      req.session.maxtimes[results[i].problem_id] = penaltyLimited
       req.session.debai.push(path.basename(results[i].path_problem))
       req.session.problem_id.push(results[i].problem_id)
     }

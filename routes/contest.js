@@ -804,13 +804,15 @@ exports.create_class = async function (req, res) {
     var class_name = post.class_name
     var email = post.Email.split(',')
 
-    var sql = "INSERT INTO student_account(rollnumber, name, email) VALUES ";
+    var sql = "";
+    var tmpSql = "";
     for (let i = 0; i < RollNumber.length; i++) {
-      sql += "('" + RollNumber[i] + "','" + FullName[i] + "','" + email[i] +  "'),";
+      sql = "INSERT INTO student_account(rollnumber, name, email) VALUES  ('" + 
+      RollNumber[i] + "','" + FullName[i] + "','" + email[i] +  "') ON DUPLICATE KEY UPDATE rollnumber=rollnumber; ";
+      tmpSql = " UPDATE student_account SET status = 1 WHERE rollnumber='" + RollNumber[i] + "'";
+      var resInsert = await getResult(sql);
+      var updateStatusInsert = await getResult(tmpSql)
     }
-    sql = sql.slice(0, -1);
-    sql += " ON DUPLICATE KEY UPDATE rollnumber = rollnumber";
-    var resInsert = await getResult(sql);
 
     var splitClassname = class_name.split('_');
     var semester = splitClassname[0]
@@ -829,19 +831,29 @@ exports.create_class = async function (req, res) {
       var selectStuID = await getResult(tmpSql3);
       if (selectStuID.length != 0) {
         var StuID = selectStuID[0].id;
-        tmpSql4 = "SELECT `student_id`, `class_id` FROM `class_student` WHERE student_id=" +
-        StuID + " AND class_id=" + ClassID + " AND status=1";
+        tmpSql4 = "SELECT `student_id`, `class_id`, `status` FROM `class_student` WHERE (student_id=" +
+        StuID + " AND class_id=" + ClassID + ") AND status=1";
         var checkExistStuClass = await getResult(tmpSql4);
+   
+        tmpSql5 = "SELECT `student_id`, `class_id`, `status` FROM `class_student` WHERE (student_id=" +
+                  StuID + " AND class_id=" + ClassID + ") AND status=0";
+        var checkDisable = await getResult(tmpSql5);
+
         if (checkExistStuClass.length == 0) {
-          tmpSql3 = "INSERT INTO `class_student`(`student_id`, `class_id`) VALUES (" + StuID + ", " + ClassID + ")";
-          var AddClassStudent = await getResult(tmpSql3);
+          if (checkDisable.length != 0) {
+            var  updateStatusSql = "UPDATE `class_student` SET `status`=1 WHERE student_id=" + StuID +" AND class_id=" + ClassID + " ;";
+            var updateStatus = await getResult(updateStatusSql);
+          } else {
+            tmpSql3 = "INSERT INTO `class_student`(`student_id`, `class_id`) VALUES (" + StuID + ", " + ClassID + ")";
+            var AddClassStudent = await getResult(tmpSql3);
+          }
           count += 1;
-        }
+        } 
       }
     }
     req.session.stuAddClass = count;
     req.session.classAdded = class_name.split('.')[0];
-    req.session.added = true
+    req.session.addByExcel = true
     res.redirect('/admin/student');
   } else {
     res.redirect("/error")
@@ -866,7 +878,7 @@ exports.add_problem = function (req, res) {
   // if file upload error
   if (req.session.upload_err) {
     req.session.upload_err = false
-    error = "Upload error!"
+    error = "Upload failed!"
   }
   // if file upload sucess
   if (req.session.upload_success) {

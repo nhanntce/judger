@@ -317,9 +317,9 @@ app.post('/searching', function (req, res) {
   var userId = req.session.userId
   var sql = ""
   if (req.session.teacher_role <= 1) {
-    sql = "SELECT contest_id, contest_name FROM contest WHERE deleted=0"
+    sql = "SELECT contest_id, contest_name FROM contest WHERE status=1"
   } else {
-    sql = "SELECT contest.contest_id, contest.contest_name FROM contest WHERE contest.teacher_id='" + userId + "' AND deleted=0"
+    sql = "SELECT contest.contest_id, contest.contest_name FROM contest WHERE contest.teacher_id='" + userId + "' AND status=1"
   }
   db.query(sql, function (err, results) {
     if (err) { return res.redirect("/error") }

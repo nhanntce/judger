@@ -42,14 +42,24 @@ exports.admin_student = function (req, res) {
   // req.session.sql_err = true it means 
   if (req.session.sql_err) {
     req.session.sql_err = false
-    error = "Student acocunt has exist!"
+    error = "Student account has exist!"
+  }
+  if (req.session.addByExcel) {
+    req.session.addByExcel = false
+    if (req.session.stuAddClass && req.session.classAdded) {
+      var num = req.session.stuAddClass;
+      message = "Succesfully! " + num + " Students have been added to '" + req.session.classAdded + "' class.";
+    } else {
+      error = "All Students have been added already."
+    }
+  }
+  if (req.session.reset) {
+    req.session.reset = false
+    message = "Students have been reseted!";
   }
   if (req.session.added) {
     req.session.added = false
-    if (req.session.stuAddClass && req.session.classAdded) 
-      message = "Succesfully! " + req.session.stuAddClass + " Students have been added to '" + req.session.classAdded + "' class.";
-    else
-      message = "Succesfully! Students have been added to class."
+    message = "Succesfully! Students have been added.";
   }
   res.render('admin-student.ejs', { message: message, error: error, teacher_role: req.session.teacher_role})
 }
@@ -79,6 +89,7 @@ exports.admin_teacher = function (req, res) {
     req.session.added = false
     message = "Succesfully! Teacher have been added."
   }
+
   res.render('admin-teacher.ejs', { message: message, error: error, teacher_role: req.session.teacher_role });
 }
 //-----------------------------------------------Load data student account------------------------------------------------------
@@ -231,7 +242,7 @@ exports.reset_student = function (req, res) {
         res.redirect("/admin/student")
       } else {
         logger.info("Reset student ip, timeout userId=" + list_id)
-        req.session.added = true
+        req.session.reset = true
         res.redirect('/admin/student')
       }
     })
