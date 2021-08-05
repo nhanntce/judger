@@ -825,6 +825,7 @@ exports.create_class = async function (req, res) {
 
     var tmpSql3 = "";
     var tmpSql4 = "";
+    var checkDisableSql = "";
     var count = 0;
     for (let i = 0; i < RollNumber.length; i++) {
       tmpSql3 = "SELECT `id` FROM `student_account` WHERE rollnumber='" + RollNumber[i] + "' AND status=1;";
@@ -835,15 +836,23 @@ exports.create_class = async function (req, res) {
         StuID + " AND class_id=" + ClassID + " AND status=1";
         var checkExistStuClass = await getResult(tmpSql4);
         if (checkExistStuClass.length == 0) {
-          tmpSql3 = "INSERT INTO `class_student`(`student_id`, `class_id`) VALUES (" + StuID + ", " + ClassID + ")";
-          var AddClassStudent = await getResult(tmpSql3);
+          checkDisableSql = "SELECT `student_id`, `class_id` FROM `class_student` WHERE student_id=" +
+                            StuID + " AND class_id=" + ClassID + " AND status=0";
+          var stuClasDisable = await getResult(checkDisableSql);
+          if (checkDisableSql.length != 0) {
+            var  updateStatusSql = "UPDATE `class_student` SET `status`=1 WHERE student_id=" + StuID +" AND class_id=" + ClassID + " ;";
+            var updateStatus = await getResult(updateStatusSql);
+          } else {
+            tmpSql3 = "INSERT INTO `class_student`(`student_id`, `class_id`) VALUES (" + StuID + ", " + ClassID + ")";
+            var AddClassStudent = await getResult(tmpSql3);
+          }
           count += 1;
         }
       }
     }
     req.session.stuAddClass = count;
     req.session.classAdded = class_name.split('.')[0];
-    req.session.added = true
+    req.session.addByExcel = true
     res.redirect('/admin/student');
   } else {
     res.redirect("/error")
