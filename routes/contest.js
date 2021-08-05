@@ -825,21 +825,22 @@ exports.create_class = async function (req, res) {
 
     var tmpSql3 = "";
     var tmpSql4 = "";
-    var checkDisableSql = "";
     var count = 0;
     for (let i = 0; i < RollNumber.length; i++) {
       tmpSql3 = "SELECT `id` FROM `student_account` WHERE rollnumber='" + RollNumber[i] + "' AND status=1;";
       var selectStuID = await getResult(tmpSql3);
       if (selectStuID.length != 0) {
         var StuID = selectStuID[0].id;
-        tmpSql4 = "SELECT `student_id`, `class_id` FROM `class_student` WHERE student_id=" +
-        StuID + " AND class_id=" + ClassID + " AND status=1";
+        tmpSql4 = "SELECT `student_id`, `class_id`, `status` FROM `class_student` WHERE (student_id=" +
+        StuID + " AND class_id=" + ClassID + ") AND status=1";
         var checkExistStuClass = await getResult(tmpSql4);
+   
+        tmpSql5 = "SELECT `student_id`, `class_id`, `status` FROM `class_student` WHERE (student_id=" +
+                  StuID + " AND class_id=" + ClassID + ") AND status=0";
+        var checkDisable = await getResult(tmpSql5);
+
         if (checkExistStuClass.length == 0) {
-          checkDisableSql = "SELECT `student_id`, `class_id` FROM `class_student` WHERE student_id=" +
-                            StuID + " AND class_id=" + ClassID + " AND status=0";
-          var stuClasDisable = await getResult(checkDisableSql);
-          if (checkDisableSql.length != 0) {
+          if (checkDisable.length != 0) {
             var  updateStatusSql = "UPDATE `class_student` SET `status`=1 WHERE student_id=" + StuID +" AND class_id=" + ClassID + " ;";
             var updateStatus = await getResult(updateStatusSql);
           } else {
@@ -847,7 +848,7 @@ exports.create_class = async function (req, res) {
             var AddClassStudent = await getResult(tmpSql3);
           }
           count += 1;
-        }
+        } 
       }
     }
     req.session.stuAddClass = count;
