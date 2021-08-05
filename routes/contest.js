@@ -798,13 +798,15 @@ exports.create_class = async function (req, res) {
     var class_name = post.class_name
     var email = post.Email.split(',')
 
-    var sql = "INSERT INTO student_account(rollnumber, name, email) VALUES ";
+    var sql = "";
+    var tmpSql = "";
     for (let i = 0; i < RollNumber.length; i++) {
-      sql += "('" + RollNumber[i] + "','" + FullName[i] + "','" + email[i] +  "'),";
+      sql = "INSERT INTO student_account(rollnumber, name, email) VALUES  ('" + 
+      RollNumber[i] + "','" + FullName[i] + "','" + email[i] +  "') ON DUPLICATE KEY UPDATE rollnumber=rollnumber; ";
+      tmpSql = " UPDATE student_account SET status = 1 WHERE rollnumber='" + RollNumber[i] + "'";
+      var resInsert = await getResult(sql);
+      var updateStatusInsert = await getResult(tmpSql)
     }
-    sql = sql.slice(0, -1);
-    sql += " ON DUPLICATE KEY UPDATE rollnumber = rollnumber";
-    var resInsert = await getResult(sql);
 
     var splitClassname = class_name.split('_');
     var semester = splitClassname[0]
