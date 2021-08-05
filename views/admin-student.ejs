@@ -12,7 +12,7 @@
         defaultContent: "",
         targets: 0
       }, {
-        targets: 8,
+        targets: 7,
         mRender: function (data, type, row, meta) {
           return data.toLocaleString("it-IT")
         }
@@ -41,10 +41,9 @@
         document.getElementById("edit_email").value = l[0][3]
         document.getElementById("edit_name").value = l[0][4]
         document.getElementById("edit_class").value = l[0][5]
-        document.getElementById("edit_contestid").value = l[0][6]
-        document.getElementById("edit_ip").value = l[0][7]
-        document.getElementById("edit_timeout").value = l[0][8]
-        if (l[0][9]) {
+        document.getElementById("edit_ip").value = l[0][6]
+        document.getElementById("edit_timeout").value = l[0][7]
+        if (l[0][8]) {
           $("#edit_islogin").prop("checked", true);
         } else {
           $("#edit_islogin").prop("checked", false);
@@ -113,7 +112,6 @@
           <th>Password</th> -->
           <th>Name</th>
           <th>Class</th>
-          <th>Contest ID</th>
           <th>IP</th>
           <th>Time out</th>
           <th>Online</th>

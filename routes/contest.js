@@ -32,9 +32,9 @@ exports.contest = function (req, res) {
 
   var sql = ""
   if (req.session.teacher_role <= 1) {
-    sql = "SELECT contest.contest_id, employee_account.rollnumber, contest.contest_name, contest.time_begin, contest.time_end FROM contest INNER JOIN employee_account ON contest.teacher_id=employee_account.userId WHERE deleted=0 ORDER BY contest.contest_id"
+    sql = "SELECT contest.contest_id, employee_account.rollnumber, contest.contest_name, contest.time_begin, contest.time_end FROM contest INNER JOIN employee_account ON contest.teacher_id=employee_account.userId WHERE contest.status=1 ORDER BY contest.contest_id"
   } else {
-    sql = "SELECT contest.contest_id, employee_account.rollnumber, contest.contest_name, contest.time_begin, contest.time_end FROM contest INNER JOIN employee_account ON contest.teacher_id=employee_account.userId WHERE contest.teacher_id='" + userId + "' AND deleted=0 ORDER BY contest.contest_id"
+    sql = "SELECT contest.contest_id, employee_account.rollnumber, contest.contest_name, contest.time_begin, contest.time_end FROM contest INNER JOIN employee_account ON contest.teacher_id=employee_account.userId WHERE contest.teacher_id='" + userId + "' AND contest.status=1 ORDER BY contest.contest_id"
   }
   db.query(sql, function (err, results) {
     if (err) { logger.error(err); res.redirect("/error"); return }
@@ -343,7 +343,7 @@ exports.contest_detail = function (req, res) {
   var sql = "SELECT student_account.userId, student_account.rollnumber, student_account.name, " +
     " contest.contest_id, contest.contest_name,contest.time_begin,contest.time_end, " +
     "contest.language FROM contest, student_account, contest_student WHERE contest_student.student_id " +
-    "= student_account.id AND contest_student.contest_id = ? AND contest.contest_id = contest_student.contest_id AND contest_student.status = 1";
+    "= student_account.id AND contest_student.contest_id = ? AND contest.contest_id = contest_student.contest_id AND contest_student.status = 1 AND student_account.status = 1";
   db.query(sql, [contest_id], function (err, results) {
     if (err) { logger.error(err); res.redirect("/error"); return }
     
@@ -495,12 +495,13 @@ exports.load_student = async function (req, res) {
   var sql = "SELECT student_account.id, student_account.rollnumber, " +
   " student_account.name, class.class_name FROM student_account, class," +
   " class_student WHERE class.id = " + class_id + " and class.id = " +
-  " class_student.class_id and student_account.id = class_student.student_id";
+  " class_student.class_id and student_account.id = class_student.student_id " +
+  " AND student_account.status = 1 AND class.status=1 AND class_student.status=1";
   let students = await getResult(sql);
 
   if(students.length == 0) {
     // List all class
-    var sqlClass = "SELECT `id`, `class_name` FROM `class`";
+    var sqlClass = "SELECT `id`, `class_name` FROM `class` WHERE status=1";
     let classes = await getResult(sqlClass);
     var listClass = [];
     for(var i = 0, len = classes.length; i < len; i++) {
@@ -533,7 +534,7 @@ exports.load_student = async function (req, res) {
   for(let i = 0, len = students.length; i < len; i++) {
     let sqlContest = "SELECT contest_student.student_id, contest.`contest_id`, " + 
     " contest.`contest_name`, contest.`time_begin`, contest.`time_end` FROM `contest`, " +
-    " contest_student WHERE  contest.deleted = 0 AND contest_student.status = 1 " +
+    " contest_student WHERE  contest.status = 1 AND contest_student.status = 1 " +
     " AND contest.contest_id = contest_student.contest_id " +
     " AND contest_student.student_id = " + students[i].id;
     let isValidStudent = true;
@@ -551,7 +552,7 @@ exports.load_student = async function (req, res) {
       studentResult.push(students[i]);
     }
   }
-  var sqlClass = "SELECT `id`, `class_name` FROM `class`";
+  var sqlClass = "SELECT `id`, `class_name` FROM `class` WHERE status=1";
   let classes = await getResult(sqlClass);
   var listClass = [];
   for(var i = 0, len = classes.length; i < len; i++) {
@@ -730,7 +731,7 @@ exports.add_class = function (req, res) {
       var semester = splitClassname[0]
       var subject = splitClassname[1]
       var className = splitClassname[2]
-      var sql = " SELECT semester, subject, class_name FROM class WHERE semester=? and subject=? and class_name=? "
+      var sql = " SELECT semester, subject, class_name FROM class WHERE semester=? and subject=? and class_name=? AND status=1"
       var newfile = "";
 
       db.query(sql, [semester, subject, className], (err, results) => {
@@ -818,11 +819,12 @@ exports.create_class = async function (req, res) {
     var tmpSql4 = "";
     var count = 0;
     for (let i = 0; i < RollNumber.length; i++) {
-      tmpSql3 = "SELECT `id` FROM `student_account` WHERE rollnumber='" + RollNumber[i] + "';";
+      tmpSql3 = "SELECT `id` FROM `student_account` WHERE rollnumber='" + RollNumber[i] + "' AND status=1;";
       var selectStuID = await getResult(tmpSql3);
       if (selectStuID.length != 0) {
         var StuID = selectStuID[0].id;
-        tmpSql4 = "SELECT `student_id`, `class_id` FROM `class_student` WHERE student_id=" +StuID + " AND class_id=" + ClassID;
+        tmpSql4 = "SELECT `student_id`, `class_id` FROM `class_student` WHERE student_id=" +
+        StuID + " AND class_id=" + ClassID + " AND status=1";
         var checkExistStuClass = await getResult(tmpSql4);
         if (checkExistStuClass.length == 0) {
           tmpSql3 = "INSERT INTO `class_student`(`student_id`, `class_id`) VALUES (" + StuID + ", " + ClassID + ")";
@@ -1101,7 +1103,7 @@ function checkTestcase(dir, req) {
 }
 exports.contestAll = function (req, res) {
   var sql = ""
-    sql = "SELECT `contest_name`FROM `contest`"
+    sql = "SELECT `contest_name`FROM `contest` WHERE status=1"
   db.query(sql, function (err, results) {
     if (err) { logger.error(err); res.redirect("/error"); return }
     res.send({ data: results })

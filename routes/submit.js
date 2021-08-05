@@ -30,17 +30,22 @@ exports.submission = function (req, res) {
     //   "INNER JOIN contest_detail ON student_account.contest_id=contest_detail.contest_id " +
     //   "INNER JOIN contest ON student_account.contest_id=contest.contest_id " +
     //   "WHERE student_account.userId=?"
-    sql = "SELECT contest.contest_id, contest.time_begin, contest.time_end, contest.contest_name, student_account.name, student_account.rollnumber, contest_detail.problem_id, contest_detail.path_problem,contest_detail.times,contest.language FROM student_account " +
+    sql = "SELECT contest.contest_id, contest.time_begin, contest.time_end, contest.contest_name, " +
+    " student_account.name, student_account.rollnumber, contest_detail.problem_id, " +
+    " contest_detail.path_problem,contest_detail.times,contest.language FROM student_account " +
     "INNER JOIN contest_detail ON student_account.contest_id=contest_detail.contest_id "+
     "INNER JOIN contest_student ON student_account.contest_id=contest_student.contest_id  "+
     "INNER JOIN contest ON student_account.contest_id=contest_student.contest_id  "+
-    "WHERE contest.deleted=0 and student_account.id= (SELECT student_account.id FROM student_account WHERE student_account.userId = ?)"
+    "WHERE contest.status=1 and student_account.id= (SELECT student_account.id FROM " +
+    " student_account WHERE student_account.userId = ?) AND contest_student.status=1";
     listsql = [userId]
   } else {
-    sql = "SELECT contest.time_begin, contest.time_end, contest.contest_name, employee_account.name, employee_account.rollnumber, contest_detail.problem_id, contest_detail.path_problem,contest_detail.times,contest.language FROM employee_account " +
+    sql = "SELECT contest.time_begin, contest.time_end, contest.contest_name, " +
+      " employee_account.name, employee_account.rollnumber, contest_detail.problem_id, " +
+      " contest_detail.path_problem,contest_detail.times,contest.language FROM employee_account " +
       "INNER JOIN contest ON contest.teacher_id=employee_account.userId " +
       "INNER JOIN contest_detail ON contest.contest_id=contest_detail.contest_id " +
-      "WHERE contest.contest_id=?"
+      "WHERE contest.contest_id=? AND contest.status = 1"
     listsql = [req.query.contest_id]
   }
   db.query(sql, listsql, function (err, results) {
