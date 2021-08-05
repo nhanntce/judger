@@ -12,10 +12,10 @@
     <%= data.length %> contests
     <button type="submit" class="btn btn-blue waves-effect btn-sm" data-toggle="modal" data-target="#myModal"><i
         class="fa fa-plus"></i> Add a new contest</button>
-    <% if (teacher_role <= 1) { %>
-    <button type="submit" class="btn btn-blue waves-effect btn-sm" onclick="window.location='/contest/add-class';"><i
-        class="fa fa-plus"></i> Add a new class</button>
-    <% } %>
+    <!-- <% if (teacher_role <= 1) { %> -->
+    <!-- <button type="submit" class="btn btn-blue waves-effect btn-sm" onclick="window.location='/contest/add-class';"><i -->
+        <!-- class="fa fa-plus"></i> Add a new class</button> -->
+    <!-- <% } %> -->
   </h2>
   <div class="accordion md-accordion accordion-1" id="accordionEx1" role="tablist" aria-multiselectable="true">
     <% for (let i = 0, l = data.length; i < l; ++i) {%>
@@ -197,20 +197,24 @@
           </div>
 <!-- end Plagiarism Checking-->
 <!-- start Penalty Mode-->
-          <label class="font-weight-bold">Penalty Mode</label>
           <div class="row">
+            <div class="col-6">
+              <label class="font-weight-bold">Penalty Mode</label>
+            </div>
             <div class="col-6" >
               <select class="mdb-select" name="penalty_mode" id="penalty_mode">
                 <option value="Easy">Easy</option>
                 <option value="Hard">Hard</option>
               </select>
             </div>
-            <div class="form col-6">
-              <label class="font-weight-bold">Limit Submission</label>
-              <div class="form">
-                <input type="number" id="limit_submission" name="limit_submission" class="form-control" value="10" min="1">
-              </div>  
-            </div>
+          </div>
+          <div class="row">
+              <div class="form col-6">
+                <label class="font-weight-bold">Limit Submission</label>
+                <div class="form">
+                  <input type="number" id="limit_submission" name="limit_submission" class="form-control" value="10" min="1">
+                </div>  
+              </div>
           </div>
 <!-- end Penalty Mode-->
           <label class="font-weight-bold">Language</label>

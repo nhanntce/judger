@@ -161,17 +161,35 @@ app.get('/contest/add-student', (req, res) => {
     res.redirect("/login")
     return
   }
-  var contest_id = req.query.contest_id
+  var contest_id = req.query.contest_id;
+  var time_begin = req.query.time_begin;
+  var time_end = req.query.time_end;
   // List all class
-  var sql = "SELECT DISTINCT class FROM `student_account` WHERE contest_id = 0"
+  var sql = "SELECT `id`, `class_name` FROM `class`"
   var listClass = [];
   db.query(sql, function (err, results) {
     if (err) { logger.error(err); res.redirect("/error"); return; }
      for(var i = 0, len = results.length; i < len; i++) {
-      listClass.push(results[i].class);
+      listClass.push({
+        class_name: results[i].class_name,
+        class_id: results[i].id 
+      });
      }
-     res.render('add-student.ejs', { list_class: listClass, data: [], contest_id: contest_id, message: "", 
-      error: "", warning: "", role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role })
+     res.render('add-student.ejs', 
+      { 
+        list_class: listClass, 
+        data: [], 
+        contest_id: contest_id, 
+        message: "", 
+        error: "", 
+        warning: "", 
+        role: req.session.role, 
+        user: req.session.user, 
+        teacher_role: req.session.teacher_role,
+        time_begin: time_begin,
+        time_end: time_end
+      }
+    )
   })
 })
 app.post('/contest/add-student', contest.add_student)
