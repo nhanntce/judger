@@ -352,7 +352,7 @@ exports.admin_class_data = function (req, res) {
     { db: "null", dt: 0 }, { db: "semester", dt: 1 }, { db: "subject", dt: 2 }, { db: "class_name", dt: 3 }, { db: "id", dt: 4 }
   ];
 
-  const query = "SELECT id, semester, subject, class_name FROM class"
+  const query = "SELECT id, semester, subject, class_name FROM class where status = 1"
   const primaryKey = "id"
   const nodeTable = new NodeTable(requestQuery, db, query, primaryKey, columnsMap);
   nodeTable.output((err, data) => {  
@@ -398,6 +398,31 @@ exports.edit_class = function (req, res) {
         res.redirect("/admin/class")
       } else {
         logger.info(sql)
+        res.redirect('/admin/class')
+      }
+    })
+
+  } else {
+    res.redirect("/error")
+    return
+  }
+}
+exports.delete_class = function (req, res) {
+  if (req.method == "POST") {
+    var post = req.body
+    var list_id = post.list_id.split(",")
+    var sql = ""
+    sql = "UPDATE class SET status = 0 WHERE "
+    for (let i = 0; i < list_id.length; ++i) {
+      sql += "id=" + list_id[i] + " OR "
+    }
+    sql = sql.slice(0, -4)
+    db.query(sql, function (err) {
+      if (err) {
+        req.session.sql_err = true
+        res.redirect("/admin/class")
+      } else {
+        req.session.added = true
         res.redirect('/admin/class')
       }
     })
