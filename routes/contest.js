@@ -135,7 +135,7 @@ exports.add_contest = function (req, res) {
  * @param {*} res 
  * @returns 
  */
-exports.delete_contest = function (req, res) {
+exports.delete_contest = async function (req, res) {
   var userId = req.session.userId
   if (userId == null) {
     res.redirect("/login")
@@ -147,34 +147,40 @@ exports.delete_contest = function (req, res) {
     var contest_name = post.contest_name.replace(/ /g, '-')
     try {
       if (fs.existsSync(storage.BAILAM + contest_name)) {
+        var deleteWorkSpace = await deleteFolder(storage.BAILAM + '$' + contest_name);
         fs.renameSync(storage.BAILAM + contest_name, storage.BAILAM + '$' + contest_name)
       }
       if (fs.existsSync(storage.DEBAI + contest_name)) {
+        var deleteProblem = await deleteFolder(storage.DEBAI + '$' + contest_name);
         fs.renameSync(storage.DEBAI + contest_name, storage.DEBAI + '$' + contest_name)
       }
       if (fs.existsSync(storage.TESTCASE + contest_name)) {
+        var deleteTestCase = await deleteFolder(storage.TESTCASE + '$' + contest_name);
         fs.renameSync(storage.TESTCASE + contest_name, storage.TESTCASE + '$' + contest_name)
       }
       if (fs.existsSync(storage.NOPBAI + 'Logs/' + contest_name)) {
+        var deleteSubmission = await deleteFolder(storage.NOPBAI + 'Logs/$' + contest_name);
         fs.renameSync(storage.NOPBAI + 'Logs/' + contest_name, storage.NOPBAI + 'Logs/$' + contest_name)
       }
       // update status contest.deleted=1, student_account.in_contest=0
-      var sql = "SELECT rollnumber FROM student_account WHERE contest_id=?"
-      db.query(sql, [contest_id], function (err, results) {
+      var sql = "SELECT `rollnumber` FROM `student_account`, contest_student WHERE " +
+      " student_account.id = contest_student.student_id AND contest_student.contest_id = ?"
+      db.query(sql, [contest_id], async function (err, results) {
         if (err) { logger.error(err); res.redirect("/error"); return }
         for (let i = 0, l = results.length; i < l; ++i) {
-          fs.rename(storage.BAILAM + '$' + contest_name + '/' + results[i].rollnumber, storage.BAILAM + '$' + contest_name + '/$' + results[i].rollnumber, function (err) {
-            if (err) { logger.error(err); res.redirect("/error"); return }
-          })
+          var deleteStudent = await deleteFolder(storage.BAILAM + '$' + contest_name + '/$' + results[i].rollnumber);
+          // fs.rename(storage.BAILAM + '$' + contest_name + '/' + results[i].rollnumber, storage.BAILAM + '$' + contest_name + '/$' + results[i].rollnumber, function (err) {
+          //   if (err) { logger.error(err); res.redirect("/error"); return }
+          // })
         }
         // SET deleted=1 means this contest deleted
-        sql = "UPDATE contest SET deleted=1 WHERE contest_id=?"
+        sql = "UPDATE contest SET status=0 WHERE contest_id=?"
         db.query(sql, [contest_id]);
         // UPDATE all these contest_id=0 which correspond to student_account 
-        sql = "UPDATE student_account SET contest_id=0 WHERE contest_id=?"
-        db.query(sql, [contest_id])
+        sql = "UPDATE `contest_student` SET `status`= 0 WHERE contest_id = ?"
+        db.query(sql, [contest_id]);
         fs.writeFileSync(storage.EVENT + 'workspaceEvent/workspaceEvent.txt', Math.random(1000) + "changed");
-        logger.info("Contest " + contest_id + " has deleted")
+        logger.info("Contest " + contest_id + " has deleted");
         res.redirect("/contest")
       })
     } catch (error) {
@@ -414,7 +420,7 @@ exports.delete_student = function (req, res) {
 
         fs.exists(storage.BAILAM + contest_name + '/$' + list[i], function (exists) {
           if (exists) {
-            fs.rmdir(storage.BAILAM + contest_name + '/$' + list[i], (err) => {
+            fs.rmdir(storage.BAILAM + contest_name + '/$' + list[i], {recursive: true}, (err) => {
               if (err) { 
               logger.error(err); res.redirect("/error"); return }
               fs.rename(storage.BAILAM + contest_name + '/' + list[i], storage.BAILAM + contest_name + '/$' + list[i], function (err) {
@@ -1110,4 +1116,17 @@ exports.contestAll = function (req, res) {
     if (err) { logger.error(err); res.redirect("/error"); return }
     res.send({ data: results })
   })
+}
+
+function deleteFolder(path) {
+  return new Promise((resolve, reject) => {
+    fs.exists(path, (exist) => {
+      if(exist) {
+        fs.rmdir(path , {recursive: true}, (err) => {
+          resolve(true);
+        })   
+      }
+      resolve(true);
+    });
+  });
 }
