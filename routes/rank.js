@@ -353,9 +353,9 @@ exports.detail_rank = function (req, res) {
   "WHERE student_account.rollnumber=?"
   db.query(sql, [rollnumber], function (err, results) {
     if (err || results.length == 0) { logger.error(err); res.redirect("/error"); return }
+    var contest_name = results[0].contest_name.replace(/ /g, '-')
     var configContent = fs.readFileSync(storage.TESTCASE + contest_name + '/config.txt', 'utf8')
     var penaltyLimited = configContent.split('\n')[11]
-    var contest_name = results[0].contest_name.replace(/ /g, '-')
     var contest_id = results[0].contest_id
     req.session.maxtimes = {}
     req.session.debai = []
