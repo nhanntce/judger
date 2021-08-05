@@ -42,7 +42,7 @@ exports.admin_student = function (req, res) {
   // req.session.sql_err = true it means 
   if (req.session.sql_err) {
     req.session.sql_err = false
-    error = "Student acocunt has exist!"
+    error = "Student account has exist!"
   }
   if (req.session.addByExcel) {
     req.session.addByExcel = false

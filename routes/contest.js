@@ -877,7 +877,7 @@ exports.add_problem = function (req, res) {
   // if file upload error
   if (req.session.upload_err) {
     req.session.upload_err = false
-    error = "Upload error!"
+    error = "Upload failed!"
   }
   // if file upload sucess
   if (req.session.upload_success) {
