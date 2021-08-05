@@ -15,9 +15,9 @@ exports.rank_time = function (req, res) {
   }
   var sql = ""
   if (req.session.teacher_role <= 1) {
-    sql = "SELECT contest_id, contest_name, time_begin, time_end FROM contest WHERE deleted=0"
+    sql = "SELECT contest_id, contest_name, time_begin, time_end FROM contest WHERE status=1"
   } else {
-    sql = "SELECT contest_id, contest_name, time_begin, time_end FROM contest WHERE teacher_id='"+ userId +"' AND deleted=0"
+    sql = "SELECT contest_id, contest_name, time_begin, time_end FROM contest WHERE teacher_id='"+ userId +"' AND status=1"
   }
   db.query(sql, function (err, results) {
     if (err) { logger.error(err); res.redirect("/error"); return }
@@ -40,7 +40,7 @@ exports.data_rank = function (req, res) {
   }
   var message = ""
   var contest_id = req.query.contest_id
-  var sql = "SELECT student_id FROM `contest_student` WHERE contest_id = ? LIMIT 1"
+  var sql = "SELECT student_id FROM `contest_student` WHERE contest_id = ? AND status=1 LIMIT 1"
   db.query(sql, [contest_id], function (err, results1) {
     if (err) { logger.error(err); res.redirect("/error"); return }
     if (results1.length == 0) { // if No student in contest
@@ -49,11 +49,11 @@ exports.data_rank = function (req, res) {
     } else {
       sql = "SELECT contest.contest_name, contest.contest_id, contest.time_begin, contest.time_end, contest_detail.problem_id, contest_detail.path_problem FROM contest " +
         "INNER JOIN contest_detail ON contest.contest_id=contest_detail.contest_id " +
-        "WHERE contest.contest_id=?"
+        "WHERE contest.contest_id=? AND contest.status=1"
       db.query(sql, [contest_id], function (err, results2) {
         if (err) { logger.error(err); res.redirect("/error"); return }
         if (results2.length == 0) { // if contest donnt have any problem
-          sql = "SELECT contest_name, contest_id, time_begin, time_end FROM contest WHERE contest_id=?"
+          sql = "SELECT contest_name, contest_id, time_begin, time_end FROM contest WHERE contest_id=? AND status=1"
           db.query(sql, [contest_id], function (err, results3) {
             res.render('data-rank.ejs', { data: results3, problem_files: [], message: message, role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role })
           })
@@ -85,8 +85,10 @@ exports.load_rank = function (req, res) {
   //   " AND contest_student.contest_id = ? AND contest.contest_id = contest_student.contest_id AND contest_student.status = 1";
   var sql = "SELECT student_account.userId, student_account.rollnumber, student_account.name, " +
   "class.class_name, contest.contest_id, contest.contest_name,contest.time_begin,contest.time_end " +
-  "FROM contest, student_account, contest_student, class, class_student WHERE student_account.id=class_student.student_id AND class.id=class_student.class_id AND contest_student.student_id = student_account.id " +
-  " AND contest_student.contest_id = 2 AND contest.contest_id = contest_student.contest_id AND contest_student.status = 1"
+  "FROM contest, student_account, contest_student, class, class_student WHERE " +
+  " student_account.id=class_student.student_id AND class.id=class_student.class_id AND contest_student.student_id = student_account.id " +
+  " AND contest_student.contest_id = ? AND contest.contest_id = contest_student.contest_id AND contest_student.status = 1 " +
+  " AND student_account.status=1 AND class.status=1 AND class_student.status=1 AND contest.status=1"; 
   db.query(sql, [contest_id], function (err, results) {
     if (err || results.length == 0) { logger.error(err); res.redirect("/error"); return }
     var contest_name = results[0].contest_name.replace(/ /g, '-')
@@ -338,7 +340,10 @@ exports.detail_rank = function (req, res) {
   }
   var rollnumber = req.query.rollnumber
   // var sql = "SELECT contest.contest_name, contest.contest_id, contest_detail.times, contest_detail.problem_id FROM contest, contest_detail INNER JOIN student_account ON student_account.contest_id=contest.contest_id WHERE student_account.rollnumber=?"
-  var sql = "SELECT contest.contest_name, contest.contest_id, contest_detail.path_problem, contest_detail.times, contest_detail.problem_id FROM contest INNER JOIN student_account ON student_account.contest_id=contest.contest_id INNER JOIN contest_detail ON contest_detail.contest_id=contest.contest_id WHERE student_account.rollnumber=?"
+  var sql = "SELECT contest.contest_name, contest.contest_id, contest_detail.path_problem, " +
+  " contest_detail.times, contest_detail.problem_id FROM contest INNER JOIN student_account " +
+  " ON student_account.contest_id=contest.contest_id INNER JOIN contest_detail ON " +
+  " contest_detail.contest_id=contest.contest_id WHERE student_account.rollnumber=?"
   db.query(sql, [rollnumber], function (err, results) {
     if (err || results.length == 0) { logger.error(err); res.redirect("/error"); return }
     var contest_name = results[0].contest_name.replace(/ /g, '-')

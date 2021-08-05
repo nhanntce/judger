@@ -36,7 +36,7 @@ exports.success = function(req, res) {
         logger.info(req.session.role + " " + req.session.user + " has connected")
         res.redirect('/submission')
       } else {
-        sql = "SELECT userId, rollnumber, role_id FROM employee_account WHERE email=? and status=1"
+        sql = "SELECT userId, rollnumber, role_id FROM employee_account WHERE email=? AND employee_account.status = 1"
         db.query(sql, [email], function (error, data) {
           if (error) { logger.error(error); res.redirect("/error"); return }
           if (data.length) {

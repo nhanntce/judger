@@ -91,7 +91,7 @@ exports.admin_teacher = function (req, res) {
 exports.admin_student_data = function (req, res) {
   const requestQuery = req.query;
   let columnsMap = [
-    { db: "null", dt: 0 }, { db: "userId", dt: 1 }, { db: "rollnumber", dt: 2 }, { db: "email", dt: 3 }, { db: "name", dt: 4 }, { db: "class_name", dt: 5 }, { db: "ip", dt: 7 }, { db: "timeout", dt: 8 }, { db: "islogin", dt: 9 }
+    { db: "null", dt: 0 }, { db: "userId", dt: 1 }, { db: "rollnumber", dt: 2 }, { db: "email", dt: 3 }, { db: "name", dt: 4 }, { db: "class_name", dt: 5 }, { db: "ip", dt: 6 }, { db: "timeout", dt: 7 }, { db: "islogin", dt: 8 }
   ];
   const query = "SELECT userId, rollnumber, email, name, class_name, ip, DATE_FORMAT(timeout, '%d-%m-%Y %H:%i:%s') AS timeout, islogin " + 
   				"FROM student_account, class_student, class " +
