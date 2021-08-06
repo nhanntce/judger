@@ -18,8 +18,8 @@ exports.contest = function (req, res) {
     return
   }
 
-  var error = ""
-  var message = ""
+  var error = "";
+  var message = "";
   // req.session.sql_err = true it means 
   if (req.session.sql_err) {
     req.session.sql_err = false
@@ -135,7 +135,7 @@ exports.add_contest = function (req, res) {
  * @param {*} res 
  * @returns 
  */
-exports.delete_contest = function (req, res) {
+exports.delete_contest = async function (req, res) {
   var userId = req.session.userId
   if (userId == null) {
     res.redirect("/login")
@@ -147,34 +147,40 @@ exports.delete_contest = function (req, res) {
     var contest_name = post.contest_name.replace(/ /g, '-')
     try {
       if (fs.existsSync(storage.BAILAM + contest_name)) {
+        var deleteWorkSpace = await deleteFolder(storage.BAILAM + '$' + contest_name);
         fs.renameSync(storage.BAILAM + contest_name, storage.BAILAM + '$' + contest_name)
       }
       if (fs.existsSync(storage.DEBAI + contest_name)) {
+        var deleteProblem = await deleteFolder(storage.DEBAI + '$' + contest_name);
         fs.renameSync(storage.DEBAI + contest_name, storage.DEBAI + '$' + contest_name)
       }
       if (fs.existsSync(storage.TESTCASE + contest_name)) {
+        var deleteTestCase = await deleteFolder(storage.TESTCASE + '$' + contest_name);
         fs.renameSync(storage.TESTCASE + contest_name, storage.TESTCASE + '$' + contest_name)
       }
       if (fs.existsSync(storage.NOPBAI + 'Logs/' + contest_name)) {
+        var deleteSubmission = await deleteFolder(storage.NOPBAI + 'Logs/$' + contest_name);
         fs.renameSync(storage.NOPBAI + 'Logs/' + contest_name, storage.NOPBAI + 'Logs/$' + contest_name)
       }
       // update status contest.deleted=1, student_account.in_contest=0
-      var sql = "SELECT rollnumber FROM student_account WHERE contest_id=?"
-      db.query(sql, [contest_id], function (err, results) {
+      var sql = "SELECT `rollnumber` FROM `student_account`, contest_student WHERE " +
+      " student_account.id = contest_student.student_id AND contest_student.contest_id = ?"
+      db.query(sql, [contest_id], async function (err, results) {
         if (err) { logger.error(err); res.redirect("/error"); return }
         for (let i = 0, l = results.length; i < l; ++i) {
-          fs.rename(storage.BAILAM + '$' + contest_name + '/' + results[i].rollnumber, storage.BAILAM + '$' + contest_name + '/$' + results[i].rollnumber, function (err) {
-            if (err) { logger.error(err); res.redirect("/error"); return }
-          })
+          var deleteStudent = await deleteFolder(storage.BAILAM + '$' + contest_name + '/$' + results[i].rollnumber);
+          // fs.rename(storage.BAILAM + '$' + contest_name + '/' + results[i].rollnumber, storage.BAILAM + '$' + contest_name + '/$' + results[i].rollnumber, function (err) {
+          //   if (err) { logger.error(err); res.redirect("/error"); return }
+          // })
         }
         // SET deleted=1 means this contest deleted
-        sql = "UPDATE contest SET deleted=1 WHERE contest_id=?"
+        sql = "UPDATE contest SET status=0 WHERE contest_id=?"
         db.query(sql, [contest_id]);
         // UPDATE all these contest_id=0 which correspond to student_account 
-        sql = "UPDATE student_account SET contest_id=0 WHERE contest_id=?"
-        db.query(sql, [contest_id])
+        sql = "UPDATE `contest_student` SET `status`= 0 WHERE contest_id = ?"
+        db.query(sql, [contest_id]);
         fs.writeFileSync(storage.EVENT + 'workspaceEvent/workspaceEvent.txt', Math.random(1000) + "changed");
-        logger.info("Contest " + contest_id + " has deleted")
+        logger.info("Contest " + contest_id + " has deleted");
         res.redirect("/contest")
       })
     } catch (error) {
@@ -235,10 +241,12 @@ exports.edit_contest = function (req, res) {
     "\ncheck_plagiarism=" + (check_plagiarism ? "true" : "false") + "\n" + percentage_allow +
     "\npenalty_mode=" + penalty_mode + "\n" + limit_submission;
 
-    if (contest_name_new !== "" && ValidateDate(time_begin) && ValidateDate(time_end) && formatTimeBegin < formatTimeEnd) {
+    if (contest_name_new !== "" && ValidateDate(time_begin) && 
+      ValidateDate(time_end) && formatTimeBegin < formatTimeEnd) {
       // update contest_name, time_begin, time_end
       var sql = "UPDATE contest SET contest_name=?, time_begin=?, time_end=?, language=? WHERE contest_id=?"
-      db.query(sql, [contest_name_new, formatTime(time_begin), formatTime(time_end), language, contest_id], function (err) {
+      db.query(sql, [contest_name_new, formatTime(time_begin), 
+        formatTime(time_end), language, contest_id], function (err) {
         if (err) { logger.error(err); res.redirect("/error"); return }
         if(contest_name_old !== contest_name_new) {
           fs.rename(storage.BAILAM + contest_name_old, storage.BAILAM + contest_name_new, function (err) {
@@ -284,9 +292,11 @@ exports.edit_contest = function (req, res) {
           })
         }
         logger.info("Contest " + contest_id + " has changed time to begin:" + formatTime(time_begin) + ", end: " + formatTime(time_end) + ", language=" + language)
+        req.session.edit_contest_success = true;
         res.redirect("/contest/detail?contest_id=" + contest_id)
       })
     } else {
+      req.session.edit_contest_fail = true;
       res.redirect("/contest/detail?contest_id=" + contest_id)
     }
   } else {
@@ -332,10 +342,19 @@ exports.contest_detail = function (req, res) {
     res.redirect("/contest")
     return
   }
-  var message = ""
+  var message = "";
+  var error = "";
   if (req.session.deleted) { // check student is deleted in contest
     req.session.deleted = false
     message = "Succesfully! Students have been deleted."
+  }
+  if(req.session.edit_contest_fail) {
+    req.session.edit_contest_fail = false;
+    error = "Edit contest fail.";
+  }
+  if(req.session.edit_contest_success) {
+    req.session.edit_contest_success = false;
+    message = "Succesfully! Contest have been edited."
   }
   // var sql = "SELECT student_account.userId, student_account.rollnumber, student_account.name, student_account.class, contest.contest_id, contest.contest_name,contest.time_begin,contest.time_end,contest.language FROM contest " +
   //   "INNER JOIN student_account ON student_account.contest_id=contest.contest_id " +
@@ -365,7 +384,7 @@ exports.contest_detail = function (req, res) {
         results[0].percentage_allow = data_config_inline[9];
         results[0].penalty_mode = data_config_inline[10].split('=')[1];
         results[0].limit_submission = data_config_inline[11];
-        res.render('contest-detail.ejs', { data: results, totalStudent: 0, message: message, teacher_role: req.session.teacher_role, role: req.session.role, user: req.session.user })
+        res.render('contest-detail.ejs', { data: results, totalStudent: 0, message: message, error: error, teacher_role: req.session.teacher_role, role: req.session.role, user: req.session.user })
       })
     } else { // at least 1 student
       var data_config =  fs.readFileSync(storage.TESTCASE + results[0].contest_name + "/config.txt", {encoding:'utf8', flag:'r'});
@@ -382,7 +401,7 @@ exports.contest_detail = function (req, res) {
       results[0].percentage_allow = data_config_inline[9];
       results[0].penalty_mode = data_config_inline[10].split('=')[1];
       results[0].limit_submission = data_config_inline[11];
-      res.render('contest-detail.ejs', { data: results, totalStudent: results.length, message: message, teacher_role: req.session.teacher_role, role: req.session.role, user: req.session.user })
+      res.render('contest-detail.ejs', { data: results, totalStudent: results.length, message: message, error: error, teacher_role: req.session.teacher_role, role: req.session.role, user: req.session.user })
     }
 
   })
@@ -414,7 +433,7 @@ exports.delete_student = function (req, res) {
 
         fs.exists(storage.BAILAM + contest_name + '/$' + list[i], function (exists) {
           if (exists) {
-            fs.rmdir(storage.BAILAM + contest_name + '/$' + list[i], (err) => {
+            fs.rmdir(storage.BAILAM + contest_name + '/$' + list[i], {recursive: true}, (err) => {
               if (err) { 
               logger.error(err); res.redirect("/error"); return }
               fs.rename(storage.BAILAM + contest_name + '/' + list[i], storage.BAILAM + contest_name + '/$' + list[i], function (err) {
@@ -798,13 +817,15 @@ exports.create_class = async function (req, res) {
     var class_name = post.class_name
     var email = post.Email.split(',')
 
-    var sql = "INSERT INTO student_account(rollnumber, name, email) VALUES ";
+    var sql = "";
+    var tmpSql = "";
     for (let i = 0; i < RollNumber.length; i++) {
-      sql += "('" + RollNumber[i] + "','" + FullName[i] + "','" + email[i] +  "'),";
+      sql = "INSERT INTO student_account(rollnumber, name, email) VALUES  ('" + 
+      RollNumber[i] + "','" + FullName[i] + "','" + email[i] +  "') ON DUPLICATE KEY UPDATE rollnumber=rollnumber; ";
+      tmpSql = " UPDATE student_account SET status = 1 WHERE rollnumber='" + RollNumber[i] + "'";
+      var resInsert = await getResult(sql);
+      var updateStatusInsert = await getResult(tmpSql)
     }
-    sql = sql.slice(0, -1);
-    sql += " ON DUPLICATE KEY UPDATE rollnumber = rollnumber";
-    var resInsert = await getResult(sql);
 
     var splitClassname = class_name.split('_');
     var semester = splitClassname[0]
@@ -823,19 +844,29 @@ exports.create_class = async function (req, res) {
       var selectStuID = await getResult(tmpSql3);
       if (selectStuID.length != 0) {
         var StuID = selectStuID[0].id;
-        tmpSql4 = "SELECT `student_id`, `class_id` FROM `class_student` WHERE student_id=" +
-        StuID + " AND class_id=" + ClassID + " AND status=1";
+        tmpSql4 = "SELECT `student_id`, `class_id`, `status` FROM `class_student` WHERE (student_id=" +
+        StuID + " AND class_id=" + ClassID + ") AND status=1";
         var checkExistStuClass = await getResult(tmpSql4);
+   
+        tmpSql5 = "SELECT `student_id`, `class_id`, `status` FROM `class_student` WHERE (student_id=" +
+                  StuID + " AND class_id=" + ClassID + ") AND status=0";
+        var checkDisable = await getResult(tmpSql5);
+
         if (checkExistStuClass.length == 0) {
-          tmpSql3 = "INSERT INTO `class_student`(`student_id`, `class_id`) VALUES (" + StuID + ", " + ClassID + ")";
-          var AddClassStudent = await getResult(tmpSql3);
+          if (checkDisable.length != 0) {
+            var  updateStatusSql = "UPDATE `class_student` SET `status`=1 WHERE student_id=" + StuID +" AND class_id=" + ClassID + " ;";
+            var updateStatus = await getResult(updateStatusSql);
+          } else {
+            tmpSql3 = "INSERT INTO `class_student`(`student_id`, `class_id`) VALUES (" + StuID + ", " + ClassID + ")";
+            var AddClassStudent = await getResult(tmpSql3);
+          }
           count += 1;
-        }
+        } 
       }
     }
     req.session.stuAddClass = count;
     req.session.classAdded = class_name.split('.')[0];
-    req.session.added = true
+    req.session.addByExcel = true
     res.redirect('/admin/student');
   } else {
     res.redirect("/error")
@@ -860,7 +891,7 @@ exports.add_problem = function (req, res) {
   // if file upload error
   if (req.session.upload_err) {
     req.session.upload_err = false
-    error = "Upload error!"
+    error = "Upload failed!"
   }
   // if file upload sucess
   if (req.session.upload_success) {
@@ -906,19 +937,19 @@ exports.add_problem = function (req, res) {
         })
       })
     } else {
-      contest_name = results[0].contest_name
+      contest_name = results[0].contest_name;
+      pathToContestConfigSetting = storage.TESTCASE + contest_name + "/config.txt";
+      data_config =  fs.readFileSync(pathToContestConfigSetting, {encoding:'utf8', flag:'r'});
+      var data_config_inline = data_config.split('\n');
+      data_limitSub = data_config_inline[11];
       for (let i = 0, l = results.length; i < l; i++) {
         problem_id.push(results[i].problem_id)
         path_problem.push(results[i].path_problem)
         path_testcase.push(results[i].path_testcase)
         testcase_size.push(getFolders(results[i].path_testcase).length) // testcase size
-        limitSub.push(results[i].times)
+        limitSub.push(data_limitSub)
       }
 
-      pathToContestConfigSetting = storage.TESTCASE + contest_name + "/config.txt";
-      data_config =  fs.readFileSync(pathToContestConfigSetting, {encoding:'utf8', flag:'r'});
-      var data_config_inline = data_config.split('\n');
-      data_limitSub = data_config_inline[11];
 
       res.render('add-problem.ejs', {
         teacher_role: req.session.teacher_role, 
@@ -1108,4 +1139,17 @@ exports.contestAll = function (req, res) {
     if (err) { logger.error(err); res.redirect("/error"); return }
     res.send({ data: results })
   })
+}
+
+function deleteFolder(path) {
+  return new Promise((resolve, reject) => {
+    fs.exists(path, (exist) => {
+      if(exist) {
+        fs.rmdir(path , {recursive: true}, (err) => {
+          resolve(true);
+        })   
+      }
+      resolve(true);
+    });
+  });
 }

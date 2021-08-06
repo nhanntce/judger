@@ -261,9 +261,43 @@ app.post('/admin/add-teacher', admin.create_teacher)
 app.post('/admin/edit-teacher', admin.edit_teacher)
 app.get('/admin/class', admin.admin_class)
 app.get('/admin/class-data', admin.admin_class_data)
+app.get('/admin/detail-class', admin.detail_class)
 app.post('/admin/add-class', admin.create_class)
 app.post('/admin/edit-class', admin.edit_class)
 app.post('/admin/delete-class', admin.delete_class)
+app.post('/admin/class-delete-student', admin.class_delete_student)
+app.post('/admin/class-add-student', admin.class_add_student)
+app.get('/admin/class-add-student', (req, res) => {
+  var userId = req.session.userId
+  if (userId == null) {
+    res.redirect("/login")
+    return
+  }
+  var class_id = req.query.class_id;
+  var class_name = req.query.class_name;
+  // List all student
+  var sql = "SELECT rollnumber, name, email, class_student.status "+
+            "FROM student_account "+
+            "LEFT JOIN class_student ON class_student.student_id = student_account.id "+
+            "WHERE ((class_student.class_id IS NULL) OR (class_student.status = 0 AND class_student.class_id = ?) OR (class_student.class_id <> ?)) AND student_account.status = 1"
+  
+  db.query(sql, [class_id, class_id], function (err, results) {
+    if (err) { logger.error(err); res.redirect("/error"); return; }
+     res.render('admin-add-student.ejs', 
+      { 
+        data: results, 
+        class_id: class_id, 
+        class_name: class_name,
+        message: "", 
+        error: "", 
+        warning: "", 
+        role: req.session.role, 
+        user: req.session.user, 
+        teacher_role: req.session.teacher_role,
+      }
+    )
+  })
+})
 app.get('/error', (req, res) => {
   res.render('404.ejs')
 })
@@ -283,9 +317,9 @@ app.post('/searching', function (req, res) {
   var userId = req.session.userId
   var sql = ""
   if (req.session.teacher_role <= 1) {
-    sql = "SELECT contest_id, contest_name FROM contest WHERE deleted=0"
+    sql = "SELECT contest_id, contest_name FROM contest WHERE status=1"
   } else {
-    sql = "SELECT contest.contest_id, contest.contest_name FROM contest WHERE contest.teacher_id='" + userId + "' AND deleted=0"
+    sql = "SELECT contest.contest_id, contest.contest_name FROM contest WHERE contest.teacher_id='" + userId + "' AND status=1"
   }
   db.query(sql, function (err, results) {
     if (err) { return res.redirect("/error") }

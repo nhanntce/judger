@@ -31,6 +31,9 @@
   <% if (message.length > 0) { %>
   <script>toastr.success('<%=message%>')</script>
   <% } %>
+  <% if (error.length > 0) { %>
+  <script>toastr.error('<%=error%>')</script>
+  <% } %>
   <!-- DataTales Example -->
   <div class="card shadow mb-4">
     <div class="card-header py-3">
@@ -296,7 +299,7 @@
             //var for penalty mode
             var penalty_mode = document.getElementById('penalty_mode');
             var limit_submission = document.getElementById('limit_submission');
-            var limit_submission_value = 10;
+            var limit_submission_value = parseInt(<%=data[0].limit_submission%>);
 
             function checkComment() {
               if(check_comment.checked == true) {

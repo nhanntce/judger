@@ -124,7 +124,6 @@
           <!-- <th>Username</th>
           <th>Password</th> -->
           <th>Name</th>
-          <th>Class</th>
           <th>IP</th>
           <th>Time out</th>
           <th>Online</th>
@@ -168,6 +167,11 @@
               %>         
             </select>
           </div>
+          <!-- <div class="md-form">
+            <i class="fas fa-users prefix grey-text"></i>
+            <input type="text" id="class" name="class" class="form-control validate">
+            <label data-error="wrong" data-success="" for="orangeForm-email">Class</label>
+          </div> -->
           <div class="md-form">
             <i class="fas fa-unlock-alt prefix grey-text"></i>
             <input type="email" id="email" name="email" class="form-control validate">
@@ -227,17 +231,6 @@
             </div>
             <div class="col-6">
               <div class="md-form">
-                Class
-             <select class="form-control" name="edit_class" id="edit_class">
-            <% for(let i = 0 ; listClass.length > i ; i++) {
-
-          %>
-              <option value="<%=listClass[i].id%>"><%=listClass[i].class_name%></option>     
-              <% } 
-              %>         
-            </select>
-          </div>
-              <!-- <div class="md-form">
                 Contest ID
                 <input type="text" id="edit_contestid" name="edit_contestid" class="form-control validate">
               </div> -->
@@ -249,13 +242,6 @@
                 Time out
                 <input type="text" id="edit_timeout" name="edit_timeout" class="form-control validate">
               </div>
-              <!-- <div class="switch">
-                <label>
-                  No
-                  <input id="edit_islogin" name="edit_islogin" type="checkbox">
-                  <span class="lever"></span> Yes
-                </label>
-              </div> -->
             </div>
           </div>
         </div>
