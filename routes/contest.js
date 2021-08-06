@@ -755,7 +755,7 @@ exports.add_class = function (req, res) {
 
       db.query(sql, [semester, subject, className], (err, results) => {
         if (err) { logger.error(err); res.redirect("/error"); return }
-        if (results.length == 0) { // if class is not exist
+        if (results.length == 0) { // if class is not exist, insert new class to db
           var sqlCreateClass = " INSERT INTO `class`(`semester`, `subject`, `class_name`) VALUES (?,?,?) ";
           db.query(sqlCreateClass, [semester, subject, className], (err) => {
             if (err) { logger.error(err); res.redirect("/error"); return }
@@ -817,14 +817,18 @@ exports.create_class = async function (req, res) {
     var class_name = post.class_name
     var email = post.Email.split(',')
 
-    var sql = "";
-    var tmpSql = "";
+    var sqlInsert = "";
+    var tmpUpdateStatusAndNameSql = "";
+    var tmpUpdateEmailSql = "";
     for (let i = 0; i < RollNumber.length; i++) {
-      sql = "INSERT INTO student_account(rollnumber, name, email) VALUES  ('" + 
+      sqlInsert = "INSERT INTO student_account(rollnumber, name, email) VALUES  ('" + 
       RollNumber[i] + "','" + FullName[i] + "','" + email[i] +  "') ON DUPLICATE KEY UPDATE rollnumber=rollnumber; ";
-      tmpSql = " UPDATE student_account SET status = 1 WHERE rollnumber='" + RollNumber[i] + "'";
-      var resInsert = await getResult(sql);
-      var updateStatusInsert = await getResult(tmpSql)
+      tmpUpdateStatusAndNameSql = " UPDATE student_account SET status=1, name='" + FullName[i] + "' WHERE rollnumber='" + RollNumber[i] + "';";
+      tmpUpdateEmailSql = "UPDATE student_account SET email='" + email[i] + "' WHERE rollnumber='" + RollNumber[i] + 
+      "' AND (SELECT `email` FROM `student_account` WHERE email='" + email[i] + "') IS NULL;"
+      var resInsert = await getResult(sqlInsert);
+      var updateStatusAndNameInsert = await getResult(tmpUpdateStatusAndNameSql);
+      var updateEmailInsert = await getResult(tmpUpdateEmailSql);
     }
 
     var splitClassname = class_name.split('_');
@@ -832,33 +836,35 @@ exports.create_class = async function (req, res) {
     var subject = splitClassname[1]
     var className = splitClassname[2].split('.')[0]
 
-    var tmpSql2 = "SELECT `id` FROM `class` WHERE semester='"+ semester + "' and subject='"+ subject + "' and class_name='"+ className + "';";
-    var selectClassID = await getResult(tmpSql2);
+    var sqlGetIdClass = "SELECT `id` FROM `class` WHERE semester='"+ semester + "' and subject='"+ subject + "' and class_name='"+ className + "';";
+    var selectClassID = await getResult(sqlGetIdClass);
     var ClassID = selectClassID[0].id;
 
-    var tmpSql3 = "";
-    var tmpSql4 = "";
+    var checkAvailableStudentSql = "";
+    var selectAvailableStudentInClass = "";
+    var selectNotAvailableStudentInClass = "";
+    var insertClassStudentSql = "";
     var count = 0;
     for (let i = 0; i < RollNumber.length; i++) {
-      tmpSql3 = "SELECT `id` FROM `student_account` WHERE rollnumber='" + RollNumber[i] + "' AND status=1;";
-      var selectStuID = await getResult(tmpSql3);
+      checkAvailableStudentSql = "SELECT `id` FROM `student_account` WHERE rollnumber='" + RollNumber[i] + "' AND status=1;";
+      var selectStuID = await getResult(checkAvailableStudentSql);
       if (selectStuID.length != 0) {
         var StuID = selectStuID[0].id;
-        tmpSql4 = "SELECT `student_id`, `class_id`, `status` FROM `class_student` WHERE (student_id=" +
+        selectAvailableStudentInClass = "SELECT `student_id`, `class_id`, `status` FROM `class_student` WHERE (student_id=" +
         StuID + " AND class_id=" + ClassID + ") AND status=1";
-        var checkExistStuClass = await getResult(tmpSql4);
+        var checkExistStuClass = await getResult(selectAvailableStudentInClass);
    
-        tmpSql5 = "SELECT `student_id`, `class_id`, `status` FROM `class_student` WHERE (student_id=" +
+        selectNotAvailableStudentInClass = "SELECT `student_id`, `class_id`, `status` FROM `class_student` WHERE (student_id=" +
                   StuID + " AND class_id=" + ClassID + ") AND status=0";
-        var checkDisable = await getResult(tmpSql5);
+        var checkDisable = await getResult(selectNotAvailableStudentInClass);
 
         if (checkExistStuClass.length == 0) {
           if (checkDisable.length != 0) {
             var  updateStatusSql = "UPDATE `class_student` SET `status`=1 WHERE student_id=" + StuID +" AND class_id=" + ClassID + " ;";
             var updateStatus = await getResult(updateStatusSql);
           } else {
-            tmpSql3 = "INSERT INTO `class_student`(`student_id`, `class_id`) VALUES (" + StuID + ", " + ClassID + ")";
-            var AddClassStudent = await getResult(tmpSql3);
+            insertClassStudentSql = "INSERT INTO `class_student`(`student_id`, `class_id`) VALUES (" + StuID + ", " + ClassID + ")";
+            var AddClassStudent = await getResult(insertClassStudentSql);
           }
           count += 1;
         } 
@@ -891,12 +897,12 @@ exports.add_problem = function (req, res) {
   // if file upload error
   if (req.session.upload_err) {
     req.session.upload_err = false
-    error = "Upload failed!"
+    error = "Failed! Something wrong with testcase file!"
   }
   // if file upload sucess
   if (req.session.upload_success) {
     req.session.upload_success = false
-    message = "Upload successfully!"
+    message = "Problem and testcase have been added."
   }
   var contest_id = req.query.contest_id
   var problem_id = []
@@ -1132,6 +1138,7 @@ function checkTestcase(dir, req) {
     req.session.upload_err = true
   }
 }
+
 exports.contestAll = function (req, res) {
   var sql = ""
     sql = "SELECT `contest_name`FROM `contest` WHERE status=1"
