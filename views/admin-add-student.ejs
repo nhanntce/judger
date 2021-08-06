@@ -1,0 +1,86 @@
+<%- include ("partials/header-admin" ) %>
+<div class="container-fluid mt-4">
+  <div class="bc-icons">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"> <a class="text-gray-700" href="/admin/class">Class</a></li>
+        <li><i class="fas fa-angle-double-right mx-2 text-gray-700" aria-hidden="true"></i></li>
+        <li class="breadcrumb-item"> <a class="text-gray-700" href="/admin/detail-class?classId=<%=class_id%>">Detail</a></li>
+        <li><i class="fas fa-angle-double-right mx-2 text-gray-700" aria-hidden="true"></i></li>
+        <li class="breadcrumb-item text-gray-700 font-italic">Add student</li>
+      </ol>
+    </nav>
+  </div>
+  <% if (message.length > 0) { %>
+  <script>toastr.success("Delete class succesful")</script>
+  <% } %>
+  <% if (error.length > 0) { %>
+  <script>toastr.error("Delete class fail")</script>
+ <% 
+    } 
+    if(teacher_role == 0) {
+  %>
+  <h2><%=class_name%></h2>
+
+  <button type="button" id="btnconfirm" class="btn btn-outline-blue waves-effect btn-sm" data-toggle="modal"
+        data-target="#modalConfirmDelete" disabled><i class="fa fa-plus fa-lg"></i> Add selected</button>
+  <% } %>
+  <div class="card-body">
+      <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+        <thead>
+          <tr>
+            <th class="text-center" width="5%">
+              <button type="button" style="border: none; background: transparent; font-size: 14px;"
+                id="MyTableCheckAllButton"><i class="far fa-square"></i></button>
+            </th>
+            <th>Roll number</th>
+            <th>Name</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%
+            for (let i = 0, l = data.length; i < l; ++i) {  %>
+          <tr>
+            <td></td>
+            <td>
+              <%= data[i].rollnumber %>
+            </td>
+            <td>
+              <%= data[i].name %>
+            </td>
+            <td>
+              <%= data[i].email %>
+            </td>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+</div>
+<!--Modal: modalConfirmDelete-->
+<div class="modal fade" id="modalConfirmDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-notify modal-success" role="document">
+    <div class="modal-content text-center">
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">Are you sure?</p>
+      </div>
+      <div class="modal-body">
+        <i class="fas fa-times fa-4x animated rotateIn"></i><br>
+        <font color=green><b id="totalrollnumber"></b></font>
+      </div>
+      <div class="modal-footer flex-center">
+        <form action="/admin/class-add-student" method="POST">
+          <input type="hidden" id="list_rollnumber" name="list_rollnumber">
+          <input type="hidden" name="class_id" value="<%=class_id%>">
+          <input type="hidden" name="class_name" value="<%=class_name%>">
+          <button type="submit" class="btn btn-outline-success">Yes</button>
+        </form>
+        <a type="button" class="btn btn-success waves-effect" data-dismiss="modal">No</a>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Modal: modalConfirmDelete-->
+<%- include ("partials/footer-admin" ) %>
