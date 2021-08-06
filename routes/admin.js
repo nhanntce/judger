@@ -51,7 +51,12 @@ exports.admin_student = function (req, res) {
     else
       message = "Succesfully! Students have been added to class."
   }
-  res.render('admin-student.ejs', { message: message, error: error, teacher_role: req.session.teacher_role})
+  var sql = ""
+    sql = "SELECT class_name, id FROM `class` where status = 1"
+  db.query(sql, function (err, results) {
+    if (err) { logger.error(err); res.redirect("/error"); return }
+    res.render('admin-student.ejs', { listClass: results, message: message, error: error, teacher_role: req.session.teacher_role})
+  })
 }
 
 /**
@@ -91,11 +96,11 @@ exports.admin_teacher = function (req, res) {
 exports.admin_student_data = function (req, res) {
   const requestQuery = req.query;
   let columnsMap = [
-    { db: "null", dt: 0 }, { db: "userId", dt: 1 }, { db: "rollnumber", dt: 2 }, { db: "email", dt: 3 }, { db: "name", dt: 4 }, { db: "class_name", dt: 5 }, { db: "ip", dt: 6 }, { db: "timeout", dt: 7 }, { db: "islogin", dt: 8 }
+    { db: "null", dt: 0 }, { db: "userId", dt: 1 }, { db: "rollnumber", dt: 2 }, { db: "email", dt: 3 }, { db: "name", dt: 4 }, { db: "class_name", dt: 5 }, { db: "ip", dt: 6 }, { db: "timeout", dt: 7 }, { db: "islogin", dt: 8 }, { db: "id", dt: 9 }
   ];
-  const query = "SELECT userId, rollnumber, email, name, class_name, ip, DATE_FORMAT(timeout, '%d-%m-%Y %H:%i:%s') AS timeout, islogin " + 
+  const query = "SELECT userId, rollnumber, email, name, class_name, ip, DATE_FORMAT(timeout, '%d-%m-%Y %H:%i:%s') AS timeout, islogin, student_account.id " + 
   				"FROM student_account, class_student, class " +
-  				"WHERE student_account.id = class_student.student_id AND class_student.class_id = class.id"
+  				"WHERE student_account.id = class_student.student_id AND class_student.class_id = class.id and student_account.status = 1 and class_student.status = 1 and class.status = 1"
   const primaryKey = "userId"
   const nodeTable = new NodeTable(requestQuery, db, query, primaryKey, columnsMap);
   nodeTable.output((err, data) => {
@@ -120,11 +125,12 @@ exports.create_student = function (req, res) {
     var post = req.body
     var rollnumber = post.rollnumber
     var name = post.name
-    var classID = post.class
-    // var username = post.username
-    // var password = post.password
-    
+    var classID = post.class_id
     var email = post.email
+    console.log(classID)
+    console.log(rollnumber)
+    console.log(name)
+    console.log(email)
     var sql = "INSERT INTO student_account(rollnumber, email, name) VALUES (?, ?, ?) "
     db.query(sql, [rollnumber, email, name], function (err, result) {
       if (err) { // if error => set req.session.sql_err = true
@@ -162,33 +168,23 @@ exports.create_student = function (req, res) {
 exports.edit_student = function (req, res) {
   if (req.method == "POST") {
     var post = req.body
-    var id = post.edit_id
+    var id = post.edit_id_student
     var rollnumber = post.edit_rollnumber
     var name = post.edit_name
     var classID = post.edit_class
-    var email = post.edit_email
-    // var username = post.edit_username
-    // var password = post.edit_password
-    var contest_id = post.edit_contestid
+    var email = post.edit_email    
     var ip = post.edit_ip
     var timeout = post.edit_timeout
-    var islogin = post.edit_islogin == "on" ? "1" : "0"
-    // if (!/^[A-Za-z0-9\d=!\-@._*]*$/.test(password)) {
-    //   res.redirect("/admin/student")
-    //   return
-    // }
-    // var hash = crypto.createHash('md5').update(password).digest("hex")
-    var sql = "UPDATE student_account SET rollnumber=?,email=?,name=?,ip=?,timeout='" + formatTime(timeout) + "',islogin=? WHERE userId=?"
-    db.query(sql, [rollnumber, email, name, ip, islogin, id], function (err) {
+    var sql = "UPDATE student_account SET rollnumber=?,email=?,name=?,ip=?,timeout='" + formatTime(timeout) + "' WHERE id=?"
+    db.query(sql, [rollnumber, email, name, ip, id], function (err) {
       if (err) {
       	req.session.sql_err = true
         res.redirect("/admin/student")
       } else {
-        logger.info(sql)
         var sql = "UPDATE class_student SET class_id=? WHERE student_id=?" 
         db.query(sql, [classID, id], function (err) {
         	if (err) {
-		      	req.session.sql_err = true
+		      	req.session.added = true
 		        res.redirect("/admin/student")
 		    } else {
 	        	req.session.updated = true
@@ -432,3 +428,11 @@ exports.delete_class = function (req, res) {
     return
   }
 }
+// exports.className = function (req, res) {
+//   var sql = ""
+//     sql = "SELECT `class_name`FROM `class`"
+//   db.query(sql, function (err, results) {
+//     if (err) { logger.error(err); res.redirect("/error"); return }
+//     res.render('admin-student.ejs', { message: message, error: error, teacher_role: req.session.teacher_role });
+//   })
+// }

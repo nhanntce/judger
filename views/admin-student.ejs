@@ -12,7 +12,7 @@
         defaultContent: "",
         targets: 0
       }, {
-        targets: 7,
+        targets: 8,
         mRender: function (data, type, row, meta) {
           return data.toLocaleString("it-IT")
         }
@@ -35,7 +35,19 @@
         selected: !0
       }).data().toArray()
       if (l.length == 1) {
-        $("#btnedit").prop('disabled', false);
+        $("#btnedit").prop('disabled', false);        
+    //     $.get("/admin/class-name", function(data, status){
+    //       var allContest = [];
+    //       console.log(data)
+    // var contestName1 = $('#contest_name').val();
+    //     for (let i = 0, l = data.data.length; i < l; ++i){
+    //         if(contestName1 === data.data[i].contest_name){
+    //           $('#contest_name').after('<span class="error">Contest name already !</span>');
+    //           isDuplicate = true
+    //       }        
+    //     }
+    //     });
+        document.getElementById("edit_id_student").value = l[0][9]
         document.getElementById("edit_id").value = l[0][1]
         document.getElementById("edit_rollnumber").value = l[0][2]
         document.getElementById("edit_email").value = l[0][3]
@@ -43,6 +55,7 @@
         document.getElementById("edit_class").value = l[0][5]
         document.getElementById("edit_ip").value = l[0][6]
         document.getElementById("edit_timeout").value = l[0][7]
+        var class_name = document.getElementById("edit_class").value
         if (l[0][8]) {
           $("#edit_islogin").prop("checked", true);
         } else {
@@ -143,10 +156,17 @@
             <input type="text" id="name" name="name" class="form-control validate">
             <label data-error="wrong" data-success="" for="orangeForm-email">Name</label>
           </div>
+          <label data-error="wrong" data-success="" for="orangeForm-email"> <i class="fas fa-users prefix grey-text"></i> Class</label>
+
           <div class="md-form">
-            <i class="fas fa-users prefix grey-text"></i>
-            <input type="text" id="class" name="class" class="form-control validate">
-            <label data-error="wrong" data-success="" for="orangeForm-email">Class</label>
+             <select class="form-control" name="class_id" id="class_id">
+            <% for(let i = 0 ; listClass.length > i ; i++) {
+
+          %>
+              <option value="<%=listClass[i].id%>"><%=listClass[i].class_name%></option>     
+              <% } 
+              %>         
+            </select>
           </div>
           <div class="md-form">
             <i class="fas fa-unlock-alt prefix grey-text"></i>
@@ -186,6 +206,9 @@
           <div class="row">
             <div class="col-6">
               <div class="md-form">
+                <input placeholder="Placeholder" type="hidden" id="edit_id_student" name="edit_id_student" class="form-control validate" readonly="">
+              </div>
+              <div class="md-form">
                 ID
                 <input placeholder="Placeholder" type="text" id="edit_id" name="edit_id" class="form-control validate" readonly="">
               </div>
@@ -197,14 +220,6 @@
                 Email
                 <input type="email" id="edit_email" name="edit_email" class="form-control validate">
               </div>
-              <!-- <div class="md-form">
-                Username
-                <input type="text" id="edit_username" name="edit_username" class="form-control validate">
-              </div>
-              <div class="md-form">
-                Password
-                <input type="password" id="edit_password" name="edit_password" class="form-control validate">
-              </div> -->
               <div class="md-form">
                 Name
                 <input type="text" id="edit_name" name="edit_name" class="form-control validate">
@@ -213,12 +228,19 @@
             <div class="col-6">
               <div class="md-form">
                 Class
-                <input type="text" id="edit_class" name="edit_class" class="form-control validate">
-              </div>
-              <div class="md-form">
+             <select class="form-control" name="edit_class" id="edit_class">
+            <% for(let i = 0 ; listClass.length > i ; i++) {
+
+          %>
+              <option value="<%=listClass[i].id%>"><%=listClass[i].class_name%></option>     
+              <% } 
+              %>         
+            </select>
+          </div>
+              <!-- <div class="md-form">
                 Contest ID
                 <input type="text" id="edit_contestid" name="edit_contestid" class="form-control validate">
-              </div>
+              </div> -->
               <div class="md-form">
                 IP
                 <input type="text" id="edit_ip" name="edit_ip" class="form-control validate">
@@ -227,14 +249,13 @@
                 Time out
                 <input type="text" id="edit_timeout" name="edit_timeout" class="form-control validate">
               </div>
-              Online
-              <div class="switch">
+              <!-- <div class="switch">
                 <label>
                   No
                   <input id="edit_islogin" name="edit_islogin" type="checkbox">
                   <span class="lever"></span> Yes
                 </label>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
