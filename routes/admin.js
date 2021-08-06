@@ -18,7 +18,7 @@ exports.dashboard = function (req, res, next) {
   db.query(sql, function (err, result) {
     if (err) {  // query statement error
       res.redirect("/error"); return }
-    res.render('admin.ejs', { data: result });
+    res.render('admin.ejs', { data: result, teacher_role: req.session.teacher_role });
   })
 
 }
