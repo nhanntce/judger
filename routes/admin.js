@@ -142,10 +142,6 @@ exports.create_student = function (req, res) {
     var name = post.name
     var classID = post.class_id
     var email = post.email
-    console.log(classID)
-    console.log(rollnumber)
-    console.log(name)
-    console.log(email)
     var sql = "INSERT INTO student_account(rollnumber, email, name) VALUES (?, ?, ?) "
     db.query(sql, [rollnumber, email, name], function (err, result) {
       if (err) { // if error => set req.session.sql_err = true
@@ -188,10 +184,10 @@ exports.edit_student = function (req, res) {
     var name = post.edit_name
     var classID = post.edit_class
     var email = post.edit_email    
-    var ip = post.edit_ip
+    var userID = post.edit_id
     var timeout = post.edit_timeout
-    var sql = "UPDATE student_account SET rollnumber=?,email=?,name=?,ip=?,timeout='" + formatTime(timeout) + "' WHERE id=?"
-    db.query(sql, [rollnumber, email, name, ip, id], function (err) {
+    var sql = "UPDATE student_account SET rollnumber='"+rollnumber+"',email='"+email+"',name='"+name+"',userId='"+userID+"',timeout='" + formatTime(timeout) + "' WHERE id=" + id;
+    db.query(sql, function (err) {
       if (err) {
       	req.session.sql_err = true
         res.redirect("/admin/student")
@@ -449,16 +445,6 @@ exports.delete_class = function (req, res) {
     return
   }
 }
-<<<<<<< HEAD
-// exports.className = function (req, res) {
-//   var sql = ""
-//     sql = "SELECT `class_name`FROM `class`"
-//   db.query(sql, function (err, results) {
-//     if (err) { logger.error(err); res.redirect("/error"); return }
-//     res.render('admin-student.ejs', { message: message, error: error, teacher_role: req.session.teacher_role });
-//   })
-// }
-=======
 
 exports.detail_class = function (req, res) {
   var userId = req.session.userId
@@ -584,4 +570,4 @@ exports.class_add_student = function (req, res) {
     // }
   }
 }
->>>>>>> 698d6aef51aca7c84c7408ef18e0d76f141bbe67
+
