@@ -53,9 +53,13 @@ exports.admin_student = function (req, res) {
       error = "All Students have been added already."
     }
   }
-  if (req.session.reset) {
-    req.session.reset = false
+  if (req.session.reset_success) {
+    req.session.reset_success = false
     message = "Students have been reseted!";
+  }
+  if(req.session.reset_fail) {
+    req.session.reset_success = false
+    error = "Reset student fail!";
   }
   if (req.session.added) {
     req.session.added = false
@@ -239,11 +243,11 @@ exports.reset_student = function (req, res) {
     sql = sql.slice(0, -4)
     db.query(sql, function (err) {
       if (err) {
-        req.session.sql_err = true
+        req.session.reset_fail = true;
         res.redirect("/admin/student")
       } else {
         logger.info("Reset student ip, timeout userId=" + list_id)
-        req.session.reset = true
+        req.session.reset_success = true;
         res.redirect('/admin/student')
       }
     })
@@ -264,7 +268,10 @@ exports.admin_teacher_data = function (req, res) {
   let columnsMap = [
     { db: "null", dt: 0 }, { db: "userId", dt: 1 }, { db: "rollnumber", dt: 2 }, { db: "name", dt: 3 }, { db: "email", dt: 4 }, { db: "status", dt: 5 }, { db: "role_name", dt: 6 }
   ];
-  const query = "SELECT employee_account.userId, employee_account.rollnumber, employee_account.name, employee_account.email, employee_account.status, role.role_name FROM employee_account, role WHERE role.role_id = employee_account.role_id"
+  const query = "SELECT employee_account.userId, employee_account.rollnumber, " +
+  " employee_account.name, employee_account.email, employee_account.status, " +
+  " role.role_name FROM employee_account, role WHERE role.role_id = employee_account.role_id " +
+  "AND employee_account.userId != '" + req.session.userId + "'";
   const primaryKey = "userId"
   const nodeTable = new NodeTable(requestQuery, db, query, primaryKey, columnsMap);
   nodeTable.output((err, data) => {
@@ -374,6 +381,7 @@ exports.admin_class_data = function (req, res) {
     res.send(data)
   })
 }
+
 exports.create_class = function (req, res) {
   if (req.method == "POST") {
     var post = req.body
@@ -396,6 +404,7 @@ exports.create_class = function (req, res) {
     return
   }
 }
+
 exports.edit_class = function (req, res) {
   if (req.method == "POST") {
     var post = req.body
@@ -418,6 +427,7 @@ exports.edit_class = function (req, res) {
     return
   }
 }
+
 exports.delete_class = function (req, res) {
   if (req.method == "POST") {
     var post = req.body
