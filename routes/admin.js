@@ -63,7 +63,10 @@ exports.admin_student = function (req, res) {
   }
   if (req.session.added) {
     req.session.added = false
-    message = "Succesfully! Students have been added.";
+    if (req.session.stuAddClass && req.session.classAdded) 
+      message = "Succesfully! " + req.session.stuAddClass + " Students have been added to '" + req.session.classAdded + "' class.";
+    else
+      message = "Succesfully! Students have been added to class."
   }
   var sql = ""
     sql = "SELECT class_name, id FROM `class` where status = 1"
