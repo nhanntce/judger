@@ -68,8 +68,8 @@ exports.admin_student = function (req, res) {
     else
       message = "Succesfully! Students have been added to class."
   }
-  var sql = ""
-    sql = "SELECT class_name, id FROM `class` where status = 1"
+  var sql = "SELECT `id`, `semester`, `subject`, `class_name`, `status` FROM `class` WHERE status = 1";
+    
   db.query(sql, function (err, results) {
     if (err) { logger.error(err); res.redirect("/error"); return }
     res.render('admin-student.ejs', { listClass: results, message: message, error: error, teacher_role: req.session.teacher_role})
@@ -137,6 +137,7 @@ exports.admin_student_data = function (req, res) {
         data.data[i][5] = "<center>-</center>";
       }
     }
+    console.log('data', data);
     res.send(data)
   })
 }
@@ -676,6 +677,16 @@ exports.list_students = async function(req, res) {
   }
   let listStudents = await queryPromise(sql, []);
   res.send(listStudents);
+}
+
+exports.list_classes = async function(req, res) {
+  let idStudent = req.query.id_student;
+  let idClass = req.query.id_class;
+  let sql = "SELECT class.`id`, class.`semester`, class.`subject`, class.`class_name` " +
+  " FROM `class`, class_student WHERE class.status = 1 AND class_student.status = 1 " +
+  " AND class.id = class_student.class_id AND class_student.student_id = ? AND class.id <> ?";
+  let listclass = await queryPromise(sql, [idStudent, idClass]);
+  res.send(listclass);
 }
 
 /**
