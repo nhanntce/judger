@@ -485,6 +485,9 @@ exports.delete_class = function (req, res) {
   }
 }
 
+/**
+ * Get student in a class
+*/
 exports.detail_class = function (req, res) {
   var userId = req.session.userId
   if (userId == null) {
@@ -508,12 +511,13 @@ exports.detail_class = function (req, res) {
             "WHERE class_student.class_id = ? AND class.id = class_student.class_id AND class_student.student_id = student_account.id AND class_student.status = 1 AND class.status = 1"
   db.query(sql, [classId], function (err, results) {
     if (err) { logger.error(err); res.redirect("/error"); return }
-    // var class_name = results[0].class_name
-    
     res.render('admin-class-detail.ejs', { data: results, class_id: classId, class_name: class_name, totalStudent: results.length, message: message, error: error, teacher_role: req.session.teacher_role, role: req.session.role, user: req.session.user })
   })
 }
 
+/**
+ * Delete student in a class
+*/
 exports.class_delete_student = function (req, res) {
   var userId = req.session.userId
   if (userId == null) {
@@ -553,7 +557,10 @@ exports.class_delete_student = function (req, res) {
   }
 }
 
-exports.class_add_student = function (req, res) {
+/**
+ * Add student to a class
+*/
+exports.class_add_student = async function (req, res) {
   var userId = req.session.userId
   if (userId == null) {
     res.redirect("/login")
@@ -572,12 +579,11 @@ exports.class_add_student = function (req, res) {
       }
       sql_student = sql_student.slice(0, -4);
       var sql_student_select_insert = "SELECT id FROM (" + sql_student + ") AS a "+
-                                      "WHERE a.id NOT IN (SELECT student_id FROM class_student WHERE class_id = ?)"
+                                      "WHERE a.id NOT IN (SELECT student_id FROM class_student WHERE class_id = "+ class_id +")"
+      try {
+        var resSelectInsert = await queryPromise(sql_student_select_insert)
 
-      var sql_class_insert = "INSERT INTO `class_student`(`student_id`, `class_id`, `status`) VALUES "
-      db.query(sql_student_select_insert, [class_id], (errSelectInsert, resSelectInsert) => {
-        if (errSelectInsert) { logger.error(errSelectInsert); res.redirect("/error"); return; }
-        
+        var sql_class_insert = "INSERT INTO `class_student`(`student_id`, `class_id`, `status`) VALUES "
         for(let i = 0, len = resSelectInsert.length; i < len; i++) {
            sql_class_insert +="("+ resSelectInsert[i].id +"," + class_id + ","+ 1 +"), "
         }
@@ -587,58 +593,48 @@ exports.class_add_student = function (req, res) {
         } else {
           sql_class_insert = sql_class_insert.slice(0, -2);
         }
+
         var sql_student_select_update = "SELECT id FROM (" + sql_student + ") AS a "+
                                       "WHERE a.id NOT IN ("+ sql_student_select_insert +")"
 
         var sql_class_update = 'UPDATE `class_student` SET `status`= 1 WHERE ';
-        db.query(sql_student_select_update, [class_id], (errSelectUpdate, resSelectUpdate) => {
-          if (errSelectUpdate) { logger.error(errSelectUpdate); res.redirect("/error"); return; }
-          
-          for(let i = 0, len = resSelectUpdate.length; i < len; i++) {
-             sql_class_update +="(student_id = "+ resSelectUpdate[i].id +" AND class_id = " + class_id + ") OR "
-          }
-          if (sql_class_update.endsWith("WHERE ")) {
-            sql_class_update = ""
-          } else {
-            sql_class_update = sql_class_update.slice(0, -4);
-          }
-          console.log("INSERT: " + sql_class_insert)
-          console.log("UPDATE: " + sql_class_update)
-          if (sql_class_insert != "" && sql_class_update != "") {
-            db.query(sql_class_insert, (errInsert) => {
-              if (errInsert) { logger.error(errInsert); res.redirect("/error"); return; }
-              db.query(sql_class_update, (errUpdate) => {
-                if (errUpdate) { logger.error(errUpdate); res.redirect("/error"); return; }
-                req.session.added = true
-                logger.info(list.length + " students in class " + class_id + " has added: " + list)
-                res.redirect("/admin/detail-class?classId=" + class_id + "&class_name=" + class_name)
-              });
-            });
-          }
-          if (sql_class_insert == "" && sql_class_update != "") {
-            db.query(sql_class_update, (errUpdate) => {
-              if (errUpdate) { logger.error(errUpdate); res.redirect("/error"); return; }
-              req.session.added = true
-              logger.info(list.length + " students in class " + class_id + " has added: " + list)
-              res.redirect("/admin/detail-class?classId=" + class_id + "&class_name=" + class_name)
-            });
-          }
-          if (sql_class_insert != "" && sql_class_update == "") {
-            db.query(sql_class_insert, (errInsert) => {
-              if (errInsert) { logger.error(errInsert); res.redirect("/error"); return; }
-              req.session.added = true
-              logger.info(list.length + " students in class " + class_id + " has added: " + list)
-              res.redirect("/admin/detail-class?classId=" + class_id + "&class_name=" + class_name)
-            });
-          }
-        })
-      })
-}
-      
-    
+        
+        var resSelectUpdate = await queryPromise(sql_student_select_update)
 
-    //   })
-    // }
+        for(let i = 0, len = resSelectUpdate.length; i < len; i++) {
+             sql_class_update +="(student_id = "+ resSelectUpdate[i].id +" AND class_id = " + class_id + ") OR "
+        }
+
+        if (sql_class_update.endsWith("WHERE ")) {
+          sql_class_update = ""
+        } else {
+          sql_class_update = sql_class_update.slice(0, -4);
+        }
+
+        if (sql_class_insert != "" && sql_class_update != "") {
+          await queryPromise(sql_class_insert)
+          await queryPromise(sql_class_update)
+          req.session.added = true
+          logger.info(list.length + " students in class " + class_id + " has added: " + list)
+          res.redirect("/admin/detail-class?classId=" + class_id + "&class_name=" + class_name)
+        }
+        if (sql_class_insert == "" && sql_class_update != "") {
+          await queryPromise(sql_class_update)
+          req.session.added = true
+          logger.info(list.length + " students in class " + class_id + " has added: " + list)
+          res.redirect("/admin/detail-class?classId=" + class_id + "&class_name=" + class_name) 
+        }
+        if (sql_class_insert != "" && sql_class_update == "") {
+          await queryPromise(sql_class_insert)
+          req.session.added = true
+          logger.info(list.length + " students in class " + class_id + " has added: " + list)
+          res.redirect("/admin/detail-class?classId=" + class_id + "&class_name=" + class_name) 
+        }
+      } catch (error) {
+        logger.error(error); res.redirect("/error"); return; 
+      }
+
+    }
   }
 }
 exports.duplicateClass = function (req, res) {
