@@ -63,7 +63,10 @@ exports.admin_student = function (req, res) {
   }
   if (req.session.added) {
     req.session.added = false
-    message = "Succesfully! Students have been added.";
+    if (req.session.stuAddClass && req.session.classAdded) 
+      message = "Succesfully! " + req.session.stuAddClass + " Students have been added to '" + req.session.classAdded + "' class.";
+    else
+      message = "Succesfully! Students have been added to class."
   }
   var sql = ""
     sql = "SELECT class_name, id FROM `class` where status = 1"
@@ -612,3 +615,37 @@ exports.duplicateClass = function (req, res) {
   })
 }
 
+/**
+ * List all student from DB except 
+ * @param  {[type]} req [description]
+ * @param  {[type]} res [description]
+ * @return {[type]}     [description]
+ */
+exports.list_students = async function(req, res) {
+  let userIdStudent = req.query.user_id_student;
+  let sql = "SELECT `id`, `userId`, `rollnumber`, `email` FROM `student_account` WHERE status = 1 ";
+  if(userIdStudent) {
+    sql +=  "AND userId != '" + userIdStudent + "'";
+  }
+  let listStudents = await queryPromise(sql, []);
+  res.send(listStudents);
+}
+
+/**
+ * @author NhanNT
+ * query sync
+ * @param  {[type]} sql    [description]
+ * @param  {[type]} params [description]
+ * @return {[type]}        [description]
+ */
+var queryPromise = (sql, params) => {
+  return new Promise((resolve, reject) => {
+    db.query(sql, params, (err, results) => {
+      if(err) {
+        reject(err);
+      } else {
+        resolve(results);
+      }
+    })
+  });
+}

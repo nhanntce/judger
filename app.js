@@ -252,6 +252,7 @@ app.use('/admin/*', auth_admin);
 app.get('/admin', admin.dashboard)
 app.get('/admin/student', admin.admin_student)
 app.get('/admin/student-data', admin.admin_student_data)
+app.get('/admin/list-students', admin.list_students)
 app.post('/admin/add-student', admin.create_student)
 app.post('/admin/edit-student', admin.edit_student)
 app.post('/admin/reset-student', admin.reset_student)
