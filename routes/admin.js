@@ -137,7 +137,6 @@ exports.admin_student_data = function (req, res) {
         data.data[i][5] = "<center>-</center>";
       }
     }
-    console.log('data', data);
     res.send(data)
   })
 }
