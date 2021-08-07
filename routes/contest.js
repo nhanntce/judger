@@ -894,11 +894,12 @@ exports.add_problem = function (req, res) {
   }
   var error = ""
   var message = ""
-  // if file upload error
+  // if Problem and testcase exist on db
   if (req.session.duplicate_prbAtc) {
     req.session.duplicate_prbAtc = false
     error = "Failed! Problem and testcase were existed!"
   }
+  // wrong type file or the file's not is right testcase file
   if (req.session.upload_err) {
     req.session.upload_err = false
     error = "Failed! Please check your files!"
@@ -907,6 +908,16 @@ exports.add_problem = function (req, res) {
   if (req.session.upload_success) {
     req.session.upload_success = false
     message = "Problem and testcase have been added."
+  }
+  //delete prblem and testcase successful
+  if (req.session.delPrbSuccess) {
+    req.session.delPrbSuccess = false
+    message = "Problem and testcase have been deleted."
+  }
+  //cant delete prblem and testcase
+  if (req.session.delPrbErr) {
+    req.session.delPrbErr = false
+    error = "Failed! Can not delete!"
   }
   var contest_id = req.query.contest_id
   var problem_id = []
@@ -1117,11 +1128,21 @@ exports.delete_problem_testcase = async function (req, res) {
     " FROM `contest_detail` WHERE contest_id=" + contest_id + " AND problem_id='" + problem_id + "'";
 
     var selectPrbTC = await getResult(getPrbAndTCSql);
-    var deletePrbAtcDb = await getResult(sql)
-    var deleteZipFile = await deleteFolder(selectPrbTC[0].path_testcase + ".zip")
-    var deleteTcDir = await deleteFolder(selectPrbTC[0].path_testcase)
-    var deletePrbDir = await deleteFolder(selectPrbTC[0].path_problem)
-    logger.info("Delete in contest_detail where contest " + contest_id + " and problem " + problem_id)
+    if (selectPrbTC.length != 0) {
+      try{
+        var deletePrbAtcDb = await getResult(sql)
+        var deleteZipFile = await deleteFolder(selectPrbTC[0].path_testcase + ".zip")
+        var deleteTcDir = await deleteFolder(selectPrbTC[0].path_testcase)
+        var deletePrbDir = await deleteFolder(selectPrbTC[0].path_problem)
+        logger.info("Delete in contest_detail where contest " + contest_id + " and problem " + problem_id)
+        req.session.delPrbSuccess = true;
+      } catch(error){
+        logger.info("Fail to delete in contest_detail where contest " + contest_id + " and problem " + problem_id)
+        req.session.delPrbErr = true;
+        res.redirect("/contest/add-problem?contest_id=" + contest_id)
+        return;
+      }
+    }
     res.redirect("/contest/add-problem?contest_id=" + contest_id)
   } else {
     res.redirect("/error")
