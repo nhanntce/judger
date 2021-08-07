@@ -281,10 +281,10 @@ app.get('/admin/class-add-student', (req, res) => {
   var class_id = req.query.class_id;
   var class_name = req.query.class_name;
   // List all student
-  var sql = "SELECT rollnumber, name, email, class_student.status "+
+  var sql = "SELECT rollnumber, name, email "+
             "FROM student_account "+
-            "LEFT JOIN class_student ON class_student.student_id = student_account.id "+
-            "WHERE ((class_student.class_id IS NULL) OR (class_student.status = 0 AND class_student.class_id = ?) OR (class_student.class_id <> ?)) AND student_account.status = 1"
+            "WHERE id NOT IN (SELECT student_id FROM class_student WHERE class_id = ?) "+
+            "OR id IN (SELECT student_id FROM class_student WHERE class_id = ? AND status = 0)"
   
   db.query(sql, [class_id, class_id], function (err, results) {
     if (err) { logger.error(err); res.redirect("/error"); return; }
