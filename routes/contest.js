@@ -520,20 +520,21 @@ exports.load_student = async function (req, res) {
 
   if(students.length == 0) {
     // List all class
-    var sqlClass = "SELECT `id`, `class_name` FROM `class` WHERE status=1";
+    var sqlClass = "SELECT `id`, `semester`, `subject`, `class_name`, `status` FROM `class` WHERE status=1";
     let classes = await getResult(sqlClass);
     var listClass = [];
     for(var i = 0, len = classes.length; i < len; i++) {
+      let semesterSubjectClass = classes[i].semester + "_" + classes[i].subject + "_" + classes[i].class_name;
       if(classes[i].id == class_id)
-        class_name = classes[i].class_name;
+        class_name = classes[i].semester + "_" + classes[i].subject + "_" + classes[i].class_name;
       listClass.push({
-        class_name: classes[i].class_name,
+        class_name: semesterSubjectClass,
         class_id: classes[i].id 
       });
     }
     res.render('add-student.ejs', { 
        list_class: listClass, 
-       data: resultsFinal, 
+       data: [], 
        contest_id: contest_id, 
        message: message, 
        error: error, 
@@ -571,14 +572,15 @@ exports.load_student = async function (req, res) {
       studentResult.push(students[i]);
     }
   }
-  var sqlClass = "SELECT `id`, `class_name` FROM `class` WHERE status=1";
+  var sqlClass = "SELECT `id`, `semester`, `subject`, `class_name`, `status` FROM `class` WHERE status=1";
   let classes = await getResult(sqlClass);
   var listClass = [];
   for(var i = 0, len = classes.length; i < len; i++) {
+    let semesterSubjectClass = classes[i].semester + "_" + classes[i].subject + "_" + classes[i].class_name;
     if(classes[i].id == class_id)
-      class_name = classes[i].class_name;
+      class_name = classes[i].semester + "_" + classes[i].subject + "_" + classes[i].class_name;
     listClass.push({
-      class_name: classes[i].class_name,
+      class_name: semesterSubjectClass,
       class_id: classes[i].id 
     });
   }
