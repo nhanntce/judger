@@ -5,7 +5,7 @@
       <ol class="breadcrumb">
         <li class="breadcrumb-item"> <a class="text-gray-700" href="/admin/class">Class</a></li>
         <li><i class="fas fa-angle-double-right mx-2 text-gray-700" aria-hidden="true"></i></li>
-        <li class="breadcrumb-item"> <a class="text-gray-700" href="/admin/detail-class?classId=<%=class_id%>">Detail</a></li>
+        <li class="breadcrumb-item"> <a class="text-gray-700" href="/admin/detail-class?classId=<%=class_id%>&class_name=<%=class_name%>"><%=class_name%></a></li>
         <li><i class="fas fa-angle-double-right mx-2 text-gray-700" aria-hidden="true"></i></li>
         <li class="breadcrumb-item text-gray-700 font-italic">Add student</li>
       </ol>
@@ -18,9 +18,8 @@
   <script>toastr.error("Delete class fail")</script>
  <% 
     } 
-    if(teacher_role == 0) {
+    if(teacher_role < 2) {
   %>
-  <h2><%=class_name%></h2>
 
   <button type="button" id="btnconfirm" class="btn btn-outline-blue waves-effect btn-sm" data-toggle="modal"
         data-target="#modalConfirmDelete" disabled><i class="fa fa-plus fa-lg"></i> Add selected</button>

@@ -165,13 +165,14 @@ app.get('/contest/add-student', (req, res) => {
   var time_begin = req.query.time_begin;
   var time_end = req.query.time_end;
   // List all class
-  var sql = "SELECT `id`, `class_name` FROM `class`"
+  var sql = "SELECT `id`, `semester`, `subject`, `class_name`, `status` FROM `class` WHERE status=1";
   var listClass = [];
   db.query(sql, function (err, results) {
     if (err) { logger.error(err); res.redirect("/error"); return; }
      for(var i = 0, len = results.length; i < len; i++) {
+      let semesterSubjectClass = results[i].semester + "_" + results[i].subject + "_" + results[i].class_name;
       listClass.push({
-        class_name: results[i].class_name,
+        class_name: semesterSubjectClass,
         class_id: results[i].id 
       });
      }
@@ -264,6 +265,7 @@ app.get('/admin/duplicate-teacher', admin.duplicateRollname)
 app.get('/admin/class', admin.admin_class)
 app.get('/admin/class-data', admin.admin_class_data)
 app.get('/admin/detail-class', admin.detail_class)
+app.get('/admin/list-class', admin.list_classes)
 app.post('/admin/add-class', admin.create_class)
 app.post('/admin/edit-class', admin.edit_class)
 app.post('/admin/delete-class', admin.delete_class)
@@ -279,10 +281,10 @@ app.get('/admin/class-add-student', (req, res) => {
   var class_id = req.query.class_id;
   var class_name = req.query.class_name;
   // List all student
-  var sql = "SELECT rollnumber, name, email, class_student.status "+
+  var sql = "SELECT rollnumber, name, email "+
             "FROM student_account "+
-            "LEFT JOIN class_student ON class_student.student_id = student_account.id "+
-            "WHERE ((class_student.class_id IS NULL) OR (class_student.status = 0 AND class_student.class_id = ?) OR (class_student.class_id <> ?)) AND student_account.status = 1"
+            "WHERE id NOT IN (SELECT student_id FROM class_student WHERE class_id = ?) "+
+            "OR id IN (SELECT student_id FROM class_student WHERE class_id = ? AND status = 0)"
   
   db.query(sql, [class_id, class_id], function (err, results) {
     if (err) { logger.error(err); res.redirect("/error"); return; }

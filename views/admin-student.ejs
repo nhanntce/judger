@@ -36,14 +36,22 @@
       }).data().toArray()
       if (l.length == 1) {
         $("#btnedit").prop('disabled', false);
-        
+
+        // $.ajax({url: '/admin/list-class', success: function(result){
+        //   for(let i = 0, len = result.length; i < len; i++) {
+        //     if()
+        //   }
+        // }});
         document.getElementById("edit_id_student").value = l[0][9]
         document.getElementById("edit_id").value = l[0][1]
         document.getElementById("edit_rollnumber").value = l[0][2]
         document.getElementById("edit_email").value = l[0][3]
         document.getElementById("edit_name").value = l[0][4]
         // document.getElementById("edit_class").value = class_edit_id;
-        document.getElementById("class_id" + l[0][5]).setAttribute("selected", "selected");
+        if(document.getElementById("class_id" + l[0][5]) != null){
+          document.getElementById("class_id" + l[0][5]).style.display = 'inline';
+          document.getElementById("class_id" + l[0][5]).setAttribute("selected", "selected");
+        }
         document.getElementById("edit_timeout").value = l[0][7]
         console.log(l[0][7])
       }
@@ -81,6 +89,13 @@
 
 
 <div class="container-fluid mt-4">
+  <div class="bc-icons">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item text-gray-700 font-italic">Student</li>
+      </ol>
+    </nav>
+  </div>
   <% if (message.length > 0) { %>
   <script>toastr.success('<%=message%>')</script>
   <% } %>
@@ -148,7 +163,7 @@
                   <% 
                     for(let i = 0 ; listClass.length > i ; i++) {
                   %>
-                    <option value="<%=listClass[i].id%>"><%=listClass[i].class_name%></option>     
+                    <option value="<%=listClass[i].id%>"><%=listClass[i].semester + '_' + listClass[i].subject + '_' + listClass[i].class_name%></option>     
                   <% 
                     } 
                   %>         
@@ -232,7 +247,7 @@
                     <% 
                       for(let i = 0 ; listClass.length > i ; i++) {
                     %>
-                    <option id="class_id<%=listClass[i].class_name%>" value="<%=listClass[i].id%>"><%=listClass[i].class_name%></option>     
+                    <option id="class_id<%=listClass[i].semester + '_' + listClass[i].subject + '_' + listClass[i].class_name%>" value="<%=listClass[i].id%>"><%=listClass[i].semester + '_' + listClass[i].subject + '_' + listClass[i].class_name%></option>     
                     <% 
                       } 
                     %>         
@@ -526,6 +541,32 @@
     emailEdit.addEventListener('keyup', isNotValidateEditEmail);
     nameEdit.addEventListener('keyup', isValidateEditName);
     buttonEditStudent.addEventListener('click', checkValidationEdit);
+    //check class validation
+    let btnEdit = document.getElementById('btnedit');
+
+    function checkClass() {
+      let id_student = document.getElementById("edit_id_student").value;
+      let id_class_current = document.getElementById("edit_class").value;
+      let url = '/admin/list-class?id_student=' + id_student + '&id_class=' + id_class_current;
+      console.log(url);
+      displayAllClass();
+      $.ajax({url: url, success: function(result){
+          for(let i = 0, len = result.length; i < len; i++) {
+            document.getElementById('class_id' + result[i].semester + '_' + result[i].subject + '_' + result[i].class_name).style.display = 'none';
+          }
+      }});
+    }
+    function displayAllClass() {
+      <% 
+        for(let i = 0 ; listClass.length > i ; i++) {
+      %>
+      document.getElementById("class_id<%=listClass[i].semester + '_' + listClass[i].subject + '_' + listClass[i].class_name%>").style.display = 'inline';
+      <% 
+        } 
+      %>   
+    }
+    btnEdit.addEventListener('click', checkClass);
+
 
 </script>
 <%- include ("partials/footer-admin" ) %>
