@@ -895,9 +895,13 @@ exports.add_problem = function (req, res) {
   var error = ""
   var message = ""
   // if file upload error
+  if (req.session.duplicate_prbAtc) {
+    req.session.duplicate_prbAtc = false
+    error = "Failed! Problem and testcase were existed!"
+  }
   if (req.session.upload_err) {
     req.session.upload_err = false
-    error = "Failed! Something wrong with testcase file!"
+    error = "Failed! Please check your files!"
   }
   // if file upload sucess
   if (req.session.upload_success) {
@@ -981,7 +985,7 @@ exports.add_problem = function (req, res) {
  * @param {*} res 
  * @returns 
  */
-exports.add_problem_testcase = function (req, res) {
+exports.add_problem_testcase = async function (req, res) {
   if (req.session.role == "Student") {
     res.redirect("/error")
     return
@@ -990,7 +994,7 @@ exports.add_problem_testcase = function (req, res) {
     // upload problem to folder './public/debai/contest_name
     var form = new formidable.IncomingForm()
     form.maxFileSize = 5 * 1024 * 1024 // limit upload 5mb
-    form.parse(req, function (err, fields, files) {
+    form.parse(req, async function (err, fields, files) {
       var contest_id = fields.contest_id
       // check file is valid
       var type = files.filetouploadProblem.name.substring(files.filetouploadProblem.name.length - 4)
@@ -1007,7 +1011,7 @@ exports.add_problem_testcase = function (req, res) {
       var contest_name = fields.contest_name
       var oldpathProb = files.filetouploadProblem.path
       var newpathProb = storage.DEBAI + contest_name + '/' + files.filetouploadProblem.name
-      fs.readFile(oldpathProb, function (err, data) {
+      fs.readFile(oldpathProb, async function (err, data) {
         if (err) { logger.error(err); res.redirect("/error"); return }
         // Write the file
         fs.writeFile(newpathProb, data, function (err) {
@@ -1019,13 +1023,13 @@ exports.add_problem_testcase = function (req, res) {
         })
         var oldpathTest = files.filetouploadTestcase.path
         var newpathTest = storage.TESTCASE + contest_name + '/' + files.filetouploadTestcase.name
-        var sql = "INSERT INTO contest_detail VALUES (?,?,?,?,?)"
-        db.query(sql, [contest_id, fields.nameProb, newpathProb, newpathTest.substring(0, newpathTest.length - 4), fields.limitSub], function (err) {
-          if (err) {
-            req.session.upload_err = true
-            return res.redirect("/contest/add-problem?contest_id=" + contest_id)
-          }
-          fs.readFile(oldpathTest, function (err, data) {
+
+        var checkExistSql = "SELECT `contest_id`, `problem_id` FROM `contest_detail` WHERE contest_id=" + 
+        contest_id + " AND problem_id='" + fields.nameProb + "'";
+        var checkExist = await getResult(checkExistSql);
+
+        if (checkExist.length == 0) {
+          fs.readFile(oldpathTest, async function (err, data) {
             if (err) { logger.error(err); res.redirect("/error"); return }
             // Write the file
             fs.writeFile(newpathTest, data, function (err) {
@@ -1037,10 +1041,13 @@ exports.add_problem_testcase = function (req, res) {
             })
             try { // extract file .zip
               extract(newpathTest, { dir: public_dir + storage.TESTCASE.substring(8) + contest_name })
-              sleep(1000).then(() => {
+              sleep(1000).then(async () => {
                 checkTestcase(newpathTest.substring(0, newpathTest.length - 4), req)
                 if (!req.session.upload_err) {
                   req.session.upload_success = true
+                  var sql = "INSERT INTO contest_detail VALUES (" + contest_id + ",'" + fields.nameProb + "','" + 
+                  newpathProb + "','" + newpathTest.substring(0, newpathTest.length - 4) +"'," + fields.limitSub + ")";
+                  var prbAndTcInsert = await getResult(sql);
                 }
                 fs.writeFileSync(storage.EVENT + 'testcaseEvent/testcaseEvent.txt', Math.random(1000) + 'changed');
                 logger.info("Upload problem contest " + contest_id + " : " + files.filetouploadProblem.name + " .Testcase: " + files.filetouploadTestcase.name)
@@ -1050,7 +1057,10 @@ exports.add_problem_testcase = function (req, res) {
               if (err) { logger.error(err); res.redirect("/error"); return }
             }
           })
-        })
+        } else {
+          req.session.duplicate_prbAtc = true
+          return res.redirect("/contest/add-problem?contest_id=" + contest_id)
+        }
       })
     })
   } else {
@@ -1093,7 +1103,7 @@ exports.edit_problem_testcase = function (req, res) {
  * @param {*} res 
  * @returns 
  */
-exports.delete_problem_testcase = function (req, res) {
+exports.delete_problem_testcase = async function (req, res) {
   if (req.session.role == "Student") {
     res.redirect("/error")
     return
@@ -1102,12 +1112,17 @@ exports.delete_problem_testcase = function (req, res) {
     var post = req.body
     var contest_id = post.contest_id
     var problem_id = post.problem_id_del
-    var sql = "DELETE FROM contest_detail WHERE contest_id=? AND problem_id=?"
-    db.query(sql, [contest_id, problem_id], function (err) {
-      if (err) { logger.error(err); res.redirect("/error"); return }
-      logger.info("Delete in contest_detail where contest " + contest_id + " and problem " + problem_id)
-      res.redirect("/contest/add-problem?contest_id=" + contest_id)
-    })
+    var sql = "DELETE FROM contest_detail WHERE contest_id="+ contest_id + " AND problem_id='" + problem_id + "'";
+    var getPrbAndTCSql = "SELECT `contest_id`, `problem_id`, `path_problem`, `path_testcase` " + 
+    " FROM `contest_detail` WHERE contest_id=" + contest_id + " AND problem_id='" + problem_id + "'";
+
+    var selectPrbTC = await getResult(getPrbAndTCSql);
+    var deletePrbAtcDb = await getResult(sql)
+    var deleteZipFile = await deleteFolder(selectPrbTC[0].path_testcase + ".zip")
+    var deleteTcDir = await deleteFolder(selectPrbTC[0].path_testcase)
+    var deletePrbDir = await deleteFolder(selectPrbTC[0].path_problem)
+    logger.info("Delete in contest_detail where contest " + contest_id + " and problem " + problem_id)
+    res.redirect("/contest/add-problem?contest_id=" + contest_id)
   } else {
     res.redirect("/error")
     return
