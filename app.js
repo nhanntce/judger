@@ -283,7 +283,7 @@ app.get('/admin/class-add-student', (req, res) => {
   var sql = "SELECT rollnumber, name, email "+
             "FROM student_account "+
             "WHERE id NOT IN (SELECT student_id FROM class_student WHERE class_id = ?) "+
-            "OR (id IN (SELECT student_id FROM class_student WHERE class_id = ?) AND status = 0)"
+            "OR id IN (SELECT student_id FROM class_student WHERE class_id = ? AND status = 0)"
   
   db.query(sql, [class_id, class_id], function (err, results) {
     if (err) { logger.error(err); res.redirect("/error"); return; }
