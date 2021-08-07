@@ -343,6 +343,14 @@ exports.edit_teacher = function (req, res) {
     return
   }
 }
+exports.duplicateRollname = function (req, res) {
+  var sql = ""
+    sql = "SELECT rollnumber, email FROM `employee_account`"
+  db.query(sql, function (err, results) {
+    if (err) { logger.error(err); res.redirect("/error"); return }
+    res.send({ data: results })
+  })
+}
 exports.admin_class = function (req, res) {
   var userId = req.session.userId
   if (userId == null) {
