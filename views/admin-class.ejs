@@ -88,7 +88,7 @@
   <button type="submit" class="btn btn-outline-blue waves-effect btn-sm" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus fa-lg"></i> Add a new class</button>
   <button type="button" id="btnedit" class="btn btn-outline-blue waves-effect btn-sm" data-toggle="modal"
     data-target="#myModalEdit"><i class="fa fa-edit fa-lg"></i> Edit</button>
-    <button type="button" id="btndelete" class="btn btn-outline-blue waves-effect btn-sm" data-toggle="modal" data-target="#myModalDelete"><i class="fa fa-edit fa-lg"></i> Delete</button>
+    <button type="button" id="btndelete" class="btn btn-outline-blue waves-effect btn-sm" data-toggle="modal" data-target="#myModalDelete"><i class="fa fa-trash-alt"></i> Delete</button>
   <% } %>
   <div class="table-responsive">
     <table class="table table-hover table-bordered" id="dataTableClass" width="100%" cellspacing="0">
@@ -120,16 +120,19 @@
       <form action="/admin/add-class" method="POST" id="form_addClass">
         <div class="modal-body mx-3">
           <div class="md-form mb-5">
-            <input type="text" id="semester" name="semester" class="form-control validate" required>
+            <input type="hidden" id="status" name="status" class="form-control validate" value="1">
+          </div>
+          <div class="form">
             <label data-error="wrong" data-success="" for="orangeForm-name">Semester  <i>(Example: SU21)</i></label>
+            <input type="text" id="semester" name="semester" class="form-control validate" required>
           </div>
-          <div class="md-form">
-            <input type="text" id="subject" name="subject" class="form-control validate">
+          <div class="form">
             <label data-error="wrong" data-success="" for="orangeForm-email">Subject  <i>(Example: CPP201)</i></label>
+            <input type="text" id="subject" name="subject" class="form-control validate">
           </div>
-          <div class="md-form mb-4">
-            <input type="text" id="class_name" name="class_name" class="form-control validate">
+          <div class="form">
             <label data-error="wrong" data-success="" for="orangeForm-pass">Class name  <i>(Example: SE1302)</i></label>
+            <input type="text" id="class_name" name="class_name" class="form-control validate">
           </div>
         </div>
         <div class="modal-footer d-flex justify-content-center">
@@ -139,7 +142,9 @@
     </div>
   </div>
 </div>
-<!-- The Modal edit a teacher-->
+<!-- The Modal add a Class-->
+
+<!-- The Modal edit a class-->
 <div class="modal fade" id="myModalEdit" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -154,16 +159,16 @@
          <div class="md-form">
             <input type="hidden" id="edit_id" name="edit_id" class="form-control validate">
           </div>
-         <p>Semester</p>
-          <div class="md-form">
+          <div class="form">
+            <label data-error="wrong" data-success="" for="orangeForm-name">Semester  <i>(Example: SU21)</i></label>
             <input type="text" id="edit_semester" name="edit_semester" class="form-control validate" required>
           </div>
-           <p>Suject</p>
-         <div class="md-form">
+         <div class="form">
+           <label data-error="wrong" data-success="" for="orangeForm-email">Subject  <i>(Example: CPP201)</i></label>
             <input type="text" id="edit_subject" name="edit_subject" class="form-control validate">
           </div>
-          <p>Class name</p>
-          <div class="md-form">
+          <div class="form">
+            <label data-error="wrong" data-success="" for="orangeForm-pass">Class name  <i>(Example: SE1302)</i></label>
             <input type="text" id="edit_class_name" name="edit_class_name" class="form-control validate" required>
           </div>
          </div>
@@ -171,11 +176,11 @@
           <button class="btn btn-deep-orange">Update</button>
         </div>
         </div>
-       
       </form>
-      <script>
-        
+<!-- The Modal edit a class-->
+      <script>        
         $(document).ready(function() {
+        $.get("/admin/duplicate-class", function(data, status){
         $('#form_addClass').submit(function(e) {
     $(".error").remove();
       var semester = $('#semester').val();
@@ -193,9 +198,21 @@
          $('#class_name').after('<span class="error">Class name must be follow format (Ex: SU21) !</span>');
           e.preventDefault();
       }
+    let isDuplicate = false    
+        for (let i = 0, l = data.data.length; i < l; ++i){
+            if(semester === data.data[i].semester && subject === data.data[i].subject && class_name === data.data[i].class_name){
+              $('#class_name').after('<span class="error">Class already !</span>');
+              isDuplicate = true
+          } 
+        }
+    if (isDuplicate){
+    e.preventDefault();
+      }
   });
         });
+        });
         $(document).ready(function() {
+        $.get("/admin/duplicate-class", function(data, status){
         $('#form_editClass').submit(function(e) {
     $(".error").remove();
       var edit_semester = $('#edit_semester').val();
@@ -213,30 +230,44 @@
          $('#edit_class_name').after('<span class="error">Class name must be follow format (Ex: SU21) !</span>');
           e.preventDefault();
       }
+      let isDuplicate = false    
+        for (let i = 0, l = data.data.length; i < l; ++i){
+            if(edit_semester === data.data[i].semester && edit_subject === data.data[i].subject && edit_class_name === data.data[i].class_name){
+              $('#edit_class_name').after('<span class="error">Class already !</span>');
+              isDuplicate = true
+          } 
+        }
+    if (isDuplicate){
+    e.preventDefault();
+      }
   });
+        });
         });
       </script>
     </div>
   </div>
 </div>
-<div class="modal fade" id="myModalDelete" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold"> Delete class</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+<!--Modal: modalConfirmDelete Class-->
+<div class="modal fade" id="myModalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
+    <div class="modal-content text-center">
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">Are you sure?</p>
       </div>
-      <form action="/admin/delete-class" method="POST" id="form_deleteClass">
-         <div class="modal-body mx-3">
-         <div class="md-form">
-            <input type="hidden" id="list_id" name="list_id" class="form-control validate">
-          </div>
-          <button type="submit"class="btn btn-deep-orange" style="margin-left: 160px">OK</button>
-        </div>
-      </form>
+      <div class="modal-body">
+        <i class="fas fa-times fa-4x animated rotateIn"></i><br>
+        <font color=red><b id="totalrollnumber"></b></font>
+      </div>
+      <div class="modal-footer flex-center">
+        <form action="/admin/delete-class" method="POST" id="form_deleteClass">
+          <input type="hidden" id="list_id" name="list_id" class="form-control validate">
+          <button type="submit" class="btn btn-outline-danger">Yes</button>
+        </form>
+        <a type="button" class="btn btn-danger waves-effect" data-dismiss="modal">No</a>
+      </div>
     </div>
   </div>
 </div>
+<!--Modal: modalConfirmDelete Class-->
 <%- include ("partials/footer-admin" ) %>
