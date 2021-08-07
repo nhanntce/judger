@@ -165,13 +165,14 @@ app.get('/contest/add-student', (req, res) => {
   var time_begin = req.query.time_begin;
   var time_end = req.query.time_end;
   // List all class
-  var sql = "SELECT `id`, `class_name` FROM `class`"
+  var sql = "SELECT `id`, `semester`, `subject`, `class_name`, `status` FROM `class` WHERE status=1";
   var listClass = [];
   db.query(sql, function (err, results) {
     if (err) { logger.error(err); res.redirect("/error"); return; }
      for(var i = 0, len = results.length; i < len; i++) {
+      let semesterSubjectClass = results[i].semester + "_" + results[i].subject + "_" + results[i].class_name;
       listClass.push({
-        class_name: results[i].class_name,
+        class_name: semesterSubjectClass,
         class_id: results[i].id 
       });
      }
