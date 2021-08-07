@@ -265,6 +265,7 @@ app.get('/admin/detail-class', admin.detail_class)
 app.post('/admin/add-class', admin.create_class)
 app.post('/admin/edit-class', admin.edit_class)
 app.post('/admin/delete-class', admin.delete_class)
+app.get('/admin/duplicate-class', admin.duplicateClass)
 app.post('/admin/class-delete-student', admin.class_delete_student)
 app.post('/admin/class-add-student', admin.class_add_student)
 app.get('/admin/class-add-student', (req, res) => {
