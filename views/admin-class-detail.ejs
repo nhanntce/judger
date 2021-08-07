@@ -5,7 +5,7 @@
       <ol class="breadcrumb">
         <li class="breadcrumb-item"> <a class="text-gray-700" href="/admin/class">Class</a></li>
         <li><i class="fas fa-angle-double-right mx-2 text-gray-700" aria-hidden="true"></i></li>
-        <li class="breadcrumb-item text-gray-700 font-italic">Detail</li>
+        <li class="breadcrumb-item text-gray-700 font-italic"><%=class_name%></li>
       </ol>
     </nav>
   </div>
@@ -16,9 +16,9 @@
   <script>toastr.error("Delete class fail")</script>
  <% 
     } 
-    if(teacher_role == 0) {
+    if(teacher_role < 2) {
   %>
-  <h2><%=class_name%></h2>
+  
   <form method="GET" action="/admin/class-add-student" style="display: inline;">
     <input type="hidden" name="class_id" value="<%=class_id%>"/>
     <input type="hidden" name="class_name" value="<%=class_name%>"/>

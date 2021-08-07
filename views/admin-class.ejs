@@ -76,6 +76,13 @@
   })
 </script>
 <div class="container-fluid mt-4">
+  <div class="bc-icons">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item text-gray-700 font-italic">Class</li>
+      </ol>
+    </nav>
+  </div>
   <% if (message.length > 0) { %>
   <script>toastr.success("Delete class succesful")</script>
   <% } %>
@@ -83,7 +90,7 @@
   <script>toastr.error("Delete class fail")</script>
  <% 
     } 
-    if(teacher_role == 0) {
+    if(teacher_role < 2) {
   %>
   <button type="submit" class="btn btn-outline-blue waves-effect btn-sm" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus fa-lg"></i> Add a new class</button>
   <button type="button" id="btnedit" class="btn btn-outline-blue waves-effect btn-sm" data-toggle="modal"
