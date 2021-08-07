@@ -403,8 +403,9 @@
         };
     }
 })
-         $(document).ready(function() {
-        $('#editContestForm').submit(function(e) {
+      $(document).ready(function() {
+    $.get("/contest/contest-all", function(data, status){
+    $('#editContestForm').submit(function(e) {
     $(".error").remove();
     var contestName = $('#contest_name').val();
     // var regex = new RegExp('^[a-zA-Z0-9_]+$');
@@ -412,6 +413,18 @@
                 $('#contest_name').after('<span class="error">Contest name must be follow format (SU21_CPP201_SE1302) !</span>');
                 e.preventDefault();
             }
+    let isDuplicate = false    
+    var allContest = [];
+    var contestName1 = $('#contest_name').val();
+        for (let i = 0, l = data.data.length; i < l; ++i){
+            if(contestName1 === data.data[i].contest_name){
+              $('#contest_name').after('<span class="error">Contest name already !</span>');
+              isDuplicate = true
+          }        
+        }
+    if (isDuplicate){
+    e.preventDefault();
+      }
     var begin = $('#time_begin').val();
     var end = $('#time_end').val();
     var y1, m1, d1, h1, mi1;
@@ -434,7 +447,7 @@
     }
   });
         });
-    
+    });
         </script>
     </div>
   </div>

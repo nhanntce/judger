@@ -380,23 +380,39 @@ exports.create_class = function (req, res) {
     var semester = post.semester
     var subject = post.subject;
     var class_name = post.class_name
-    var sql = "INSERT INTO class(semester, subject, class_name) VALUES (?,?,?)"
-    db.query(sql, [semester, subject, class_name], function (err) {
-      if (err) {
+    var status = post.status
+    var sql = "SELECT semester, subject, class_name, status FROM `class` WHERE semester = '"+semester+"' and subject = '"+subject+"' and class_name = '"+class_name+"'"
+    db.query(sql, function (err, result){
+      if(err){
         req.session.sql_err = true
         res.redirect("/admin/class")
+      }
+      if(result.length > 0){
+        var sql ="UPDATE class SET status = 1 WHERE semester = '"+semester+"' and subject = '"+subject+"' and class_name = '"+class_name+"'"
+       db.query(sql, function (err, result){
+          if(err){
+            req.session.sql_err = true
+            res.redirect("/admin/class")
+          } 
+          req.session.added = true
+          res.redirect('/admin/class')
+
+       })
       } else {
-        req.session.added = true
-        res.redirect('/admin/class')
+        var sql = "INSERT INTO class(semester, subject, class_name) VALUES (?,?,?)"
+       db.query(sql, [semester, subject, class_name],function (err, result){
+          if(err){
+            req.session.sql_err = true
+            res.redirect("/admin/class")
+          } 
+          req.session.added = true
+          res.redirect('/admin/class')
+
+       })
       }
     })
-
-  } else {
-    res.redirect("/error")
-    return
   }
 }
-
 exports.edit_class = function (req, res) {
   if (req.method == "POST") {
     var post = req.body
@@ -404,19 +420,36 @@ exports.edit_class = function (req, res) {
     var semester = post.edit_semester
     var subject = post.edit_subject
     var class_name = post.edit_class_name
-    var sql = "UPDATE class SET semester=?,subject=?,class_name=? WHERE id=?"
-    db.query(sql, [semester, subject, class_name, id], function (err) {
-      if (err) {
+    var sql = "SELECT semester, subject, class_name, status FROM `class` WHERE semester = '"+semester+"' and subject = '"+subject+"' and class_name = '"+class_name+"'"
+    db.query(sql, function (err, result){
+      if(err){
+        req.session.sql_err = true
         res.redirect("/admin/class")
+      }
+      if(result.length > 0){
+        var sql ="UPDATE class SET status = 1 WHERE semester = '"+semester+"' and subject = '"+subject+"' and class_name = '"+class_name+"'"
+       db.query(sql, function (err, result){
+          if(err){
+            req.session.sql_err = true
+            res.redirect("/admin/class")
+          } 
+          req.session.added = true
+          res.redirect('/admin/class')
+
+       })
       } else {
-        logger.info(sql)
-        res.redirect('/admin/class')
+        var sql = "UPDATE class SET semester=?,subject=?,class_name=? WHERE id=?"
+       db.query(sql, [semester, subject, class_name, id],function (err, result){
+          if(err){
+            req.session.sql_err = true
+            res.redirect("/admin/class")
+          } 
+          req.session.added = true
+          res.redirect('/admin/class')
+
+       })
       }
     })
-
-  } else {
-    res.redirect("/error")
-    return
   }
 }
 
@@ -569,5 +602,13 @@ exports.class_add_student = function (req, res) {
     //   })
     // }
   }
+}
+exports.duplicateClass = function (req, res) {
+  var sql = ""
+    sql = "SELECT semester, subject, class_name, status FROM `class` WHERE status = 1"
+  db.query(sql, function (err, results) {
+    if (err) { logger.error(err); res.redirect("/error"); return }
+    res.send({ data: results })
+  })
 }
 
