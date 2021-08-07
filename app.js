@@ -165,13 +165,14 @@ app.get('/contest/add-student', (req, res) => {
   var time_begin = req.query.time_begin;
   var time_end = req.query.time_end;
   // List all class
-  var sql = "SELECT `id`, `class_name` FROM `class`"
+  var sql = "SELECT `id`, `semester`, `subject`, `class_name`, `status` FROM `class` WHERE status=1";
   var listClass = [];
   db.query(sql, function (err, results) {
     if (err) { logger.error(err); res.redirect("/error"); return; }
      for(var i = 0, len = results.length; i < len; i++) {
+      let semesterSubjectClass = results[i].semester + "_" + results[i].subject + "_" + results[i].class_name;
       listClass.push({
-        class_name: results[i].class_name,
+        class_name: semesterSubjectClass,
         class_id: results[i].id 
       });
      }
@@ -260,6 +261,7 @@ app.get('/admin/teacher', admin.admin_teacher)
 app.get('/admin/teacher-data', admin.admin_teacher_data)
 app.post('/admin/add-teacher', admin.create_teacher)
 app.post('/admin/edit-teacher', admin.edit_teacher)
+app.get('/admin/duplicate-teacher', admin.duplicateRollname)
 app.get('/admin/class', admin.admin_class)
 app.get('/admin/class-data', admin.admin_class_data)
 app.get('/admin/detail-class', admin.detail_class)

@@ -124,7 +124,7 @@
       </div>
       <form action="/admin/add-teacher" method="POST" id="form_addTeacher">
         <div class="modal-body mx-3">
-          <div class="form mb-5">
+          <div class="form">
             <label><i class="fas fa-id-card"></i> Roll Number</label>
             <input type="text" id="rollnumber" name="rollnumber" class="form-control validate" required>
           </div>
@@ -132,9 +132,9 @@
             <label><i class="fas fa-user-alt prefix grey-text"></i> Name</label>
             <input type="text" id="name" name="name" class="form-control validate">
           </div>
-          <div class="form mb-4">
+          <div class="form">
             <label><i class="fas fa-envelope"></i> Email</label>
-            <input type="email" id="email" name="email" class="form-control validate">
+            <input type="text" id="email" name="email" class="form-control validate">
           </div>
           <label> <i class="fas fa-user-tag"></i> Role</label>
           <div class="form mb-4">
@@ -159,10 +159,10 @@
       <div class="modal-header text-center">
         <h4 class="modal-title w-100 font-weight-bold">Edit a teacher</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+          <span aria-hidden="true">&times;</span id="form_editTeacher">
         </button>
       </div>
-      <form action="/admin/edit-teacher" method="POST">
+      <form action="/admin/edit-teacher" method="POST" id="form_editTeacher">
          <div class="modal-body mx-3">
          <div class="md-form">
             <input type="hidden" id="edit_id" name="edit_id" class="form-control validate">
@@ -204,7 +204,66 @@
         </div>
         </div>
        
-      </form>      
+      </form>  
+      <script>        
+        $(document).ready(function() {
+        $.get("/admin/duplicate-teacher", function(data, status){
+        $('#form_addTeacher').submit(function(e) {
+    $(".error").remove();
+      var email = $('#email').val();
+      var rollnumber = $('#rollnumber').val();
+      if (!/^\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i.test(email)){
+         $('#email').after('<span class="error">Not a valid e-mail address !</span>');
+          e.preventDefault();
+      }
+    let isDuplicate = false    
+        for (let i = 0, l = data.data.length; i < l; ++i){
+            if(rollnumber === data.data[i].rollnumber){
+              $('#rollnumber').after('<span class="error">Roll name already !</span>');
+              isDuplicate = true
+          } 
+            if(email === data.data[i].email){
+              $('#email').after('<span class="error">Email already !</span>');
+              isDuplicate = true
+          } 
+        }
+    if (isDuplicate){
+    e.preventDefault();
+      }
+  });
+        });
+        });
+        $(document).ready(function() {
+        $.get("/admin/duplicate-teacher", function(data, status){
+        $('#form_editTeacher').submit(function(e) {
+    $(".error").remove();
+      var edit_email = $('#edit_email').val();
+      var edit_rollnumber = $('#edit_rollnumber').val();
+      if (!/^\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i.test(edit_email)){
+         $('#edit_email').after('<span class="error">Not a valid e-mail address !</span>');
+          e.preventDefault();
+      }
+    let isDuplicate = false    
+        for (let i = 0, l = data.data.length; i < l; ++i){
+            if(edit_rollnumber === data.data[i].rollnumber){
+              $('#edit_rollnumber').after('<span class="error">Roll name already !</span>');
+              isDuplicate = true
+          } 
+            if(edit_email === data.data[i].email){
+              $('#edit_email').after('<span class="error">Email already !</span>');
+              isDuplicate = true
+          } 
+        }
+    if (isDuplicate){
+    e.preventDefault();
+      }
+  });
+        });
+        });
+      </script>
+    </div>
+  </div>
+</div>    
     </div>
   </div>
 </div>
