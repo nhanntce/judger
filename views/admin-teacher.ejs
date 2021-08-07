@@ -243,15 +243,22 @@
          $('#edit_email').after('<span class="error">Not a valid e-mail address !</span>');
           e.preventDefault();
       }
-    let isDuplicate = false    
+    let isDuplicate = false
+    var count1 = 0;
+    var count2 = 0;    
         for (let i = 0, l = data.data.length; i < l; ++i){
             if(edit_rollnumber === data.data[i].rollnumber){
-              $('#edit_rollnumber').after('<span class="error">Roll name already !</span>');
+              count1 +=1;
+          } if(count1 == 2){
+            $('#edit_rollnumber').after('<span class="error">Roll name already !</span>');
               isDuplicate = true
-          } 
+          }
             if(edit_email === data.data[i].email){
-              $('#edit_email').after('<span class="error">Email already !</span>');
+              count2 +=1;
+          } if(count == 2){
+            $('#edit_email').after('<span class="error">Email already !</span>');
               isDuplicate = true
+          }
           } 
         }
     if (isDuplicate){

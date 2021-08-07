@@ -77,10 +77,10 @@
 </script>
 <div class="container-fluid mt-4">
   <% if (message.length > 0) { %>
-  <script>toastr.success("Delete class succesful")</script>
+  <script>toastr.success('<%=message%>')</script>
   <% } %>
   <% if (error.length > 0) { %>
-  <script>toastr.error("Delete class fail")</script>
+  <script>toastr.error('<%=error%>')</script>
  <% 
     } 
     if(teacher_role == 0) {
@@ -231,11 +231,15 @@
           e.preventDefault();
       }
       let isDuplicate = false    
+      var count = 0;
         for (let i = 0, l = data.data.length; i < l; ++i){
             if(edit_semester === data.data[i].semester && edit_subject === data.data[i].subject && edit_class_name === data.data[i].class_name){
-              $('#edit_class_name').after('<span class="error">Class already !</span>');
-              isDuplicate = true
+              count += 1;
           } 
+          if(count == 0){
+            $('#edit_class_name').after('<span class="error">Class already !</span>');
+              isDuplicate = true
+          }
         }
     if (isDuplicate){
     e.preventDefault();
