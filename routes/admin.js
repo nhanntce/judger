@@ -116,9 +116,12 @@ exports.admin_student_data = function (req, res) {
   let columnsMap = [
     { db: "null", dt: 0 }, { db: "userId", dt: 1 }, { db: "rollnumber", dt: 2 }, { db: "email", dt: 3 }, { db: "name", dt: 4 }, { db: "class_name", dt: 5 }, { db: "ip", dt: 6 }, { db: "timeout", dt: 7 }, { db: "islogin", dt: 8 }, { db: "id", dt: 9 }
   ];
-  const query = "SELECT userId, rollnumber, email, name, class_name, ip, DATE_FORMAT(timeout, '%d-%m-%Y %H:%i:%s') AS timeout, islogin, student_account.id " + 
-  				"FROM student_account, class_student, class " +
-  				"WHERE student_account.id = class_student.student_id AND class_student.class_id = class.id and student_account.status = 1 and class_student.status = 1 and class.status = 1"
+  // const query = "SELECT userId, rollnumber, email, name, class_name, ip, DATE_FORMAT(timeout, '%d-%m-%Y %H:%i:%s') AS timeout, islogin, student_account.id " + 
+  // 				"FROM student_account, class_student, class " +
+  // 				"WHERE student_account.id = class_student.student_id AND class_student.class_id = class.id and student_account.status = 1 and class_student.status = 1 and class.status = 1"
+  const query = "SELECT userId, rollnumber, email, name, c.class_name, ip, DATE_FORMAT(timeout, '%d-%m-%Y %H:%i:%s')" + 
+  "AS timeout, islogin, a.id FROM student_account a LEFT JOIN class_student b ON  a.id = b.student_id AND b.status=1 " + 
+  "LEFT JOIN class c ON b.class_id = c.id AND c.status=1 WHERE a.status=1"
   const primaryKey = "userId"
   const nodeTable = new NodeTable(requestQuery, db, query, primaryKey, columnsMap);
   nodeTable.output((err, data) => {
