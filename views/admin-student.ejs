@@ -48,7 +48,10 @@
         document.getElementById("edit_email").value = l[0][3]
         document.getElementById("edit_name").value = l[0][4]
         // document.getElementById("edit_class").value = class_edit_id;
-        document.getElementById("class_id" + l[0][5]).setAttribute("selected", "selected");
+        if(document.getElementById("class_id" + l[0][5]) != null){
+          document.getElementById("class_id" + l[0][5]).style.display = 'inline';
+          document.getElementById("class_id" + l[0][5]).setAttribute("selected", "selected");
+        }
         document.getElementById("edit_timeout").value = l[0][7]
         console.log(l[0][7])
       }
@@ -546,9 +549,21 @@
       let id_class_current = document.getElementById("edit_class").value;
       let url = '/admin/list-class?id_student=' + id_student + '&id_class=' + id_class_current;
       console.log(url);
+      displayAllClass();
       $.ajax({url: url, success: function(result){
-          console.log(result);
+          for(let i = 0, len = result.length; i < len; i++) {
+            document.getElementById('class_id' + result[i].semester + '_' + result[i].subject + '_' + result[i].class_name).style.display = 'none';
+          }
       }});
+    }
+    function displayAllClass() {
+      <% 
+        for(let i = 0 ; listClass.length > i ; i++) {
+      %>
+      document.getElementById("class_id<%=listClass[i].semester + '_' + listClass[i].subject + '_' + listClass[i].class_name%>").style.display = 'inline';
+      <% 
+        } 
+      %>   
     }
     btnEdit.addEventListener('click', checkClass);
 
