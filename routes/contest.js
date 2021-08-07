@@ -360,9 +360,14 @@ exports.contest_detail = function (req, res) {
   //   "INNER JOIN student_account ON student_account.contest_id=contest.contest_id " +
   //   "WHERE contest.contest_id=?"
   var sql = "SELECT student_account.userId, student_account.rollnumber, student_account.name, " +
+    " class.class_name, class.semester, class.subject, " +
     " contest.contest_id, contest.contest_name,contest.time_begin,contest.time_end, " +
-    "contest.language FROM contest, student_account, contest_student WHERE contest_student.student_id " +
-    "= student_account.id AND contest_student.contest_id = ? AND contest.contest_id = contest_student.contest_id AND contest_student.status = 1 AND student_account.status = 1";
+    "contest.language FROM contest, student_account, contest_student, class, " +
+    " class_student WHERE contest_student.student_id " +
+    "= student_account.id AND contest_student.contest_id = ? AND contest.contest_id = " +
+    "contest_student.contest_id AND contest_student.status = 1 AND student_account.status = 1 " +
+    "  AND class.status = 1 AND class_student.student_id = student_account.id " +
+    " AND class_student.class_id = class.id AND class_student.status = 1";
   db.query(sql, [contest_id], function (err, results) {
     if (err) { logger.error(err); res.redirect("/error"); return }
     
