@@ -47,11 +47,21 @@
         document.getElementById("edit_rollnumber").value = l[0][2]
         document.getElementById("edit_email").value = l[0][3]
         document.getElementById("edit_name").value = l[0][4]
-        // document.getElementById("edit_class").value = class_edit_id;
         if(document.getElementById("class_id" + l[0][5]) != null){
+          var listOption = document.getElementById("edit_class").options;
+          for(let i = 0; i < listOption.length; i++){
+            listOption[i].removeAttribute('selected');
+          }
           document.getElementById("class_id" + l[0][5]).style.display = 'inline';
           document.getElementById("class_id" + l[0][5]).setAttribute("selected", "selected");
+          console.log(document.getElementById("class_id" + l[0][5]))
+          console.log("OLD CLASS ID", l[0][5])
+          console.log(document.getElementById("edit_class").value)
+          document.getElementById("old_class_id").value = document.getElementById("edit_class").value;
+        } else {
+          document.getElementById("old_class_id").value = "none";
         }
+
         document.getElementById("edit_timeout").value = l[0][7]
         console.log(l[0][7])
       }
@@ -216,6 +226,7 @@
         <div class="modal-body mx-3">
               <div class="md-form">
                 <input placeholder="Placeholder" type="hidden" id="edit_id_student" name="edit_id_student" class="form-control validate" readonly="">
+                <input placeholder="Placeholder" type="hidden" id="old_class_id" name="old_class_id" class="form-control validate" readonly="">
               </div>
               <div class="form">
                 <label><i class="fas fa-id-card"></i> ID</label>

@@ -191,36 +191,46 @@ exports.create_student = function (req, res) {
  * @param {*} res 
  * @returns 
 */
-exports.edit_student = function (req, res) {
+exports.edit_student = async function (req, res) {
   if (req.method == "POST") {
     var post = req.body
     var id = post.edit_id_student
     var rollnumber = post.edit_rollnumber
     var name = post.edit_name
     var classID = post.edit_class
+    var oldClassID = post.old_class_id
     var email = post.edit_email    
     var userID = post.edit_id
     var timeout = post.edit_timeout
-    var sql = "UPDATE student_account SET rollnumber='"+rollnumber+"',email='"+email+"',name='"+name+"',userId='"+userID+"',timeout='" + formatTime(timeout) + "' WHERE id=" + id;
-    db.query(sql, function (err) {
-      if (err) {
-      	req.session.sql_err = true
-        res.redirect("/admin/student")
-      } else {
-        var sql = "UPDATE class_student SET class_id=? WHERE student_id=?" 
-        db.query(sql, [classID, id], function (err) {
-        	if (err) {
-		      	req.session.added = true
-		        res.redirect("/admin/student")
-		    } else {
-	        	req.session.updated = true
-	        	res.redirect('/admin/student')
-       		}
-        })
-        
-      }
-    })
 
+    var updateStuSql = "UPDATE student_account SET rollnumber='" + rollnumber + "', email='" + email + "', name='" + 
+    name + "', userId='" + userID + "', timeout='" + formatTime(timeout) + "' WHERE id=" + id;
+
+    try {
+      var updateStudent = await queryPromise(updateStuSql);
+      var updateClaStuSql = "";
+      if (oldClassID == "none") {
+        var checkExistClaStuSql = "SELECT `student_id`, `class_id`, `status` FROM `class_student` " + 
+        "WHERE student_id=" + id + " AND class_id=" + classID;
+        var checkExistClaStu = await queryPromise(checkExistClaStuSql);
+        if (checkExistClaStu.length != 0) {
+          updateClaStuSql = "UPDATE `class_student` SET `status`=1 WHERE student_id=" + 
+          id + " AND class_id=" + classID;
+          await queryPromise(updateClaStuSql);
+        } else {
+          var insertNewClaStuSql = "INSERT INTO `class_student`(`student_id`, `class_id`) VALUES (" + id + ", " + classID + ")";
+          await queryPromise(insertNewClaStuSql);
+        }
+      } else {
+        updateClaStuSql = "UPDATE `class_student` SET `class_id`=" + classID + " WHERE student_id=" + 
+        id + " AND class_id=" + oldClassID;
+        await queryPromise(updateClaStuSql);        
+      }
+    } catch(error) {
+      req.session.sql_err = true
+      res.redirect("/admin/student")
+    }
+    res.redirect('/admin/student')
   } else {
     res.redirect("/error")
     return
