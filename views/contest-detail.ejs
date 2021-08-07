@@ -415,12 +415,16 @@
             }
     let isDuplicate = false    
     var allContest = [];
+    var count = 0;
     var contestName1 = $('#contest_name').val();
         for (let i = 0, l = data.data.length; i < l; ++i){
             if(contestName1 === data.data[i].contest_name){
-              $('#contest_name').after('<span class="error">Contest name already !</span>');
+              count +=1;
+          }
+        }
+        if(count == 2){
+          $('#contest_name').after('<span class="error">Contest name already !</span>');
               isDuplicate = true
-          }        
         }
     if (isDuplicate){
     e.preventDefault();

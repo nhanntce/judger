@@ -101,6 +101,10 @@ exports.admin_teacher = function (req, res) {
     req.session.added = false
     message = "Succesfully! Teacher have been added."
   }
+  if (req.session.update) {
+    req.session.update = false
+    message = "Succesfully! Teacher have been updated."
+  }
 
   res.render('admin-teacher.ejs', { message: message, error: error, teacher_role: req.session.teacher_role });
 }
@@ -137,7 +141,6 @@ exports.admin_student_data = function (req, res) {
         data.data[i][5] = "<center>-</center>";
       }
     }
-    console.log('data', data);
     res.send(data)
   })
 }
@@ -350,9 +353,10 @@ exports.edit_teacher = function (req, res) {
     var sql = "UPDATE employee_account SET rollnumber=?,email=?,name=?,role_id=?,status=? WHERE userId=?"
     db.query(sql, [rollnumber, email, name, role, isDisable, id], function (err) {
       if (err) {
+        req.session.sql_err = true
         res.redirect("/admin/teacher")
       } else {
-        logger.info(sql)
+        req.session.update = true
         res.redirect('/admin/teacher')
       }
     })
@@ -378,14 +382,30 @@ exports.admin_class = function (req, res) {
   }
   var error = ""
   var message = ""
-  if (req.session.sql_err) {
-    req.session.sql_err = false
-    error = "Teacher acocunt has exist!"
+  if (req.session.add_class_err) {
+    req.session.add_class_err = false
+    error = "Class has exist!"
   }
-  if (req.session.added) {
-    req.session.added = false
-    message = "Succesfully! Teacher have been added."
+  if (req.session.added_class_success) {
+    req.session.added_class_success = false
+    message = "Successfully! Class have been added."
   }
+   if (req.session.update_class_success) {
+     req.session.update_class_success = false
+    message = "Successfully! Class have been updated."
+   }
+   if (req.session.update_class_fail) {
+     req.session.update_class_fail = false
+    message = "Successfully! Class have been update fail."
+   }
+   if (req.session.delete_class_success) {
+     req.session.delete_class_success = false
+    message = "Successfully! Class have been deleted."
+   }
+   if (req.session.delete_class_fail) {
+     req.session.delete_class_fail = false
+    message = "Successfully! Class have been delete fail."
+   }
   res.render('admin-class.ejs', { message: message, error: error, teacher_role: req.session.teacher_role });
 }
 
@@ -417,17 +437,17 @@ exports.create_class = function (req, res) {
     var sql = "SELECT semester, subject, class_name, status FROM `class` WHERE semester = '"+semester+"' and subject = '"+subject+"' and class_name = '"+class_name+"'"
     db.query(sql, function (err, result){
       if(err){
-        req.session.sql_err = true
+        req.session.add_class_err = true
         res.redirect("/admin/class")
       }
       if(result.length > 0){
         var sql ="UPDATE class SET status = 1 WHERE semester = '"+semester+"' and subject = '"+subject+"' and class_name = '"+class_name+"'"
        db.query(sql, function (err, result){
           if(err){
-            req.session.sql_err = true
+            req.session.add_class_err = true
             res.redirect("/admin/class")
           } 
-          req.session.added = true
+          req.session.added_class_success = true
           res.redirect('/admin/class')
 
        })
@@ -435,10 +455,10 @@ exports.create_class = function (req, res) {
         var sql = "INSERT INTO class(semester, subject, class_name) VALUES (?,?,?)"
        db.query(sql, [semester, subject, class_name],function (err, result){
           if(err){
-            req.session.sql_err = true
+            req.session.add_class_err = true
             res.redirect("/admin/class")
           } 
-          req.session.added = true
+          req.session.added_class_success = true
           res.redirect('/admin/class')
 
        })
@@ -456,17 +476,17 @@ exports.edit_class = function (req, res) {
     var sql = "SELECT semester, subject, class_name, status FROM `class` WHERE semester = '"+semester+"' and subject = '"+subject+"' and class_name = '"+class_name+"'"
     db.query(sql, function (err, result){
       if(err){
-        req.session.sql_err = true
+        req.session.update_class_fail = true
         res.redirect("/admin/class")
       }
       if(result.length > 0){
         var sql ="UPDATE class SET status = 1 WHERE semester = '"+semester+"' and subject = '"+subject+"' and class_name = '"+class_name+"'"
        db.query(sql, function (err, result){
           if(err){
-            req.session.sql_err = true
+            req.session.update_class_fail = true
             res.redirect("/admin/class")
           } 
-          req.session.added = true
+          req.session.update_class_success = true
           res.redirect('/admin/class')
 
        })
@@ -474,10 +494,10 @@ exports.edit_class = function (req, res) {
         var sql = "UPDATE class SET semester=?,subject=?,class_name=? WHERE id=?"
        db.query(sql, [semester, subject, class_name, id],function (err, result){
           if(err){
-            req.session.sql_err = true
+            req.session.update_class_fail = true
             res.redirect("/admin/class")
           } 
-          req.session.added = true
+          req.session.update_class_success = true
           res.redirect('/admin/class')
 
        })
@@ -498,10 +518,10 @@ exports.delete_class = function (req, res) {
     sql = sql.slice(0, -4)
     db.query(sql, function (err) {
       if (err) {
-        req.session.sql_err = true
+        req.session.delete_class_fail = true
         res.redirect("/admin/class")
       } else {
-        req.session.added = true
+        req.session.delete_class_success = true
         res.redirect('/admin/class')
       }
     })
