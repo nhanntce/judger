@@ -47,8 +47,9 @@ exports.data_rank = function (req, res) {
       message = "No student in contest"
       res.render('data-rank.ejs', { data: [], problem_files: [], message: message, role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role })
     } else {
-      sql = "SELECT contest.contest_name, contest.contest_id, contest.time_begin, contest.time_end, contest_detail.problem_id, contest_detail.path_problem FROM contest " +
+      sql = "SELECT contest.contest_name, contest.contest_id, employee_account.name, contest.time_begin, contest.time_end, contest_detail.problem_id, contest_detail.path_problem FROM contest " +
         "INNER JOIN contest_detail ON contest.contest_id=contest_detail.contest_id " +
+        "INNER JOIN employee_account ON contest.teacher_id=employee_account.userId " +
         "WHERE contest.contest_id=? AND contest.status=1"
       db.query(sql, [contest_id], function (err, results2) {
         if (err) { logger.error(err); res.redirect("/error"); return }
@@ -105,7 +106,7 @@ exports.load_rank = function (req, res) {
         };
         for (let i = 0, l = results.length; i < l; ++i) {
           tb = new Array()
-          tb.push('', results[i].rollnumber, results[i].name, results[i].class_name, 0, '<center>' + 0 + '</center>', '<center>' + 0 + '</center>',0,0,0,0);
+          tb.push('', results[i].rollnumber, results[i].name, results[i].class_name, 0, '<center>' + 0 + '</center>', '<center>' + 0 + '</center>',0,0,0,0,'','','','','');
           obj.data.push(tb)
         }
         res.send(obj)
@@ -285,10 +286,12 @@ exports.load_rank = function (req, res) {
 
             if (totaltimes[results[i].rollnumber] == 0) {
               tb.push('<center>Not submit<br>(0)</center>')
+              tb.push('<center>Not submit<br>(0)</center>')
             } else {
               tb.push('<center>' + totalpoint[results[i].rollnumber].toFixed(1) + '<br>(' + totaltimes[results[i].rollnumber] + ')</center>')
+              tb.push((totalpoint[results[i].rollnumber] / problem_files.length).toFixed(1))
             }
-            tb.push((totalpoint[results[i].rollnumber] / problem_files.length).toFixed(1))
+            
             for (let j = 0, l = problem_files.length; j < l; ++j) {
               if (point[results[i].rollnumber][problem_files[j]] > 0) {
                 tb.push("<center class='solved'>" + format[results[i].rollnumber][problem_files[j]] + '<br>(' + times[results[i].rollnumber][problem_files[j]] + ')</center>')
@@ -315,6 +318,52 @@ exports.load_rank = function (req, res) {
               } else {
                 tb.push("<center>" + plagiarism[results[i].rollnumber][problem_files[j]] + '<br>(' + times[results[i].rollnumber][problem_files[j]] + ')</center>')
               }
+            }
+            tb.push("-")
+            tb.push("-")
+            var nonFormat = ""
+            if (checkFormat == "true") {
+            	for (let j = 0, l = problem_files.length; j < l; ++j) {
+	              if (format[results[i].rollnumber][problem_files[j]] == false) {
+	                nonFormat += problem_files[j]
+	              }
+	            }	
+            }
+            
+            if (nonFormat == "") {
+              tb.push("-")
+            } else {
+              tb.push(nonFormat)
+            }
+
+            var nonComment = ""
+            if (checkCmt == "true") {
+            	for (let j = 0, l = problem_files.length; j < l; ++j) {
+	              if (parseFloat(comment[results[i].rollnumber][problem_files[j]]) < parseFloat(percentCmtAcp)) {
+	                nonComment += problem_files[j]
+	              }
+	            }
+            }
+
+            if (nonComment == "") {
+              tb.push("-")
+            } else {
+              tb.push(nonComment)
+            }
+
+            var nonPlagiarism = ""
+            if (checkPlagiarism == "true") {
+            	for (let j = 0, l = problem_files.length; j < l; ++j) {
+	              if (parseFloat(plagiarism[results[i].rollnumber][problem_files[j]]) >= parseFloat(plagiarismAcp)) {
+	                nonPlagiarism += problem_files[j]
+	              }
+	            }	
+            }
+            
+            if (nonPlagiarism == "") {
+              tb.push("-")
+            } else {
+              tb.push(nonPlagiarism)
             }
             obj.data.push(tb)
           }
