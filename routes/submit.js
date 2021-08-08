@@ -21,6 +21,7 @@ var queryPromise = (sql, params) => {
     })
   });
 }
+/** */
 exports.submission = async function (req, res) {
   var userId = req.session.userId
   if (userId == null) {
@@ -97,9 +98,14 @@ exports.submission = async function (req, res) {
       "WHERE contest.contest_id=? AND contest.status = 1"
     listsql = [req.query.contest_id]
   }
-  db.query(sql, listsql, function (err, results) {
+  db.query(sql, listsql, async function (err, results) {
     if (err) { logger.error(err); res.redirect("/error"); return }
 
+      if(results.length == 0 ){
+        error = "Your contest does not have any problem. Please wait until this contest was added problems"
+        res.render('submit.ejs', { error: error, role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role })
+        return
+      }
       var contest_name = results[0].contest_name.replace(/ /g, '-')
       var time_begin = results[0].time_begin
       var time_end = results[0].time_end
