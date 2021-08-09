@@ -72,7 +72,7 @@
               <%= data[i].name %>
             </td>
             <td>
-              <%= data[i].semester + "_" + data[i].subject + "_" + data[i].class_name %>
+              <%=data[i].semester ? (data[i].semester + "_" + data[i].subject + "_" + data[i].class_name) : "" %>
             </td>
           </tr>
           <% } %>
