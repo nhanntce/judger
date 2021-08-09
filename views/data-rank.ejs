@@ -9,6 +9,9 @@
     var checkFormat = configContent.split('\n')[2].split('=')[1]
     var checkCmt = configContent.split('\n')[4].split('=')[1]
     var checkPlagiarism = configContent.split('\n')[8].split('=')[1]
+    var semester = data[0].contest_name.split('_')[0];
+    var subject = data[0].contest_name.split('_')[1];
+    var className = data[0].contest_name.split('_')[2];
   %>
   <script>
 
@@ -152,8 +155,10 @@
     // Loop through each row to append to sheet.    
     table.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
       var data = table.cells(rowIdx, exportClass).data();
-      data[3] = data[3].split('>')[1].split('<')[0];
-      data[4] = data[4].split('>')[1].split('<')[0];
+       for (var i = 0; i < <%=problem_files.length%>; i++) {
+       	data[i+3] = data[i+3].split('>')[1].split('<')[0];
+       }
+      
       // If data is object based then it needs to be converted 
       // to an array before sending to buildRow()
       ws += buildRow(data, rowNum, '');
@@ -230,9 +235,9 @@
           url: "/load-rank?contest_id=<%=data[0].contest_id%>",
           type: "POST"
         },
-        aaSorting: [[lastIndex, 'desc'], [4, 'asc']],
+        aaSorting: [[<%=problem_files.length%>+5, 'desc'], [4, 'asc']],
         aoColumnDefs: [
-          { sType: "ranks", aTargets: lastIndex - 1 },
+          { sType: "ranks", aTargets: <%=problem_files.length%>+5 },
           { sType: "times", aTargets: 4 },
           {
             aTargets: [1, 2], 
@@ -259,6 +264,7 @@
           "<'row'<'col-sm-5'i><'col-sm-7'p>>",
         buttons: [{
           extend: 'excelHtml5',
+          header: false,
           text: '<li class="fa fa-file-excel"></li> Export result into Excel',
           filename: '<%=data[0].contest_name.replace(/ /g, ' - ')%>',
           title: '',
@@ -268,7 +274,9 @@
             columns: ['.export'],
             format: {
               body: function ( data, row, column, node ) {
-                if (data.includes('<a')) {
+                if (data == '') {
+                  return row+1
+                } else if (data.includes('<a')) {
                   return data.split('>')[1].split('<')[0]
                 } else if (data.includes('<center')) {
                   return data.split('>')[1].split('<')[0]
@@ -279,6 +287,680 @@
             }
           },
           customize: function( xlsx ) {
+          	var sSh = xlsx.xl['styles.xml'];
+            var styleSheet = sSh.childNodes[0];
+            cellXfs = styleSheet.childNodes[5];
+            fonts = styleSheet.childNodes[1];
+            numbers = styleSheet.childNodes[0];
+            fills = styleSheet.childNodes[2];
+
+            // Set a custom format ID
+            var formatID = 300;
+            var formatDateID = 301;
+
+            // Using this instead of "" (required for Excel 2007+, not for 2003)
+            var ns = "http://schemas.openxmlformats.org/spreadsheetml/2006/main";
+
+            // Create number format
+            var n1 = '<numFmt formatCode="#0.0" numFmtId="300"/>';
+            var n2 = '<numFmt formatCode="[$-en-US]mmmm dd, yyyy" numFmtId="301"/>';
+            numbers.innerHTML = numbers.innerHTML + n1 + n2;
+
+            // Create custom font
+            var f1FontIndex = $('fonts font', sSh).length;
+            var f2FontIndex = $('fonts font', sSh).length + 1;
+            var f3FontIndex = $('fonts font', sSh).length + 2;
+            var f4FontIndex = $('fonts font', sSh).length + 3;
+            var f5FontIndex = $('fonts font', sSh).length + 4;
+            var f6FontIndex = $('fonts font', sSh).length + 5;
+            var f7FontIndex = $('fonts font', sSh).length + 6;
+            var f8FontIndex = $('fonts font', sSh).length + 7;
+            var f9FontIndex = $('fonts font', sSh).length + 8;
+
+            var f1 = //bold and 22
+              '<font>'+
+                      '<sz val="22" />'+
+                      '<name val="Times New Roman" />'+
+                      '<b />'+
+              '</font>'
+
+            var f2 = //bold and 16
+            '<font>'+
+                    '<sz val="16" />'+
+                    '<name val="Times New Roman" />'+
+                    '<b />'+
+            '</font>'
+
+            var f3 = //italic and 10
+            '<font>'+
+                    '<sz val="10" />'+
+                    '<name val="Times New Roman" />'+
+                    '<i />'+
+            '</font>'
+
+            var f4 = //bold and 11
+            '<font>'+
+                    '<sz val="11" />'+
+                    '<name val="Times New Roman" />'+
+                    '<color rgb="FF0000" />'+
+                    '<b />'+
+            '</font>'
+
+            var f5 = //bold, 11 and green
+            '<font>'+
+                    '<sz val="11" />'+
+                    '<name val="Times New Roman" />'+
+                    '<color rgb="0000FF" />'+
+                    '<b />'+
+            '</font>'
+
+            var f6 = //normal, 11 and black
+            '<font>'+
+                    '<sz val="11" />'+
+                    '<name val="Times New Roman" />'+
+            '</font>'
+
+            var f7 = //italic, 12 and black
+            '<font>'+
+                    '<sz val="12" />'+
+                    '<name val="Times New Roman" />'+
+                    '<i />'+
+            '</font>'
+
+            var f8 = //bold, 12 and black
+            '<font>'+
+                    '<sz val="12" />'+
+                    '<name val="Times New Roman" />'+
+                    '<b />'+
+            '</font>'
+
+            var f9 = //normal, 10 and black
+            '<font>'+
+                    '<sz val="10" />'+
+                    '<name val="Times New Roman" />'+
+            '</font>'
+            
+            fonts.innerHTML = fonts.innerHTML + f1 + f2 + f3 + f4 + f5 + f6 + f7 + f8 + f9;
+            
+            var lastFillIndex = $('fills fill', sSh).length - 1;
+
+            var fillGray = 
+            '<fill>'+
+                    '<patternFill patternType="solid">'+
+                    '<fgColor rgb="99ccff"/>'+
+                    '<bgColor indexed="64"/>'+
+                    '</patternFill>'+
+            '</fill>'
+            fills.innerHTML = fills.innerHTML + fillGray;
+            
+            
+            // Create custom style
+            var lastStyleNum = $('cellXfs xf', sSh).length - 1;
+            var f1StyleIndex = lastStyleNum + 1;
+            var f2StyleIndex = lastStyleNum + 2;
+            var f3StyleIndex = lastStyleNum + 3;
+            var f4StyleIndex = lastStyleNum + 4;
+            var f5StyleIndex = lastStyleNum + 5;
+            var f6StyleIndex = lastStyleNum + 6;
+            var f7StyleIndex = lastStyleNum + 7;
+            var f8StyleIndex = lastStyleNum + 8;
+            var f9StyleIndex = lastStyleNum + 9;
+            var f10StyleIndex = lastStyleNum + 10;
+            var f11StyleIndex = lastStyleNum + 11;
+            var f12StyleIndex = lastStyleNum + 12;
+            var f13StyleIndex = lastStyleNum + 13;
+            var f14StyleIndex = lastStyleNum + 14;
+
+            var f1Style = document.createElementNS(ns, "xf");
+
+            f1Style.setAttribute("numFmtId", formatID);
+            f1Style.setAttribute("fontId", f1FontIndex);
+            f1Style.setAttribute("fillId", 0);
+            f1Style.setAttribute("borderId", 0);
+            f1Style.setAttribute("applyFont", 1);
+            f1Style.setAttribute("applyFill", 1);
+            f1Style.setAttribute("applyBorder", 1);
+            f1Style.setAttribute("xfId", 0);
+            f1Style.setAttribute("applyNumberFormat", 0);
+
+            // Alignment (optional)
+            var align = document.createElementNS(ns, "alignment");
+            align.setAttribute("horizontal", "center");
+            align.setAttribute("vertical", "center");
+            f1Style.appendChild(align);
+
+            // Append the style next to the other ones
+            cellXfs.appendChild(f1Style);
+
+			      var f2Style = document.createElementNS(ns, "xf");
+
+            f2Style.setAttribute("numFmtId", formatID);
+            f2Style.setAttribute("fontId", f2FontIndex);
+            f2Style.setAttribute("fillId", 0);
+            f2Style.setAttribute("borderId", 0);
+            f2Style.setAttribute("applyFont", 1);
+            f2Style.setAttribute("applyFill", 1);
+            f2Style.setAttribute("applyBorder", 1);
+            f2Style.setAttribute("xfId", 0);
+            f2Style.setAttribute("applyNumberFormat", 0);
+
+            // Alignment (optional)
+            var align = document.createElementNS(ns, "alignment");
+            align.setAttribute("horizontal", "center");
+            align.setAttribute("vertical", "center");
+            f2Style.appendChild(align);
+
+            cellXfs.appendChild(f2Style);
+
+            var f3Style = document.createElementNS(ns, "xf");
+
+            f3Style.setAttribute("numFmtId", formatID);
+            f3Style.setAttribute("fontId", f3FontIndex);
+            f3Style.setAttribute("fillId", 0);
+            f3Style.setAttribute("borderId", 0);
+            f3Style.setAttribute("applyFont", 1);
+            f3Style.setAttribute("applyFill", 1);
+            f3Style.setAttribute("applyBorder", 1);
+            f3Style.setAttribute("xfId", 0);
+            f3Style.setAttribute("applyNumberFormat", 0);
+
+            // Alignment (optional)
+            var align = document.createElementNS(ns, "alignment");
+            align.setAttribute("horizontal", "center");
+            align.setAttribute("vertical", "center");
+            f3Style.appendChild(align);
+
+            cellXfs.appendChild(f3Style);
+
+            var f4Style = document.createElementNS(ns, "xf");
+
+            f4Style.setAttribute("numFmtId", formatID);
+            f4Style.setAttribute("fontId", f2FontIndex);
+            f4Style.setAttribute("fillId", 0);
+            f4Style.setAttribute("borderId", 0);
+            f4Style.setAttribute("applyFont", 1);
+            f4Style.setAttribute("applyFill", 1);
+            f4Style.setAttribute("applyBorder", 1);
+            f4Style.setAttribute("xfId", 0);
+            f4Style.setAttribute("applyNumberFormat", 0);
+
+            // Alignment (optional)
+            var alignRight = document.createElementNS(ns, "alignment");
+            alignRight.setAttribute("horizontal", "right");
+            alignRight.setAttribute("vertical", "center");
+            f4Style.appendChild(alignRight);
+
+            cellXfs.appendChild(f4Style);
+
+            var f5Style = document.createElementNS(ns, "xf");
+
+            f5Style.setAttribute("numFmtId", formatID);
+            f5Style.setAttribute("fontId", f2FontIndex);
+            f5Style.setAttribute("fillId", 0);
+            f5Style.setAttribute("borderId", 0);
+            f5Style.setAttribute("applyFont", 1);
+            f5Style.setAttribute("applyFill", 1);
+            f5Style.setAttribute("applyBorder", 1);
+            f5Style.setAttribute("xfId", 0);
+            f5Style.setAttribute("applyNumberFormat", 0);
+
+            // Alignment (optional)
+            var align = document.createElementNS(ns, "alignment");
+            align.setAttribute("vertical", "center");
+            f5Style.appendChild(align);
+
+            cellXfs.appendChild(f5Style);
+
+            var f6Style = document.createElementNS(ns, "xf");
+
+            f6Style.setAttribute("numFmtId", formatID);
+            f6Style.setAttribute("fontId", f4FontIndex);
+            f6Style.setAttribute("fillId", 2);
+            f6Style.setAttribute("borderId", 1);
+            f6Style.setAttribute("applyFont", 1);
+            f6Style.setAttribute("applyFill", 1);
+            f6Style.setAttribute("applyBorder", 1);
+            f6Style.setAttribute("xfId", 0);
+            f6Style.setAttribute("applyNumberFormat", 1);
+
+            // Alignment (optional)
+            var align = document.createElementNS(ns, "alignment");
+            align.setAttribute("horizontal", "center");
+            align.setAttribute("vertical", "center");
+            f6Style.appendChild(align);
+
+            cellXfs.appendChild(f6Style);
+
+            var f7Style = document.createElementNS(ns, "xf");
+
+            f7Style.setAttribute("numFmtId", formatID);
+            f7Style.setAttribute("fontId", f5FontIndex);
+            f7Style.setAttribute("fillId", 2);
+            f7Style.setAttribute("borderId", 1);
+            f7Style.setAttribute("applyFont", 1);
+            f7Style.setAttribute("applyFill", 1);
+            f7Style.setAttribute("applyBorder", 1);
+            f7Style.setAttribute("xfId", 0);
+            f7Style.setAttribute("applyNumberFormat", 1);
+
+            // Alignment (optional)
+            var align = document.createElementNS(ns, "alignment");
+            align.setAttribute("horizontal", "center");
+            align.setAttribute("vertical", "center");
+            f7Style.appendChild(align);
+
+            cellXfs.appendChild(f7Style);
+
+            var f8Style = document.createElementNS(ns, "xf");
+
+            f8Style.setAttribute("numFmtId", formatID);
+            f8Style.setAttribute("fontId", f5FontIndex);
+            f8Style.setAttribute("fillId", 0);
+            f8Style.setAttribute("borderId", 1);
+            f8Style.setAttribute("applyFont", 1);
+            f8Style.setAttribute("applyFill", 1);
+            f8Style.setAttribute("applyBorder", 1);
+            f8Style.setAttribute("xfId", 0);
+            f8Style.setAttribute("applyNumberFormat", 1);
+
+            // Alignment (optional)
+            var align = document.createElementNS(ns, "alignment");
+            align.setAttribute("horizontal", "center");
+            align.setAttribute("vertical", "center");
+            f8Style.appendChild(align);
+
+            cellXfs.appendChild(f8Style);
+
+            var f9Style = document.createElementNS(ns, "xf");
+
+            f9Style.setAttribute("numFmtId", formatID);
+            f9Style.setAttribute("fontId", f6FontIndex);
+            f9Style.setAttribute("fillId", lastFillIndex+1);
+            f9Style.setAttribute("borderId", 1);
+            f9Style.setAttribute("applyFont", 1);
+            f9Style.setAttribute("applyFill", 1);
+            f9Style.setAttribute("applyBorder", 1);
+            f9Style.setAttribute("xfId", 0);
+            f9Style.setAttribute("applyNumberFormat", 1);
+
+            // Alignment (optional)
+            var align = document.createElementNS(ns, "alignment");
+            align.setAttribute("horizontal", "center");
+            align.setAttribute("vertical", "center");
+            f9Style.appendChild(align);
+
+            cellXfs.appendChild(f9Style);
+
+            var f10Style = document.createElementNS(ns, "xf");
+
+            f10Style.setAttribute("numFmtId", 0);
+            f10Style.setAttribute("fontId", f6FontIndex);
+            f10Style.setAttribute("fillId", 0);
+            f10Style.setAttribute("borderId", 1);
+            f10Style.setAttribute("applyFont", 1);
+            f10Style.setAttribute("applyFill", 1);
+            f10Style.setAttribute("applyBorder", 1);
+            f10Style.setAttribute("xfId", 0);
+            f10Style.setAttribute("applyNumberFormat", 0);
+
+            // Alignment (optional)
+            var align = document.createElementNS(ns, "alignment");
+            align.setAttribute("horizontal", "center");
+            align.setAttribute("vertical", "center");
+            f10Style.appendChild(align);
+
+            cellXfs.appendChild(f10Style);
+
+            var f11Style = document.createElementNS(ns, "xf");
+
+            f11Style.setAttribute("numFmtId", 0);
+            f11Style.setAttribute("fontId", f6FontIndex);
+            f11Style.setAttribute("fillId", 0);
+            f11Style.setAttribute("borderId", 1);
+            f11Style.setAttribute("applyFont", 1);
+            f11Style.setAttribute("applyFill", 1);
+            f11Style.setAttribute("applyBorder", 1);
+            f11Style.setAttribute("xfId", 0);
+            f11Style.setAttribute("applyNumberFormat", 0);
+
+            // Alignment (optional)
+            var align = document.createElementNS(ns, "alignment");
+            align.setAttribute("vertical", "center");
+            f11Style.appendChild(align);
+
+            cellXfs.appendChild(f11Style);
+
+            var f12Style = document.createElementNS(ns, "xf");
+
+            f12Style.setAttribute("numFmtId", 301);
+            f12Style.setAttribute("fontId", f7FontIndex);
+            f12Style.setAttribute("fillId", 0);
+            f12Style.setAttribute("borderId", 0);
+            f12Style.setAttribute("applyFont", 1);
+            f12Style.setAttribute("applyFill", 1);
+            f12Style.setAttribute("applyBorder", 1);
+            f12Style.setAttribute("xfId", 0);
+            f12Style.setAttribute("applyNumberFormat", 0);
+
+            // Alignment (optional)
+            var align = document.createElementNS(ns, "alignment");
+            align.setAttribute("horizontal", "center");
+            align.setAttribute("vertical", "center");
+            f12Style.appendChild(align);
+
+            cellXfs.appendChild(f12Style);
+
+            var f13Style = document.createElementNS(ns, "xf");
+
+            f13Style.setAttribute("numFmtId", 0);
+            f13Style.setAttribute("fontId", f8FontIndex);
+            f13Style.setAttribute("fillId", 0);
+            f13Style.setAttribute("borderId", 0);
+            f13Style.setAttribute("applyFont", 1);
+            f13Style.setAttribute("applyFill", 1);
+            f13Style.setAttribute("applyBorder", 1);
+            f13Style.setAttribute("xfId", 0);
+            f13Style.setAttribute("applyNumberFormat", 0);
+
+            // Alignment (optional)
+            var align = document.createElementNS(ns, "alignment");
+            align.setAttribute("horizontal", "center");
+            align.setAttribute("vertical", "center");
+            f13Style.appendChild(align);
+
+            cellXfs.appendChild(f13Style);
+
+            var f14Style = document.createElementNS(ns, "xf");
+
+            f14Style.setAttribute("numFmtId", 0);
+            f14Style.setAttribute("fontId", f9FontIndex);
+            f14Style.setAttribute("fillId", 0);
+            f14Style.setAttribute("borderId", 0);
+            f14Style.setAttribute("applyFont", 1);
+            f14Style.setAttribute("applyFill", 1);
+            f14Style.setAttribute("applyBorder", 1);
+            f14Style.setAttribute("xfId", 0);
+            f14Style.setAttribute("applyNumberFormat", 0);
+
+            // Alignment (optional)
+            var align = document.createElementNS(ns, "alignment");
+            align.setAttribute("horizontal", "center");
+            align.setAttribute("vertical", "center");
+            f14Style.appendChild(align);
+
+            cellXfs.appendChild(f14Style);
+
+          	var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+	        var downrows = 11;
+	        var clRow = $('row', sheet);
+	        //update Row
+	        clRow.each(function () {
+	            var attr = $(this).attr('r');
+	            var ind = parseInt(attr);
+	            ind = ind + downrows;
+	            $(this).attr("r",ind);
+	        });
+	 
+	        // Update  row > c
+	        $('row c ', sheet).each(function () {
+	            var attr = $(this).attr('r');
+	            var pre = attr.substring(0, 1);
+	            var ind = parseInt(attr.substring(1, attr.length));
+	            ind = ind + downrows;
+	            $(this).attr("r", pre + ind);
+	        });
+
+	        var cols = $('col', sheet).length -1;
+          if (cols < 10) {
+            cols += 10 - cols;
+          }
+
+            var mergeCells = $('mergeCells', sheet);
+
+            
+            mergeCells[0].appendChild( _createNode( sheet, 'mergeCell', {
+              attr: {
+                  ref: 'A1:'+ createCellPos(cols, 'A') + 1
+              }
+            } ) );
+
+            mergeCells[0].appendChild( _createNode( sheet, 'mergeCell', {
+              attr: {
+                  ref: 'A2:'+ createCellPos(cols, 'A') + 2
+              }
+            } ) );
+            
+            mergeCells[0].appendChild( _createNode( sheet, 'mergeCell', {
+              attr: {
+                  ref: 'A3:'+ createCellPos(cols, 'A') + 3
+              }
+            } ) );
+
+            mergeCells[0].appendChild( _createNode( sheet, 'mergeCell', {
+              attr: {
+                  ref: 'A4:'+ createCellPos(cols, 'A') + 4
+              }
+            } ) );
+
+            mergeCells[0].appendChild( _createNode( sheet, 'mergeCell', {
+              attr: {
+                  ref: 'C6:D6'
+              }
+            } ) );
+
+            mergeCells[0].appendChild( _createNode( sheet, 'mergeCell', {
+              attr: {
+                  ref: 'C7:D7'
+              }
+            } ) );
+
+            mergeCells[0].appendChild( _createNode( sheet, 'mergeCell', {
+              attr: {
+                  ref: 'C8:D8'
+              }
+            } ) );
+
+            mergeCells[0].appendChild( _createNode( sheet, 'mergeCell', {
+              attr: {
+                  ref: 'C9:D9'
+              }
+            } ) );
+
+            mergeCells[0].appendChild( _createNode( sheet, 'mergeCell', {
+              attr: {
+                  ref: 'A10:A11'
+              }
+            } ) );
+
+            mergeCells[0].appendChild( _createNode( sheet, 'mergeCell', {
+              attr: {
+                  ref: 'B10:B11'
+              }
+            } ) );
+
+            mergeCells[0].appendChild( _createNode( sheet, 'mergeCell', {
+              attr: {
+                  ref: 'C10:C11'
+              }
+            } ) );
+
+            mergeCells[0].appendChild( _createNode( sheet, 'mergeCell', {
+              attr: {
+                  ref: createCellPos(<%=problem_files.length%>, 'D')+'10:'+createCellPos(1, createCellPos(<%=problem_files.length%>, 'D')) + '10'
+              }
+            } ) );
+
+            mergeCells[0].appendChild( _createNode( sheet, 'mergeCell', {
+              attr: {
+                  ref: createCellPos(1, createCellPos(1, createCellPos(<%=problem_files.length%>, 'D')))+'10:'+createCellPos(2, createCellPos(1, createCellPos(1, createCellPos(<%=problem_files.length%>, 'D')))) + '10'
+              }
+            } ) );
+
+            mergeCells.attr( 'count', mergeCells.attr( 'count' )+1 );
+            //$('row:eq('+(row-1)+') c', sheet).attr( 's', '51' ); // centre
+    
+ 
+            function createCellPos( n, key ){
+                var ordA = key.charCodeAt(0);
+                var ordZ = 'Z'.charCodeAt(0);
+                var len = ordZ - ordA + 1;
+                var s = "";
+              
+                while( n >= 0 ) {
+                    s = String.fromCharCode(n % len + ordA) + s;
+                    n = Math.floor(n / len) - 1;
+                }
+              
+                return s;
+            }
+
+            function _createNode( doc, nodeName, opts ) {
+                var tempNode = doc.createElement( nodeName );
+
+                if ( opts ) {
+                    if ( opts.attr ) {
+                        $(tempNode).attr( opts.attr );
+                    }
+
+                    if ( opts.children ) {
+                        $.each( opts.children, function ( key, value ) {
+                            tempNode.appendChild( value );
+                        } );
+                    }
+
+                    if ( opts.text !== null && opts.text !== undefined ) {
+                        tempNode.appendChild( doc.createTextNode( opts.text ) );
+                    }
+                }
+                return tempNode;
+            }
+
+			function Addrow(index, data, sheet, type) {
+	            msg='<row r="'+index+'">'
+	            for(i=0;i<data.length;i++){
+	                var key=data[i].k;
+	                var value=data[i].v;
+	                var style=data[i].s;
+	                
+                  if (type == 'f' && value.includes('(')) {
+                    msg += '<c t="str" r="' + key + index + '" s="'+ style +'">';
+                    msg +=  '<f>'+value+'</f>';
+                    msg+='</c>';
+                  } else {
+                    msg += '<c t="inlineStr" r="' + key + index + '" s="'+ style +'">';
+                    msg += '<is>';
+                    msg +=  '<t>'+value+'</t>';
+                    msg+=  '</is>';
+                    msg+='</c>';
+                  }
+                
+	                
+	            }
+	            msg += '</row>';
+	            return msg;
+	        }
+
+	        function getDate() {
+			    var d = new Date(),
+			        month = '' + (d.getMonth() + 1),
+			        day = '' + d.getDate(),
+			        year = d.getFullYear();
+
+			    if (month.length < 2) 
+			        month = '0' + month;
+			    if (day.length < 2) 
+			        day = '0' + day;
+
+			    return [year, month, day].join('-');
+			}
+          var title = [];
+          var title2 = [];
+          title.push({ k: 'A', v: 'No', s: f8StyleIndex });
+          title.push({ k: 'B', v: 'ID', s: f8StyleIndex });
+          title.push({ k: 'C', v: 'Full name', s: f8StyleIndex });
+          title2.push({ k: 'A', v: '', s: f8StyleIndex });
+          title2.push({ k: 'B', v: '', s: f8StyleIndex });
+          title2.push({ k: 'C', v: '', s: f8StyleIndex });
+          var c = 'C';
+          
+          <% for (let i = 0, l = problem_files.length; i < l; ++i) { %>
+            c = createCellPos(1, c);
+            var value = '<%=data[i].problem_id%>';
+            title.push({ k: c, v: value, s: f7StyleIndex });
+            title2.push({ k: c, v: 'VALUE(10)', s: f6StyleIndex });
+          <% } %>
+
+          var rangeSum = 'D11:' + c + '11';
+          var rChar = c;
+          c = createCellPos(1, c);
+          title.push({ k: c, v: 'SUM', s: f7StyleIndex });
+          title.push({ k: createCellPos(1, c), v: '', s: f7StyleIndex });
+          title2.push({ k: c, v: 'SUM('+ rangeSum + ')', s: f6StyleIndex });
+          c = createCellPos(1, c);
+          title2.push({ k: c, v: 'VALUE(100)', s: f6StyleIndex });
+          c = createCellPos(1, c);
+          title.push({ k: c, v: 'Note', s: f7StyleIndex });
+          title.push({ k: createCellPos(1, c), v: '', s: f7StyleIndex });
+          title.push({ k: createCellPos(2, c), v: '', s: f7StyleIndex });
+          title2.push({ k: c, v: 'Format', s: f7StyleIndex });
+          title2.push({ k: createCellPos(1, c), v: 'Comment', s: f7StyleIndex });
+          title2.push({ k: createCellPos(2, c), v: 'Plagiarism', s: f7StyleIndex });
+
+	        var r1 = Addrow(1, [{ k: 'A', v: 'FPT UNIVERSITY', s: f1StyleIndex }], sheet, '');
+	        var r2 = Addrow(2, [{ k: 'A', v: 'Campus Can Tho', s: f2StyleIndex }], sheet, '');
+	        var r3 = Addrow(3, [{ k: 'A', v: '600, đường Nguyễn Văn Cừ (nối dài), phường An Bình, quận Ninh Kiều, TP. Cần Thơ # (0292) 360 1996 # fptu.cantho@fe.edu.vn', s: f3StyleIndex }], sheet, '');
+	        var r4 = Addrow(4, [{ k: 'A', v: 'PRACTICAL SCORE SHEET', s: f2StyleIndex }], sheet);
+	        var r6 = Addrow(6, [{ k: 'C', v: 'Semester:', s: f4StyleIndex }, { k: 'E', v: '<%=semester%>', s: f5StyleIndex }], sheet, '');
+	        var r7 = Addrow(7, [{ k: 'C', v: 'Subject:', s: f4StyleIndex }, { k: 'E', v: '<%=subject%>', s: f5StyleIndex }], sheet, '');
+	        var r8 = Addrow(8, [{ k: 'C', v: 'Class:', s: f4StyleIndex }, { k: 'E', v: '<%=className%>', s: f5StyleIndex }], sheet, '');
+	        var r9 = Addrow(9, [{ k: 'C', v: 'Date:', s: f4StyleIndex }, { k: 'E', v: getDate(), s: f5StyleIndex }], sheet, '');
+          var r10 = Addrow(10, title, sheet, '');
+          var r11 = Addrow(11, title2, sheet, 'f');
+
+	        sheet.childNodes[0].childNodes[1].innerHTML = r1 + r2 + r3 + r4 + r6 + r7 + r8 + r9 + r10 + r11 + sheet.childNodes[0].childNodes[1].innerHTML;
+          var rows = $('row c', sheet);
+
+          for (var i = 10; i < rows.length; i++) {
+            $('row:eq('+ i +') c', sheet).attr( 's', f10StyleIndex ); 
+            $('c[r="'+ createCellPos(1, rChar) + (i+2) +'"]', sheet).attr( 's', f9StyleIndex ); 
+            $('c[r="'+ createCellPos(1, rChar) + (i+2) +'"]', sheet).attr( 't', 'str' ); 
+            $('c[r="'+ createCellPos(1, rChar) + (i+2) +'"]', sheet).append('<f>' + 'SUM(D'+ (i+2) +':'+ rChar + (i+2) +')' + '</f>');
+            $('is', $('c[r="'+ createCellPos(1, rChar) + (i+2) +'"]', sheet)).remove();
+            $('c[r="'+ createCellPos(2, rChar) + (i+2) +'"]', sheet).attr( 's', f9StyleIndex );
+            $('c[r="'+ createCellPos(2, rChar) + (i+2) +'"]', sheet).attr( 't', 'str' ); 
+            $('c[r="'+ createCellPos(2, rChar) + (i+2) +'"]', sheet).append('<f>' + createCellPos(1, rChar)+ (i+2) +'*'+ createCellPos(2, rChar) +'11/'+ createCellPos(1, rChar) +'11' + '</f>');
+            $('is', $('c[r="'+ createCellPos(2, rChar) + (i+2) +'"]', sheet)).remove();
+            $('c[r="B'+ (i+2) +'"]', sheet).attr( 's', f11StyleIndex );
+            $('c[r="C'+ (i+2) +'"]', sheet).attr( 's', f11StyleIndex );
+          }
+
+          rows = $('row', sheet);
+          mergeCells[0].appendChild( _createNode( sheet, 'mergeCell', {
+              attr: {
+                  ref: createCellPos(2, rChar) + (rows.length+3) + ':' + createCellPos(5, rChar) + (rows.length+3)
+              }
+            } ) );
+
+          mergeCells[0].appendChild( _createNode( sheet, 'mergeCell', {
+              attr: {
+                  ref: createCellPos(2, rChar) + (rows.length+4) + ':' + createCellPos(5, rChar) + (rows.length+4)
+              }
+            } ) );
+
+          mergeCells[0].appendChild( _createNode( sheet, 'mergeCell', {
+              attr: {
+                  ref: createCellPos(2, rChar) + (rows.length+7) + ':' + createCellPos(5, rChar) + (rows.length+7)
+              }
+            } ) );
+
+          mergeCells.attr( 'count', mergeCells.attr( 'count' )+1 );
+          
+          var r12 = Addrow(rows.length + 3, [{ k: createCellPos(2, rChar), v: 'TODAY()', s: f12StyleIndex }], sheet, 'f');
+          var r13 = Addrow(rows.length + 4, [{ k: createCellPos(2, rChar), v: 'Lecturer', s: f13StyleIndex }], sheet, '');
+          var r14 = Addrow(rows.length + 7, [{ k: createCellPos(2, rChar), v: '<%=data[0].name%>', s: f14StyleIndex }], sheet, '');
+          sheet.childNodes[0].childNodes[1].innerHTML = sheet.childNodes[0].childNodes[1].innerHTML + r12 + r13 + r14;          
+
             setSheetName(xlsx, 'Points');
             if (<%=checkFormat%>)
               addSheet(xlsx, '#dataTableRank', '', 'Formats', '2', '.exportFormat');
@@ -287,6 +969,7 @@
             if (<%=checkPlagiarism%>)
             addSheet(xlsx, '#dataTableRank', '', 'Plagiarisms', '4', '.exportPlagiarism');
           }
+          
         }, {
           text: '<li class="fa fa-download"></li> Download source code',
           className: 'ml-1',
@@ -346,18 +1029,18 @@
         <table id="dataTableRank" class="table table-sm table-hover table-bordered" width="100%" cellspacing="0">
           <thead>
             <tr>
-              <th rowspan="2" class="align-middle font-weight-bold" width="5%">Rank</th>
-              <th rowspan="2" class="align-middle font-weight-bold export exportFormat exportComment exportPlagiarism" width="15%">Roll number</th>
-              <th rowspan="2" class="align-middle font-weight-bold export exportFormat exportComment exportPlagiarism">Name</th>
-              <th rowspan="2" class="align-middle font-weight-bold export exportFormat exportComment exportPlagiarism" width="5%">Class</th>
+              <th rowspan="2" class="align-middle font-weight-bold export" width="5%">Rank</th>
+              <th rowspan="2" class="align-middle font-weight-bold export exportFormat exportComment exportPlagiarism" width="15%">ID</th>
+              <th rowspan="2" class="align-middle font-weight-bold export exportFormat exportComment exportPlagiarism">Full name</th>
+              <th rowspan="2" class="align-middle font-weight-bold exportFormat exportComment exportPlagiarism" width="5%">Class</th>
               <th rowspan="2" class="align-middle font-weight-bold" width="5%">Time</th>
               <% if (problem_files.length > 0) { %>
               <th colspan="<%=problem_files.length%>" class="text-center align-middle font-weight-bold export">Problem</th>
               <% } else { %>
               <th colspan="1" class="text-center align-middle font-weight-bold export">Problem</th>
               <% } %>
-              <th rowspan="2" class="text-center align-middle font-weight-bold export" width="8%">Total</th>
-              <th rowspan="2" class="text-center align-middle font-weight-bold export">Final</th>
+              <th rowspan="2" class="text-center align-middle font-weight-bold " width="8%">Total</th>
+              <th rowspan="2" class="text-center align-middle font-weight-bold ">Final</th>
               <% if (problem_files.length > 0) { %>
               <% for (let i = 0, l = problem_files.length; i < l; ++i) { %>
               <th rowspan="2" class="text-center exportFormat" width="8%">
@@ -382,6 +1065,11 @@
               <% }} else { %>
               <th rowspan="2" class="text-center exportPlagiarism" width="8%">None</th>
               <% } %>
+              <th rowspan="2" class="text-center align-middle font-weight-bold export">1</th>
+              <th rowspan="2" class="text-center align-middle font-weight-bold export">2</th>
+              <th rowspan="2" class="text-center align-middle font-weight-bold export">Format</th>
+              <th rowspan="2" class="text-center align-middle font-weight-bold export">Comment</th>
+              <th rowspan="2" class="text-center align-middle font-weight-bold export">Plagiarism</th>
             </tr>
             <tr>
               <% if (problem_files.length > 0) { %>
@@ -396,6 +1084,7 @@
             </tr>
           </thead>
           </table>
+          
         </table>
       </div>
     </div>

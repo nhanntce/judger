@@ -367,7 +367,7 @@ exports.contest_detail = function (req, res) {
     "= student_account.id AND contest_student.contest_id = ? AND contest.contest_id = " +
     "contest_student.contest_id AND contest_student.status = 1 AND student_account.status = 1 " +
     "  AND class.status = 1 AND class_student.student_id = student_account.id " +
-    " AND class_student.class_id = class.id AND class_student.status = 1";
+    " AND class_student.class_id = class.id AND class_student.status = 1 GROUP BY student_account.id";
   db.query(sql, [contest_id], function (err, results) {
     if (err) { logger.error(err); res.redirect("/error"); return }
     

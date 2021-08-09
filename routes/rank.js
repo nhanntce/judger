@@ -38,6 +38,7 @@ exports.data_rank = function (req, res) {
     res.redirect("/login")
     return
   }
+  console.log("data-rank");
   var message = ""
   var contest_id = req.query.contest_id
   var sql = "SELECT student_id FROM `contest_student` WHERE contest_id = ? AND status=1 LIMIT 1"
@@ -47,8 +48,9 @@ exports.data_rank = function (req, res) {
       message = "No student in contest"
       res.render('data-rank.ejs', { data: [], problem_files: [], message: message, role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role })
     } else {
-      sql = "SELECT contest.contest_name, contest.contest_id, contest.time_begin, contest.time_end, contest_detail.problem_id, contest_detail.path_problem FROM contest " +
+      sql = "SELECT contest.contest_name, contest.contest_id, employee_account.name, contest.time_begin, contest.time_end, contest_detail.problem_id, contest_detail.path_problem FROM contest " +
         "INNER JOIN contest_detail ON contest.contest_id=contest_detail.contest_id " +
+        "INNER JOIN employee_account ON contest.teacher_id=employee_account.userId " +
         "WHERE contest.contest_id=? AND contest.status=1"
       db.query(sql, [contest_id], function (err, results2) {
         if (err) { logger.error(err); res.redirect("/error"); return }
@@ -83,12 +85,16 @@ exports.load_rank = function (req, res) {
   //   "student_account.class, contest.contest_id, contest.contest_name,contest.time_begin,contest.time_end " +
   //   " FROM contest, student_account, contest_student WHERE contest_student.student_id = student_account.id " +
   //   " AND contest_student.contest_id = ? AND contest.contest_id = contest_student.contest_id AND contest_student.status = 1";
-  var sql = "SELECT student_account.userId, student_account.rollnumber, student_account.name, " +
-  "class.class_name, contest.contest_id, contest.contest_name,contest.time_begin,contest.time_end " +
-  "FROM contest, student_account, contest_student, class, class_student WHERE " +
-  " student_account.id=class_student.student_id AND class.id=class_student.class_id AND contest_student.student_id = student_account.id " +
-  " AND contest_student.contest_id = ? AND contest.contest_id = contest_student.contest_id AND contest_student.status = 1 " +
-  " AND student_account.status=1 AND class.status=1 AND class_student.status=1 AND contest.status=1"; 
+  console.log("load-rank");
+  var sql = "SELECT student_account.rollnumber, student_account.userId, " +
+  " student_account.name, class.class_name, contest.contest_id, " +
+  " contest.contest_name,contest.time_begin,contest.time_end FROM " +
+  " student_account INNER JOIN class_student ON class_student.student_id " +
+  " = student_account.id AND class_student.status=1 INNER JOIN class ON class.id = " +
+  " class_student.class_id AND class.status=1 INNER JOIN contest_student ON " +
+  " contest_student.student_id = student_account.id AND contest_student.status=1 " +
+  " INNER JOIN contest ON contest.contest_id = contest_student.contest_id AND " +
+  " contest.contest_id= ? WHERE student_account.status=1 GROUP BY student_account.id"; 
   db.query(sql, [contest_id], function (err, results) {
     if (err || results.length == 0) { logger.error(err); res.redirect("/error"); return }
     var contest_name = results[0].contest_name.replace(/ /g, '-')
@@ -105,7 +111,7 @@ exports.load_rank = function (req, res) {
         };
         for (let i = 0, l = results.length; i < l; ++i) {
           tb = new Array()
-          tb.push('', results[i].rollnumber, results[i].name, results[i].class_name, 0, '<center>' + 0 + '</center>', '<center>' + 0 + '</center>',0,0,0,0);
+          tb.push('', results[i].rollnumber, results[i].name, results[i].class_name, 0, '<center>' + 0 + '</center>', '<center>' + 0 + '</center>',0,0,0,0,'','','','','');
           obj.data.push(tb)
         }
         res.send(obj)
@@ -285,10 +291,12 @@ exports.load_rank = function (req, res) {
 
             if (totaltimes[results[i].rollnumber] == 0) {
               tb.push('<center>Not submit<br>(0)</center>')
+              tb.push('<center>Not submit<br>(0)</center>')
             } else {
               tb.push('<center>' + totalpoint[results[i].rollnumber].toFixed(1) + '<br>(' + totaltimes[results[i].rollnumber] + ')</center>')
+              tb.push((totalpoint[results[i].rollnumber] / problem_files.length).toFixed(1))
             }
-            tb.push((totalpoint[results[i].rollnumber] / problem_files.length).toFixed(1))
+            
             for (let j = 0, l = problem_files.length; j < l; ++j) {
               if (point[results[i].rollnumber][problem_files[j]] > 0) {
                 tb.push("<center class='solved'>" + format[results[i].rollnumber][problem_files[j]] + '<br>(' + times[results[i].rollnumber][problem_files[j]] + ')</center>')
@@ -315,6 +323,52 @@ exports.load_rank = function (req, res) {
               } else {
                 tb.push("<center>" + plagiarism[results[i].rollnumber][problem_files[j]] + '<br>(' + times[results[i].rollnumber][problem_files[j]] + ')</center>')
               }
+            }
+            tb.push("-")
+            tb.push("-")
+            var nonFormat = ""
+            if (checkFormat == "true") {
+            	for (let j = 0, l = problem_files.length; j < l; ++j) {
+	              if (format[results[i].rollnumber][problem_files[j]] == false) {
+	                nonFormat += problem_files[j]
+	              }
+	            }	
+            }
+            
+            if (nonFormat == "") {
+              tb.push("-")
+            } else {
+              tb.push(nonFormat)
+            }
+
+            var nonComment = ""
+            if (checkCmt == "true") {
+            	for (let j = 0, l = problem_files.length; j < l; ++j) {
+	              if (parseFloat(comment[results[i].rollnumber][problem_files[j]]) < parseFloat(percentCmtAcp)) {
+	                nonComment += problem_files[j]
+	              }
+	            }
+            }
+
+            if (nonComment == "") {
+              tb.push("-")
+            } else {
+              tb.push(nonComment)
+            }
+
+            var nonPlagiarism = ""
+            if (checkPlagiarism == "true") {
+            	for (let j = 0, l = problem_files.length; j < l; ++j) {
+	              if (parseFloat(plagiarism[results[i].rollnumber][problem_files[j]]) >= parseFloat(plagiarismAcp)) {
+	                nonPlagiarism += problem_files[j]
+	              }
+	            }	
+            }
+            
+            if (nonPlagiarism == "") {
+              tb.push("-")
+            } else {
+              tb.push(nonPlagiarism)
             }
             obj.data.push(tb)
           }
