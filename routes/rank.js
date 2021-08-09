@@ -38,7 +38,6 @@ exports.data_rank = function (req, res) {
     res.redirect("/login")
     return
   }
-  console.log("data-rank");
   var message = ""
   var contest_id = req.query.contest_id
   var sql = "SELECT student_id FROM `contest_student` WHERE contest_id = ? AND status=1 LIMIT 1"
@@ -85,7 +84,6 @@ exports.load_rank = function (req, res) {
   //   "student_account.class, contest.contest_id, contest.contest_name,contest.time_begin,contest.time_end " +
   //   " FROM contest, student_account, contest_student WHERE contest_student.student_id = student_account.id " +
   //   " AND contest_student.contest_id = ? AND contest.contest_id = contest_student.contest_id AND contest_student.status = 1";
-  console.log("load-rank");
   var sql = "SELECT student_account.rollnumber, student_account.userId, " +
   " student_account.name, class.class_name, contest.contest_id, " +
   " contest.contest_name,contest.time_begin,contest.time_end FROM " +
@@ -279,8 +277,6 @@ exports.load_rank = function (req, res) {
 
             for (let j = 0, l = problem_files.length; j < l; ++j) {
               if (point[results[i].rollnumber][problem_files[j]] > 0) {
-                // console.log(point[results[i].rollnumber][problem_files[j]].toFixed(1))
-                // console.log(times[results[i].rollnumber][problem_files[j]])
                 tb.push("<center class='solved'>" + point[results[i].rollnumber][problem_files[j]].toFixed(1) + '<br>(' + times[results[i].rollnumber][problem_files[j]] + ')</center>')
               } else if (point[results[i].rollnumber][problem_files[j]] == 0) {
                 tb.push("<center class='attempted'>" + point[results[i].rollnumber][problem_files[j]] + '<br>(' + times[results[i].rollnumber][problem_files[j]] + ')</center>')
@@ -421,7 +417,6 @@ exports.detail_rank = function (req, res) {
       req.session.problem_id.push(results[i].problem_id)
     }
     var debai = JSON.parse(JSON.stringify(req.session.problem_id))
-    // console.log("server " +req.session.maxtimes)
     // get all judged Logs in folder './public/nopbai/Logs/contest_name
     fs.readdir(storage.NOPBAI + 'Logs/' + contest_name, function (err, files) {
       if (err) { logger.error(err); res.redirect("/error"); return }
