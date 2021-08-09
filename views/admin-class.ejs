@@ -12,10 +12,9 @@
         defaultContent: "",
         targets: 0
       }, {
-        targets: 4,
+        targets: 5,
         mRender: function (data, type, row, meta) {
-          console.log(data)
-          return '<a href="/admin/detail-class?classId=' + row[4] + '&class_name='+ row[1] + '_' + row[2] + '_' + row[3] +'">' + '<button style="margin-top: -7px" class="btn btn-outline-blue waves-effect btn-sm">Detail</button>' + '</a>';
+          return '<a href="/admin/detail-class?classId=' + row[5] + '&class_name='+ row[1] + '_' + row[2] + '_' + row[3] +'">' + '<button style="margin-top: -7px" class="btn btn-outline-blue waves-effect btn-sm">Detail</button>' + '</a>';
         }
       }
       ],
@@ -39,18 +38,32 @@
       if (l.length == 1) {
         $("#btnedit").prop('disabled', false);
         var role;
-        document.getElementById("edit_id").value = l[0][4]
+        document.getElementById("edit_id").value = l[0][5]
         document.getElementById("edit_semester").value = l[0][1]
         document.getElementById("edit_subject").value = l[0][2]
         document.getElementById("edit_class_name").value = l[0][3]
+        // document.getElementById("edit_disable").value = l[0][4]
+
+        document.getElementById("old_semester").value = l[0][1]
+        document.getElementById("old_subject").value = l[0][2]
+        document.getElementById("old_class_name").value = l[0][3]
+
         
+        if (l[0][4].includes('green')) {
+          $("#edit_disable").prop("checked", true);
+          document.getElementById("old_class_status").value = "on";
+        } else {
+          $("#edit_disable").prop("checked", false);
+          document.getElementById("old_class_status").value = "off";
+        }
+
       }
       if (l.length < 1 || l.length > 1) {
         $("#btnedit").prop('disabled', true);
       }
       var a = [];
       for (let e = 0; e < l.length; e++){
-        a.push(l[e][4]);
+        a.push(l[e][5]);
       }
       if (a.length == 0) {
         $("#btndelete").prop('disabled', true);
@@ -108,6 +121,7 @@
           <th>Semester</th>
           <th>Subject</th>
           <th>Class name</th>
+          <th>Status</th>
           <th></th>
         </tr>
       </thead>
@@ -156,7 +170,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Edit a teacher</h4>
+        <h4 class="modal-title w-100 font-weight-bold">Edit a class</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -165,6 +179,10 @@
          <div class="modal-body mx-3">
          <div class="md-form">
             <input type="hidden" id="edit_id" name="edit_id" class="form-control validate">
+            <input type="hidden" id="old_semester" name="old_semester" class="form-control validate">
+            <input type="hidden" id="old_subject" name="old_subject" class="form-control validate">
+            <input type="hidden" id="old_class_name" name="old_class_name" class="form-control validate">
+            <input type="hidden" id="old_class_status" name="old_class_status" class="form-control validate">
           </div>
           <div class="form">
             <label data-error="wrong" data-success="" for="orangeForm-name">Semester  <i>(Example: SU21)</i></label>
@@ -177,6 +195,14 @@
           <div class="form">
             <label data-error="wrong" data-success="" for="orangeForm-pass">Class name  <i>(Example: SE1302)</i></label>
             <input type="text" id="edit_class_name" name="edit_class_name" class="form-control validate" required>
+          </div>
+          <i class="fas fa-eye"></i> Status
+          <div class="switch">
+            <label>
+              No
+              <input id="edit_disable" name="edit_disable" type="checkbox">
+              <span class="lever"></span> Yes
+            </label>
           </div>
          </div>
           <div class="modal-footer d-flex justify-content-center">
@@ -193,6 +219,7 @@
       var semester = $('#semester').val();
       var subject = $('#subject').val();   
       var class_name = $('#class_name').val();
+
       if (!/^[A-Z]{2}[0-9]{2}$/.test(semester)){
          $('#semester').after('<span class="error">Semester must be follow format (Ex: SU21) !</span>');
           e.preventDefault();
@@ -220,40 +247,50 @@
         });
         $(document).ready(function() {
         $.get("/admin/duplicate-class", function(data, status){
-        $('#form_editClass').submit(function(e) {
-    $(".error").remove();
-      var edit_semester = $('#edit_semester').val();
-      var edit_subject = $('#edit_subject').val();
-      var edit_class_name = $('#edit_class_name').val();
-      if (!/^[A-Z]{2}[0-9]{2}$/.test(edit_semester)){
-         $('#edit_semester').after('<span class="error">Semester must be follow format (Ex: SU21) !</span>');
-          e.preventDefault();
-      }
-      if (!/^[A-Z]{3}[0-9]{3}$/.test(edit_subject)){
-         $('#edit_subject').after('<span class="error">Subject must be follow format (Ex: CPP201) !</span>');
-          e.preventDefault();
-      }
-      if (!/^[A-Z]{2}[0-9]{4}$/.test(edit_class_name)){
-         $('#edit_class_name').after('<span class="error">Class name must be follow format (Ex: SU21) !</span>');
-          e.preventDefault();
-      }
-      let isDuplicate = false    
-      var count = 0;
-        for (let i = 0, l = data.data.length; i < l; ++i){
-            if(edit_semester === data.data[i].semester && edit_subject === data.data[i].subject && edit_class_name === data.data[i].class_name){
-              count += 1;
-          } 
-          if(count == 0){
-            $('#edit_class_name').after('<span class="error">Class already !</span>');
-              isDuplicate = true
-          }
-        }
-    if (isDuplicate){
-    e.preventDefault();
-      }
-  });
+          $('#form_editClass').submit(function(e) {
+            $(".error").remove();
+              var edit_semester = $('#edit_semester').val();
+              var edit_subject = $('#edit_subject').val();
+              var edit_class_name = $('#edit_class_name').val();
+              var edit_class_status = $('#edit_disable').val();
+
+              if (!/^[A-Z]{2}[0-9]{2}$/.test(edit_semester)){
+                 $('#edit_semester').after('<span class="error">Semester must be follow format (Ex: SU21) !</span>');
+                  e.preventDefault();
+              }
+              if (!/^[A-Z]{3}[0-9]{3}$/.test(edit_subject)){
+                 $('#edit_subject').after('<span class="error">Subject must be follow format (Ex: CPP201) !</span>');
+                  e.preventDefault();
+              }
+              if (!/^[A-Z]{2}[0-9]{4}$/.test(edit_class_name)){
+                 $('#edit_class_name').after('<span class="error">Class name must be follow format (Ex: SU21) !</span>');
+                  e.preventDefault();
+              }
+              let isDuplicate = false    
+              for (let i = 0, l = data.data.length; i < l; i++){
+                  var editStatus = edit_class_status == "on" ? 1 : 0;
+                  if(edit_semester === data.data[i].semester && edit_subject === data.data[i].subject 
+                    && edit_class_name === data.data[i].class_name && editStatus===data.data[i].status){
+                    isDuplicate = true;
+                } 
+              }
+              var old_semester = document.getElementById("old_semester").value;
+              var old_subject = document.getElementById("old_subject").value;
+              var old_class_name = document.getElementById("old_class_name").value;
+              var old_class_status = document.getElementById("old_class_status").value;
+
+              if(edit_semester === old_semester && edit_subject === old_subject && edit_class_name === old_class_name && edit_class_status === old_class_status){
+                $('#edit_class_name').after('<span class="error">Nothing to update !</span>');
+                isDuplicate = false;
+                e.preventDefault();
+              }
+              if (isDuplicate){
+                $('#edit_class_name').after('<span class="error">Class was exist !</span>');
+                e.preventDefault();
+              }
+          });
         });
-        });
+      });
       </script>
     </div>
   </div>

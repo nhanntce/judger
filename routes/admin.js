@@ -412,16 +412,23 @@ exports.admin_class = function (req, res) {
 exports.admin_class_data = function (req, res) {
   const requestQuery = req.query;
   let columnsMap = [
-    { db: "null", dt: 0 }, { db: "semester", dt: 1 }, { db: "subject", dt: 2 }, { db: "class_name", dt: 3 }, { db: "id", dt: 4 }
+    { db: "null", dt: 0 }, { db: "semester", dt: 1 }, { db: "subject", dt: 2 }, { db: "class_name", dt: 3 }, { db: "status", dt: 4 }, { db: "id", dt: 5 }
   ];
 
-  const query = "SELECT id, semester, subject, class_name FROM class where status = 1"
+  const query = "SELECT id, semester, subject, class_name, status FROM class"
   const primaryKey = "id"
   const nodeTable = new NodeTable(requestQuery, db, query, primaryKey, columnsMap);
   nodeTable.output((err, data) => {  
     if (err) {
       console.log(err);
       return;
+    }
+    for (var i = 0 ; i < data.data.length  ; i++){  
+      if(data.data[i][4]){
+          data.data[i][4] = '<i class="far fa-check-circle" style="color:green ; font-size: 120%"></i>'
+      } else {
+        data.data[i][4] = '<i class="far fa-times-circle" style="color:red ; font-size: 120%"></i>'
+      }
     }
     res.send(data)
   })
@@ -466,43 +473,26 @@ exports.create_class = function (req, res) {
     })
   }
 }
-exports.edit_class = function (req, res) {
+exports.edit_class = async function (req, res) {
   if (req.method == "POST") {
     var post = req.body
     var id = post.edit_id
     var semester = post.edit_semester
     var subject = post.edit_subject
     var class_name = post.edit_class_name
-    var sql = "SELECT semester, subject, class_name, status FROM `class` WHERE semester = '"+semester+"' and subject = '"+subject+"' and class_name = '"+class_name+"'"
-    db.query(sql, function (err, result){
-      if(err){
-        req.session.update_class_fail = true
-        res.redirect("/admin/class")
-      }
-      if(result.length > 0){
-        var sql ="UPDATE class SET status = 1 WHERE semester = '"+semester+"' and subject = '"+subject+"' and class_name = '"+class_name+"'"
-       db.query(sql, function (err, result){
-          if(err){
-            req.session.update_class_fail = true
-            res.redirect("/admin/class")
-          } 
-          req.session.update_class_success = true
-          res.redirect('/admin/class')
+    var isDisable = post.edit_disable == "on" ? "1" : "0"
+    console.log("Status: ",post.edit_disable)
 
-       })
-      } else {
-        var sql = "UPDATE class SET semester=?,subject=?,class_name=? WHERE id=?"
-       db.query(sql, [semester, subject, class_name, id],function (err, result){
-          if(err){
-            req.session.update_class_fail = true
-            res.redirect("/admin/class")
-          } 
-          req.session.update_class_success = true
-          res.redirect('/admin/class')
-
-       })
-      }
-    })
+    var updateSql = "UPDATE `class` SET `semester`=?,`subject`=?,`class_name`=?,`status`=? WHERE id=?";
+    try {
+      var update = await queryPromise(updateSql, [semester, subject, class_name, isDisable, id]);
+      req.session.update_class_success = true
+      res.redirect('/admin/class')
+    } catch (error){
+      req.session.update_class_fail = true
+      console.log(error)
+      res.redirect("/admin/class")
+    }
   }
 }
 
@@ -684,13 +674,16 @@ exports.class_add_student = async function (req, res) {
     }
   }
 }
-exports.duplicateClass = function (req, res) {
+exports.duplicateClass = async function (req, res) {
   var sql = ""
-    sql = "SELECT semester, subject, class_name, status FROM `class` WHERE status = 1"
-  db.query(sql, function (err, results) {
-    if (err) { logger.error(err); res.redirect("/error"); return }
-    res.send({ data: results })
-  })
+  sql = "SELECT semester, subject, class_name, status FROM `class`"
+  try {
+    var getAllClass = await queryPromise(sql);
+    res.send({ data: getAllClass })
+  } catch(error) {
+    logger.error(error); res.redirect("/error"); 
+    return;
+  }
 }
 
 /**
