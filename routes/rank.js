@@ -38,6 +38,7 @@ exports.data_rank = function (req, res) {
     res.redirect("/login")
     return
   }
+  console.log("data-rank");
   var message = ""
   var contest_id = req.query.contest_id
   var sql = "SELECT student_id FROM `contest_student` WHERE contest_id = ? AND status=1 LIMIT 1"
@@ -84,12 +85,16 @@ exports.load_rank = function (req, res) {
   //   "student_account.class, contest.contest_id, contest.contest_name,contest.time_begin,contest.time_end " +
   //   " FROM contest, student_account, contest_student WHERE contest_student.student_id = student_account.id " +
   //   " AND contest_student.contest_id = ? AND contest.contest_id = contest_student.contest_id AND contest_student.status = 1";
-  var sql = "SELECT student_account.userId, student_account.rollnumber, student_account.name, " +
-  "class.class_name, contest.contest_id, contest.contest_name,contest.time_begin,contest.time_end " +
-  "FROM contest, student_account, contest_student, class, class_student WHERE " +
-  " student_account.id=class_student.student_id AND class.id=class_student.class_id AND contest_student.student_id = student_account.id " +
-  " AND contest_student.contest_id = ? AND contest.contest_id = contest_student.contest_id AND contest_student.status = 1 " +
-  " AND student_account.status=1 AND class.status=1 AND class_student.status=1 AND contest.status=1"; 
+  console.log("load-rank");
+  var sql = "SELECT student_account.rollnumber, student_account.userId, " +
+  " student_account.name, class.class_name, contest.contest_id, " +
+  " contest.contest_name,contest.time_begin,contest.time_end FROM " +
+  " student_account INNER JOIN class_student ON class_student.student_id " +
+  " = student_account.id AND class_student.status=1 INNER JOIN class ON class.id = " +
+  " class_student.class_id AND class.status=1 INNER JOIN contest_student ON " +
+  " contest_student.student_id = student_account.id AND contest_student.status=1 " +
+  " INNER JOIN contest ON contest.contest_id = contest_student.contest_id AND " +
+  " contest.contest_id= ? WHERE student_account.status=1 GROUP BY student_account.id"; 
   db.query(sql, [contest_id], function (err, results) {
     if (err || results.length == 0) { logger.error(err); res.redirect("/error"); return }
     var contest_name = results[0].contest_name.replace(/ /g, '-')
