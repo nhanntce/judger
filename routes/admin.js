@@ -481,7 +481,6 @@ exports.edit_class = async function (req, res) {
     var subject = post.edit_subject
     var class_name = post.edit_class_name
     var isDisable = post.edit_disable == "on" ? "1" : "0"
-    console.log("Status: ",post.edit_disable)
 
     var updateSql = "UPDATE `class` SET `semester`=?,`subject`=?,`class_name`=?,`status`=? WHERE id=?";
     try {

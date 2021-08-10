@@ -42,7 +42,6 @@
         document.getElementById("edit_semester").value = l[0][1]
         document.getElementById("edit_subject").value = l[0][2]
         document.getElementById("edit_class_name").value = l[0][3]
-        // document.getElementById("edit_disable").value = l[0][4]
 
         document.getElementById("old_semester").value = l[0][1]
         document.getElementById("old_subject").value = l[0][2]
@@ -200,7 +199,7 @@
           <div class="switch">
             <label>
               No
-              <input id="edit_disable" name="edit_disable" type="checkbox">
+              <input id="edit_disable" name="edit_disable" type="checkbox" >
               <span class="lever"></span> Yes
             </label>
           </div>
@@ -279,10 +278,18 @@
               var old_class_name = document.getElementById("old_class_name").value;
               var old_class_status = document.getElementById("old_class_status").value;
 
+              console.log(edit_semester)
+              console.log(edit_subject)
+              console.log(edit_class_name)
+              console.log(edit_class_status)
+              console.log("--------------------")
+              console.log(old_semester)
+              console.log(old_subject)
+              console.log(old_class_name)
+              console.log(old_class_status)
+
               if(edit_semester === old_semester && edit_subject === old_subject && edit_class_name === old_class_name && edit_class_status === old_class_status){
-                $('#edit_class_name').after('<span class="error">Nothing to update !</span>');
                 isDuplicate = false;
-                e.preventDefault();
               }
               if (isDuplicate){
                 $('#edit_class_name').after('<span class="error">Class was exist !</span>');
