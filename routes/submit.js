@@ -39,56 +39,45 @@ exports.submission = async function (req, res) {
   }
   var sql = ''
   var listsql = []
-  // moc cai id by userId
-  // timebegin, timeend cua a userId
-  // so sanh ai dang thi cuoc thi nao
-  // SELECT contest_id FROM contest_student WHERE student_id = (SELECT student_account.id FROM student_account WHERE student_account.userId = 'SD-000005')
-  // SELECT contest.time_begin, contest.time_end, contest.contest_name, student_account.name, student_account.rollnumber, contest_detail.problem_id, contest_detail.path_problem,contest_detail.times,contest.language FROM student_account INNER JOIN contest_detail ON student_account.contest_id=contest_detail.contest_id INNER JOIN contest_student ON student_account.contest_id=contest_student.contest_id INNER JOIN contest ON student_account.contest_id=contest_student.contest_id WHERE student_account.id=5
+ 
   if (req.session.role == "Student") {
-    // sql = "SELECT contest.time_begin, contest.time_end, contest.contest_name, student_account.name, student_account.rollnumber, contest_detail.problem_id, contest_detail.path_problem,contest_detail.times,contest.language FROM student_account " +
-    //   "INNER JOIN contest_detail ON student_account.contest_id=contest_detail.contest_id " +
-    //   "INNER JOIN contest ON student_account.contest_id=contest.contest_id " +
-    //   "WHERE student_account.userId=?"
-    
-    // sql = "SELECT contest.contest_id, contest.time_begin, contest.time_end, contest.contest_name, " +
-    // " student_account.name, student_account.rollnumber, contest_detail.problem_id, " +
-    // " contest_detail.path_problem,contest_detail.times,contest.language FROM student_account " +
-    // "INNER JOIN contest_detail ON student_account.contest_id=contest_detail.contest_id "+
-    // "INNER JOIN contest_student ON student_account.contest_id=contest_student.contest_id  "+
-    // "INNER JOIN contest ON student_account.contest_id=contest_student.contest_id  "+
-    // "WHERE contest.status=1 and student_account.id= (SELECT student_account.id FROM " +
-    // " student_account WHERE student_account.userId = ?) AND contest_student.status=1";
     var listContestSql = "SELECT contest.`contest_id`, contest.time_begin, contest.time_end FROM `contest`, contest_student WHERE " +
     " contest.contest_id = contest_student.contest_id AND contest_student.student_id = " +
     " (SELECT `id` FROM `student_account` WHERE userId = ?) AND contest.status = 1 AND contest_student.status = 1";
-    var listContests = await queryPromise(listContestSql, [userId]);
-    if (listContests.length == 0) { // if student have no contests
-      error = "You have no contest"
-      res.render('submit.ejs', { error: error, role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role })
-    } else {
-      var time_tmp = 0;
-      for(let i = 0; i <= listContests.length; i++) {
-        if(new Date() > new Date(listContests[i].time_begin) && new Date() < new Date(listContests[i].time_end)) {
-          time_tmp = i;
-          break;
-        }
-        
-        if(new Date() - new Date(listContests[i].time_begin) < 0 && new Date(listContests[i].time_begin) - new Date(results[time_tmp].time_begin) <= 0 ){
-          time_tmp = i;
+    try {
+      var listContests = await queryPromise(listContestSql, [userId]);
+      if (listContests.length == 0) { // if student have no contests
+        error = "You have no contest"
+        res.render('submit.ejs', { error: error, role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role })
+        return;
+      } else {
+        var time_tmp = 0;
+        for(let i = 0; i <= listContests.length; i++) {
+          if(new Date() > new Date(listContests[i].time_begin) && new Date() < new Date(listContests[i].time_end)) {
+            time_tmp = i;
+            break;
+          }
+          
+          if(new Date() - new Date(listContests[i].time_begin) < 0 && new Date(listContests[i].time_begin) - new Date(listContests[time_tmp].time_begin) <= 0 ){
+            time_tmp = i;
+          }
         }
       }
-    }
-    var idContest = listContests[time_tmp].contest_id;
+      var idContest = listContests[time_tmp].contest_id;
 
-    sql = "SELECT contest.contest_id, contest.time_begin, contest.time_end, " +
-    " contest.contest_name, student_account.name, student_account.rollnumber, " +
-    " contest_detail.problem_id, contest_detail.path_problem,contest_detail.times, " +
-    " contest.language FROM student_account INNER JOIN contest_student ON " +
-    " student_account.id=contest_student.student_id AND contest_student.contest_id= ? " +
-    " INNER JOIN contest_detail ON contest_student.contest_id=contest_detail.contest_id " +
-    " INNER JOIN contest ON contest_detail.contest_id=contest.contest_id WHERE student_account.id= " +
-    " (SELECT student_account.id FROM student_account WHERE student_account.userId = ?)";
-    listsql = [idContest, userId];
+      sql = "SELECT contest.contest_id, contest.time_begin, contest.time_end, " +
+      " contest.contest_name, student_account.name, student_account.rollnumber, " +
+      " contest_detail.problem_id, contest_detail.path_problem,contest_detail.times, " +
+      " contest.language FROM student_account INNER JOIN contest_student ON " +
+      " student_account.id=contest_student.student_id AND contest_student.contest_id= ? AND contest_student.status=1" +
+      " INNER JOIN contest_detail ON contest_student.contest_id=contest_detail.contest_id " +
+      " INNER JOIN contest ON contest_detail.contest_id=contest.contest_id AND contest.status=1 WHERE student_account.id= " +
+      " (SELECT student_account.id FROM student_account WHERE student_account.userId = ?)";
+      listsql = [idContest, userId];
+    } catch(error) {
+      logger.error(error); res.redirect("/error"); return;
+    }
+    
   } else {
     sql = "SELECT contest.time_begin, contest.time_end, contest.contest_name, " +
       " employee_account.name, employee_account.rollnumber, contest_detail.problem_id, " +
@@ -98,118 +87,122 @@ exports.submission = async function (req, res) {
       "WHERE contest.contest_id=? AND contest.status = 1"
     listsql = [req.query.contest_id]
   }
-  db.query(sql, listsql, async function (err, results) {
-    if (err) { logger.error(err); res.redirect("/error"); return }
+  try {
+    var results = await queryPromise(sql, listsql);
+    if(results.length == 0 ){
+      error = "Your contest does not have any problem. Please wait until this contest was added problems"
+      res.render('submit.ejs', { error: error, role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role })
+      return;
+    }
+    var contest_name = results[0].contest_name.replace(/ /g, '-')
+    var time_begin = results[0].time_begin
+    var time_end = results[0].time_end
+    req.session.time_begin = time_begin
+    req.session.time_end = time_end
+    req.session.contest_name = contest_name
+    req.session.rollnumber = results[0].rollnumber
+    req.session.times = req.session.times ? req.session.times : {}
+    req.session.maxtimes = {}
+    req.session.debai = []
+    req.session.problem_id = []
+    var clonetimes = {}
+    var configContent = fs.readFileSync(storage.TESTCASE + contest_name + '/config.txt', 'utf8')
 
-      if(results.length == 0 ){
-        error = "Your contest does not have any problem. Please wait until this contest was added problems"
-        res.render('submit.ejs', { error: error, role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role })
+    for (let i = 0; i < results.length; ++i) {
+      clonetimes[results[i].problem_id] = configContent.split('\n')[11]
+      // clonetimes[results[i].problem_id] = results[i].times
+      // req.session.maxtimes[results[i].problem_id] = results[i].times
+      req.session.maxtimes[results[i].problem_id] = configContent.split('\n')[11]
+      req.session.debai.push(path.basename(results[i].path_problem))
+      req.session.problem_id.push(results[i].problem_id)
+    }
+
+    var debai = JSON.parse(JSON.stringify(req.session.problem_id))
+    if (req.session.role != "Student" && !fs.existsSync(storage.BAILAM + contest_name + '/' + results[0].rollnumber)) {
+      fs.mkdirSync(storage.BAILAM + contest_name + '/' + results[0].rollnumber, (err) => {
+        if (err) {
+          return res.redirect("/error")
+        }
+      });
+    }
+
+    // get all submissions of student in folder './public/thumucbailam/contest_name/req.session.rollnumber
+    var bailam = traverseDir(storage.BAILAM + contest_name + '/' + req.session.rollnumber)
+    try {
+      bailam = bailam.map(function (fileName) {
+        return {
+          name: fileName,
+          time: fs.statSync(fileName).mtime.getTime()
+        }
+
+      }).sort(function (a, b) {
+        return a.time - b.time
+      }).map(function (v) {
+        return v.name
+      })
+    } catch (err) {}
+
+    // get all judged Logs in folder './public/nopbai/Logs/' + contest_name
+    fs.readdir(storage.NOPBAI + 'Logs/' + contest_name, function (err, files) {
+      if (err) {
+        res.redirect("/error")
         return
       }
-      var contest_name = results[0].contest_name.replace(/ /g, '-')
-      var time_begin = results[0].time_begin
-      var time_end = results[0].time_end
-      req.session.time_begin = time_begin
-      req.session.time_end = time_end
-      req.session.contest_name = contest_name
-      req.session.rollnumber = results[0].rollnumber
-      req.session.times = req.session.times ? req.session.times : {}
-      req.session.maxtimes = {}
-      req.session.debai = []
-      req.session.problem_id = []
-      var clonetimes = {}
-      var configContent = fs.readFileSync(storage.TESTCASE + contest_name + '/config.txt', 'utf8')
-      for (let i = 0; i < results.length; ++i) {
-        clonetimes[results[i].problem_id] = configContent.split('\n')[11]
-        // clonetimes[results[i].problem_id] = results[i].times
-        // req.session.maxtimes[results[i].problem_id] = results[i].times
-        req.session.maxtimes[results[i].problem_id] = configContent.split('\n')[11]
-        req.session.debai.push(path.basename(results[i].path_problem))
-        req.session.problem_id.push(results[i].problem_id)
+      log_files = []
+      testcase_size = []
+      for (let i = 0, l = files.length; i < l; ++i) {
+        var tmp = files[i].split('][')[files[i].split('][').length - 1].split('].')[0]
+        var roll = files[i].split('][')[files[i].split('][').length - 2]
+        if (roll != results[0].rollnumber) continue
+        if (clonetimes[tmp] > 0) {
+          clonetimes[tmp]--
+        }
+        if (files[i].includes(req.session.rollnumber)) {
+          log_files.push(files[i])
+        }
+        if (Object.keys(req.session.times).length !== 0) {
+          req.session.times[tmp] = Math.min(clonetimes[tmp], req.session.times[tmp])
+        }
       }
-      var debai = JSON.parse(JSON.stringify(req.session.problem_id))
-      if (req.session.role != "Student" && !fs.existsSync(storage.BAILAM + contest_name + '/' + results[0].rollnumber)) {
-        fs.mkdirSync(storage.BAILAM + contest_name + '/' + results[0].rollnumber, (err) => {
-          if (err) {
-            return res.redirect("/error")
+      var logs = []
+      for (let i = 0; i < bailam.length; ++i) {
+        for (let j = 0; j < log_files.length; ++j) {
+          if (bailam[i].includes(log_files[j].substring(0, log_files[j].length - 4))) {
+            logs.push(log_files[j])
+            var tmp = log_files[j].split('][')[log_files[j].split('][').length - 1].split('].')[0]
+            testcase_size.push(getFolders(storage.TESTCASE + contest_name + '/' + tmp).length)
+            break
           }
-        });
+        }
       }
-      // get all submissions of student in folder './public/thumucbailam/contest_name/req.session.rollnumber
-      var bailam = traverseDir(storage.BAILAM + contest_name + '/' + req.session.rollnumber)
-      try {
-        bailam = bailam.map(function (fileName) {
-          return {
-            name: fileName,
-            time: fs.statSync(fileName).mtime.getTime()
-          }
-
-        }).sort(function (a, b) {
-          return a.time - b.time
-        }).map(function (v) {
-          return v.name
-        })
-      } catch (err) {
+      if (Object.keys(req.session.times).length === 0) {
+        req.session.times = JSON.parse(JSON.stringify(clonetimes))
       }
-      // get all judged Logs in folder './public/nopbai/Logs/' + contest_name
-      fs.readdir(storage.NOPBAI + 'Logs/' + contest_name, function (err, files) {
-        if (err) {
-          res.redirect("/error")
-          return
-        }
-        log_files = []
-        testcase_size = []
-        for (let i = 0, l = files.length; i < l; ++i) {
-          var tmp = files[i].split('][')[files[i].split('][').length - 1].split('].')[0]
-          var roll = files[i].split('][')[files[i].split('][').length - 2]
-          if (roll != results[0].rollnumber) continue
-          if (clonetimes[tmp] > 0) {
-            clonetimes[tmp]--
-          }
-          if (files[i].includes(req.session.rollnumber)) {
-            log_files.push(files[i])
-          }
-          if (Object.keys(req.session.times).length !== 0) {
-            req.session.times[tmp] = Math.min(clonetimes[tmp], req.session.times[tmp])
-          }
-        }
-        var logs = []
-        for (let i = 0; i < bailam.length; ++i) {
-          for (let j = 0; j < log_files.length; ++j) {
-            if (bailam[i].includes(log_files[j].substring(0, log_files[j].length - 4))) {
-              logs.push(log_files[j])
-              var tmp = log_files[j].split('][')[log_files[j].split('][').length - 1].split('].')[0]
-              testcase_size.push(getFolders(storage.TESTCASE + contest_name + '/' + tmp).length)
-              break
-            }
-          }
-        }
-        if (Object.keys(req.session.times).length === 0) {
-          req.session.times = JSON.parse(JSON.stringify(clonetimes))
-        }
-        res.render('submit.ejs', 
-          { 
-            error: "",
-            contest_id: req.query.contest_id, 
-            language: results[0].language, 
-            name: results[0].name, 
-            rollnumber: results[0].rollnumber, 
-            contest_name: contest_name, 
-            time_begin: time_begin, 
-            time_end: time_end, 
-            debai: debai, 
-            bailam: bailam, 
-            log_files: logs, 
-            testcase_size: testcase_size, 
-            clonetimes: req.session.times, 
-            maxtimes: req.session.maxtimes, 
-            message: message, 
-            role: req.session.role, 
-            user: req.session.user, 
-            teacher_role: req.session.teacher_role 
-          })
+      res.render('submit.ejs', 
+        { 
+          error: "",
+          contest_id: req.query.contest_id, 
+          language: results[0].language, 
+          name: results[0].name, 
+          rollnumber: results[0].rollnumber, 
+          contest_name: contest_name, 
+          time_begin: time_begin, 
+          time_end: time_end, 
+          debai: debai, 
+          bailam: bailam, 
+          log_files: logs, 
+          testcase_size: testcase_size, 
+          clonetimes: req.session.times, 
+          maxtimes: req.session.maxtimes, 
+          message: message, 
+          role: req.session.role, 
+          user: req.session.user, 
+          teacher_role: req.session.teacher_role 
       })
-  })
+    })
+  } catch(error) {
+    logger.error(error); res.redirect("/error"); return;
+  }
 }
 //---------------------------------submissions realtime result----------------------------------
 exports.submission_realtime = function (req, res) {

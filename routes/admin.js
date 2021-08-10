@@ -66,7 +66,11 @@ exports.admin_student = function (req, res) {
     if (req.session.stuAddClass && req.session.classAdded) 
       message = "Succesfully! " + req.session.stuAddClass + " Students have been added to '" + req.session.classAdded + "' class.";
     else
-      message = "Succesfully! Students have been added to class."
+      message = "Succesfully! Students have been added."
+  }
+  if (req.session.edit_student_success) {
+    req.session.edit_student_success = false;
+    message = "Succesfully! Students have been updated."
   }
   var sql = "SELECT `id`, `semester`, `subject`, `class_name`, `status` FROM `class` WHERE status = 1";
     
@@ -105,7 +109,6 @@ exports.admin_teacher = function (req, res) {
     req.session.update = false
     message = "Succesfully! Teacher have been updated."
   }
-
   res.render('admin-teacher.ejs', { message: message, error: error, teacher_role: req.session.teacher_role });
 }
 //-----------------------------------------------Load data student account------------------------------------------------------
@@ -233,6 +236,7 @@ exports.edit_student = async function (req, res) {
       req.session.sql_err = true
       res.redirect("/admin/student")
     }
+    req.session.edit_student_success = true;
     res.redirect('/admin/student')
   } else {
     res.redirect("/error")

@@ -330,7 +330,7 @@
       rollNumberError.style.display = 'none';
       if(rollNumberValue.trim() === '') {
         rollNumberError.style.display = 'inline';
-        rollNumberError.innerHTML = "Roll number can't be empty!";
+        rollNumberError.innerHTML = "Roll number cannot be empty!";
         return  true;
       }
       if(!(/\b[A-Za-z]{2}[0-9]{6}\b/.test(rollNumberValue))) {
@@ -340,7 +340,7 @@
       } 
       for(let i = 0, len = studentList.length; i < len; i++) {
         if(rollNumberValue.toLowerCase() === studentList[i].rollnumber.toLowerCase()) {
-          rollNumberError.innerHTML = "Roll number is exists!";
+          rollNumberError.innerHTML = "Roll number existed!";
           rollNumberError.style.display = 'inline';
           return true;
         }
@@ -359,16 +359,16 @@
       //check email empty
       if(emailValue.trim() === "") {
         emailError.style.display = 'inline';
-        emailError.innerHTML = "Email can't be empty!";
+        emailError.innerHTML = "Email cannot be empty!";
         return true;
       }
       if(!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(emailValue))) {
         emailError.style.display = 'inline';
-        emailError.innerHTML = "Email is wrong fotmat!";
+        emailError.innerHTML = "Email is wrong format!";
       }
       for(let i = 0, len = studentList.length; i < len; i++) {
         if(emailValue.toLowerCase() === studentList[i].email.toLowerCase()) {
-          emailError.innerHTML = "Email is exists!";
+          emailError.innerHTML = "Email existed!";
           emailError.style.display = 'inline';
           return true;
         }
@@ -385,7 +385,7 @@
       //check name empty
       if(nameValue.trim() === '') {
         nameError.style.display = 'inline';
-        nameError.innerHTML = "Name can't be empty!";
+        nameError.innerHTML = "Name cannot be empty!";
         return false;
       }
       return true;
@@ -460,7 +460,7 @@
       console.log(studentList);
       if(rollNumberValue.trim() === '') {
         rollEditNumberError.style.display = 'inline';
-        rollEditNumberError.innerHTML = "Roll number can't be empty!";
+        rollEditNumberError.innerHTML = "Roll number cannot be empty!";
         return  true;
       }
       if(!(/\b[A-Za-z]{2}[0-9]{6}\b/.test(rollNumberValue))) {
@@ -470,7 +470,7 @@
       } 
       for(let i = 0, len = studentList.length; i < len; i++) {
         if(rollNumberValue.toLowerCase() === studentList[i].rollnumber.toLowerCase()) {
-          rollEditNumberError.innerHTML = "Roll number is exists!";
+          rollEditNumberError.innerHTML = "Roll number existed!";
           rollEditNumberError.style.display = 'inline';
           return true;
         }
@@ -489,16 +489,16 @@
       //check email empty
       if(emailValue.trim() === "") {
         emailEditError.style.display = 'inline';
-        emailEditError.innerHTML = "Email can't be empty!";
+        emailEditError.innerHTML = "Email cannot be empty!";
         return true;
       }
       if(!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(emailValue))) {
         emailEditError.style.display = 'inline';
-        emailEditError.innerHTML = "Email is wrong fotmat!";
+        emailEditError.innerHTML = "Email is wrong format!";
       }
       for(let i = 0, len = studentList.length; i < len; i++) {
         if(emailValue.toLowerCase() === studentList[i].email.toLowerCase()) {
-          emailEditError.innerHTML = "Email is exists!";
+          emailEditError.innerHTML = "Email existed!";
           emailEditError.style.display = 'inline';
           return true;
         }
@@ -515,7 +515,7 @@
       //check name empty
       if(nameValue.trim() === '') {
         nameEditError.style.display = 'inline';
-        nameEditError.innerHTML = "Name can't be empty!";
+        nameEditError.innerHTML = "Name cannot be empty!";
         return false;
       }
       return true;
