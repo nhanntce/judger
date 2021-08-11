@@ -52,7 +52,7 @@ exports.submission = async function (req, res) {
         return;
       } else {
         var time_tmp = 0;
-        for(let i = 0; i <= listContests.length; i++) {
+        for(let i = 0; i < listContests.length; i++) {
           if(new Date() > new Date(listContests[i].time_begin) && new Date() < new Date(listContests[i].time_end)) {
             time_tmp = i;
             break;
