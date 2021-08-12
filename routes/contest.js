@@ -27,7 +27,7 @@ exports.contest = function (req, res) {
   }
   if (req.session.added) {
     req.session.added = false
-    message = "Succesfully! Contest have been added."
+    message = "Successfully! Contest have been added."
   }
 
   var sql = ""
@@ -346,7 +346,7 @@ exports.contest_detail = function (req, res) {
   var error = "";
   if (req.session.deleted) { // check student is deleted in contest
     req.session.deleted = false
-    message = "Succesfully! Students have been deleted."
+    message = "Successfully! Students have been deleted."
   }
   if(req.session.edit_contest_fail) {
     req.session.edit_contest_fail = false;
@@ -354,7 +354,7 @@ exports.contest_detail = function (req, res) {
   }
   if(req.session.edit_contest_success) {
     req.session.edit_contest_success = false;
-    message = "Succesfully! Contest have been edited."
+    message = "Successfully! Contest have been edited."
   }
   // var sql = "SELECT student_account.userId, student_account.rollnumber, student_account.name, student_account.class, contest.contest_id, contest.contest_name,contest.time_begin,contest.time_end,contest.language FROM contest " +
   //   "INNER JOIN student_account ON student_account.contest_id=contest.contest_id " +
@@ -505,7 +505,7 @@ exports.load_student = async function (req, res) {
   var warning = ""
   if (req.session.added) {
     req.session.added = false
-    message = "Succesfully! Students have been added."
+    message = "Successfully! Students have been added."
   }
   var class_id = req.query.class_name;
   var class_name;
@@ -1011,8 +1011,14 @@ exports.add_problem_testcase = async function (req, res) {
   if (req.method == "POST") {
     // upload problem to folder './public/debai/contest_name
     var form = new formidable.IncomingForm()
+    
     form.maxFileSize = 5 * 1024 * 1024 // limit upload 5mb
     form.parse(req, async function (err, fields, files) {
+      console.log(files.filetouploadTestcase.fileSize)
+      console.log(form.maxFileSize)
+      if((files.filetouploadTestcase.fileSize)/1024/1024  > form.maxFileSize) {
+        console.log("..........")
+      }
       var contest_id = fields.contest_id
       // check file is valid
       var type = files.filetouploadProblem.name.substring(files.filetouploadProblem.name.length - 4)
