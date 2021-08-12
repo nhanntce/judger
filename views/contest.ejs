@@ -342,7 +342,7 @@
   $('#form_contest').submit(function(e) {
   $(".error").remove();
     var contestName = $('#contest_name').val();
-        if ( !/^(FA|SP|SU)\d{2}[_][A-Z]{3}\d{3}[_][A-Z]{2}\d{4}[_][a-zA-Z0-9]$/.test(contestName) ) {
+        if ( !/^(FA|SP|SU)\d{2}[_][A-Z]{3}\d{3}[_][A-Z]{2}\d{4}[_]\w+$/.test(contestName) ) {
           $('#contest_name').after('<span class="error">Contest name must be follow format (Ex: SU21_CPP201_SE1302_1) !</span>');
           e.preventDefault();
         }
