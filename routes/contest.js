@@ -1011,14 +1011,8 @@ exports.add_problem_testcase = async function (req, res) {
   if (req.method == "POST") {
     // upload problem to folder './public/debai/contest_name
     var form = new formidable.IncomingForm()
-    
     form.maxFileSize = 5 * 1024 * 1024 // limit upload 5mb
     form.parse(req, async function (err, fields, files) {
-      console.log(files.filetouploadTestcase.fileSize)
-      console.log(form.maxFileSize)
-      if((files.filetouploadTestcase.fileSize)/1024/1024  > form.maxFileSize) {
-        console.log("..........")
-      }
       var contest_id = fields.contest_id
       // check file is valid
       var type = files.filetouploadProblem.name.substring(files.filetouploadProblem.name.length - 4)
