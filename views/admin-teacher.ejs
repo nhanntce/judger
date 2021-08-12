@@ -219,7 +219,7 @@
     $(".error").remove();
       var email = $('#email').val();
       var rollnumber = $('#rollnumber').val();
-      if (!/^\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i.test(email)){
+      if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))){
          $('#email').after('<span class="error">Not a valid e-mail address !</span>');
           e.preventDefault();
       }
@@ -246,7 +246,7 @@
     $(".error").remove();
       var edit_email = $('#edit_email').val();
       var edit_rollnumber = $('#edit_rollnumber').val();
-      if (!/^\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i.test(edit_email)){
+      if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(edit_email))){
          $('#edit_email').after('<span class="error">Not a valid e-mail address !</span>');
           e.preventDefault();
       }
@@ -266,7 +266,7 @@
             $('#edit_email').after('<span class="error">Email existed !</span>');
               isDuplicate = true
           }
-          } 
+          
         }
     if (isDuplicate){
     e.preventDefault();
@@ -274,6 +274,7 @@
   });
         });
         });
+      
       </script>
     </div>
   </div>
