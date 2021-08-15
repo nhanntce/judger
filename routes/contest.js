@@ -1033,24 +1033,26 @@ exports.add_problem_testcase = async function (req, res) {
       var contest_name = fields.contest_name
       var oldpathProb = files.filetouploadProblem.path
       var newpathProb = storage.DEBAI + contest_name + '/' + files.filetouploadProblem.name
-      fs.readFile(oldpathProb, async function (err, data) {
-        if (err) { logger.error(err); res.redirect("/error"); return }
-        // Write the file
-        fs.writeFile(newpathProb, data, function (err) {
-          if (err) { logger.error(err); res.redirect("/error"); return }
-        })
-        // Delete the file
-        fs.unlink(oldpathProb, function (err) {
-          if (err) { logger.error(err); res.redirect("/error"); return }
-        })
-        var oldpathTest = files.filetouploadTestcase.path
-        var newpathTest = storage.TESTCASE + contest_name + '/' + files.filetouploadTestcase.name
 
-        var checkExistSql = "SELECT `contest_id`, `problem_id` FROM `contest_detail` WHERE contest_id=" + 
-        contest_id + " AND problem_id='" + fields.nameProb + "'";
-        var checkExist = await getResult(checkExistSql);
+      var checkExistSql = "SELECT `contest_id`, `problem_id` FROM `contest_detail` WHERE contest_id=" + 
+      contest_id + " AND problem_id='" + fields.nameProb + "'";
+      var checkExist = await getResult(checkExistSql);
 
-        if (checkExist.length == 0) {
+      if (checkExist.length == 0) {
+        fs.readFile(oldpathProb, async function (err, data) {
+          if (err) { logger.error(err); res.redirect("/error"); return }
+          // Write the file
+          fs.writeFile(newpathProb, data, function (err) {
+            if (err) { logger.error(err); res.redirect("/error"); return }
+          })
+          // Delete the file
+          fs.unlink(oldpathProb, function (err) {
+            if (err) { logger.error(err); res.redirect("/error"); return }
+          })
+          
+          var oldpathTest = files.filetouploadTestcase.path
+          var newpathTest = storage.TESTCASE + contest_name + '/' + files.filetouploadTestcase.name
+
           fs.readFile(oldpathTest, async function (err, data) {
             if (err) { logger.error(err); res.redirect("/error"); return }
             // Write the file
@@ -1084,11 +1086,11 @@ exports.add_problem_testcase = async function (req, res) {
               if (err) { logger.error(err); res.redirect("/error"); return }
             }
           })
-        } else {
-          req.session.duplicate_prbAtc = true
-          return res.redirect("/contest/add-problem?contest_id=" + contest_id)
-        }
-      })
+        })
+      } else {
+        req.session.duplicate_prbAtc = true
+        return res.redirect("/contest/add-problem?contest_id=" + contest_id)
+      }
     })
   } else {
     res.redirect("/error")
