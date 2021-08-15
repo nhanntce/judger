@@ -911,6 +911,10 @@ exports.add_problem = function (req, res) {
     req.session.upload_err = false
     error = "Failed! Please check your files!"
   }
+  if (req.session.large_size_error) {
+    req.session.large_size_error = false
+    error = "Failed! Your files too large, File max size: 5MB!"
+  }
   // if file upload sucess
   if (req.session.upload_success) {
     req.session.upload_success = false
@@ -1029,24 +1033,26 @@ exports.add_problem_testcase = async function (req, res) {
       var contest_name = fields.contest_name
       var oldpathProb = files.filetouploadProblem.path
       var newpathProb = storage.DEBAI + contest_name + '/' + files.filetouploadProblem.name
-      fs.readFile(oldpathProb, async function (err, data) {
-        if (err) { logger.error(err); res.redirect("/error"); return }
-        // Write the file
-        fs.writeFile(newpathProb, data, function (err) {
-          if (err) { logger.error(err); res.redirect("/error"); return }
-        })
-        // Delete the file
-        fs.unlink(oldpathProb, function (err) {
-          if (err) { logger.error(err); res.redirect("/error"); return }
-        })
-        var oldpathTest = files.filetouploadTestcase.path
-        var newpathTest = storage.TESTCASE + contest_name + '/' + files.filetouploadTestcase.name
 
-        var checkExistSql = "SELECT `contest_id`, `problem_id` FROM `contest_detail` WHERE contest_id=" + 
-        contest_id + " AND problem_id='" + fields.nameProb + "'";
-        var checkExist = await getResult(checkExistSql);
+      var checkExistSql = "SELECT `contest_id`, `problem_id` FROM `contest_detail` WHERE contest_id=" + 
+      contest_id + " AND problem_id='" + fields.nameProb + "'";
+      var checkExist = await getResult(checkExistSql);
 
-        if (checkExist.length == 0) {
+      if (checkExist.length == 0) {
+        fs.readFile(oldpathProb, async function (err, data) {
+          if (err) { logger.error(err); res.redirect("/error"); return }
+          // Write the file
+          fs.writeFile(newpathProb, data, function (err) {
+            if (err) { logger.error(err); res.redirect("/error"); return }
+          })
+          // Delete the file
+          fs.unlink(oldpathProb, function (err) {
+            if (err) { logger.error(err); res.redirect("/error"); return }
+          })
+          
+          var oldpathTest = files.filetouploadTestcase.path
+          var newpathTest = storage.TESTCASE + contest_name + '/' + files.filetouploadTestcase.name
+
           fs.readFile(oldpathTest, async function (err, data) {
             if (err) { logger.error(err); res.redirect("/error"); return }
             // Write the file
@@ -1066,20 +1072,25 @@ exports.add_problem_testcase = async function (req, res) {
                   var sql = "INSERT INTO contest_detail VALUES (" + contest_id + ",'" + fields.nameProb + "','" + 
                   newpathProb + "','" + newpathTest.substring(0, newpathTest.length - 4) +"'," + fields.limitSub + ")";
                   var prbAndTcInsert = await getResult(sql);
+                  logger.info("Upload Successfully! problem contest " + contest_id + " : " + files.filetouploadProblem.name + " .Testcase: " + files.filetouploadTestcase.name)
+                } else {
+                  var deleteZipFile = await deleteFolder(newpathTest);
+                  var deleteTcDir = await deleteFolder(newpathTest.substring(0, newpathTest.length - 4));
+                  var deletePrbDir = await deleteFolder(newpathProb);
+                  logger.info("Upload Failure! Problem: " + files.filetouploadProblem.name + " . Testcase: " + files.filetouploadTestcase.name)
                 }
                 fs.writeFileSync(storage.EVENT + 'testcaseEvent/testcaseEvent.txt', Math.random(1000) + 'changed');
-                logger.info("Upload problem contest " + contest_id + " : " + files.filetouploadProblem.name + " .Testcase: " + files.filetouploadTestcase.name)
                 res.redirect("/contest/add-problem?contest_id=" + contest_id)
               })
             } catch (err) {
               if (err) { logger.error(err); res.redirect("/error"); return }
             }
           })
-        } else {
-          req.session.duplicate_prbAtc = true
-          return res.redirect("/contest/add-problem?contest_id=" + contest_id)
-        }
-      })
+        })
+      } else {
+        req.session.duplicate_prbAtc = true
+        return res.redirect("/contest/add-problem?contest_id=" + contest_id)
+      }
     })
   } else {
     res.redirect("/error")
@@ -1162,6 +1173,10 @@ function checkTestcase(dir, req) {
   var results = []
   try {
     var list = fs.readdirSync(dir)
+    if (list.length == 0) {
+      req.session.upload_err = true
+      return
+    }
     list.forEach(function (file) {
       file = dir + '/' + file
       var stat = fs.statSync(file)
