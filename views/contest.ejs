@@ -98,7 +98,7 @@
         <div class="modal-body mx-3">
           <label class="font-weight-bold">Name</label>
           <div class="form mb-3">
-            <input type="text" id="contest_name" name="contest_name" class="form-control" required autocomplete="off">
+            <input type="text" id="contest_name" name="contest_name" class="form-control" autocomplete="off">
           </div>
           <label class="font-weight-bold">Enter start time</label>
           <div class="form mb-3">
@@ -131,12 +131,7 @@
             <div class="form col-6">
               <label class="font-weight-bold">Minus point (point)</label>
               <div class="form">
-
-                <div class="row">
-                    <div class="col-10">
-                      <input type="number" id="format_minus_point" name="format_minus_point" class="form-control" min="1" require>
-                    </div>
-                </div>
+                  <input type="number" id="format_minus_point" name="format_minus_point" class="form-control" />
               </div>              
             </div>
           </div>
@@ -158,19 +153,14 @@
             <div class="row">
               <div class="col-6">
                 <label class="font-weight-bold">Percentage Accept</label>
-                <div class="form mb-3">
-                  <input type="number" id="percentage_accept" min="1" name="percentage_accept" class="form-control" require>
+                <div class="form">
+                  <input type="number" id="percentage_accept" name="percentage_accept" class="form-control" />
                 </div>              
               </div>
               <div class="col-6">
                 <label class="font-weight-bold" id="lb_minus_point">Minus Points (point)</label>
-                <div class="form mb-3">
-
-                  <div class="row">
-                      <div class="cz`ol-10">
-                        <input type="number" id="percentage_minus_point" min="1" name="percentage_minus_point" class="form-control" require>
-                      </div>
-                  </div>
+                <div class="form">
+                  <input type="number" id="percentage_minus_point" name="percentage_minus_point" class="form-control" />
                 </div>              
               </div>
             </div>
@@ -186,12 +176,7 @@
             <div class="form col-6">
               <label class="font-weight-bold">Percentage Allow (%)</label>
               <div class="form">
-
-                <div class="row">
-                    <div class="col-10">
-                      <input type="number" id="percentage_allow" name="percentage_allow" class="form-control" min="1" require>
-                    </div>
-                </div>
+                  <input type="number" id="percentage_allow" name="percentage_allow" class="form-control" />
               </div>              
             </div>
           </div>
@@ -212,7 +197,7 @@
               <div class="form col-6">
                 <label class="font-weight-bold">Limit Submission</label>
                 <div class="form">
-                  <input type="number" id="limit_submission" name="limit_submission" class="form-control" value="10" min="1">
+                  <input type="number" id="limit_submission" name="limit_submission" class="form-control" value="10"/>
                 </div>  
               </div>
           </div>
@@ -318,75 +303,165 @@
         </div>
       </form>
       <!-- check if it is having any message, then show it TuPTA-->
-      <% if (message.length > 0) { %>
-        <script>toastr.success('<%=message%>')</script>
+        <% if (message.length > 0) { %>
+          <script>toastr.success('<%=message%>')</script>
         <% } %>
          <!-- check validation form add contest -->
-        <script>
+      <script>
         document.addEventListener("DOMContentLoaded", function() {
-    var elements = document.getElementsByTagName("INPUT");
-    for (var i = 0; i < elements.length; i++) {
-        elements[i].oninvalid = function(e) {
-            e.target.setCustomValidity("");
-            if (!e.target.validity.valid) {
+          var elements = document.getElementsByTagName("INPUT");
+          for (var i = 0; i < elements.length; i++) {
+            elements[i].oninvalid = function(e) {
+              e.target.setCustomValidity("");
+              if (!e.target.validity.valid) {
                 e.target.setCustomValidity("This field cannot be left blank");
+              }
             }
-        };
-        elements[i].oninput = function(e) {
-            e.target.setCustomValidity("");
-            };
+            elements[i].oninput = function(e) {
+              e.target.setCustomValidity("");
+            }
           }
-      });      
-  $(document).ready(function() {
-  $.get("contest/contest-all", function(data, status){
-  $('#form_contest').submit(function(e) {
-  $(".error").remove();
-    var contestName = $('#contest_name').val();
-        if ( !/^(FA|SP|SU)\d{2}[_][A-Z]{3}\d{3}[_][A-Z]{2}\d{4}[_]\w+$/.test(contestName) ) {
-          $('#contest_name').after('<span class="error">Contest name must be follow format (Ex: SU21_CPP201_SE1302_1) !</span>');
-          e.preventDefault();
-        }
-        let isDuplicate = false    
-    var allContest = [];
-    var contestName1 = $('#contest_name').val();
-        for (let i = 0, l = data.data.length; i < l; ++i){
-            if(contestName1 === data.data[i].contest_name){
-              $('#contest_name').after('<span class="error">Contest name already !</span>');
-              isDuplicate = true
-          }        
-        }
-    if (isDuplicate){
-    e.preventDefault();
-      }
-    var begin = $('#time_begin').val();
-    var end = $('#time_end').val();
-    var y1, m1, d1, h1, mi1;
-    var y2, m2, d2, h2, mi2;
-    y1 = begin.split(' ')[0].split('-')[2];
-    m1 = begin.split(' ')[0].split('-')[1];
-    d1 = begin.split(' ')[0].split('-')[0];
-    h1 = begin.split(' ')[1].split(':')[0];
-    mi1 = begin.split(' ')[1].split(':')[1];
-    var timeBegin = new Date(y1, m1 - 1, d1, h1, mi1,'00')
-    y2 = end.split(' ')[0].split('-')[2];
-    m2 = end.split(' ')[0].split('-')[1];
-    d2 = end.split(' ')[0].split('-')[0];
-    h2 = end.split(' ')[1].split(':')[0];
-    mi2 = end.split(' ')[1].split(':')[1];
-    var timeEnd = new Date(y2, m2 - 1, d2, h2, mi2,'00')
-    var currentTime = new Date()
-    if(timeBegin > timeEnd){
-      $('#time_end').after('<span class="error">End time must be greater than Start time !</span>');
-      e.preventDefault();
-    }
-    if(currentTime > timeBegin ){
-      $('#time_begin').after('<span class="error">The start time must be in the future !</span>');
-      e.preventDefault();
-      } 
+        });   
+
+        $(document).ready(function() {
+            $.get("contest/contest-all", function(data, status){
+                $('#form_contest').submit(function(e) {
+                    $(".error").remove();
+                    //validation contest name
+                    var contestName = $('#contest_name').val();
+                    let contest_name_validation = true;    
+                    if(contestName === '') {
+                      $('#contest_name').after('<span class="error">Contest name cannot be empty!</span>');
+                      contest_name_validation = false;
+                    }
+                    if (contest_name_validation && (!/^(FA|SP|SU)\d{2}[_][A-Z]{3}\d{3}[_][A-Z]{2}\d{4}[_]\w+$/.test(contestName))) {
+                      $('#contest_name').after('<span class="error">Contest name must be follow format (Ex: SU21_CPP201_SE1302_1) !</span>');
+                      contest_name_validation = false
+                      // e.preventDefault();
+                    }
+                   
+                    for(let i = 0, l = data.data.length; i < l; ++i){
+                        if(contestName === data.data[i].contest_name){
+                          $('#contest_name').after('<span class="error">Contest name already !</span>');
+                          contest_name_validation = false;
+                          break;
+                      }        
+                    }
+                    if(!contest_name_validation){
+                      e.preventDefault();
+                    }
+                    //time begin, time end
+                    var begin = $('#time_begin').val();
+                    var end = $('#time_end').val();
+                    var y1, m1, d1, h1, mi1;
+                    var y2, m2, d2, h2, mi2;
+                    y1 = begin.split(' ')[0].split('-')[2];
+                    m1 = begin.split(' ')[0].split('-')[1];
+                    d1 = begin.split(' ')[0].split('-')[0];
+                    h1 = begin.split(' ')[1].split(':')[0];
+                    mi1 = begin.split(' ')[1].split(':')[1];
+                    var timeBegin = new Date(y1, m1 - 1, d1, h1, mi1,'00')
+                    y2 = end.split(' ')[0].split('-')[2];
+                    m2 = end.split(' ')[0].split('-')[1];
+                    d2 = end.split(' ')[0].split('-')[0];
+                    h2 = end.split(' ')[1].split(':')[0];
+                    mi2 = end.split(' ')[1].split(':')[1];
+                    var timeEnd = new Date(y2, m2 - 1, d2, h2, mi2,'00')
+                    var currentTime = new Date()
+                    if(timeBegin > timeEnd){
+                      $('#time_end').after('<span class="error">End time must be greater than Start time !</span>');
+                      // e.preventDefault();
+                    }
+                    if(currentTime > timeBegin ){
+                      $('#time_begin').after('<span class="error">The start time must be in the future !</span>');
+                      // e.preventDefault();
+                    }
+                    //format validation
+                    let format_validation = true;
+                    if($('#check_format').is(":checked")) {
+                      let minus_format = $('#format_minus_point');
+                      if(minus_format.val() === '') {
+                        $('#format_minus_point').after('<span class="error">Minus point cannot empty!</span>');
+                        format_validation = false;
+                      }
+                      if(format_validation && (minus_format.val() < 0 || minus_format.val() > 9)) {
+                        $('#format_minus_point').after('<span class="error">Minus point must be from 0 to 9!</span>');
+                        format_validation = false;
+                      }
+                    } 
+                    if (!format_validation) {
+                      e.preventDefault();
+                    }
+                    //comment validation
+                    let comment_validation = true;
+                    let point_comment_validation = true;
+                    if($('#check_comment').is(":checked")) {
+                      let minus_comment = $('#percentage_minus_point');
+                      let comment_percentage_accept = $('#percentage_accept');
+                      if(comment_percentage_accept.val() === '') {
+                        comment_percentage_accept.after('<span class="error">Percentage accept cannot be empty!</span>');
+                        comment_validation = false;
+                      }
+                      if(comment_validation && (comment_percentage_accept.val() < 0 || 
+                        comment_percentage_accept.val() > 100)) {
+                        comment_percentage_accept.after('<span class="error">Percentage accept must be from 0 to 100!</span>');
+                        comment_validation = false;
+                      }
+
+                      if(minus_comment.val() === '') {
+                        minus_comment.after('<span class="error">Minus point cannot be empty!</span>');
+                        point_comment_validation = false;
+                      }
+                      if(point_comment_validation && (minus_comment.val() < 0 || minus_comment.val() > 9)) {
+                        minus_comment.after('<span class="error">Minus point must be from 0 to 9!</span>');
+                        point_comment_validation = false;
+                      }
+                    } 
+
+                    if(!comment_validation) {
+                      e.preventDefault();
+                    }
+                    if(!point_comment_validation) {
+                      e.preventDefault();
+                    }
+                    //plagiarism validation
+                    let plagiarism_validation = true;
+                    if($('#check_plagiarism').is(':checked')) {
+                      let percentage_plagiarism =  $('#percentage_allow');
+                      if(percentage_plagiarism.val() === '') {
+                        percentage_plagiarism.after('<span class="error">Percentage allow cannot be empty!</span>');
+                        plagiarism_validation = false;
+                      }
+
+                      if(plagiarism_validation && (percentage_plagiarism.val() < 0 
+                        || percentage_plagiarism.val() > 100)) {
+                        percentage_plagiarism.after('<span class="error">Percentage allow must be from 0 to 100!</span>');
+                        plagiarism_validation = false; 
+                      }
+                    }
+
+                    if(!plagiarism_validation) {
+                      e.preventDefault();
+                    }
+                    //limit submission
+                    let limit_submission_validation = $('#limit_submission');
+                    let limit_submission_validation_check = true;
+                    if(limit_submission_validation.val() === '') {
+                      limit_submission_validation_check = false;
+                      limit_submission_validation.after('<span class="error">Limit submission cannot be empty!</span>');
+                    }
+                    if(limit_submission_validation_check && limit_submission_validation.val() < 1) {
+                      limit_submission_validation_check = false;
+                      limit_submission_validation.after('<span class="error">Limit submission must be greater than 0!</span>'); 
+                    }
+                    if(!limit_submission_validation_check) {
+                      e.preventDefault();
+                    }
+
+                });
+            });
         });
-        });
-        });
-        </script>
+      </script>
         <!-- check if it is having any error, then show it TuPTA -->
         <% if (error.length > 0) { %>
         <script>toastr.error('<%=error%>')</script>
