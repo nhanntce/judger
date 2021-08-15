@@ -911,10 +911,6 @@ exports.add_problem = function (req, res) {
     req.session.upload_err = false
     error = "Failed! Please check your files!"
   }
-  if (req.session.large_size_error) {
-    req.session.large_size_error = false
-    error = "Failed! Your files too large, File max size: 5MB!"
-  }
   // if file upload sucess
   if (req.session.upload_success) {
     req.session.upload_success = false
@@ -1017,19 +1013,26 @@ exports.add_problem_testcase = async function (req, res) {
     var form = new formidable.IncomingForm()
     form.maxFileSize = 5 * 1024 * 1024 // limit upload 5mb
     form.parse(req, async function (err, fields, files) {
-      var contest_id = fields.contest_id
-      // check file is valid
-      var type = files.filetouploadProblem.name.substring(files.filetouploadProblem.name.length - 4)
-      if (err || files.filetouploadProblem.name == "" || (type !== "docx" && type !== ".doc" && type !== ".pdf") || fields.nameProb == "" || fields.limitSub == "") {
-        req.session.upload_err = true
-        res.redirect("/contest/add-problem?contest_id=" + contest_id)
+      try {
+        var contest_id = fields.contest_id
+        // check file is valid
+        var type = files.filetouploadProblem.name.substring(files.filetouploadProblem.name.length - 4)
+        if (err || files.filetouploadProblem.name == "" || (type !== "docx" && type !== ".doc" && type !== ".pdf") || fields.nameProb == "" || fields.limitSub == "") {
+          req.session.upload_err = true
+          res.redirect("/contest/add-problem?contest_id=" + contest_id)
+          return
+        }
+        if (err || files.filetouploadTestcase.name == "" || files.filetouploadTestcase.name.substring(files.filetouploadTestcase.name.length - 4) !== ".zip") {
+          req.session.upload_err = true
+          res.redirect("/contest/add-problem?contest_id=" + contest_id)
+          return
+        }
+      } catch (error){
+        logger.error(error);
+        res.redirect("/error");
         return
       }
-      if (err || files.filetouploadTestcase.name == "" || files.filetouploadTestcase.name.substring(files.filetouploadTestcase.name.length - 4) !== ".zip") {
-        req.session.upload_err = true
-        res.redirect("/contest/add-problem?contest_id=" + contest_id)
-        return
-      }
+      
       var contest_name = fields.contest_name
       var oldpathProb = files.filetouploadProblem.path
       var newpathProb = storage.DEBAI + contest_name + '/' + files.filetouploadProblem.name
