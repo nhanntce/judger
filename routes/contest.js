@@ -20,14 +20,20 @@ exports.contest = function (req, res) {
 
   var error = "";
   var message = "";
-  // req.session.sql_err = true it means 
+  
   if (req.session.sql_err) {
     req.session.sql_err = false
     error = "Contest acocunt has exist!"
   }
+
   if (req.session.added) {
     req.session.added = false
     message = "Successfully! Contest have been added."
+  }
+
+  if (req.session.deleted_contest) {
+    req.session.deleted_contest = false
+    message = "Successfully! Contest have been deleted."
   }
 
   var sql = ""
@@ -181,6 +187,7 @@ exports.delete_contest = async function (req, res) {
         db.query(sql, [contest_id]);
         fs.writeFileSync(storage.EVENT + 'workspaceEvent/workspaceEvent.txt', Math.random(1000) + "changed");
         logger.info("Contest " + contest_id + " has deleted");
+        req.session.deleted_contest = true;
         res.redirect("/contest")
       })
     } catch (error) {
