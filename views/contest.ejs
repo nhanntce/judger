@@ -98,7 +98,7 @@
         <div class="modal-body mx-3">
           <label class="font-weight-bold">Name</label>
           <div class="form mb-3">
-            <input type="text" id="contest_name" name="contest_name" class="form-control" required autocomplete="off">
+            <input type="text" id="contest_name" name="contest_name" class="form-control" autocomplete="off">
           </div>
           <label class="font-weight-bold">Enter start time</label>
           <div class="form mb-3">
@@ -131,7 +131,7 @@
             <div class="form col-6">
               <label class="font-weight-bold">Minus point (point)</label>
               <div class="form">
-                  <input type="number" id="format_minus_point" name="format_minus_point" class="form-control" min="0" />
+                  <input type="number" id="format_minus_point" name="format_minus_point" class="form-control" />
               </div>              
             </div>
           </div>
@@ -153,19 +153,14 @@
             <div class="row">
               <div class="col-6">
                 <label class="font-weight-bold">Percentage Accept</label>
-                <div class="form mb-3">
-                  <input type="number" id="percentage_accept" min="1" name="percentage_accept" class="form-control" />
+                <div class="form">
+                  <input type="number" id="percentage_accept" name="percentage_accept" class="form-control" />
                 </div>              
               </div>
               <div class="col-6">
                 <label class="font-weight-bold" id="lb_minus_point">Minus Points (point)</label>
-                <div class="form mb-3">
-
-                  <div class="row">
-                      <div class="cz`ol-10">
-                        <input type="number" id="percentage_minus_point" min="1" name="percentage_minus_point" class="form-control" />
-                      </div>
-                  </div>
+                <div class="form">
+                  <input type="number" id="percentage_minus_point" name="percentage_minus_point" class="form-control" />
                 </div>              
               </div>
             </div>
@@ -181,12 +176,7 @@
             <div class="form col-6">
               <label class="font-weight-bold">Percentage Allow (%)</label>
               <div class="form">
-
-                <div class="row">
-                    <div class="col-10">
-                      <input type="number" id="percentage_allow" name="percentage_allow" class="form-control" min="0" />
-                    </div>
-                </div>
+                  <input type="number" id="percentage_allow" name="percentage_allow" class="form-control" />
               </div>              
             </div>
           </div>
@@ -207,7 +197,7 @@
               <div class="form col-6">
                 <label class="font-weight-bold">Limit Submission</label>
                 <div class="form">
-                  <input type="number" id="limit_submission" name="limit_submission" class="form-control" value="10" min="1"/>
+                  <input type="number" id="limit_submission" name="limit_submission" class="form-control" value="10"/>
                 </div>  
               </div>
           </div>
@@ -339,22 +329,26 @@
                     $(".error").remove();
                     //validation contest name
                     var contestName = $('#contest_name').val();
-                    if ( !/^(FA|SP|SU)\d{2}[_][A-Z]{3}\d{3}[_][A-Z]{2}\d{4}[_]\w+$/.test(contestName) ) {
+                    let contest_name_validation = true;    
+                    if(contestName === '') {
+                      $('#contest_name').after('<span class="error">Contest name cannot be empty!</span>');
+                      contest_name_validation = false;
+                    }
+                    if (contest_name_validation && (!/^(FA|SP|SU)\d{2}[_][A-Z]{3}\d{3}[_][A-Z]{2}\d{4}[_]\w+$/.test(contestName))) {
                       $('#contest_name').after('<span class="error">Contest name must be follow format (Ex: SU21_CPP201_SE1302_1) !</span>');
+                      contest_name_validation = false
                       // e.preventDefault();
                     }
-                    let isDuplicate = false;    
-                    var allContest = [];
-                    var contestName1 = $('#contest_name').val();
-                    for (let i = 0, l = data.data.length; i < l; ++i){
-                        if(contestName1 === data.data[i].contest_name){
+                   
+                    for(let i = 0, l = data.data.length; i < l; ++i){
+                        if(contestName === data.data[i].contest_name){
                           $('#contest_name').after('<span class="error">Contest name already !</span>');
-                          isDuplicate = true;
+                          contest_name_validation = false;
                           break;
                       }        
                     }
-                    if (isDuplicate){
-                      // e.preventDefault();
+                    if(!contest_name_validation){
+                      e.preventDefault();
                     }
                     //time begin, time end
                     var begin = $('#time_begin').val();
@@ -383,9 +377,9 @@
                       // e.preventDefault();
                     }
                     //format validation
-                    var format_validation = true;
+                    let format_validation = true;
                     if($('#check_format').is(":checked")) {
-                      var minus_format = $('#format_minus_point');
+                      let minus_format = $('#format_minus_point');
                       if(minus_format.val() === '') {
                         $('#format_minus_point').after('<span class="error">Minus point cannot empty!</span>');
                         format_validation = false;
@@ -394,36 +388,73 @@
                         $('#format_minus_point').after('<span class="error">Minus point must be from 0 to 9!</span>');
                         format_validation = false;
                       }
-                    } else {
-                      console.log("False");
-                    }
+                    } 
                     if (!format_validation) {
                       e.preventDefault();
                     }
                     //comment validation
-                    var comment_validation = true;
-                    var point_comment_validation = true;
+                    let comment_validation = true;
+                    let point_comment_validation = true;
                     if($('#check_comment').is(":checked")) {
-                      var minus_comment = $('#percentage_minus_point');
-                      var comment_percentage_accept = $('#percentage_accept');
+                      let minus_comment = $('#percentage_minus_point');
+                      let comment_percentage_accept = $('#percentage_accept');
                       if(comment_percentage_accept.val() === '') {
                         comment_percentage_accept.after('<span class="error">Percentage accept cannot be empty!</span>');
                         comment_validation = false;
                       }
-                      if(comment_validation && (comment_percentage_accept.val() < 0 || comment_percentage_accept.val() > 100)) {
+                      if(comment_validation && (comment_percentage_accept.val() < 0 || 
+                        comment_percentage_accept.val() > 100)) {
                         comment_percentage_accept.after('<span class="error">Percentage accept must be from 0 to 100!</span>');
                         comment_validation = false;
                       }
-                      if(minus_format.val() === '') {
+
+                      if(minus_comment.val() === '') {
                         minus_comment.after('<span class="error">Minus point cannot be empty!</span>');
                         point_comment_validation = false;
                       }
-                      if(point_comment_validation && (minus_format.val() < 0 || minus_format.val() > 9)) {
+                      if(point_comment_validation && (minus_comment.val() < 0 || minus_comment.val() > 9)) {
                         minus_comment.after('<span class="error">Minus point must be from 0 to 9!</span>');
                         point_comment_validation = false;
                       }
+                    } 
+
+                    if(!comment_validation) {
+                      e.preventDefault();
                     }
-                    if(!comment_validation && !point_comment_validation) {
+                    if(!point_comment_validation) {
+                      e.preventDefault();
+                    }
+                    //plagiarism validation
+                    let plagiarism_validation = true;
+                    if($('#check_plagiarism').is(':checked')) {
+                      let percentage_plagiarism =  $('#percentage_allow');
+                      if(percentage_plagiarism.val() === '') {
+                        percentage_plagiarism.after('<span class="error">Percentage allow cannot be empty!</span>');
+                        plagiarism_validation = false;
+                      }
+
+                      if(plagiarism_validation && (percentage_plagiarism.val() < 0 
+                        || percentage_plagiarism.val() > 100)) {
+                        percentage_plagiarism.after('<span class="error">Percentage allow must be from 0 to 100!</span>');
+                        plagiarism_validation = false; 
+                      }
+                    }
+
+                    if(!plagiarism_validation) {
+                      e.preventDefault();
+                    }
+                    //limit submission
+                    let limit_submission_validation = $('#limit_submission');
+                    let limit_submission_validation_check = true;
+                    if(limit_submission_validation.val() === '') {
+                      limit_submission_validation_check = false;
+                      limit_submission_validation.after('<span class="error">Limit submission cannot be empty!</span>');
+                    }
+                    if(limit_submission_validation_check && limit_submission_validation.val() < 1) {
+                      limit_submission_validation_check = false;
+                      limit_submission_validation.after('<span class="error">Limit submission must be greater than 0!</span>'); 
+                    }
+                    if(!limit_submission_validation_check) {
                       e.preventDefault();
                     }
 
