@@ -241,7 +241,7 @@
          $('#subject').after('<span class="error">Subject must be follow format (Ex: CPP201) !</span>');
           e.preventDefault();
       }
-      if (!/^[A-Z]{2}[0-9]{4}$/.test(class_name)){
+      if (!/^[A-Z]{2}[0-9]{4}[.]\w+$/.test(class_name)){
          $('#class_name').after('<span class="error">Class name must be follow format (Ex: SE1302) !</span>');
           e.preventDefault();
       }
@@ -275,7 +275,7 @@
                  $('#edit_subject').after('<span class="error">Subject must be follow format (Ex: CPP201) !</span>');
                   e.preventDefault();
               }
-              if (!/^[A-Z]{2}[0-9]{4}$/.test(edit_class_name)){
+              if (!/^[A-Z]{2}[0-9]{4}[.]\w+$/.test(edit_class_name)){
                  $('#edit_class_name').after('<span class="error">Class name must be follow format (Ex: SE1302) !</span>');
                   e.preventDefault();
               }
