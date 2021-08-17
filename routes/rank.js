@@ -384,24 +384,21 @@ exports.load_rank = function (req, res) {
  */
 exports.detail_rank = function (req, res) {
   var userId = req.session.userId
+  var contest_id = req.query.contest_id
   if (userId == null) {
     res.redirect("/login")
     return
   }
   var rollnumber = req.query.rollnumber
-  // var sql = "SELECT contest.contest_name, contest.contest_id, contest_detail.times, contest_detail.problem_id FROM contest, contest_detail INNER JOIN student_account ON student_account.contest_id=contest.contest_id WHERE student_account.rollnumber=?"
-  // var sql = "SELECT contest.contest_name, contest.contest_id, contest_detail.path_problem, " +
-  // " contest_detail.times, contest_detail.problem_id FROM contest INNER JOIN student_account " +
-  // " ON student_account.contest_id=contest.contest_id INNER JOIN contest_detail ON " +
-  // " contest_detail.contest_id=contest.contest_id WHERE student_account.rollnumber=?"
+  
   var sql = "SELECT contest.contest_name, contest.contest_id, contest_detail.path_problem, " +
   "contest_detail.times, contest_detail.problem_id FROM contest "+
   "INNER JOIN contest_detail ON contest_detail.contest_id=contest.contest_id " +
-  "INNER JOIN contest_student ON contest_student.contest_id=contest.contest_id " +
+  "INNER JOIN contest_student ON contest_student.contest_id=contest.contest_id AND contest_student.contest_id=?" +
   "INNER JOIN student_account ON contest_student.student_id=student_account.id " +
   
   "WHERE student_account.rollnumber=?"
-  db.query(sql, [rollnumber], function (err, results) {
+  db.query(sql, [contest_id, rollnumber], function (err, results) {
     if (err || results.length == 0) { logger.error(err); res.redirect("/error"); return }
     var contest_name = results[0].contest_name.replace(/ /g, '-')
     var configContent = fs.readFileSync(storage.TESTCASE + contest_name + '/config.txt', 'utf8')

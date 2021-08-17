@@ -242,7 +242,7 @@
           {
             aTargets: [1, 2], 
             mRender: function (data, type, row, meta) {
-              return '<a href="/detail-rank?rollnumber=' + row[1] + '">' + data + '</a>';
+              return '<a href="/detail-rank?rollnumber=' + row[1] + '&contest_id=<%=data[0].contest_id%>">' + data + '</a>';
             }
           }, {
             bSearchable: false,
