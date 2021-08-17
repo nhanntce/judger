@@ -196,6 +196,8 @@ app.get('/contest/add-student', (req, res) => {
 app.post('/contest/add-student', contest.add_student)
 // Load class
 app.get('/contest/load-class', contest.load_class)
+//down load template excel 
+app.get('/contest/download-excel-template', contest.download_excel_template);
 // Add class
 app.post('/contest/add-class', contest.add_class)
 // Add class

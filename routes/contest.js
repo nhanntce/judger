@@ -1218,3 +1218,8 @@ function deleteFolder(path) {
     });
   });
 }
+
+
+exports.download_excel_template = (req, res) => {
+  res.download("./public/excel/SU21_JFE201_IA1301.xlsx");
+}
