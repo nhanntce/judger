@@ -748,14 +748,13 @@ exports.add_class = function (req, res) {
       if (err) { logger.error(err); res.redirect("/error"); return }
 
       var class_name = files.filetoupload.name
-
       if (class_name == "") { // check if dont choose file
          res.render('add-class.ejs', {teacher_role: req.session.teacher_role, data: [], xlData: "", message: "", error: "Input must be not empty. Please choose a file!", class_name: class_name, role: req.session.role, user: req.session.user, detail: true })
         return
       }
 
-      if (!/^(FA|SP|SU)\d{2}[_][A-Z]{3}\d{3}[_][A-Z]{2}\d{4}[.](xls|xlsx)$/.test(class_name)) {
-        res.render('add-class.ejs', {teacher_role: req.session.teacher_role, data: [], xlData: "", message: "", error: "File name is not follow format (Ex:SU21_PRO201_SE1302.xls)", class_name: class_name, role: req.session.role, user: req.session.user, detail: true })
+      if (!/^(FA|SP|SU)\d{2}[_][A-Z]{3}\d{3}[_][A-Z]{2}\d{4}[.](|[A-Z]{2}[.])(xls|xlsx)$/.test(class_name)) {
+        res.render('add-class.ejs', {teacher_role: req.session.teacher_role, data: [], xlData: "", message: "", error: "File name is not follow format!(Ex:SU21_PRO201_SE1302.xls or SU21_PRO201_SE1302.HL.xls)", class_name: class_name, role: req.session.role, user: req.session.user, detail: true })
         return
       }
 
@@ -763,7 +762,7 @@ exports.add_class = function (req, res) {
       var splitClassname = class_name.split('.')[0].split('_');
       var semester = splitClassname[0]
       var subject = splitClassname[1]
-      var className = splitClassname[2]
+      var className = class_name.split('.').length == 2 ? splitClassname[2] : (splitClassname[2] + "." + class_name.split('.')[1]);
       var sql = " SELECT semester, subject, class_name FROM class WHERE semester=? and subject=? and class_name=? AND status=1"
       var newfile = "";
 
@@ -776,7 +775,8 @@ exports.add_class = function (req, res) {
           });
           newfile = class_name;
         } else {
-          newfile = class_name.split('.')[0] + "_" + Math.random() + "." + class_name.split('.')[1];
+          var tmpCount = class_name.split('.').length;
+          newfile = tmpCount == 2 ? (class_name.split('.')[0] + "_" + Math.random() + "." + class_name.split('.')[1]) : (class_name.split('.')[0] + "." + class_name.split('.')[1] + "_" + Math.random() + "." + class_name.split('.')[2]);
         }
         // get file upload and rewrite it 
         var oldpath = files.filetoupload.path
@@ -848,7 +848,7 @@ exports.create_class = async function (req, res) {
     var splitClassname = class_name.split('_');
     var semester = splitClassname[0]
     var subject = splitClassname[1]
-    var className = splitClassname[2].split('.')[0]
+    var className = splitClassname[2].split('.').length == 2 ? splitClassname[2].split('.')[0] : (splitClassname[2].split('.')[0] + "." + splitClassname[2].split('.')[1]);
 
     var sqlGetIdClass = "SELECT `id` FROM `class` WHERE semester='"+ semester + "' and subject='"+ subject + "' and class_name='"+ className + "';";
     var selectClassID = await getResult(sqlGetIdClass);
@@ -859,6 +859,7 @@ exports.create_class = async function (req, res) {
     var selectNotAvailableStudentInClass = "";
     var insertClassStudentSql = "";
     var count = 0;
+
     for (let i = 0; i < RollNumber.length; i++) {
       checkAvailableStudentSql = "SELECT `id` FROM `student_account` WHERE rollnumber='" + RollNumber[i] + "' AND status=1;";
       var selectStuID = await getResult(checkAvailableStudentSql);
