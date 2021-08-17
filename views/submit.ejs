@@ -71,9 +71,15 @@
 
                     <!-- check log file not includes python file -->
                     if(!log_files[i].includes('py')) {
-                      format.push('Compile Error')
-                      comment.push('Compile Error')
-                      plagiarism.push('Compile Error')          
+                      if(logcontent.split('\n')[0] == 'Run Time Error') {
+                        format.push('Run time Error')
+                        comment.push('Run time Error')
+                        plagiarism.push('Run time Error') 
+                      } else {
+                        format.push('Compile Error')
+                        comment.push('Compile Error')
+                        plagiarism.push('Compile Error') 
+                      }
                     }
                     
                 } else {
@@ -375,7 +381,7 @@
               </td> -->
               <%
                 <!-- } -->
-                if (format[i] == 'Compile Error') {
+                if (format[i] == 'Compile Error' || format[i] == 'Run time Error') {
               %>
               <td class="text-danger font-weight-bold">
                 <%=format[i]%>
@@ -411,7 +417,7 @@
                 <%=comment[i]%>
               </td>
               <%
-                } else if(comment[i] == 'Compile Error') {
+                } else if(comment[i] == 'Compile Error' || comment[i] == 'Run time Error') {
               %>
               <td class="text-danger font-weight-bold">
                 <%=comment[i]%>
@@ -438,7 +444,7 @@
                 <%=plagiarism[i]%>
               </td>
               <%
-                } else if(plagiarism[i] == 'Compile Error') {
+                } else if(plagiarism[i] == 'Compile Error' || plagiarism[i] == 'Run time Error') {
 
               %>
               <td class="text-danger font-weight-bold">
