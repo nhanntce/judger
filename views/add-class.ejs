@@ -10,7 +10,17 @@
       <ol class="breadcrumb">
         <li class="breadcrumb-item"> <a class="text-gray-700" href="/admin/student">Student</a></li>
         <li><i class="fas fa-angle-double-right mx-2 text-gray-700" aria-hidden="true"></i></li>
-        <li class="breadcrumb-item text-gray-700 font-italic">Add student by excel</li>
+        <li class="breadcrumb-item text-gray-700 font-italic">
+          <%
+            if(detail == false) {
+          %>
+          <a class="text-gray-700" href="/contest/add-class">Add student by excel</a>
+          <%
+            } else {
+          %>
+          Add student by excel
+          <% } %>
+        </li>
         <%
           if(detail == false) {
         %>
@@ -89,11 +99,14 @@
         </tr>
       </thead>
       <tbody>
-        <% for (let i = 0, l = xlData.length; i < l; ++i) { %>
+        <% 
+          full_class_name = class_name.split('.').length == 2 ? class_name.split('.')[0] : (class_name.split('.')[0] + "." + class_name.split('.')[1])
+          for (let i = 0, l = xlData.length; i < l; ++i) { 
+        %>
         <tr>
           <td><%= JSON.stringify(xlData[i].RollNumber).replace(/"/g,'') %></td>
           <td><%= JSON.stringify(xlData[i].FullName).replace(/"/g,'') %></td>
-          <td><%=class_name.split('.')[0]%></td>
+          <td><%=full_class_name%></td>
           <td><%= JSON.stringify(xlData[i].Email).replace(/"/g,'') %></td>
         </tr>
         <% } %>

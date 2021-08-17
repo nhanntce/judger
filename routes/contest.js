@@ -20,14 +20,20 @@ exports.contest = function (req, res) {
 
   var error = "";
   var message = "";
-  // req.session.sql_err = true it means 
+  
   if (req.session.sql_err) {
     req.session.sql_err = false
     error = "Contest acocunt has exist!"
   }
+
   if (req.session.added) {
     req.session.added = false
     message = "Successfully! Contest have been added."
+  }
+
+  if (req.session.deleted_contest) {
+    req.session.deleted_contest = false
+    message = "Successfully! Contest have been deleted."
   }
 
   var sql = ""
@@ -181,6 +187,7 @@ exports.delete_contest = async function (req, res) {
         db.query(sql, [contest_id]);
         fs.writeFileSync(storage.EVENT + 'workspaceEvent/workspaceEvent.txt', Math.random(1000) + "changed");
         logger.info("Contest " + contest_id + " has deleted");
+        req.session.deleted_contest = true;
         res.redirect("/contest")
       })
     } catch (error) {
@@ -741,14 +748,13 @@ exports.add_class = function (req, res) {
       if (err) { logger.error(err); res.redirect("/error"); return }
 
       var class_name = files.filetoupload.name
-
       if (class_name == "") { // check if dont choose file
          res.render('add-class.ejs', {teacher_role: req.session.teacher_role, data: [], xlData: "", message: "", error: "Input must be not empty. Please choose a file!", class_name: class_name, role: req.session.role, user: req.session.user, detail: true })
         return
       }
 
-      if (!/^(FA|SP|SU)\d{2}[_][A-Z]{3}\d{3}[_][A-Z]{2}\d{4}[.](xls|xlsx)$/.test(class_name)) {
-        res.render('add-class.ejs', {teacher_role: req.session.teacher_role, data: [], xlData: "", message: "", error: "File name is not follow format (Ex:SU21_PRO201_SE1302.xls)", class_name: class_name, role: req.session.role, user: req.session.user, detail: true })
+      if (!/^(FA|SP|SU)\d{2}[_][A-Z]{3}\d{3}[_][A-Z]{2}\d{4}[.](|[A-Z]{2}[.])(xls|xlsx)$/.test(class_name)) {
+        res.render('add-class.ejs', {teacher_role: req.session.teacher_role, data: [], xlData: "", message: "", error: "File name is not follow format!(Ex:SU21_PRO201_SE1302.xls or SU21_PRO201_SE1302.HL.xls)", class_name: class_name, role: req.session.role, user: req.session.user, detail: true })
         return
       }
 
@@ -756,7 +762,7 @@ exports.add_class = function (req, res) {
       var splitClassname = class_name.split('.')[0].split('_');
       var semester = splitClassname[0]
       var subject = splitClassname[1]
-      var className = splitClassname[2]
+      var className = class_name.split('.').length == 2 ? splitClassname[2] : (splitClassname[2] + "." + class_name.split('.')[1]);
       var sql = " SELECT semester, subject, class_name FROM class WHERE semester=? and subject=? and class_name=? AND status=1"
       var newfile = "";
 
@@ -769,7 +775,8 @@ exports.add_class = function (req, res) {
           });
           newfile = class_name;
         } else {
-          newfile = class_name.split('.')[0] + "_" + Math.random() + "." + class_name.split('.')[1];
+          var tmpCount = class_name.split('.').length;
+          newfile = tmpCount == 2 ? (class_name.split('.')[0] + "_" + Math.random() + "." + class_name.split('.')[1]) : (class_name.split('.')[0] + "." + class_name.split('.')[1] + "_" + Math.random() + "." + class_name.split('.')[2]);
         }
         // get file upload and rewrite it 
         var oldpath = files.filetoupload.path
@@ -841,7 +848,7 @@ exports.create_class = async function (req, res) {
     var splitClassname = class_name.split('_');
     var semester = splitClassname[0]
     var subject = splitClassname[1]
-    var className = splitClassname[2].split('.')[0]
+    var className = splitClassname[2].split('.').length == 2 ? splitClassname[2].split('.')[0] : (splitClassname[2].split('.')[0] + "." + splitClassname[2].split('.')[1]);
 
     var sqlGetIdClass = "SELECT `id` FROM `class` WHERE semester='"+ semester + "' and subject='"+ subject + "' and class_name='"+ className + "';";
     var selectClassID = await getResult(sqlGetIdClass);
@@ -852,6 +859,7 @@ exports.create_class = async function (req, res) {
     var selectNotAvailableStudentInClass = "";
     var insertClassStudentSql = "";
     var count = 0;
+
     for (let i = 0; i < RollNumber.length; i++) {
       checkAvailableStudentSql = "SELECT `id` FROM `student_account` WHERE rollnumber='" + RollNumber[i] + "' AND status=1;";
       var selectStuID = await getResult(checkAvailableStudentSql);
@@ -910,10 +918,6 @@ exports.add_problem = function (req, res) {
   if (req.session.upload_err) {
     req.session.upload_err = false
     error = "Failed! Please check your files!"
-  }
-  if (req.session.large_size_error) {
-    req.session.large_size_error = false
-    error = "Failed! Your files too large, File max size: 5MB!"
   }
   // if file upload sucess
   if (req.session.upload_success) {
@@ -1017,19 +1021,26 @@ exports.add_problem_testcase = async function (req, res) {
     var form = new formidable.IncomingForm()
     form.maxFileSize = 5 * 1024 * 1024 // limit upload 5mb
     form.parse(req, async function (err, fields, files) {
-      var contest_id = fields.contest_id
-      // check file is valid
-      var type = files.filetouploadProblem.name.substring(files.filetouploadProblem.name.length - 4)
-      if (err || files.filetouploadProblem.name == "" || (type !== "docx" && type !== ".doc" && type !== ".pdf") || fields.nameProb == "" || fields.limitSub == "") {
-        req.session.upload_err = true
-        res.redirect("/contest/add-problem?contest_id=" + contest_id)
+      try {
+        var contest_id = fields.contest_id
+        // check file is valid
+        var type = files.filetouploadProblem.name.substring(files.filetouploadProblem.name.length - 4)
+        if (err || files.filetouploadProblem.name == "" || (type !== "docx" && type !== ".doc" && type !== ".pdf") || fields.nameProb == "" || fields.limitSub == "") {
+          req.session.upload_err = true
+          res.redirect("/contest/add-problem?contest_id=" + contest_id)
+          return
+        }
+        if (err || files.filetouploadTestcase.name == "" || files.filetouploadTestcase.name.substring(files.filetouploadTestcase.name.length - 4) !== ".zip") {
+          req.session.upload_err = true
+          res.redirect("/contest/add-problem?contest_id=" + contest_id)
+          return
+        }
+      } catch (error){
+        logger.error(error);
+        res.redirect("/error");
         return
       }
-      if (err || files.filetouploadTestcase.name == "" || files.filetouploadTestcase.name.substring(files.filetouploadTestcase.name.length - 4) !== ".zip") {
-        req.session.upload_err = true
-        res.redirect("/contest/add-problem?contest_id=" + contest_id)
-        return
-      }
+      
       var contest_name = fields.contest_name
       var oldpathProb = files.filetouploadProblem.path
       var newpathProb = storage.DEBAI + contest_name + '/' + files.filetouploadProblem.name
