@@ -77,11 +77,16 @@
                     score = 0
 
                      <!-- check log file not includes python file -->
-                     
-                     if(log_files[i].includes('py') == false) {
-                      format = 'Compile Error'
-                      comment = 'Compile Error'
-                      plagiarism = 'Compile Error'    
+                    if(log_files[i].includes('py') == false) {
+                      if(logcontent.split('\n')[0] == 'Run Time Error') {
+                        format = 'Run time Error'
+                        comment = 'Run time Error'
+                        plagiarism = 'Run time Error'
+                      } else {
+                        format = 'Compile Error'
+                        comment = 'Compile Error'
+                        plagiarism = 'Compile Error'
+                      }
                     }
                     
                 } else {
@@ -175,7 +180,7 @@
           <%=testcase%>
         </td>
         <%
-          if (format == 'Compile Error') {
+          if (format == 'Compile Error' || format == 'Run time Error') {
         %>
         <td class="text-danger font-weight-bold">
         <%=format%>
@@ -198,7 +203,7 @@
           }
         %>
         <%
-                if (comment == 'Compile Error') {
+                if (comment == 'Compile Error' || comment == 'Run time Error') {
               %>
               <td class="text-danger font-weight-bold">
                 <%=comment%>
@@ -232,7 +237,7 @@
                 <%=plagiarism%>%
               </td>
               <%   
-                } else if(plagiarism == 'Compile Error') {
+                } else if(plagiarism == 'Compile Error' || plagiarism == 'Run time Error') {
               %>
               <td class="text-danger font-weight-bold">
                 <%=plagiarism%>
