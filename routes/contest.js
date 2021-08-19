@@ -1172,6 +1172,7 @@ exports.delete_problem_testcase = async function (req, res) {
         return;
       }
     }
+    fs.writeFileSync(storage.EVENT + 'testcaseEvent/testcaseEvent.txt', Math.random(1000) + 'changed');
     res.redirect("/contest/add-problem?contest_id=" + contest_id)
   } else {
     res.redirect("/error")

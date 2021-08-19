@@ -241,17 +241,22 @@
          $('#subject').after('<span class="error">Subject must be follow format (Ex: CPP201) !</span>');
           e.preventDefault();
       }
-      if (!/^[A-Z]{2}[0-9]{4}[.]\w+$/.test(class_name)){
+      let class_validation = true;
+      if (!/^[A-Z]{2}[0-9]{4}(|[.][A-Z]{2})$/.test(class_name)){
          $('#class_name').after('<span class="error">Class name must be follow format (Ex: SE1302) !</span>');
+         class_validation = false;
           e.preventDefault();
       }
-    let isDuplicate = false    
-        for (let i = 0, l = data.data.length; i < l; ++i){
+    let isDuplicate = false; 
+        if(class_validation)  {
+          for (let i = 0, l = data.data.length; i < l; ++i){
             if(semester === data.data[i].semester && subject === data.data[i].subject && class_name === data.data[i].class_name){
               $('#class_name').after('<span class="error">Class already !</span>');
               isDuplicate = true
           } 
         }
+        }
+        
     if (isDuplicate){
     e.preventDefault();
       }
@@ -275,17 +280,21 @@
                  $('#edit_subject').after('<span class="error">Subject must be follow format (Ex: CPP201) !</span>');
                   e.preventDefault();
               }
-              if (!/^[A-Z]{2}[0-9]{4}[.]\w+$/.test(edit_class_name)){
+              let class_edit_validation = true;
+              if (!/^[A-Z]{2}[0-9]{4}(|[.][A-Z]{2})$/.test(edit_class_name)){
                  $('#edit_class_name').after('<span class="error">Class name must be follow format (Ex: SE1302) !</span>');
                   e.preventDefault();
+                  class_edit_validation = false;
               }
               let isDuplicate = false    
-              for (let i = 0, l = data.data.length; i < l; i++){
+              if(class_edit_validation) {
+                for (let i = 0, l = data.data.length; i < l; i++){
                   var editStatus = edit_class_status == "on" ? 1 : 0;
                   if(edit_semester === data.data[i].semester && edit_subject === data.data[i].subject 
                     && edit_class_name === data.data[i].class_name && editStatus===data.data[i].status){
                     isDuplicate = true;
                 } 
+              }
               }
               var old_semester = document.getElementById("old_semester").value;
               var old_subject = document.getElementById("old_subject").value;

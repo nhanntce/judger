@@ -171,7 +171,9 @@ exports.load_rank = function (req, res) {
             prob = log_files[i].split('][')[4].split('].')[0]
             if (!check[rollnum][prob]) {
               var contents = fs.existsSync(storage.NOPBAI + 'Logs/' + results[0].contest_name.replace(/ /g, '-') + '/' + log_files[i]) ? fs.readFileSync(storage.NOPBAI + 'Logs/' + results[0].contest_name.replace(/ /g, '-') + '/' + log_files[i], 'utf8') : ""
-
+              while(!contents.split('\n')[0].includes('Error') && contents.split('\n').length < 5) {
+                contents = fs.existsSync(storage.NOPBAI + 'Logs/' + results[0].contest_name.replace(/ /g, '-') + '/' + log_files[i]) ? fs.readFileSync(storage.NOPBAI + 'Logs/' + results[0].contest_name.replace(/ /g, '-') + '/' + log_files[i], 'utf8') : ""
+              }
               if (!contents.split('\n')[0].includes('Error')) {
                 // check plagiarism
                 var tmpScore = parseFloat(contents.split('\n')[0])

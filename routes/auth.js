@@ -48,7 +48,7 @@ exports.success = function(req, res) {
             logger.info(req.session.role + " " + req.session.user + " has connected")
             res.redirect('/contest')
           } else {
-            message = 'Your email is not exist or available'
+            message = 'Your email is not exist or unavailable'
             res.render('index.ejs', { message: message, username: req.session.user })
           }
 
