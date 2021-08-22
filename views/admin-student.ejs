@@ -340,7 +340,7 @@
       } 
       for(let i = 0, len = studentList.length; i < len; i++) {
         if(rollNumberValue.toLowerCase() === studentList[i].rollnumber.toLowerCase()) {
-          rollNumberError.innerHTML = "Roll number existed!";
+          rollNumberError.innerHTML = "Roll number already exists. Please enter another roll number!";
           rollNumberError.style.display = 'inline';
           return true;
         }
@@ -368,7 +368,7 @@
       }
       for(let i = 0, len = studentList.length; i < len; i++) {
         if(emailValue.toLowerCase() === studentList[i].email.toLowerCase()) {
-          emailError.innerHTML = "Email existed!";
+          emailError.innerHTML = "Email already exists. Please enter another email!";
           emailError.style.display = 'inline';
           return true;
         }
@@ -470,7 +470,7 @@
       } 
       for(let i = 0, len = studentList.length; i < len; i++) {
         if(rollNumberValue.toLowerCase() === studentList[i].rollnumber.toLowerCase()) {
-          rollEditNumberError.innerHTML = "Roll number existed!";
+          rollEditNumberError.innerHTML = "Roll number already exists. Please enter another roll number!";
           rollEditNumberError.style.display = 'inline';
           return true;
         }
@@ -498,7 +498,7 @@
       }
       for(let i = 0, len = studentList.length; i < len; i++) {
         if(emailValue.toLowerCase() === studentList[i].email.toLowerCase()) {
-          emailEditError.innerHTML = "Email existed!";
+          emailEditError.innerHTML = "Email already exists. Please enter another email!";
           emailEditError.style.display = 'inline';
           return true;
         }
