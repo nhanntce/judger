@@ -251,7 +251,7 @@
         if(class_validation)  {
           for (let i = 0, l = data.data.length; i < l; ++i){
             if(semester === data.data[i].semester && subject === data.data[i].subject && class_name === data.data[i].class_name){
-              $('#class_name').after('<span class="error">Class already !</span>');
+              $('#class_name').after('<span class="error">Class already exists. Please enter another class name!</span>');
               isDuplicate = true
           } 
         }
@@ -315,7 +315,7 @@
                 isDuplicate = false;
               }
               if (isDuplicate){
-                $('#edit_class_name').after('<span class="error">Class was exist !</span>');
+                $('#edit_class_name').after('<span class="error">Class already exists. Please enter another class name!</span>');
                 e.preventDefault();
               }
           });
