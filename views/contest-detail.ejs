@@ -417,7 +417,7 @@
                     }    
                     for (let i = 0, l = data.data.length; i < l; ++i){
                         if(contestName === data.data[i].contest_name && contestName !== oldContestName){
-                          $('#contest_name').after('<span class="error">Contest name already exists. Please enter another contest name!<</span>');
+                          $('#contest_name').after('<span class="error">Contest name already exists. Please enter another contest name!</span>');
                           contest_name_validation = false;
                           break;
                         }
