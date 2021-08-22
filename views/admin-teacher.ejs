@@ -226,11 +226,11 @@
     let isDuplicate = false    
         for (let i = 0, l = data.data.length; i < l; ++i){
             if(rollnumber === data.data[i].rollnumber){
-              $('#rollnumber').after('<span class="error">Roll name existed !</span>');
+              $('#rollnumber').after('<span class="error">Roll number already exists. Please enter another roll number!</span>');
               isDuplicate = true
           } 
             if(email === data.data[i].email){
-              $('#email').after('<span class="error">Email existed !</span>');
+              $('#email').after('<span class="error">Email already exists. Please enter another email!</span>');
               isDuplicate = true
           } 
         }
@@ -257,13 +257,13 @@
             if(edit_rollnumber === data.data[i].rollnumber){
               count1 +=1;
           } if(count1 == 2){
-            $('#edit_rollnumber').after('<span class="error">Roll name existed !</span>');
+            $('#edit_rollnumber').after('<span class="error">Roll number already exists. Please enter another roll number!</span>');
               isDuplicate = true
           }
             if(edit_email === data.data[i].email){
               count2 +=1;
           } if(count == 2){
-            $('#edit_email').after('<span class="error">Email existed !</span>');
+            $('#edit_email').after('<span class="error">Email already exists. Please enter another email!</span>');
               isDuplicate = true
           }
           
