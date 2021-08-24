@@ -270,11 +270,13 @@
                   if (parseFloat(plagiarism) >= parseFloat(plagiarismAcp)) {
                     score = 0;
                   } else {
-                    if(format == 'No'){
-                      score -=minusFormat;
+                    if(checkFormat == 'true') {
+                      if(format == 'No'){
+                        score -=minusFormat;
+                      }
                     }
                     if(checkCmt == 'true') {
-                      if (comment < percentCmtAcp) {
+                      if (parseFloat(comment) < parseFloat(percentCmtAcp)) {
                         if (checkCmtMode == 'Fixed') {
                           score = score - minusPoint;
                         } else {
@@ -285,7 +287,6 @@
                   }
                 }
                 
-                
               %>
         <td>
           <%
@@ -293,7 +294,6 @@
           var pen = []
           var tmp_pen = {}
           var tmp_maxtimes = []
-          
           <!-- set default of tmp_pen -->
           for (let i = 0, l = debai.length; i < l; ++i) { 
             tmp_pen[debai[i]] = -1
@@ -313,13 +313,12 @@
           <!-- caculate the score with penaty -->
             if(penaltyMode == 'Easy') {
               score = score * (tmp_maxtimes[i] - pen[i]) / tmp_maxtimes[i]
-            } 
-            
+            }  
           if(score < 0){
             score = 0;
           }
           %>
-          <%=score.toFixed(1)%>
+          <%=parseFloat(score).toFixed(1)%>
         </td>
       </tr>
       <div class="modal fade" id="myModal<%=i%>"> 
