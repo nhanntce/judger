@@ -1,0 +1,12 @@
+time_limit=1000
+memory_limit=500
+check_format=true
+1
+check_comment=true
+check_comment_mode=Fixed
+50
+1
+check_plagiarism=true
+70
+penalty_mode=Easy
+10
