@@ -51,6 +51,7 @@ exports.submission = async function (req, res) {
         res.render('submit.ejs', { error: error, role: req.session.role, user: req.session.user, teacher_role: req.session.teacher_role })
         return;
       } else {
+        var time_tmp_over = 0;
         var time_tmp = 0;
         for(let i = 0; i < listContests.length; i++) {
           //check student in open contest 
@@ -67,6 +68,11 @@ exports.submission = async function (req, res) {
               time_tmp = i;
             }
           }
+          time_tmp_over = i;
+        }
+        // check the least contest over
+        if(time_tmp == 0) {
+          time_tmp = time_tmp_over;
         }
       }
       var idContest = listContests[time_tmp].contest_id;
