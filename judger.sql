@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 24, 2021 at 06:11 AM
+-- Generation Time: Aug 24, 2021 at 06:48 AM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 8.0.6
 
@@ -169,7 +169,7 @@ CREATE TABLE `contest` (
 --
 
 INSERT INTO `contest` (`contest_id`, `teacher_id`, `contest_name`, `time_begin`, `time_end`, `language`, `status`) VALUES
-(6, 'TC-000006', 'SU21_HCI201_SE1302_TEST01', '2021-08-17 18:32:00', '2021-08-18 18:30:00', 'C,C++,Java', 1);
+(6, 'TC-000001', 'SU21_HCI201_SE1302_TEST01', '2021-08-17 18:32:00', '2021-08-18 18:30:00', 'C,C++,Java', 1);
 
 -- --------------------------------------------------------
 
@@ -288,7 +288,7 @@ CREATE TABLE `student_account` (
 --
 
 INSERT INTO `student_account` (`id`, `userId`, `rollnumber`, `name`, `ip`, `timeout`, `islogin`, `email`, `status`) VALUES
-(24, 'SD-000025', 'CE130353', 'Nguyễn Minh Thảo', '1', '2021-08-18 00:02:18', 1, 'thaonmce130353@fpt.edu.vn', 1),
+(24, 'SD-000025', 'CE130353', 'Nguyễn Minh Thảo', '1', '2021-08-24 11:39:03', 0, 'thaonmce130353@fpt.edu.vn', 1),
 (80, 'SD-000081', 'CE130252', 'Nguyễn Chí Linh', '1', '2021-08-17 19:17:22', 0, 'linhncce130252@fpt.edu.vn', 1),
 (81, 'SD-000082', 'CE133213', 'Nguyễn Thành Nhân', '1', '2021-08-17 19:17:22', 0, 'nhanntce130377@fpt.edu.vn', 1),
 (82, 'SD-000083', 'CE130077', 'Phạm Trương Anh Tú', '1', '2021-08-17 19:17:22', 0, 'tuptace130136@fpt.edu.vn', 1),
@@ -372,7 +372,7 @@ CREATE TABLE `_sequence` (
 
 INSERT INTO `_sequence` (`seq_name`, `seq_group`, `seq_val`) VALUES
 ('userId', 'SD', 281),
-('userId1', 'TC', 6);
+('userId1', 'TC', 7);
 
 --
 -- Indexes for dumped tables
@@ -468,7 +468,7 @@ ALTER TABLE `contest_student`
 -- AUTO_INCREMENT for table `employee_account`
 --
 ALTER TABLE `employee_account`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `student_account`

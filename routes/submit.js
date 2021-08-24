@@ -53,13 +53,19 @@ exports.submission = async function (req, res) {
       } else {
         var time_tmp = 0;
         for(let i = 0; i < listContests.length; i++) {
-          if(new Date() > new Date(listContests[i].time_begin) && new Date() < new Date(listContests[i].time_end)) {
+          //check student in open contest 
+          if(new Date() > new Date(listContests[i].time_begin) && 
+             new Date() < new Date(listContests[i].time_end)) {
             time_tmp = i;
             break;
           }
-          
-          if(new Date() - new Date(listContests[i].time_begin) < 0 && new Date(listContests[i].time_begin) - new Date(listContests[time_tmp].time_begin) <= 0 ){
-            time_tmp = i;
+          //check student in future contest
+          if(new Date() - new Date(listContests[i].time_begin) < 0){
+            if (new Date() - new Date(listContests[time_tmp].time_begin) > 0) {
+              time_tmp = i;
+            } else if(new Date(listContests[i].time_begin) - new Date(listContests[time_tmp].time_begin) <= 0){
+              time_tmp = i;
+            }
           }
         }
       }
