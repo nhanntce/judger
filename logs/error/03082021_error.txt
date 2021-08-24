@@ -1,0 +1,31 @@
+03-08-2021 09:39:32 : Error: ER_BAD_FIELD_ERROR: Unknown column 'student_account.class' in 'field list'
+03-08-2021 10:15:54 : Error: ER_BAD_FIELD_ERROR: Unknown column 'class' in 'where clause'
+03-08-2021 10:41:57 : Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'SU21'' and subject=''JFE201'' and class_name=''SE1301''' at line 1
+03-08-2021 10:59:13 : Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 1
+03-08-2021 10:59:13 : Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 1
+03-08-2021 11:00:15 : Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 1
+03-08-2021 11:00:15 : Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 1
+03-08-2021 11:36:52 : Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'orrollnumber='CE130021' orrollnumber='CE130252' orrollnumber='CE133213' orrol...' at line 1
+03-08-2021 12:02:52 : Error: ER_BAD_FIELD_ERROR: Unknown column 'student_account.class' in 'field list'
+03-08-2021 12:24:32 : Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '?,?) ON DUPLICATE KEY UPDATE student_id=? class_id=?' at line 1
+03-08-2021 12:24:32 : Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '?,?) ON DUPLICATE KEY UPDATE student_id=? class_id=?' at line 1
+03-08-2021 12:38:45 : Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'class_id=10' at line 1
+03-08-2021 12:38:45 : Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'class_id=10' at line 1
+03-08-2021 12:58:58 : Error: ER_LOCK_DEADLOCK: Deadlock found when trying to get lock; try restarting transaction
+03-08-2021 13:36:08 : Error: ER_LOCK_DEADLOCK: Deadlock found when trying to get lock; try restarting transaction
+03-08-2021 13:38:29 : Error: ER_LOCK_DEADLOCK: Deadlock found when trying to get lock; try restarting transaction
+03-08-2021 14:17:24 : Error: ER_LOCK_DEADLOCK: Deadlock found when trying to get lock; try restarting transaction
+03-08-2021 14:26:46 : Error: ER_LOCK_DEADLOCK: Deadlock found when trying to get lock; try restarting transaction
+03-08-2021 14:32:23 : Error: ER_LOCK_DEADLOCK: Deadlock found when trying to get lock; try restarting transaction
+03-08-2021 14:55:40 : Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'WHERE NOT EXISTS (SELECT student_id, class_id FROM class_student WHERE studen...' at line 1
+03-08-2021 15:02:35 : Error: ER_LOCK_DEADLOCK: Deadlock found when trying to get lock; try restarting transaction
+03-08-2021 15:05:33 : Error: ER_LOCK_DEADLOCK: Deadlock found when trying to get lock; try restarting transaction
+03-08-2021 15:05:33 : Error: ER_LOCK_DEADLOCK: Deadlock found when trying to get lock; try restarting transaction
+03-08-2021 17:36:50 : Error: ER_LOCK_DEADLOCK: Deadlock found when trying to get lock; try restarting transaction
+03-08-2021 17:59:30 : Error: ER_NO_REFERENCED_ROW_2: Cannot add or update a child row: a foreign key constraint fails (`judger`.`class_student`, CONSTRAINT `class_student_ibfk_1` FOREIGN KEY (`class_id`) REFERENCES `class` (`id`))
+03-08-2021 18:12:10 : Error: ER_LOCK_DEADLOCK: Deadlock found when trying to get lock; try restarting transaction
+03-08-2021 19:24:51 : Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'CALL AddClassStudent('CE130252',36);CALL AddClassStudent('CE133213',36);CALL ...' at line 1
+03-08-2021 19:28:46 : Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'CALL AddClassStudent('CE133213',37)' at line 1
+03-08-2021 19:39:37 : Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'CALL AddClassStudent('CE130252',40);
+CALL AddClassStudent('CE133213',40);
+CAL...' at line 2

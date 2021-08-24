@@ -1,0 +1,51 @@
+15-08-2021 16:42:04 : Teacher abc123 has connected
+15-08-2021 16:42:44 : Teacher abc123 has disconnected
+15-08-2021 16:42:53 : Teacher AC203115 has connected
+15-08-2021 16:46:19 : Upload problem contest 2 : Test_01.pdf .Testcase: F.zip
+15-08-2021 16:47:30 : Delete in contest_detail where contest 2 and problem F
+15-08-2021 16:50:04 : Upload problem contest 2 : Script.docx .Testcase: F.zip
+15-08-2021 16:50:32 : Delete in contest_detail where contest 2 and problem F
+15-08-2021 16:53:01 : Upload problem contest 2 : Script.docx .Testcase: F.zip
+15-08-2021 16:54:52 : Delete in contest_detail where contest 2 and problem F
+15-08-2021 16:55:02 : Upload problem contest 2 : Script.docx .Testcase: F.zip
+15-08-2021 17:03:54 : Delete in contest_detail where contest 2 and problem F
+15-08-2021 17:04:03 : Upload problem contest 2 : Script.docx .Testcase: F.zip
+15-08-2021 17:06:43 : Delete in contest_detail where contest 2 and problem F
+15-08-2021 17:06:51 : Upload problem contest 2 : Script.docx .Testcase: F.zip
+15-08-2021 17:07:12 : Upload problem contest 2 : Test_01.pdf .Testcase: A.zip
+15-08-2021 17:08:02 : Delete in contest_detail where contest 2 and problem A
+15-08-2021 17:08:14 : Upload problem contest 2 : Test_01.pdf .Testcase: A.zip
+15-08-2021 17:08:20 : Delete in contest_detail where contest 2 and problem A
+15-08-2021 17:08:38 : Upload problem contest 2 : Test_01.pdf .Testcase: F.zip
+15-08-2021 17:10:37 : Upload problem contest 2 : Script.docx .Testcase: F.zip
+15-08-2021 17:10:41 : Delete in contest_detail where contest 2 and problem F
+15-08-2021 17:12:58 : Upload problem contest 2 : Script.docx .Testcase: F.zip
+15-08-2021 17:14:28 : Upload problem contest 2 : Script.docx .Testcase: F.zip
+15-08-2021 17:16:16 : Upload problem contest 2 : Script.docx .Testcase: F.zip
+15-08-2021 17:17:32 : Upload problem contest 2 : Script.docx .Testcase: F.zip
+15-08-2021 17:21:27 : Upload problem contest 2 : Script.docx .Testcase: F.zip
+15-08-2021 17:22:25 : Upload problem contest 2 : Script.docx .Testcase: F.zip
+15-08-2021 17:25:15 : Delete in contest_detail where contest 2 and problem F
+15-08-2021 17:33:50 : Upload problem contest 2 : Report2_Project-Management-Plan_ThaoNM-LinhNC_Lan02.docx .Testcase: F.zip
+15-08-2021 17:36:26 : Upload problem contest 2 : Script.docx .Testcase: F.zip
+15-08-2021 17:37:35 : Upload problem contest 2 : Script.docx .Testcase: F.zip
+15-08-2021 17:39:00 : Upload problem contest 2 : Script.docx .Testcase: F.zip
+15-08-2021 17:40:36 : Upload problem contest 2 : Script.docx .Testcase: F.zip
+15-08-2021 17:43:40 : Upload problem contest 2 : Report2_Project-Management-Plan_ThaoNM-LinhNC_Lan02.docx .Testcase: F.zip
+15-08-2021 17:47:56 : Upload Failure! Problem: Script.docx . Testcase: F.zip
+15-08-2021 17:48:28 : Upload Successfully! problem contest 2 : Test_01.docx .Testcase: A.zip
+15-08-2021 17:49:04 : Upload Successfully! problem contest 2 : Test_01.pdf .Testcase: B.zip
+15-08-2021 17:49:38 : Delete in contest_detail where contest 2 and problem A
+15-08-2021 17:50:11 : Delete in contest_detail where contest 2 and problem B
+15-08-2021 18:01:30 : Upload Successfully! problem contest 2 : Script.docx .Testcase: A.zip
+15-08-2021 18:05:37 : Delete in contest_detail where contest 2 and problem A
+15-08-2021 18:09:11 : Upload Failure! Problem: Script.docx . Testcase: F.zip
+15-08-2021 18:14:31 : Upload Failure! Problem: Script.docx . Testcase: F.zip
+15-08-2021 18:15:11 : Upload Successfully! problem contest 2 : Test_01.docx .Testcase: A.zip
+15-08-2021 18:21:56 : Delete in contest_detail where contest 2 and problem A
+15-08-2021 18:22:11 : Upload Failure! Problem: Test_01.docx . Testcase: F.zip
+15-08-2021 18:24:03 : Delete in contest_detail where contest 2 and problem C
+15-08-2021 18:24:15 : Upload Successfully! problem contest 2 : Sorting Array.docx .Testcase: C.zip
+15-08-2021 18:24:59 : Delete in contest_detail where contest 2 and problem C
+15-08-2021 18:25:08 : Upload Successfully! problem contest 2 : Sorting Array.docx .Testcase: C.zip
+15-08-2021 21:24:30 : Contest 2 has deleted

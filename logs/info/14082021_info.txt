@@ -1,0 +1,27 @@
+14-08-2021 18:21:08 : Teacher abc123 has connected
+14-08-2021 18:22:09 : Load file excel SU21_JFE201_SE1302.xls
+14-08-2021 18:22:17 : Load file excel SU21_JFE201_SE1301.xls
+14-08-2021 18:25:14 : Create student_account rollnumber=CE140353 name=Nguyễn Vương Khang Hy classId=5
+14-08-2021 18:27:57 : Create student_account rollnumber=CE140352 name=Huynh Nguyễn Duy Khang classId=5
+14-08-2021 18:31:18 : Create employee_account rollnumber=AC203115 name=Trần Khánh Duy
+14-08-2021 18:32:33 : Create employee_account rollnumber=TC100223 name=Đỗ  Bảo Ngọc
+14-08-2021 18:33:44 : 4 students in class 4 has added: CE130077,CE130252,CE130353,CE133213
+14-08-2021 18:34:05 : 1 students in class 4 has deleted: CE133213
+14-08-2021 18:34:17 : Teacher abc123 has disconnected
+14-08-2021 18:34:28 : Teacher TC100223 has connected
+14-08-2021 18:36:35 : Create contest SU21_HCI201_SE1302_TEST01 by TC-000006
+14-08-2021 18:37:02 : 8 students in contest 2 has added: CE130077,CE130252,CE130353,CE133213,CE137481,CE137482,CE140352,CE140353
+14-08-2021 18:37:49 : Upload problem contest 2 : Sorting Array.docx .Testcase: C.zip
+14-08-2021 18:38:17 : Upload problem contest 2 : Test_01.pdf .Testcase: A.zip
+14-08-2021 18:38:23 : Delete in contest_detail where contest 2 and problem A
+14-08-2021 18:38:39 : Teacher TC100223 has disconnected
+14-08-2021 18:38:54 : Student CE130353 has connected
+14-08-2021 18:43:00 : Sumit code content field [1][180105][SU21_HCI201_SE1302_TEST01][CE130353][C].java of contest SU21_HCI201_SE1302_TEST01 problem C by SD-000017
+14-08-2021 18:49:05 : Student CE130353 has disconnected
+14-08-2021 18:49:11 : Teacher TC100223 has connected
+14-08-2021 18:49:13 : Teacher TC100223 has disconnected
+14-08-2021 18:49:18 : Teacher AC203115 has connected
+14-08-2021 18:53:29 : Contest 2 has downloaded
+14-08-2021 18:53:29 : Contest 2 has downloaded
+14-08-2021 18:53:59 : Contest 2 has downloaded
+14-08-2021 18:54:08 : Contest 2 has downloaded

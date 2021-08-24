@@ -1,0 +1,20 @@
+09-08-2021 09:56:45 : Teacher abc123 has connected
+09-08-2021 09:57:23 : 1 students in class 6 has added: CE137482
+09-08-2021 10:00:53 : 2 students in contest 1 has added: CE130078,CE130079
+09-08-2021 10:04:50 : 1 students in contest 1 has added: CE141476
+09-08-2021 10:23:29 : 2 students in contest 2 has deleted: CE137482,CE137482
+09-08-2021 10:32:41 : 2 students in contest 2 has added: CE130077,CE137482
+09-08-2021 10:32:50 : 1 students in contest 2 has deleted: CE137482
+09-08-2021 10:32:53 : 1 students in contest 2 has deleted: CE130077
+09-08-2021 10:33:49 : 1 students in contest 2 has added: CE137482
+09-08-2021 10:34:13 : 1 students in contest 2 has deleted: CE137482
+09-08-2021 10:34:21 : 1 students in contest 2 has added: CE137482
+09-08-2021 16:01:15 : Teacher abc123 has connected
+09-08-2021 16:03:01 : Load file excel SU21_JFE201_SE1302.xls
+09-08-2021 16:34:33 : Load file excel SU21_JFE201_SE1301.xls
+09-08-2021 16:43:25 : Create employee_account rollnumber=GV130353 name=Nguyễn Trần Gia Bảo
+09-08-2021 21:23:18 : Teacher abc123 has connected
+09-08-2021 21:32:33 : 2 students in class 1 has added: CE137481,CE137482
+09-08-2021 21:44:21 : 3 students in class 1 has added: CE130077,CE130252,CE130353
+09-08-2021 21:49:09 : 3 students in class 1 has deleted: CE130353,CE137481,CE137482
+09-08-2021 21:50:31 : Teacher abc123 has disconnected

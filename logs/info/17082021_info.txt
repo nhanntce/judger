@@ -1,0 +1,107 @@
+17-08-2021 11:07:27 : Teacher abc123 has connected
+17-08-2021 11:07:54 : Create contest SU21_HCI201_SE1302_TEST02 by TC-000001
+17-08-2021 11:08:30 : 1 students in contest 3 has added: CE130077
+17-08-2021 11:09:46 : Upload Successfully! problem contest 3 : Sorting Array.docx .Testcase: C.zip
+17-08-2021 11:10:10 : Contest 3 has deleted
+17-08-2021 11:11:03 : Create contest SU21_HCI201_SE1302_TEST03 by TC-000001
+17-08-2021 11:11:16 : Upload Successfully! problem contest 4 : Sorting Array.docx .Testcase: C.zip
+17-08-2021 11:11:42 : 1 students in contest 4 has added: CE130077
+17-08-2021 14:59:22 : Teacher abc123 has connected
+17-08-2021 14:59:46 : 4 students in contest 4 has added: CE130252,CE130353,CE133213,CE137481
+17-08-2021 15:00:40 : Student CE137481 has connected
+17-08-2021 15:00:40 : Student CE133213 has connected
+17-08-2021 15:01:02 : Student CE130077 has connected
+17-08-2021 15:03:18 : Sumit code content field [183-80-52-121][13698424][SU21_HCI201_SE1302_TEST03][CE133213][C].java of contest SU21_HCI201_SE1302_TEST03 problem C by SD-000027
+17-08-2021 15:04:22 : Sumit code content field [113-169-143-72][13762498][SU21_HCI201_SE1302_TEST03][CE130077][C].java of contest SU21_HCI201_SE1302_TEST03 problem C by SD-000028
+17-08-2021 15:07:31 : Student CE130252 has connected
+17-08-2021 15:07:59 : Sumit code content field [240280063a589f58c5f5710560c3aef][13979757][SU21_HCI201_SE1302_TEST03][CE130252][C].java of contest SU21_HCI201_SE1302_TEST03 problem C by SD-000026
+17-08-2021 15:10:21 : Sumit code content field [240280063a589f58c5f5710560c3aef][14121316][SU21_HCI201_SE1302_TEST03][CE130252][C].java of contest SU21_HCI201_SE1302_TEST03 problem C by SD-000026
+17-08-2021 15:11:24 : Sumit code content field [113-169-143-72][14184262][SU21_HCI201_SE1302_TEST03][CE130077][C].java of contest SU21_HCI201_SE1302_TEST03 problem C by SD-000028
+17-08-2021 15:21:31 : Student CE133213 has connected
+17-08-2021 15:21:33 : Teacher abc123 has connected
+17-08-2021 15:22:25 : Student CE137481 has connected
+17-08-2021 15:22:38 : Sumit code content field [240280063a5cb424dfe340cd793c56][14858929][SU21_HCI201_SE1302_TEST03][CE137481][C].java of contest SU21_HCI201_SE1302_TEST03 problem C by SD-000029
+17-08-2021 15:30:17 : Sumit code content field [240280063a5cb424dfe340cd793c56][15317706][SU21_HCI201_SE1302_TEST03][CE137481][C].java of contest SU21_HCI201_SE1302_TEST03 problem C by SD-000029
+17-08-2021 15:34:23 : Create contest SU21_HCI201_SE1302_TEST05 by TC-000001
+17-08-2021 15:34:45 : Upload Successfully! problem contest 5 : Sorting Array.docx .Testcase: C.zip
+17-08-2021 15:35:28 : 5 students in contest 4 has deleted: CE130077,CE130252,CE130353,CE133213,CE137481
+17-08-2021 15:35:56 : 5 students in contest 5 has added: CE130077,CE130252,CE130353,CE133213,CE137481
+17-08-2021 15:36:20 : Student CE130077 has connected
+17-08-2021 15:36:39 : Sumit code content field [183-80-52-121][99087][SU21_HCI201_SE1302_TEST05][CE133213][C].java of contest SU21_HCI201_SE1302_TEST05 problem C by SD-000027
+17-08-2021 15:38:11 : Student CE133213 has connected
+17-08-2021 15:38:16 : Sumit code content field [240280063a5cb424dfe340cd793c56][15796327][SU21_HCI201_SE1302_TEST03][CE137481][C].java of contest SU21_HCI201_SE1302_TEST03 problem C by SD-000029
+17-08-2021 15:39:22 : Sumit code content field [240280063a5cb424dfe340cd793c56][262107][SU21_HCI201_SE1302_TEST05][CE137481][C].java of contest SU21_HCI201_SE1302_TEST05 problem C by SD-000029
+17-08-2021 15:40:30 : Student CE130252 has connected
+17-08-2021 15:41:04 : Sumit code content field [240280063a589f58c5f5710560c3aef][364196][SU21_HCI201_SE1302_TEST05][CE130252][C].c of contest SU21_HCI201_SE1302_TEST05 problem C by SD-000026
+17-08-2021 15:41:28 : Sumit code content field [113-169-143-72][388021][SU21_HCI201_SE1302_TEST05][CE130077][C].java of contest SU21_HCI201_SE1302_TEST05 problem C by SD-000028
+17-08-2021 15:42:41 : Sumit code content field [240280063a589f58c5f5710560c3aef][461155][SU21_HCI201_SE1302_TEST05][CE130252][C].cpp of contest SU21_HCI201_SE1302_TEST05 problem C by SD-000026
+17-08-2021 15:44:56 : Sumit code content field [113-169-143-72][596432][SU21_HCI201_SE1302_TEST05][CE130077][C].java of contest SU21_HCI201_SE1302_TEST05 problem C by SD-000028
+17-08-2021 15:45:20 : Sumit code content field [240280063a5cb424dfe340cd793c56][620273][SU21_HCI201_SE1302_TEST05][CE137481][C].java of contest SU21_HCI201_SE1302_TEST05 problem C by SD-000029
+17-08-2021 15:45:40 : Sumit code content field [240280063a589f58c5f5710560c3aef][640443][SU21_HCI201_SE1302_TEST05][CE130252][C].cpp of contest SU21_HCI201_SE1302_TEST05 problem C by SD-000026
+17-08-2021 15:45:41 : Sumit code content field [183-80-52-121][641073][SU21_HCI201_SE1302_TEST05][CE133213][C].java of contest SU21_HCI201_SE1302_TEST05 problem C by SD-000027
+17-08-2021 15:46:15 : Sumit code content field [240280063a5cb424dfe340cd793c56][675840][SU21_HCI201_SE1302_TEST05][CE137481][C].java of contest SU21_HCI201_SE1302_TEST05 problem C by SD-000029
+17-08-2021 15:47:23 : undefined undefined has disconnected
+17-08-2021 15:47:49 : Student CE137481 has connected
+17-08-2021 15:49:05 : Sumit code content field [240280063a589f58c5f5710560c3aef][845088][SU21_HCI201_SE1302_TEST05][CE130252][C].c of contest SU21_HCI201_SE1302_TEST05 problem C by SD-000026
+17-08-2021 15:49:51 : Sumit code content field [240280063a589f58c5f5710560c3aef][891410][SU21_HCI201_SE1302_TEST05][CE130252][C].cpp of contest SU21_HCI201_SE1302_TEST05 problem C by SD-000026
+17-08-2021 15:49:51 : Sumit code content field [240280063a589f58c5f5710560c3aef][891408][SU21_HCI201_SE1302_TEST05][CE130252][C].cpp of contest SU21_HCI201_SE1302_TEST05 problem C by SD-000026
+17-08-2021 15:49:51 : Sumit code content field [240280063a5cb424dfe340cd793c56][891408][SU21_HCI201_SE1302_TEST05][CE137481][C].java of contest SU21_HCI201_SE1302_TEST05 problem C by SD-000029
+17-08-2021 15:49:51 : Sumit code content field [240280063a589f58c5f5710560c3aef][891410][SU21_HCI201_SE1302_TEST05][CE130252][C].cpp of contest SU21_HCI201_SE1302_TEST05 problem C by SD-000026
+17-08-2021 15:49:51 : Sumit code content field [240280063a589f58c5f5710560c3aef][891410][SU21_HCI201_SE1302_TEST05][CE130252][C].cpp of contest SU21_HCI201_SE1302_TEST05 problem C by SD-000026
+17-08-2021 15:49:51 : Sumit code content field [240280063a589f58c5f5710560c3aef][891410][SU21_HCI201_SE1302_TEST05][CE130252][C].cpp of contest SU21_HCI201_SE1302_TEST05 problem C by SD-000026
+17-08-2021 15:49:51 : Sumit code content field [240280063a589f58c5f5710560c3aef][891411][SU21_HCI201_SE1302_TEST05][CE130252][C].cpp of contest SU21_HCI201_SE1302_TEST05 problem C by SD-000026
+17-08-2021 15:49:52 : Student CE130353 has connected
+17-08-2021 15:51:11 : Sumit code content field [240280063a5cb424dfe340cd793c56][971684][SU21_HCI201_SE1302_TEST05][CE137481][C].java of contest SU21_HCI201_SE1302_TEST05 problem C by SD-000029
+17-08-2021 15:51:30 : Sumit code content field [240280063a589f58c5f5710560c3aef][990977][SU21_HCI201_SE1302_TEST05][CE130252][C].c of contest SU21_HCI201_SE1302_TEST05 problem C by SD-000026
+17-08-2021 15:53:57 : Contest 4 has deleted
+17-08-2021 16:07:39 : Student CE130077 has connected
+17-08-2021 16:08:14 : Student CE130077 has disconnected
+17-08-2021 16:08:22 : Student CE130077 has connected
+17-08-2021 16:08:34 : Student CE130077 has disconnected
+17-08-2021 16:08:46 : Sumit code content field [113-169-143-72][2026752][SU21_HCI201_SE1302_TEST05][CE130077][C].java of contest SU21_HCI201_SE1302_TEST05 problem C by SD-000028
+17-08-2021 16:18:04 : Teacher abc123 has connected
+17-08-2021 16:24:36 : Teacher abc123 has disconnected
+17-08-2021 16:25:05 : Student CE130353 has connected
+17-08-2021 16:29:20 : Sumit code content field [1][3260266][SU21_HCI201_SE1302_TEST05][CE130353][C].java of contest SU21_HCI201_SE1302_TEST05 problem C by SD-000025
+17-08-2021 16:30:18 : Sumit code content field [1][3318942][SU21_HCI201_SE1302_TEST05][CE130353][C].c of contest SU21_HCI201_SE1302_TEST05 problem C by SD-000025
+17-08-2021 16:30:34 : Sumit code content field [1][3334475][SU21_HCI201_SE1302_TEST05][CE130353][C].java of contest SU21_HCI201_SE1302_TEST05 problem C by SD-000025
+17-08-2021 16:31:04 : Sumit code content field [1][3364826][SU21_HCI201_SE1302_TEST05][CE130353][C].java of contest SU21_HCI201_SE1302_TEST05 problem C by SD-000025
+17-08-2021 16:34:06 : Sumit code content field [1][3546104][SU21_HCI201_SE1302_TEST05][CE130353][C].java of contest SU21_HCI201_SE1302_TEST05 problem C by SD-000025
+17-08-2021 16:36:45 : Sumit code content field [1][3705465][SU21_HCI201_SE1302_TEST05][CE130353][C].java of contest SU21_HCI201_SE1302_TEST05 problem C by SD-000025
+17-08-2021 16:38:44 : Sumit code content field [1][3824978][SU21_HCI201_SE1302_TEST05][CE130353][C].java of contest SU21_HCI201_SE1302_TEST05 problem C by SD-000025
+17-08-2021 16:40:32 : Sumit code content field [1][3932739][SU21_HCI201_SE1302_TEST05][CE130353][C].java of contest SU21_HCI201_SE1302_TEST05 problem C by SD-000025
+17-08-2021 18:30:19 : Teacher abc123 has connected
+17-08-2021 18:30:22 : Teacher abc123 has disconnected
+17-08-2021 18:30:33 : Teacher TC100223 has connected
+17-08-2021 18:31:26 : Create contest SU21_HCI201_SE1302_TEST01 by TC-000006
+17-08-2021 18:31:52 : Upload Successfully! problem contest 6 : Sorting Array.docx .Testcase: C.zip
+17-08-2021 18:32:05 : 1 students in contest 6 has added: CE130353
+17-08-2021 18:32:14 : Teacher TC100223 has disconnected
+17-08-2021 18:32:18 : Student CE130353 has connected
+17-08-2021 18:34:26 : Sumit code content field [1][146158][SU21_HCI201_SE1302_TEST01][CE130353][C].java of contest SU21_HCI201_SE1302_TEST01 problem C by SD-000025
+17-08-2021 18:35:54 : Sumit code content field [1][234238][SU21_HCI201_SE1302_TEST01][CE130353][C].java of contest SU21_HCI201_SE1302_TEST01 problem C by SD-000025
+17-08-2021 18:37:00 : Sumit code content field [1][300361][SU21_HCI201_SE1302_TEST01][CE130353][C].java of contest SU21_HCI201_SE1302_TEST01 problem C by SD-000025
+17-08-2021 18:38:15 : Sumit code content field [1][375370][SU21_HCI201_SE1302_TEST01][CE130353][C].java of contest SU21_HCI201_SE1302_TEST01 problem C by SD-000025
+17-08-2021 19:02:48 : Student CE130353 has disconnected
+17-08-2021 19:02:56 : Teacher abc123 has connected
+17-08-2021 19:03:10 : Load file excel SU21_PRF192_SE1302.HL.xls
+17-08-2021 19:10:39 : Load file excel SU21_JFE201_IA1503.xls
+17-08-2021 19:12:23 : Load file excel SU21_JFE201_IA1503_0.7045568943952707.xls
+17-08-2021 19:13:57 : Load file excel SU21_JFE201_IA1503_0.690162288845868.xls
+17-08-2021 19:14:13 : Load file excel SU21_JFE201_IA1503_0.7457489641870712.xls
+17-08-2021 19:17:17 : Load file excel SU21_PRF192_SE1302_0.800206275011591.HL
+17-08-2021 19:18:02 : Load file excel SU21_JFE201_IA1503_0.03033738861130919.xls
+17-08-2021 19:19:09 : Load file excel SU21_PRF192_SE1302_0.19614874998075793.HL
+17-08-2021 19:26:43 : Load file excel SU21_PRF192_SE1302_0.6823046515494766.HL
+17-08-2021 19:31:48 : Load file excel SU21_PRF192_SE1302.HL_0.5480129255170418.xls
+17-08-2021 19:32:56 : Load file excel SU21_PRF192_SE1302.HL_0.22203454360376318.xls
+17-08-2021 19:33:14 : Load file excel SU21_JFE201_IA1503_0.1529808732235063.xls
+17-08-2021 23:20:06 : Teacher abc123 has disconnected
+17-08-2021 23:20:46 : Student CE130353 has connected
+17-08-2021 23:21:43 : Sumit code content field [1][17383536][SU21_HCI201_SE1302_TEST01][CE130353][C].java of contest SU21_HCI201_SE1302_TEST01 problem C by SD-000025
+17-08-2021 23:27:14 : Student CE130353 has disconnected
+17-08-2021 23:27:20 : Teacher abc123 has connected
+17-08-2021 23:46:55 : Teacher abc123 has disconnected
+17-08-2021 23:47:02 : Teacher abc123 has connected
+17-08-2021 23:47:15 : Teacher abc123 has disconnected
+17-08-2021 23:47:18 : Student CE130353 has connected

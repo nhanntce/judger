@@ -1,4 +1,0 @@
-time_limit=1500
-memory_limit=1000
-check_format=true
-check_comment=true

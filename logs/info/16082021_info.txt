@@ -1,0 +1,4 @@
+16-08-2021 17:55:59 : Student CE130353 has connected
+16-08-2021 17:56:14 : Student CE130353 has disconnected
+16-08-2021 17:56:18 : Teacher abc123 has connected
+16-08-2021 18:14:01 : Load file excel SU21_JFE201_IA1401.xls

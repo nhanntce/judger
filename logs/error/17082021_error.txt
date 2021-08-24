@@ -1,0 +1,2 @@
+17-08-2021 16:05:20 : Error: ER_NON_UNIQ_ERROR: Column 'contest_id' in on clause is ambiguous
+17-08-2021 23:20:11 : Error: connect ECONNREFUSED 127.0.0.1:3306

@@ -1,0 +1,6 @@
+01-08-2021 10:07:36 : Error: ER_NO_SUCH_TABLE: Table 'judger.teacher_account' doesn't exist
+01-08-2021 10:07:46 : Error: ER_NO_SUCH_TABLE: Table 'judger.teacher_account' doesn't exist
+01-08-2021 16:30:03 : null
+01-08-2021 16:31:39 : null
+01-08-2021 16:35:44 : Error: ENOENT: no such file or directory, rename 'D:\Project\NetBeansProjects\judger\public\workspace\SU21_CONTEST_2\CE140237' -> 'D:\Project\NetBeansProjects\judger\public\workspace\SU21_CONTEST_2\$CE140237'
+01-08-2021 16:47:27 : Error: EPERM: operation not permitted, rename 'D:\Project\NetBeansProjects\judger\public\workspace\SU21_CONTEST_2\h' -> 'D:\Project\NetBeansProjects\judger\public\workspace\SU21_CONTEST_2\$h'

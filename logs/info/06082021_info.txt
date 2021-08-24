@@ -1,0 +1,55 @@
+06-08-2021 11:47:04 : Teacher abc123 has connected
+06-08-2021 11:47:13 : Load file excel SU21_JFE201_IA1503_0.5439837050907008.xls
+06-08-2021 11:47:35 : Teacher abc123 has disconnected
+06-08-2021 11:47:38 : Teacher GV123 has connected
+06-08-2021 15:41:12 : Teacher abc123 has connected
+06-08-2021 15:41:20 : Load file excel SU21_JFE201_SE1301_0.24834250033302685.xls
+06-08-2021 15:53:50 : Load file excel SU21_JFE201_IA1503_0.692883492116678.xls
+06-08-2021 16:00:04 : Create contest SU21_HCI201_SE1302_1 by TC-000001
+06-08-2021 16:00:40 : Upload problem contest 1 : Test_01.pdf .Testcase: A.zip
+06-08-2021 16:06:31 : Upload problem contest 1 : Test_01.pdf .Testcase: B.zip
+06-08-2021 20:50:41 : Teacher GV123 has connected
+06-08-2021 20:52:24 : Upload problem contest 1 : Test_01.pdf .Testcase: C.zip
+06-08-2021 20:53:56 : Delete in contest_detail where contest 1 and problem C
+06-08-2021 20:54:42 : Upload problem contest 1 : Test_01.pdf .Testcase: C.zip
+06-08-2021 20:55:44 : Upload problem contest 1 : Test_01.pdf .Testcase: C.zip
+06-08-2021 20:59:42 : Upload problem contest 1 : Test_01.pdf .Testcase: C.zip
+06-08-2021 21:01:41 : Upload problem contest 1 : Test_01.pdf .Testcase: C.zip
+06-08-2021 21:02:41 : Upload problem contest 1 : Test_01.pdf .Testcase: C.zip
+06-08-2021 21:33:30 : Upload problem contest 1 : Test_01.pdf .Testcase: D.zip
+06-08-2021 21:53:11 : Delete in contest_detail where contest 1 and problem C
+06-08-2021 21:53:30 : Upload problem contest 1 : Test_01.pdf .Testcase: C.zip
+06-08-2021 21:55:37 : Delete in contest_detail where contest 1 and problem C
+06-08-2021 21:55:51 : Delete in contest_detail where contest 1 and problem C
+06-08-2021 21:57:07 : Upload problem contest 1 : Test_01.pdf .Testcase: C.zip
+06-08-2021 21:58:25 : Delete in contest_detail where contest 1 and problem C
+06-08-2021 21:58:49 : Upload problem contest 1 : Test_01.pdf .Testcase: C.zip
+06-08-2021 21:59:19 : Upload problem contest 1 : Test_01.pdf .Testcase: C.zip
+06-08-2021 22:01:21 : Upload problem contest 1 : Test_01.pdf .Testcase: C.zip
+06-08-2021 22:19:12 : Delete in contest_detail where contest 1 and problem C
+06-08-2021 22:20:10 : Delete in contest_detail where contest 1 and problem D
+06-08-2021 22:22:24 : Delete in contest_detail where contest 1 and problem B
+06-08-2021 22:24:44 : Delete in contest_detail where contest 1 and problem A
+06-08-2021 22:25:43 : Upload problem contest 1 : Test_01.pdf .Testcase: A.zip
+06-08-2021 22:25:47 : Delete in contest_detail where contest 1 and problem A
+06-08-2021 22:28:20 : Upload problem contest 1 : Test_01.pdf .Testcase: A.zip
+06-08-2021 22:28:28 : Delete in contest_detail where contest 1 and problem A
+06-08-2021 22:30:36 : Upload problem contest 1 : Test_01.pdf .Testcase: A.zip
+06-08-2021 22:30:44 : Delete in contest_detail where contest 1 and problem A
+06-08-2021 22:34:14 : Upload problem contest 1 : Test_01.pdf .Testcase: A.zip
+06-08-2021 22:34:22 : Delete in contest_detail where contest 1 and problem A
+06-08-2021 22:37:04 : Upload problem contest 1 : Test_01.pdf .Testcase: A.zip
+06-08-2021 22:37:08 : Delete in contest_detail where contest 1 and problem A
+06-08-2021 22:42:17 : Upload problem contest 1 : Test_01.pdf .Testcase: A.zip
+06-08-2021 22:42:24 : Delete in contest_detail where contest 1 and problem A
+06-08-2021 22:45:54 : Upload problem contest 1 : Test_01.pdf .Testcase: A.zip
+06-08-2021 22:45:57 : Delete in contest_detail where contest 1 and problem A
+06-08-2021 22:47:38 : Upload problem contest 1 : Test_01.pdf .Testcase: A.zip
+06-08-2021 22:47:42 : Delete in contest_detail where contest 1 and problem A
+06-08-2021 22:50:43 : Upload problem contest 1 : Test_01.pdf .Testcase: A.zip
+06-08-2021 22:55:15 : Upload problem contest 1 : Test_01.pdf .Testcase: B.zip
+06-08-2021 22:56:14 : Delete in contest_detail where contest 1 and problem B
+06-08-2021 22:56:59 : Upload problem contest 1 : Test_01.pdf .Testcase: A.zip
+06-08-2021 22:57:38 : Upload problem contest 1 : Test_01.docx .Testcase: B.zip
+06-08-2021 22:58:19 : Upload problem contest 1 : TL10_Computer System.pdf .Testcase: C.zip
+06-08-2021 22:58:25 : Delete in contest_detail where contest 1 and problem C

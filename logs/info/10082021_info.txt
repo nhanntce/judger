@@ -1,0 +1,53 @@
+10-08-2021 12:30:30 : Teacher abc123 has connected
+10-08-2021 12:32:33 : Teacher GV123 has connected
+10-08-2021 12:32:35 : Teacher GV123 has disconnected
+10-08-2021 12:32:40 : Teacher abc123 has connected
+10-08-2021 16:27:02 : Teacher abc123 has connected
+10-08-2021 16:27:11 : Teacher abc123 has disconnected
+10-08-2021 16:27:15 : Student CE130353 has connected
+10-08-2021 16:27:36 : Student CE130353 has disconnected
+10-08-2021 16:27:49 : Teacher abc123 has connected
+10-08-2021 16:29:05 : Teacher abc123 has disconnected
+10-08-2021 16:29:12 : Student CE130353 has connected
+10-08-2021 16:33:32 : Student CE130353 has disconnected
+10-08-2021 16:33:37 : Student CE130353 has connected
+10-08-2021 16:37:13 : Student CE130353 has disconnected
+10-08-2021 16:37:17 : Teacher abc123 has connected
+10-08-2021 16:37:50 : Create contest fail
+10-08-2021 16:39:58 : Create contest SU21_HCI201_SE1302_1 by TC-000001
+10-08-2021 16:40:39 : Upload problem contest 1 : Sorting Array.docx .Testcase: C.zip
+10-08-2021 16:41:10 : 1 students in contest 1 has added: CE130353
+10-08-2021 16:41:16 : Teacher abc123 has disconnected
+10-08-2021 16:41:20 : Student CE130353 has connected
+10-08-2021 16:55:54 : Student CE130353 has disconnected
+10-08-2021 16:55:59 : Student CE130353 has connected
+10-08-2021 16:56:15 : Student CE130353 has disconnected
+10-08-2021 16:56:40 : Teacher abc123 has connected
+10-08-2021 16:56:47 : 1 students in contest 1 has deleted: CE130353
+10-08-2021 16:56:51 : Teacher abc123 has disconnected
+10-08-2021 16:56:57 : Student CE130353 has connected
+10-08-2021 16:57:02 : Student CE130353 has disconnected
+10-08-2021 16:57:09 : Teacher abc123 has connected
+10-08-2021 16:57:18 : 1 students in contest 1 has added: CE130353
+10-08-2021 16:57:24 : Delete in contest_detail where contest 1 and problem C
+10-08-2021 16:57:28 : Teacher abc123 has disconnected
+10-08-2021 16:57:34 : Student CE130353 has connected
+10-08-2021 17:08:00 : Student CE130353 has disconnected
+10-08-2021 17:08:06 : Teacher abc123 has connected
+10-08-2021 17:08:29 : Upload problem contest 1 : Sorting Array.docx .Testcase: C.zip
+10-08-2021 17:09:57 : Teacher abc123 has disconnected
+10-08-2021 17:10:02 : Student CE130353 has connected
+10-08-2021 17:19:33 : Sumit code content field [1][2073951][SU21_HCI201_SE1302_1][CE130353][C].java of contest SU21_HCI201_SE1302_1 problem C by SD-000002
+10-08-2021 17:20:31 : Student CE130353 has disconnected
+10-08-2021 17:20:39 : Teacher abc123 has connected
+10-08-2021 17:21:25 : Upload problem contest 1 : Sorting Array.docx .Testcase: A.zip
+10-08-2021 17:21:35 : Teacher abc123 has disconnected
+10-08-2021 17:21:41 : Student CE130353 has connected
+10-08-2021 17:22:14 : Student CE130353 has disconnected
+10-08-2021 17:22:24 : Teacher abc123 has connected
+10-08-2021 17:22:38 : Upload problem contest 1 : Test_01.pdf .Testcase: E.zip
+10-08-2021 17:22:44 : Teacher abc123 has disconnected
+10-08-2021 17:22:50 : Student CE130353 has connected
+10-08-2021 17:23:10 : Sumit code content field [1][2290694][SU21_HCI201_SE1302_1][CE130353][E].java of contest SU21_HCI201_SE1302_1 problem E by SD-000002
+10-08-2021 17:28:07 : Student CE130353 has disconnected
+10-08-2021 17:28:11 : Teacher abc123 has connected

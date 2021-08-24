@@ -1,9 +1,0 @@
-Compile Error
-[118-69-133-17][90062990][demo1][CE150662][C].cpp: In function 'int main()':
-[118-69-133-17][90062990][demo1][CE150662][C].cpp:30:12: error: invalid conversion from 'int' to 'const char*' [-fpermissive]
-     printf(result);
-            ^~~~~~
-In file included from [118-69-133-17][90062990][demo1][CE150662][C].cpp:6:
-C:/Program Files (x86)/mingw-w64/i686-8.1.0-posix-dwarf-rt_v6-rev0/mingw32/i686-w64-mingw32/include/stdio.h:509:48: note:   initializing argument 1 of 'int printf(const char*, ...)'
-   int __cdecl printf(const char * __restrict__ _Format,...);
-                      ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~

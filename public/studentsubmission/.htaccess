@@ -1,5 +1,0 @@
-Deny from all
-<Files ~ "^\w+\.(c|cpp)$">
-order deny,allow
-allow from all
-</Files>

@@ -1,0 +1,30 @@
+01-08-2021 10:08:54 : Teacher abc123 has connected
+01-08-2021 10:10:54 : Create contest SU21_CONTEST_1 by TC-000001
+01-08-2021 10:11:57 : Create contest SU21_CONTEST_2 by TC-000001
+01-08-2021 15:01:49 : Teacher abc123 has connected
+01-08-2021 15:30:59 : 5 students in contest 9 has added: user1,user2,user3,user4,user5
+01-08-2021 15:42:06 : 1 students in contest 9 has added: h
+01-08-2021 15:43:51 : 1 students in contest 9 has added: h
+01-08-2021 15:48:17 : 1 students in contest 9 has added: CE140237
+01-08-2021 15:49:26 : 1 students in contest 9 has added: h
+01-08-2021 15:53:02 : 1 students in contest 9 has added: CE140237
+01-08-2021 16:00:31 : 1 students in contest 9 has added: h
+01-08-2021 16:02:19 : 1 students in contest 9 has added: CE140237
+01-08-2021 16:05:03 : 1 students in contest 9 has added: h
+01-08-2021 16:06:01 : 1 students in contest 9 has added: CE140237
+01-08-2021 16:06:50 : 2 students in contest 9 has added: CE140019,CE140212
+01-08-2021 16:08:31 : 2 students in contest 9 has added: CE140242,CE140284
+01-08-2021 16:09:11 : 4 students in contest 9 has added: CE140411,CE140426,CE140462,CE140520
+01-08-2021 16:10:05 : 4 students in contest 9 has added: CE140524,CE140556,CE150093,CE150124
+01-08-2021 16:18:43 : 4 students in contest 9 has added: CE150493,CE150499,CE150569,CE150623
+01-08-2021 16:25:29 : 3 students in contest 9 has added: CE150662,CE150718,CE150762
+01-08-2021 16:32:34 : 1 students in contest 9 has added: h
+01-08-2021 16:32:54 : 5 students in contest 9 has added: user1,user2,user3,user4,user5
+01-08-2021 16:33:43 : 1 students in contest 9 has added: CE140237
+01-08-2021 16:38:05 : 5 students in contest 9 has added: CE130021,CE130252,CE130353,CE133213,CE134554
+01-08-2021 16:38:41 : 5 students in contest 9 has deleted: CE130021,CE130252,CE130353,CE133213,CE134554
+01-08-2021 16:45:18 : 1 students in contest 9 has added: h
+01-08-2021 16:45:31 : 5 students in contest 9 has added: user1,user2,user3,user4,user5
+01-08-2021 16:46:09 : 1 students in contest 9 has deleted: h
+01-08-2021 16:46:42 : 1 students in contest 9 has added: h
+01-08-2021 16:47:27 : 1 students in contest 9 has deleted: h

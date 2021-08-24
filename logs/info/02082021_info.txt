@@ -1,0 +1,61 @@
+02-08-2021 10:13:34 : Teacher abc123 has connected
+02-08-2021 10:19:10 : Load file excel SU21_JFE201_SE1301.xls
+02-08-2021 10:40:39 : Load file excel SU21_JFE201_SE1301.xls
+02-08-2021 10:41:24 : Load file excel SU21_JFE201_SE1301.xls
+02-08-2021 10:46:21 : Load file excel SU21_JFE201_SE1301.xls
+02-08-2021 10:46:23 : 5 students has added to database: CE130353,CE130021,CE130252,CE133213,CE134554
+02-08-2021 11:05:55 : Upload problem contest 9 : 1 - if.doc .Testcase: A.zip
+02-08-2021 11:06:36 : Upload problem contest 9 : 5 - string.docx .Testcase: C.zip
+02-08-2021 16:10:02 : Teacher abc123 has connected
+02-08-2021 16:13:42 : Load file excel SU21_JFE201_SE1301.xls
+02-08-2021 16:16:36 : Load file excel SU21_JFE201_SE1301.xls
+02-08-2021 16:22:06 : Load file excel SU21_JFE201_SE1301.xls
+02-08-2021 16:25:45 : Load file excel SU21_JFE201_SE1301.xls
+02-08-2021 16:26:32 : Load file excel SU21_JFE201_SE1301.xls
+02-08-2021 16:29:03 : Load file excel SU21_JFE201_SE1301.xls
+02-08-2021 16:31:05 : Load file excel SU21_JFE201_SE1301.xls
+02-08-2021 16:31:57 : 5 students has added to database: CE130353,CE130021,CE130252,CE133213,CE134554
+02-08-2021 16:35:44 : Load file excel SU21_JFE201_SE1301.xls
+02-08-2021 16:39:37 : Load file excel SU21_JFE201_SE1301.xls
+02-08-2021 16:42:27 : Load file excel SU21_JFE201_SE1301.xls
+02-08-2021 16:42:29 : 5 students has added to database: CE130353,CE130021,CE130252,CE133213,CE134554
+02-08-2021 16:43:41 : Load file excel SU21_JFE201_SE1301.xls
+02-08-2021 16:45:25 : Load file excel SU21_JFE201_SE1301.xls
+02-08-2021 16:45:35 : 5 students has added to database: CE130353,CE130021,CE130252,CE133213,CE130077
+02-08-2021 16:48:23 : Load file excel SU21_JFE201_SE1301.xls
+02-08-2021 16:49:11 : Load file excel SU21_JFE201_SE1301.xls
+02-08-2021 16:49:48 : Load file excel SU21_JFE201_SE1301.xls
+02-08-2021 16:49:51 : 5 students has added to database: CE130353,CE130021,CE130252,CE133213,CE130077
+02-08-2021 17:00:16 : Reset student ip, timeout userId=SD-000001
+02-08-2021 17:00:44 : Reset student ip, timeout userId=SD-000001
+02-08-2021 17:03:43 : Create student_account rollnumber= name= class=
+02-08-2021 17:13:25 : Teacher abc123 has disconnected
+02-08-2021 17:13:31 : Teacher abc123 has connected
+02-08-2021 17:17:40 : Teacher abc123 has disconnected
+02-08-2021 17:17:48 : Teacher GV123 has connected
+02-08-2021 17:49:23 : 1 students in contest 9 has added: CE130353
+02-08-2021 17:49:29 : Teacher GV123 has disconnected
+02-08-2021 17:49:34 : Teacher GV456 has connected
+02-08-2021 17:49:36 : Teacher GV456 has disconnected
+02-08-2021 17:49:40 : Student CE130353 has connected
+02-08-2021 17:51:43 : Student CE130353 has disconnected
+02-08-2021 17:51:48 : Teacher abc123 has connected
+02-08-2021 17:52:29 : Upload problem contest 9 : 2 - for.doc .Testcase: C.zip
+02-08-2021 17:52:36 : Teacher abc123 has disconnected
+02-08-2021 17:52:40 : Student CE130353 has connected
+02-08-2021 17:53:03 : Sumit code content field [1][113883122][SU21_CONTEST_2][CE130353][C].java of contest SU21_CONTEST_2 problem C by SD-000122
+02-08-2021 17:56:17 : Sumit code content field [1][114077592][SU21_CONTEST_2][CE130353][C].java of contest SU21_CONTEST_2 problem C by SD-000122
+02-08-2021 17:56:42 : Sumit code content field [1][114102533][SU21_CONTEST_2][CE130353][C].java of contest SU21_CONTEST_2 problem C by SD-000122
+02-08-2021 18:00:47 : Sumit code content field [1][114347052][SU21_CONTEST_2][CE130353][C].java of contest SU21_CONTEST_2 problem C by SD-000122
+02-08-2021 18:09:05 : Sumit code content field [1][114845203][SU21_CONTEST_2][CE130353][C].java of contest SU21_CONTEST_2 problem C by SD-000122
+02-08-2021 18:15:35 : Student CE130353 has disconnected
+02-08-2021 18:15:41 : Teacher abc123 has connected
+02-08-2021 18:15:53 : Teacher abc123 has disconnected
+02-08-2021 18:15:57 : Teacher GV123 has connected
+02-08-2021 18:18:25 : Create contest SU21_CONTEST_3 by TC-000002
+02-08-2021 18:31:43 : Student CE130353 has connected
+02-08-2021 18:32:22 : UPDATE student_account SET rollnumber=?,email=?,name=?,class=?,contest_id=?,ip=?,timeout='2021-08-02 18:46:43+00:00',islogin=? WHERE userId=?
+02-08-2021 18:33:14 : UPDATE student_account SET rollnumber=?,email=?,name=?,class=?,contest_id=?,ip=?,timeout='2021-08-02 18:46:43+00:00',islogin=? WHERE userId=?
+02-08-2021 19:30:58 : Upload problem contest 9 : 70_cau_trac_nghiem_mac_lenin.docx .Testcase: E.zip
+02-08-2021 20:43:42 : Teacher GV123 has disconnected
+02-08-2021 20:43:55 : Teacher GV456 has connected

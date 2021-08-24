@@ -1,0 +1,28 @@
+07-08-2021 10:38:12 : Teacher abc123 has connected
+07-08-2021 10:42:12 : Upload problem contest 1 : Test_01.docx .Testcase: B.zip
+07-08-2021 10:45:44 : Upload problem contest 1 : Test_01.docx .Testcase: B.zip
+07-08-2021 10:46:26 : Upload problem contest 1 : Test_01.docx .Testcase: B.zip
+07-08-2021 10:46:29 : Delete in contest_detail where contest 1 and problem B
+07-08-2021 11:00:35 : Upload problem contest 1 : Test_01.pdf .Testcase: A.zip
+07-08-2021 11:02:37 : Upload problem contest 1 : Test_01.pdf .Testcase: A.zip
+07-08-2021 11:02:48 : Upload problem contest 1 : Test_01.pdf .Testcase: B.zip
+07-08-2021 11:02:57 : Delete in contest_detail where contest 1 and problem B
+07-08-2021 11:07:36 : Delete in contest_detail where contest 1 and problem A
+07-08-2021 11:11:21 : Upload problem contest 1 : Test_01.pdf .Testcase: A.zip
+07-08-2021 11:11:39 : Upload problem contest 1 : Test_01.docx .Testcase: B.zip
+07-08-2021 11:12:20 : Delete in contest_detail where contest 1 and problem B
+07-08-2021 11:12:24 : Delete in contest_detail where contest 1 and problem A
+07-08-2021 17:05:46 : Teacher abc123 has connected
+07-08-2021 17:30:19 : 10 students in class 5 has added: CE130077,CE130078,CE130079,CE130080,CE130081,CE130252,CE130353,CE131182,CE133213,CE137481
+07-08-2021 17:31:32 : 10 students in class 6 has added: CE130077,CE130078,CE130079,CE130080,CE130081,CE130252,CE130353,CE131182,CE133213,CE137481
+07-08-2021 17:37:46 : 10 students in class 5 has added: CE130077,CE130078,CE130079,CE130080,CE130081,CE130252,CE130353,CE131182,CE133213,CE137481
+07-08-2021 17:38:22 : 10 students in class 8 has added: CE130077,CE130078,CE130079,CE130080,CE130081,CE130252,CE130353,CE131182,CE133213,CE137481
+07-08-2021 17:38:49 : 10 students in class 5 has deleted: CE130077,CE130078,CE130079,CE130080,CE130081,CE130252,CE130353,CE131182,CE133213,CE137481
+07-08-2021 17:47:24 : 10 students in class 7 has added: CE130077,CE130077,CE130078,CE130078,CE130079,CE130079,CE130080,CE130080,CE130081,CE130081
+07-08-2021 17:47:24 : 10 students in class 7 has added: CE130077,CE130077,CE130078,CE130078,CE130079,CE130079,CE130080,CE130080,CE130081,CE130081
+07-08-2021 17:50:02 : 10 students in class 5 has added: CE130077,CE130078,CE130079,CE130080,CE130081,CE130252,CE130353,CE131182,CE133213,CE137481
+07-08-2021 17:50:39 : 10 students in class 6 has added: CE130077,CE130078,CE130079,CE130080,CE130081,CE130252,CE130353,CE131182,CE133213,CE137481
+07-08-2021 17:50:57 : 10 students in class 5 has deleted: CE130077,CE130078,CE130079,CE130080,CE130081,CE130252,CE130353,CE131182,CE133213,CE137481
+07-08-2021 17:51:44 : 10 students in class 7 has added: CE130077,CE130077,CE130078,CE130078,CE130079,CE130079,CE130080,CE130080,CE130081,CE130081
+07-08-2021 17:53:03 : 10 students in class 8 has added: CE130077,CE130077,CE130077,CE130078,CE130078,CE130078,CE130079,CE130079,CE130079,CE130080
+07-08-2021 22:57:28 : 1 students in class 5 has deleted: CE137482

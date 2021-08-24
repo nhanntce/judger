@@ -1,0 +1,93 @@
+21-07-2021 18:17:31 : Teacher abc123 has disconnected
+21-07-2021 18:18:29 : Teacher abc123 has disconnected
+21-07-2021 18:20:40 : Teacher abc123 has connected
+21-07-2021 18:21:43 : Teacher abc123 has disconnected
+21-07-2021 18:21:48 : Student CE130353 has connected
+21-07-2021 18:24:38 : Student CE130353 has disconnected
+21-07-2021 20:06:31 : Student CE130353 has connected
+21-07-2021 20:10:04 : Teacher abc123 has connected
+21-07-2021 20:13:14 : Teacher abc123 has disconnected
+21-07-2021 20:13:19 : Student CE130353 has connected
+21-07-2021 20:15:00 : Student CE130353 has disconnected
+21-07-2021 20:15:25 : Student CE130353 has connected
+21-07-2021 20:16:16 : Student CE130353 has disconnected
+21-07-2021 20:20:05 : Student CE134554 has connected
+21-07-2021 20:20:16 : Student CE134554 has connected
+21-07-2021 20:20:17 : Student CE130252 has connected
+21-07-2021 20:20:56 : Student CE133213 has connected
+21-07-2021 20:24:23 : Student CE130353 has connected
+21-07-2021 20:26:01 : Sumit code content field [24028006390dcbdb12a5f5533b1efa9][258541238][Test][CE130252][A].cpp of contest Test problem A by SD-000099
+21-07-2021 20:28:22 : Sumit code content field [24028006390dcbdb12a5f5533b1efa9][258682159][Test][CE130252][A].cpp of contest Test problem A by SD-000099
+21-07-2021 20:29:51 : Sumit code content field [113-22-66-222][258771440][Test][CE133213][A].java of contest Test problem A by SD-000100
+21-07-2021 20:30:56 : Sumit code content field [24028006390dcbdb12a5f5533b1efa9][258836162][Test][CE130252][A].cpp of contest Test problem A by SD-000099
+21-07-2021 20:32:15 : Sumit code content field [113-22-66-222][258915826][Test][CE133213][A].java of contest Test problem A by SD-000100
+21-07-2021 20:36:05 : Sumit code content field [113-22-66-222][259145935][Test][CE133213][B].java of contest Test problem B by SD-000100
+21-07-2021 20:36:16 : Sumit code content field [24028006390dcbdb12a5f5533b1efa9][259156641][Test][CE130252][B].cpp of contest Test problem B by SD-000099
+21-07-2021 20:36:35 : Sumit code content field [113-22-66-222][259175409][Test][CE133213][B].java of contest Test problem B by SD-000100
+21-07-2021 20:41:23 : Sumit code content field [113-22-66-222][259463647][Test][CE133213][B].java of contest Test problem B by SD-000100
+21-07-2021 20:45:25 : Sumit code content field [240280063a592f0e8f5aecd5b09396d][259705163][Test][CE130353][D].java of contest Test problem D by SD-000097
+21-07-2021 20:48:36 : Sumit code content field [24028006390dcbdb12a5f5533b1efa9][259896469][Test][CE130252][D].cpp of contest Test problem D by SD-000099
+21-07-2021 20:49:41 : Sumit code content field [113-183-184-88][259961066][Test][CE134554][C].java of contest Test problem C by SD-000101
+21-07-2021 20:49:48 : Sumit code content field [24028006390dcbdb12a5f5533b1efa9][259968233][Test][CE130252][D].cpp of contest Test problem D by SD-000099
+21-07-2021 20:52:09 : Sumit code content field [24028006390dcbdb12a5f5533b1efa9][260109240][Test][CE130252][C].cpp of contest Test problem C by SD-000099
+21-07-2021 20:52:36 : Sumit code content field [240280063a592f0e8f5aecd5b09396d][260136322][Test][CE130353][D].java of contest Test problem D by SD-000097
+21-07-2021 20:53:20 : Sumit code content field [24028006390dcbdb12a5f5533b1efa9][260180794][Test][CE130252][C].java of contest Test problem C by SD-000099
+21-07-2021 20:53:31 : Sumit code content field [113-22-66-222][260191273][Test][CE133213][E].java of contest Test problem E by SD-000100
+21-07-2021 20:54:27 : Sumit code content field [24028006390dcbdb12a5f5533b1efa9][260247814][Test][CE130252][C].java of contest Test problem C by SD-000099
+21-07-2021 20:55:17 : Sumit code content field [24028006390dcbdb12a5f5533b1efa9][260297477][Test][CE130252][C].java of contest Test problem C by SD-000099
+21-07-2021 20:55:35 : Sumit code content field [113-22-66-222][260315196][Test][CE133213][C].java of contest Test problem C by SD-000100
+21-07-2021 20:56:16 : Sumit code content field [113-22-66-222][260356112][Test][CE133213][C].java of contest Test problem C by SD-000100
+21-07-2021 20:59:12 : Sumit code content field [113-22-66-222][260532492][Test][CE133213][C].java of contest Test problem C by SD-000100
+21-07-2021 21:00:07 : Sumit code content field [240280063a592f0e8f5aecd5b09396d][260587115][Test][CE130353][D].java of contest Test problem D by SD-000097
+21-07-2021 21:00:28 : Sumit code content field [113-22-66-222][260608005][Test][CE133213][C].java of contest Test problem C by SD-000100
+21-07-2021 21:01:31 : Sumit code content field [113-22-66-222][260671337][Test][CE133213][C].java of contest Test problem C by SD-000100
+21-07-2021 21:01:31 : Student CE130021 has connected
+21-07-2021 21:03:42 : Sumit code content field [24028006390dcbdb12a5f5533b1efa9][260802558][Test][CE130252][C].cpp of contest Test problem C by SD-000099
+21-07-2021 21:05:19 : Sumit code content field [113-22-66-222][260899059][Test][CE133213][A].java of contest Test problem A by SD-000100
+21-07-2021 21:05:29 : Sumit code content field [113-183-184-88][260909281][Test][CE134554][B].java of contest Test problem B by SD-000101
+21-07-2021 21:05:56 : Sumit code content field [113-22-66-222][260936029][Test][CE133213][A].java of contest Test problem A by SD-000100
+21-07-2021 21:06:20 : Sumit code content field [24028006390dcbdb12a5f5533b1efa9][260960378][Test][CE130252][D].cpp of contest Test problem D by SD-000099
+21-07-2021 21:06:36 : Sumit code content field [113-22-66-222][260976569][Test][CE133213][A].java of contest Test problem A by SD-000100
+21-07-2021 21:07:09 : Sumit code content field [113-183-184-88][261009230][Test][CE134554][A].java of contest Test problem A by SD-000101
+21-07-2021 21:08:04 : Sumit code content field [240280063a592f0e8f5aecd5b09396d][261064393][Test][CE130353][D].java of contest Test problem D by SD-000097
+21-07-2021 21:08:34 : Sumit code content field [113-183-184-88][261094003][Test][CE134554][B].java of contest Test problem B by SD-000101
+21-07-2021 21:09:56 : Sumit code content field [113-183-184-88][261176645][Test][CE134554][B].java of contest Test problem B by SD-000101
+21-07-2021 21:11:24 : Sumit code content field [113-183-184-88][261264060][Test][CE134554][B].java of contest Test problem B by SD-000101
+21-07-2021 21:11:56 : Sumit code content field [24028006390dcbdb12a5f5533b1efa9][261296345][Test][CE130252][D].c of contest Test problem D by SD-000099
+21-07-2021 21:12:08 : Sumit code content field [113-183-184-88][261308987][Test][CE134554][D].java of contest Test problem D by SD-000101
+21-07-2021 21:14:01 : Sumit code content field [113-22-66-222][261421277][Test][CE133213][D].java of contest Test problem D by SD-000100
+21-07-2021 21:14:54 : Sumit code content field [113-22-66-222][261474699][Test][CE133213][D].java of contest Test problem D by SD-000100
+21-07-2021 21:15:08 : Sumit code content field [113-183-184-88][261488419][Test][CE134554][B].java of contest Test problem B by SD-000101
+21-07-2021 21:16:32 : Sumit code content field [24028006390dcbdb12a5f5533b1efa9][261572922][Test][CE130252][D].java of contest Test problem D by SD-000099
+21-07-2021 21:16:54 : Sumit code content field [113-183-184-88][261594998][Test][CE134554][B].java of contest Test problem B by SD-000101
+21-07-2021 21:17:16 : Sumit code content field [240280063a592f0e8f5aecd5b09396d][261616772][Test][CE130353][D].java of contest Test problem D by SD-000097
+21-07-2021 21:18:12 : Sumit code content field [24028006390dcbdb12a5f5533b1efa9][261672374][Test][CE130252][D].java of contest Test problem D by SD-000099
+21-07-2021 21:18:25 : Sumit code content field [240280063a592f0e8f5aecd5b09396d][261685163][Test][CE130353][B].java of contest Test problem B by SD-000097
+21-07-2021 21:22:22 : Sumit code content field [113-22-66-222][261922522][Test][CE133213][E].java of contest Test problem E by SD-000100
+21-07-2021 21:23:00 : Sumit code content field [240280063a592f0e8f5aecd5b09396d][261960137][Test][CE130353][E].java of contest Test problem E by SD-000097
+21-07-2021 21:25:54 : Sumit code content field [24028006390dcbdb12a5f5533b1efa9][262134963][Test][CE130252][E].java of contest Test problem E by SD-000099
+21-07-2021 21:26:06 : Sumit code content field [240280063a592f0e8f5aecd5b09396d][262146569][Test][CE130353][D].java of contest Test problem D by SD-000097
+21-07-2021 21:27:00 : Sumit code content field [240280063a592f0e8f5aecd5b09396d][262200257][Test][CE130353][D].java of contest Test problem D by SD-000097
+21-07-2021 21:27:56 : Sumit code content field [240280063a592f0e8f5aecd5b09396d][262256435][Test][CE130353][D].java of contest Test problem D by SD-000097
+21-07-2021 21:28:31 : Sumit code content field [113-183-184-88][262291041][Test][CE134554][E].java of contest Test problem E by SD-000101
+21-07-2021 21:28:59 : Sumit code content field [113-183-184-88][262319833][Test][CE134554][E].java of contest Test problem E by SD-000101
+21-07-2021 21:30:22 : Sumit code content field [113-183-184-88][262402998][Test][CE134554][E].java of contest Test problem E by SD-000101
+21-07-2021 21:31:31 : Sumit code content field [113-183-184-88][262471624][Test][CE134554][E].java of contest Test problem E by SD-000101
+21-07-2021 21:31:32 : Sumit code content field [113-183-184-88][262472676][Test][CE134554][E].java of contest Test problem E by SD-000101
+21-07-2021 21:32:47 : Student CE130353 has disconnected
+21-07-2021 21:32:54 : Sumit code content field [113-183-184-88][262554897][Test][CE134554][E].java of contest Test problem E by SD-000101
+21-07-2021 21:32:54 : Teacher abc123 has connected
+21-07-2021 21:34:15 : Teacher abc123 has disconnected
+21-07-2021 21:35:20 : Teacher abc123 has connected
+21-07-2021 21:36:14 : Teacher abc123 has disconnected
+21-07-2021 21:36:44 : Student CE130353 has connected
+21-07-2021 21:37:02 : Sumit code content field [113-183-184-88][262802748][Test][CE134554][B].java of contest Test problem B by SD-000101
+21-07-2021 21:37:52 : Sumit code content field [113-183-184-88][262852723][Test][CE134554][B].java of contest Test problem B by SD-000101
+21-07-2021 21:38:12 : Sumit code content field [24028006390dcbdb12a5f5533b1efa9][262872191][Test][CE130252][E].java of contest Test problem E by SD-000099
+21-07-2021 21:39:23 : Sumit code content field [24028006390dcbdb12a5f5533b1efa9][262943533][Test][CE130252][E].java of contest Test problem E by SD-000099
+21-07-2021 21:40:09 : Sumit code content field [240280063a592f0e8f5aecd5b09396d][262989730][Test][CE130353][D].java of contest Test problem D by SD-000097
+21-07-2021 21:46:55 : Sumit code content field [240280063a592f0e8f5aecd5b09396d][263395403][Test][CE130353][D].java of contest Test problem D by SD-000097
+21-07-2021 21:48:36 : Student CE130353 has disconnected
+21-07-2021 21:52:45 : Student CE130353 has connected
+21-07-2021 21:53:16 : Sumit code content field [1][263776468][Test][CE130353][B].java of contest Test problem B by SD-000097
+21-07-2021 21:56:59 : Sumit code content field [1][263999361][Test][CE130353][C].java of contest Test problem C by SD-000097

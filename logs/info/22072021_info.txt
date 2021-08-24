@@ -1,0 +1,10 @@
+22-07-2021 20:11:38 : Teacher GV456 has connected
+22-07-2021 20:14:52 : Create contest Test-teacher by TC-000003
+22-07-2021 20:32:09 : Teacher GV456 has disconnected
+22-07-2021 20:32:15 : Teacher abc123 has connected
+22-07-2021 20:33:43 : Teacher abc123 has disconnected
+22-07-2021 20:33:47 : Teacher GV456 has connected
+22-07-2021 20:47:47 : Teacher GV456 has disconnected
+22-07-2021 20:48:14 : Teacher GV123 has connected
+22-07-2021 21:10:59 : Teacher GV123 has disconnected
+22-07-2021 21:11:02 : Teacher GV456 has connected
